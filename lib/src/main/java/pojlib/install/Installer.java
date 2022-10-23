@@ -1,11 +1,11 @@
-package pojlib.unity.install;
+package pojlib.install;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import pojlib.unity.util.APIHandler;
-import pojlib.unity.util.Constants;
-import pojlib.unity.util.DownloadUtils;
+import pojlib.util.APIHandler;
+import pojlib.util.Constants;
+import pojlib.util.DownloadUtils;
 
 import java.io.File;
 import java.io.IOException;

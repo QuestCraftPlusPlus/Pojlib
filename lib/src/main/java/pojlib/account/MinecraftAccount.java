@@ -1,8 +1,8 @@
-package pojlib.unity.account;
+package pojlib.account;
 
 import com.google.gson.Gson;
 import org.json.JSONException;
-import pojlib.unity.util.Constants;
+import pojlib.util.Constants;
 
 import java.io.*;
 

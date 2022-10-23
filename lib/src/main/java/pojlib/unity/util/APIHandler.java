@@ -12,7 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public record APIHandler(String baseUrl) {
+public class APIHandler {
+    private final String baseUrl;
+
+    public APIHandler(String url) {
+        baseUrl = url;
+    }
 
     private String parseQueries(HashMap<String, Object> query) {
         StringBuilder params = new StringBuilder("?");

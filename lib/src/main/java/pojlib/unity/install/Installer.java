@@ -10,13 +10,17 @@ import pojlib.unity.util.DownloadUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.StringJoiner;
 
 //This class reads data from a game version json and downloads its contents.
 //This works for the base game as well as mod loaders
 public class Installer {
 
-    //Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
-    public static void downloadLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
+    // Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
+    // Returns the classpath of the downloaded libraries
+    public static String downloadLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
+        StringJoiner classpath = new StringJoiner(File.pathSeparator);
+
         for (VersionInfo.Library library : versionInfo.libraries) {
             for (int i = 0; i < 5; i++) {
                 if (i == 4) throw new RuntimeException(String.format("Library download of %s failed after 5 retries", library.name));
@@ -37,9 +41,14 @@ public class Installer {
                     if (!libraryFile.exists()) DownloadUtils.downloadFile(artifact.url, libraryFile);
                 }
 
-                if (DownloadUtils.compareSHA1(libraryFile, sha1)) break;
+                if (DownloadUtils.compareSHA1(libraryFile, sha1)) {
+                    classpath.add(libraryFile.getAbsolutePath());
+                    break;
+                }
             }
         }
+
+        return classpath.toString();
     }
 
     //Only works on minecraft, not fabric, quilt, etc...

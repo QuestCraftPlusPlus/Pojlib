@@ -3,6 +3,7 @@ package pojlib.unity.api;
 
 import pojlib.unity.install.*;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -39,26 +40,32 @@ public class API_V1 {
      * @throws IOException Throws if download of library or asset fails
      */
     public static void createNewInstance(String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) throws IOException {
-        VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
-        VersionInfo modLoaderVersionInfo;
 
-        switch (modLoader) {
-            case Fabric: {
-                FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
-                if (fabricVersion != null) modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
-            }
-            case Quilt: {
-                QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
-                if (quiltVersion != null) modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
-            }
-            case Forge: {
-                System.out.println("Forge not yet implemented\nExiting...");
-                return;
-            }
+        //Get minecraft info
+        VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
+        VersionInfo modLoaderVersionInfo = null;
+
+        //Get mod loader info
+        if (modLoader.equals(ModLoader.Fabric)) {
+            FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
+            if (fabricVersion != null) modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
+        }
+        else if (modLoader.equals(ModLoader.Quilt)) {
+            QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
+            if (quiltVersion != null) modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
+        }
+        else if (modLoader.equals(ModLoader.Forge)) {
+            throw new RuntimeException("Forge not yet implemented\nExiting...");
         }
 
-        Installer.downloadLibraries(minecraftVersionInfo, home);
-        Installer.downloadLibraries(minecraftVersionInfo, home);
+        if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
+
+        //Install libraries
+        String minecraftClasspath = Installer.downloadLibraries(minecraftVersionInfo, home);
+        String modLoaderClasspath = Installer.downloadLibraries(modLoaderVersionInfo, home);
+        String finalClasspath = minecraftClasspath + File.pathSeparator + modLoaderClasspath;
+
+        //Install game assets
         Installer.downloadAssets(minecraftVersionInfo, home);
     }
 }

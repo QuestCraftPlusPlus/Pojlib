@@ -11,8 +11,6 @@ import pojlib.unity.authentication.AccountTools;
 
 public class Msa {
 
-    private MSAuthTask task;
-
     public boolean isRefresh;
     public String msRefreshToken;
     public String mcName;
@@ -20,13 +18,11 @@ public class Msa {
     public String mcUuid;
     public boolean doesOwnGame;
 
-    public Msa(MSAuthTask task, boolean isRefresh, String authCode) throws IOException, JSONException {
-        this.task = task;
+    public Msa(boolean isRefresh, String authCode) throws IOException, JSONException {
         acquireAccessToken(isRefresh, authCode);
     }
 
     public void acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
-        task.publishProgressPublic();
 
         URL url = new URL(Constants.OAUTH_TOKEN_URL);
         Log.i("MicroAuth", "isRefresh=" + isRefresh + ", authCode= "+authcode);
@@ -70,7 +66,6 @@ public class Msa {
     }
 
     private void acquireXBLToken(String accessToken) throws IOException, JSONException {
-        task.publishProgressPublic();
 
         URL url = new URL(Constants.XBL_AUTH_URL);
 
@@ -116,7 +111,6 @@ public class Msa {
     }
 
     private void acquireXsts(String xblToken) throws IOException, JSONException {
-        task.publishProgressPublic();
 
         URL url = new URL(Constants.XSTS_AUTH_URL);
         Map<Object, Object> data = new HashMap<>();
@@ -161,7 +155,6 @@ public class Msa {
     }
 
     private void acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
-        task.publishProgressPublic();
 
         URL url = new URL(Constants.MC_LOGIN_URL);
 
@@ -195,7 +188,6 @@ public class Msa {
         }
     }
     private void checkMcStore(String mcAccessToken) throws IOException, JSONException {
-        task.publishProgressPublic();
 
         URL url = new URL(Constants.MC_STORE_URL);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -217,7 +209,6 @@ public class Msa {
     }
 
     private void checkMcProfile(String mcAccessToken) throws IOException, JSONException {
-        task.publishProgressPublic();
 
         URL url = new URL(Constants.MC_PROFILE_URL);
 

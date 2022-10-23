@@ -25,5 +25,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Pojlib-Unity"
+rootProject.name = "Pojlib"
 include("lib")

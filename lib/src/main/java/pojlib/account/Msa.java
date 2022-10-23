@@ -1,9 +1,9 @@
-package pojlib.unity.account;
+package pojlib.account;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pojlib.unity.util.Constants;
+import pojlib.util.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,6 +1,5 @@
 package pojlib.api;
 
-
 import org.json.JSONException;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
@@ -59,7 +58,7 @@ public class API_V1 {
      * @param authCode The token received from the microsoft login window
      * @return A minecraft account object
      */
-    public static MinecraftAccount login(String home, String authCode) throws JSONException, IOException {
+    public static MinecraftAccount login(String home, String authCode) throws IOException, JSONException {
         return MinecraftAccount.login(home, authCode);
     }
 

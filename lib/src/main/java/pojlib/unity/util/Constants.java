@@ -2,8 +2,11 @@ package pojlib.unity.util;
 
 public class Constants {
 
-    public static String MOJANG_API_URL = "https://piston-meta.mojang.com";
+    public static String MOJANG_META_URL = "https://piston-meta.mojang.com";
     public static String MOJANG_RESOURCES_URL = "https://resources.download.minecraft.net";
+    
+    public static String FABRIC_META_URL = "https://meta.fabricmc.net/v2";
+    public static String QUILT_META_URL = "https://meta.quiltmc.org/v3";
 
     public static String OAUTH_TOKEN_URL = "https://login.live.com/oauth20_token.srf";
     public static String XBL_AUTH_URL = "https://user.auth.xboxlive.com/user/authenticate";

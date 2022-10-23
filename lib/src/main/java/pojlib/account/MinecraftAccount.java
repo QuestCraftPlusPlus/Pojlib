@@ -25,7 +25,7 @@ public class MinecraftAccount {
         return accountFile.delete();
     }
 
-    //Try this before using login - the account will have been saved if previously logged in
+    //Try this before using login - the account will have been saved to disk if previously logged in
     public static MinecraftAccount load(String path) {
         try {
             return new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);

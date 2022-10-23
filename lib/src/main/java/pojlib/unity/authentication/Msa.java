@@ -5,16 +5,11 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.json.*;
+import pojlib.unity.util.Constants;
 import pojlib.unity.authentication.AccountTools;
 
 
 public class Msa {
-    private static final String authTokenUrl = "https://login.live.com/oauth20_token.srf";
-    private static final String xblAuthUrl = "https://user.auth.xboxlive.com/user/authenticate";
-    private static final String xstsAuthUrl = "https://xsts.auth.xboxlive.com/xsts/authorize";
-    private static final String mcLoginUrl = "https://api.minecraftservices.com/authentication/login_with_xbox";
-    private static final String mcStoreUrl = "https://api.minecraftservices.com/entitlements/mcstore";
-    private static final String mcProfileUrl = "https://api.minecraftservices.com/minecraft/profile";
 
     private MSAuthTask task;
 
@@ -33,7 +28,7 @@ public class Msa {
     public void acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
         task.publishProgressPublic();
 
-        URL url = new URL(authTokenUrl);
+        URL url = new URL(Constants.OAUTH_TOKEN_URL);
         Log.i("MicroAuth", "isRefresh=" + isRefresh + ", authCode= "+authcode);
         Map<Object, Object> data = new HashMap<>();
         /*Map.of(
@@ -77,7 +72,7 @@ public class Msa {
     private void acquireXBLToken(String accessToken) throws IOException, JSONException {
         task.publishProgressPublic();
 
-        URL url = new URL(xblAuthUrl);
+        URL url = new URL(Constants.XBL_AUTH_URL);
 
         Map<Object, Object> data = new HashMap<>();
         Map<Object, Object> properties = new HashMap<>();
@@ -123,7 +118,7 @@ public class Msa {
     private void acquireXsts(String xblToken) throws IOException, JSONException {
         task.publishProgressPublic();
 
-        URL url = new URL(xstsAuthUrl);
+        URL url = new URL(Constants.XSTS_AUTH_URL);
         Map<Object, Object> data = new HashMap<>();
         Map<Object, Object> properties = new HashMap<>();
         properties.put("SandboxId", "RETAIL");
@@ -168,7 +163,7 @@ public class Msa {
     private void acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
         task.publishProgressPublic();
 
-        URL url = new URL(mcLoginUrl);
+        URL url = new URL(Constants.MC_LOGIN_URL);
 
         Map<Object, Object> data = new HashMap<>();
         data.put("identityToken", "XBL3.0 x=" + xblUhs + ";" + xblXsts);
@@ -202,7 +197,7 @@ public class Msa {
     private void checkMcStore(String mcAccessToken) throws IOException, JSONException {
         task.publishProgressPublic();
 
-        URL url = new URL(mcStoreUrl);
+        URL url = new URL(Constants.MC_STORE_URL);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + mcAccessToken);
         conn.setRequestMethod("GET");
@@ -224,7 +219,7 @@ public class Msa {
     private void checkMcProfile(String mcAccessToken) throws IOException, JSONException {
         task.publishProgressPublic();
 
-        URL url = new URL(mcProfileUrl);
+        URL url = new URL(Constants.MC_PROFILE_URL);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + mcAccessToken);

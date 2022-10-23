@@ -1,8 +1,8 @@
-package pojlib.unity.install;
+package pojlib.install;
 
 import com.google.gson.annotations.SerializedName;
-import pojlib.unity.util.APIHandler;
-import pojlib.unity.util.Constants;
+import pojlib.util.APIHandler;
+import pojlib.util.Constants;
 
 public class FabricMeta {
 

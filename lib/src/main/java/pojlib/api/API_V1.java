@@ -1,15 +1,15 @@
-package pojlib.unity.api;
+package pojlib.api;
 
 
 import org.json.JSONException;
-import pojlib.unity.account.MinecraftAccount;
-import pojlib.unity.install.*;
+import pojlib.account.MinecraftAccount;
+import pojlib.install.*;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- * This class is the only class used by unity to communicate and talk to pojlib. This keeps pojlib and unity separate.
+ * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
  * If we ever make breaking change to either project, we can make a new api class to accommodate for those changes without
  * having to make changes to either project deeply.
  */

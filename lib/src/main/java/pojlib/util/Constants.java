@@ -1,4 +1,4 @@
-package pojlib.unity.util;
+package pojlib.util;
 
 public class Constants {
 

@@ -1,4 +1,4 @@
-package pojlib.unity.util;
+package pojlib.util;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;

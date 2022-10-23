@@ -19,21 +19,12 @@ public class APIHandler {
         baseUrl = url;
     }
 
-    private String parseQueries(HashMap<String, Object> query) {
-        StringBuilder params = new StringBuilder("?");
-        for (String param : query.keySet()) {
-            Object value = query.get(param);
-            params.append(param).append("=").append(value).append("&");
-        }
-        return params.substring(0, params.length() - 1);
-    }
-
     public <T> T get(String endpoint, Class<T> tClass) {
-        return new Gson().fromJson(getRaw(baseUrl + "/" + endpoint), tClass);
+        return getFullUrl(baseUrl + "/" + endpoint, tClass);
     }
 
     public <T> T get(String endpoint, HashMap<String, Object> query, Class<T> tClass) {
-        return get(endpoint + parseQueries(query), tClass);
+        return getFullUrl(baseUrl + "/" + endpoint, query, tClass);
     }
 
     //Make a get request and return the response as a raw string;
@@ -49,5 +40,22 @@ public class APIHandler {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static String parseQueries(HashMap<String, Object> query) {
+        StringBuilder params = new StringBuilder("?");
+        for (String param : query.keySet()) {
+            Object value = query.get(param);
+            params.append(param).append("=").append(value).append("&");
+        }
+        return params.substring(0, params.length() - 1);
+    }
+
+    public static  <T> T getFullUrl(String url, Class<T> tClass) {
+        return new Gson().fromJson(getRaw(url), tClass);
+    }
+
+    public static  <T> T getFullUrl(String url, HashMap<String, Object> query, Class<T> tClass) {
+        return getFullUrl(url + parseQueries(query), tClass);
     }
 }

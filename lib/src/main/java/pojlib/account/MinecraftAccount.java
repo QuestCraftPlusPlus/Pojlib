@@ -13,7 +13,7 @@ public class MinecraftAccount {
     public String uuid;
     public String username;
 
-    public static MinecraftAccount login(String path, String authCode) throws JSONException, IOException {
+    public static MinecraftAccount login(String path, String authCode) throws IOException, JSONException {
         MinecraftAccount account = Msa.getAccountFromAuthCode(false, authCode);
 
         new Gson().toJson(account, new FileWriter(path + "/account.json"));

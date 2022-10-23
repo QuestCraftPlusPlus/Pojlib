@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import pojlib.unity.util.Constants;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class MinecraftAccount {
 
@@ -23,9 +20,18 @@ public class MinecraftAccount {
         return account;
     }
 
+    public static boolean logout(String path) {
+        File accountFile = new File(path + "/account.json");
+        return accountFile.delete();
+    }
+
     //Try this before using login - the account will have been saved if previously logged in
-    public static MinecraftAccount load(String path) throws FileNotFoundException {
-        return new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);
+    public static MinecraftAccount load(String path) {
+        try {
+            return new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     public static String getSkinFaceUrl(MinecraftAccount account) {

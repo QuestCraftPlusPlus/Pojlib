@@ -1,6 +1,8 @@
 package pojlib.unity.api;
 
 
+import org.json.JSONException;
+import pojlib.unity.account.MinecraftAccount;
 import pojlib.unity.install.*;
 
 import java.io.File;
@@ -14,7 +16,7 @@ import java.io.IOException;
 public class API_V1 {
 
     /**
-     * Returns a list of every minecraft version
+     * @return A list of every minecraft version
      */
     public static MinecraftMeta.MinecraftVersion[] getMinecraftVersions() {
         return MinecraftMeta.getVersions();
@@ -67,5 +69,26 @@ public class API_V1 {
 
         //Install game assets
         Installer.downloadAssets(minecraftVersionInfo, home);
+    }
+
+    /**
+     * Logs the user in and keeps them logged in unless they log out
+     *
+     * @param home The base directory where minecraft should be setup
+     * @param authCode The token received from the microsoft login window
+     * @return A minecraft account object
+     */
+    public static MinecraftAccount login(String home, String authCode) throws JSONException, IOException {
+        return MinecraftAccount.login(home, authCode);
+    }
+
+    /**
+     * Logs the user out
+     *
+     * @param home The base directory where minecraft should be setup
+     * @return True if logout was successful
+     */
+    public static boolean logout(String home) {
+        return MinecraftAccount.logout(home);
     }
 }

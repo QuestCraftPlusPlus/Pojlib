@@ -1,17 +1,24 @@
 package pojlib.unity.authentication;
 
-import android.util.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pojlib.unity.util.Constants;
-import pojlib.unity.authentication.AccountTools;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Msa {
 
-    public boolean isRefresh;
     public String msRefreshToken;
     public String mcName;
     public String mcToken;
@@ -23,9 +30,8 @@ public class Msa {
     }
 
     public void acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
-
         URL url = new URL(Constants.OAUTH_TOKEN_URL);
-        Log.i("MicroAuth", "isRefresh=" + isRefresh + ", authCode= "+authcode);
+
         Map<Object, Object> data = new HashMap<>();
         /*Map.of(
          "client_id", "00000000402b5328",
@@ -45,19 +51,18 @@ public class Msa {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             JSONObject jo = new JSONObject(AccountTools.read(conn.getInputStream()));
             msRefreshToken = jo.getString("refresh_token");
-            Log.i("MicroAuth","Acess Token = "+jo.getString("access_token"));
             acquireXBLToken(jo.getString("access_token"));
         }else{
             throwResponseError(conn);
@@ -66,7 +71,6 @@ public class Msa {
     }
 
     private void acquireXBLToken(String accessToken) throws IOException, JSONException {
-
         URL url = new URL(Constants.XBL_AUTH_URL);
 
         Map<Object, Object> data = new HashMap<>();
@@ -92,18 +96,17 @@ public class Msa {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             JSONObject jo = new JSONObject(AccountTools.read(conn.getInputStream()));
-            Log.i("MicroAuth","Xbl Token = "+jo.getString("Token"));
             acquireXsts(jo.getString("Token"));
         }else{
             throwResponseError(conn);
@@ -111,8 +114,8 @@ public class Msa {
     }
 
     private void acquireXsts(String xblToken) throws IOException, JSONException {
-
         URL url = new URL(Constants.XSTS_AUTH_URL);
+
         Map<Object, Object> data = new HashMap<>();
         Map<Object, Object> properties = new HashMap<>();
         properties.put("SandboxId", "RETAIL");
@@ -134,20 +137,19 @@ public class Msa {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
 
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             JSONObject jo = new JSONObject(AccountTools.read(conn.getInputStream()));
             String uhs = jo.getJSONObject("DisplayClaims").getJSONArray("xui").getJSONObject(0).getString("uhs");
-            Log.i("MicroAuth","Xbl Xsts = "+jo.getString("Token")+"; Uhs = " + uhs);
             acquireMinecraftToken(uhs,jo.getString("Token"));
         }else{
             throwResponseError(conn);
@@ -155,30 +157,27 @@ public class Msa {
     }
 
     private void acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
-
         URL url = new URL(Constants.MC_LOGIN_URL);
 
         Map<Object, Object> data = new HashMap<>();
         data.put("identityToken", "XBL3.0 x=" + xblUhs + ";" + xblXsts);
-
         String req = ofJSONData(data);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
 
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             JSONObject jo = new JSONObject(AccountTools.read(conn.getInputStream()));
-            Log.i("MicroAuth","MC token: "+jo.getString("access_token"));
             mcToken = jo.getString("access_token");
             checkMcProfile(jo.getString("access_token"));
             checkMcStore(jo.getString("access_token"));
@@ -188,8 +187,8 @@ public class Msa {
         }
     }
     private void checkMcStore(String mcAccessToken) throws IOException, JSONException {
-
         URL url = new URL(Constants.MC_STORE_URL);
+
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + mcAccessToken);
         conn.setRequestMethod("GET");
@@ -198,10 +197,8 @@ public class Msa {
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             JSONObject jo = new JSONObject(AccountTools.read(conn.getInputStream()));
             JSONArray ja = jo.getJSONArray("items");
-            Log.i("MicroAuth","Store Len = " + ja.length());
             for(int i = 0; i < ja.length(); i++) {
                 String prod = ja.getJSONObject(i).getString("name");
-                Log.i("MicroAuth","Product " + i +": " +prod);
             }
         }else{
             throwResponseError(conn);
@@ -209,7 +206,6 @@ public class Msa {
     }
 
     private void checkMcProfile(String mcAccessToken) throws IOException, JSONException {
-
         URL url = new URL(Constants.MC_PROFILE_URL);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -219,7 +215,6 @@ public class Msa {
 
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             String s= AccountTools.read(conn.getInputStream());
-            Log.i("MicroAuth","profile:" + s);
             JSONObject jsonObject = new JSONObject(s);
             String name = (String) jsonObject.get("name");
             String uuid = (String) jsonObject.get("id");
@@ -227,12 +222,9 @@ public class Msa {
                     "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
             );
             doesOwnGame = true;
-            Log.i("MicroAuth","UserName = " + name);
-            Log.i("MicroAuth","Uuid Minecraft = " + uuidDashes);
             mcName=name;
             mcUuid=uuidDashes;
         }else{
-            Log.i("MicroAuth","It seems that this Microsoft Account does not own the game.");
             doesOwnGame = false;
             throwResponseError(conn);
         }
@@ -262,11 +254,8 @@ public class Msa {
     private static void throwResponseError(HttpURLConnection conn) throws IOException {
         String otherErrStr = "";
         String errStr = AccountTools.read(conn.getErrorStream());
-        Log.i("MicroAuth","Error code: " + conn.getResponseCode() + ": " + conn.getResponseMessage() + "\n" + errStr);
 
-        if (errStr.contains("NOT_FOUND") &&
-                errStr.contains("The server has not found anything matching the request URI"))
-        {
+        if (errStr.contains("NOT_FOUND") && errStr.contains("The server has not found anything matching the request URI")) {
             // TODO localize this
             otherErrStr = "It seems that this Microsoft Account does not own the game. Make sure that you have bought/migrated to your Microsoft account.";
         }

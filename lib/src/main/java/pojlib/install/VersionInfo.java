@@ -1,4 +1,4 @@
-package pojlib.unity.install;
+package pojlib.install;
 
 import com.google.gson.annotations.SerializedName;
 

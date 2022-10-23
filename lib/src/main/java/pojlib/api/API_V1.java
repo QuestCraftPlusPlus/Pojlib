@@ -1,15 +1,16 @@
-package pojlib.unity.api;
+package pojlib.api;
 
 
 import org.json.JSONException;
-import pojlib.unity.account.MinecraftAccount;
-import pojlib.unity.install.*;
+import pojlib.account.MinecraftAccount;
+import pojlib.install.*;
+import pojlib.instance.MinecraftInstance;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- * This class is the only class used by unity to communicate and talk to pojlib. This keeps pojlib and unity separate.
+ * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
  * If we ever make breaking change to either project, we can make a new api class to accommodate for those changes without
  * having to make changes to either project deeply.
  */
@@ -26,9 +27,15 @@ public class API_V1 {
      * A collection of mod loader types
      */
     public enum ModLoader {
-        Fabric,
-        Quilt,
-        Forge
+        Fabric(0),
+        Quilt(1),
+        Forge(2);
+
+        public final int index;
+
+        ModLoader(int i) {
+            this.index = i;
+        }
     }
 
     /**
@@ -42,33 +49,7 @@ public class API_V1 {
      * @throws IOException Throws if download of library or asset fails
      */
     public static void createNewInstance(String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) throws IOException {
-
-        //Get minecraft info
-        VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
-        VersionInfo modLoaderVersionInfo = null;
-
-        //Get mod loader info
-        if (modLoader.equals(ModLoader.Fabric)) {
-            FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
-            if (fabricVersion != null) modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
-        }
-        else if (modLoader.equals(ModLoader.Quilt)) {
-            QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
-            if (quiltVersion != null) modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
-        }
-        else if (modLoader.equals(ModLoader.Forge)) {
-            throw new RuntimeException("Forge not yet implemented\nExiting...");
-        }
-
-        if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
-
-        //Install libraries
-        String minecraftClasspath = Installer.downloadLibraries(minecraftVersionInfo, home);
-        String modLoaderClasspath = Installer.downloadLibraries(modLoaderVersionInfo, home);
-        String finalClasspath = minecraftClasspath + File.pathSeparator + modLoaderClasspath;
-
-        //Install game assets
-        Installer.downloadAssets(minecraftVersionInfo, home);
+        MinecraftInstance.create(instanceName, home, minecraftVersion, modLoader.index);
     }
 
     /**
@@ -80,6 +61,16 @@ public class API_V1 {
      */
     public static MinecraftAccount login(String home, String authCode) throws JSONException, IOException {
         return MinecraftAccount.login(home, authCode);
+    }
+
+    /**
+     * Fetches the account data from disk if the user has logged in before.
+     *
+     * @param home The base directory where minecraft should be setup
+     * @return A minecraft account object, null if no account found
+     */
+    public static MinecraftAccount fetchSavedLogin(String home) {
+        return MinecraftAccount.load(home);
     }
 
     /**

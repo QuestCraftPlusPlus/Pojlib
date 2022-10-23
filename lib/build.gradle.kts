@@ -21,7 +21,6 @@ android {
 
 dependencies {
     implementation("com.google.code.gson:gson:2.9.1")
-    implementation("net.hycrafthd:minecraft_authenticator:3.0.2")
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-codec:commons-codec:1.15")
 }

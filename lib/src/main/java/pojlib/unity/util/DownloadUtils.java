@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 
 public class DownloadUtils {
 
@@ -42,7 +43,7 @@ public class DownloadUtils {
         File tempOut = File.createTempFile(out.getName(), ".part", out.getParentFile());
         BufferedOutputStream bos = null;
         try {
-            OutputStream bos2 = new BufferedOutputStream(new FileOutputStream(tempOut));
+            OutputStream bos2 = new BufferedOutputStream(Files.newOutputStream(tempOut.toPath()));
             try {
                 download(new URL(url), bos2);
                 tempOut.renameTo(out);
@@ -62,7 +63,7 @@ public class DownloadUtils {
     public static boolean compareSHA1(File f, String sourceSHA) {
         try {
             String sha1_dst;
-            try (InputStream is = new FileInputStream(f)) {
+            try (InputStream is = Files.newInputStream(f.toPath())) {
                 sha1_dst = new String(Hex.encodeHex(DigestUtils.sha1(is)));
             }
             if (sourceSHA != null) return sha1_dst.equalsIgnoreCase(sourceSHA);

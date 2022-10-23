@@ -4,6 +4,7 @@ package pojlib.api;
 import org.json.JSONException;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
+import pojlib.instance.MinecraftInstance;
 
 import java.io.File;
 import java.io.IOException;

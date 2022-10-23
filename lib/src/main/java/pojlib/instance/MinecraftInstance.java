@@ -1,6 +1,6 @@
-package pojlib.unity.instance;
+package pojlib.instance;
 
-import pojlib.unity.install.*;
+import pojlib.install.*;
 
 import java.io.File;
 import java.io.IOException;

@@ -17,6 +17,21 @@ import java.util.StringJoiner;
 //This works for the base game as well as mod loaders
 public class Installer {
 
+    // Downloads the vanilla client
+    // Returns client classpath
+    public static String downloadClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+        Logger.log(Logger.INFO, "Downloading Client");
+
+        File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
+        for (int i = 0; i < 5; i++) {
+            if (i == 4) throw new RuntimeException("Client download failed after 5 retries");
+
+            if (!clientFile.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile);
+            if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) return clientFile.getAbsolutePath();
+        }
+        return null;
+    }
+
     // Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
     // Returns the classpath of the downloaded libraries
     public static String downloadLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
@@ -77,11 +92,6 @@ public class Installer {
         }
         return gameDir + "/assets";
     }
-
-    public static void installJVM(String gameDir) {
-
-    }
-
 
     //Used for mod libraries, vanilla is handled a different (tbh better) way
     private static String parseLibraryNameToPath(String libraryName) {

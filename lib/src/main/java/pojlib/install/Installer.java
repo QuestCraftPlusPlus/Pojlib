@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import pojlib.util.APIHandler;
 import pojlib.util.Constants;
 import pojlib.util.DownloadUtils;
+import pojlib.util.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +20,9 @@ public class Installer {
     // Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
     // Returns the classpath of the downloaded libraries
     public static String downloadLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
-        StringJoiner classpath = new StringJoiner(File.pathSeparator);
+        Logger.log(Logger.INFO, "Downloading Libraries for: " + versionInfo.id);
 
+        StringJoiner classpath = new StringJoiner(File.pathSeparator);
         for (VersionInfo.Library library : versionInfo.libraries) {
             for (int i = 0; i < 5; i++) {
                 if (i == 4) throw new RuntimeException(String.format("Library download of %s failed after 5 retries", library.name));
@@ -33,12 +35,18 @@ public class Installer {
                     String path = parseLibraryNameToPath(library.name);
                     libraryFile = new File(gameDir + "/libraries/", path);
                     sha1 = APIHandler.getRaw(library.url + path + ".sha1");
-                    if (!libraryFile.exists()) DownloadUtils.downloadFile(library.url + path, libraryFile);
+                    if (!libraryFile.exists()) {
+                        Logger.log(Logger.INFO, "Downloading: " + library.name);
+                        DownloadUtils.downloadFile(library.url + path, libraryFile);
+                    }
                 } else {
                     VersionInfo.Library.Artifact artifact = library.downloads.artifact;
                     libraryFile = new File(gameDir + "/libraries/", artifact.path);
                     sha1 = artifact.sha1;
-                    if (!libraryFile.exists()) DownloadUtils.downloadFile(artifact.url, libraryFile);
+                    if (!libraryFile.exists()) {
+                        Logger.log(Logger.INFO, "Downloading: " + library.name);
+                        DownloadUtils.downloadFile(artifact.url, libraryFile);
+                    }
                 }
 
                 if (DownloadUtils.compareSHA1(libraryFile, sha1)) {
@@ -53,15 +61,21 @@ public class Installer {
 
     //Only works on minecraft, not fabric, quilt, etc...
     //Will only download asset if it is missing
-    public static void downloadAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+    public static String downloadAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+        Logger.log(Logger.INFO, "Downloading assets");
+
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
             VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
             String path = asset.hash.substring(0, 2) + "/" + asset.hash;
             File assetFile = new File(gameDir + "/assets/", path);
-            if (!assetFile.exists()) DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+            if (!assetFile.exists()) {
+                Logger.log(Logger.INFO, "Downloading: " + entry.getKey());
+                DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+            }
         }
+        return gameDir + "/assets";
     }
 
     public static void installJVM(String gameDir) {

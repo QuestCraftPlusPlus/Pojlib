@@ -7,6 +7,8 @@ import java.util.List;
 public class VersionInfo {
     @SerializedName("id")
     public String id;
+    @SerializedName("type")
+    public String type;
     @SerializedName("assetIndex")
     public AssetIndex assetIndex;
     @SerializedName("libraries")
@@ -15,8 +17,6 @@ public class VersionInfo {
     public static class AssetIndex {
         @SerializedName("id")
         public String id;
-        @SerializedName("sha1")
-        public String sha1;
         @SerializedName("totalSize")
         public int totalSize;
         @SerializedName("url")

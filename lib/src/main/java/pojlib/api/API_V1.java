@@ -23,12 +23,13 @@ public class API_V1 {
     }
 
     /**
-     * A collection of mod loader types
+     * A collection of loader types
      */
     public enum ModLoader {
-        Fabric(0),
-        Quilt(1),
-        Forge(2);
+        Vanilla(0),
+        Fabric(1),
+        Quilt(2),
+        Forge(3);
 
         public final int index;
 

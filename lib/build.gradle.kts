@@ -22,7 +22,6 @@ dependencies {
 dependencies {
     implementation("org.jetbrains:annotations:20.1.0")
     implementation("com.google.code.gson:gson:2.9.1")
-// https://mvnrepository.com/artifact/org.json/json
     implementation("org.json:json:20220924")
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-codec:commons-codec:1.15")

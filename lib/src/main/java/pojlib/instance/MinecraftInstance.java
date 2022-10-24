@@ -30,5 +30,7 @@ public class MinecraftInstance {
         String finalClasspath = minecraftClasspath + File.pathSeparator + modLoaderClasspath;
 
         Installer.downloadAssets(minecraftVersionInfo, home);
+
+
     }
 }

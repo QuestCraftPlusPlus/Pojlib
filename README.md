@@ -13,7 +13,7 @@ This library was initially meant for use in QuestCraft but has turned into the p
 
 * Fabric, Forge and Quilt Mod Loading
 
-* Version Swithicn 
+* Version Swithing
 
 ## Contributing
 

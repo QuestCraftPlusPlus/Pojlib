@@ -35,13 +35,18 @@ public class MinecraftInstance {
         VersionInfo modLoaderVersionInfo = null;
 
         // Get mod loader info
-        if (modLoader == 1) {
+        if (modLoader == 0) {
+            instance.mainClass = minecraftVersionInfo.mainClass;
+        }
+
+        else if (modLoader == 1) {
             FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
             if (fabricVersion != null) {
                 modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
         }
+
         else if (modLoader == 2) {
             QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
             if (quiltVersion != null) {
@@ -49,6 +54,7 @@ public class MinecraftInstance {
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
         }
+
         else if (modLoader == 3) {
             throw new RuntimeException("Forge not yet implemented\nExiting...");
         }

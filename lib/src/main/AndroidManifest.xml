@@ -2,7 +2,9 @@
           package="quartz.pojlib.android">
 
     <application>
-
+        <activity
+                android:screenOrientation="sensorLandscape"
+                android:name="pojlib.account.MicrosoftLoginGUIActivity"/>
     </application>
 
 </manifest>

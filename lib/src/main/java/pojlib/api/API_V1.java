@@ -1,6 +1,7 @@
 package pojlib.api;
 
 
+import android.app.Activity;
 import org.json.JSONException;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
@@ -81,5 +82,17 @@ public class API_V1 {
      */
     public static boolean logout(String home) {
         return MinecraftAccount.logout(home);
+    }
+
+    /**
+     *  Fetches the current Unity activity for use in other classes (i.e: this one)
+     */
+    public int Add(int i, int j) {
+        return i + j;
+    }
+
+    private static Activity unityActivity;
+    public static void recieveUnityActivity(Activity tActivity) {
+        unityActivity = tActivity;
     }
 }

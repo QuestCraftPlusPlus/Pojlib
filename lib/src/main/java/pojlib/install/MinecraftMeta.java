@@ -8,6 +8,11 @@ public class MinecraftMeta {
 
     private static final APIHandler handler = new APIHandler(Constants.MOJANG_META_URL);
 
+    public static class MinecraftVersions {
+        @SerializedName("versions")
+        public MinecraftVersion[] verisons;
+    }
+
     public static class MinecraftVersion {
         @SerializedName("id")
         public String id;
@@ -16,7 +21,7 @@ public class MinecraftMeta {
     }
 
     public static MinecraftVersion[] getVersions() {
-        return handler.get("mc/game/version_manifest_v2.json", MinecraftVersion[].class);
+        return handler.get("mc/game/version_manifest_v2.json", MinecraftVersions.class).verisons;
     }
 
     public static VersionInfo getVersionInfo(MinecraftVersion minecraftVersion) {

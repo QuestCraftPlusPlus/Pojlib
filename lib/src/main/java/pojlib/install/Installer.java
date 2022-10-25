@@ -17,9 +17,9 @@ import java.util.StringJoiner;
 //This works for the base game as well as mod loaders
 public class Installer {
 
-    // Downloads the vanilla client
+    // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath
-    public static String downloadClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+    public static String installClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
         Logger.log(Logger.INFO, "Downloading Client");
 
         File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
@@ -34,7 +34,7 @@ public class Installer {
 
     // Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
     // Returns the classpath of the downloaded libraries
-    public static String downloadLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
+    public static String installLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
         Logger.log(Logger.INFO, "Downloading Libraries for: " + versionInfo.id);
 
         StringJoiner classpath = new StringJoiner(File.pathSeparator);
@@ -76,7 +76,7 @@ public class Installer {
 
     //Only works on minecraft, not fabric, quilt, etc...
     //Will only download asset if it is missing
-    public static String downloadAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+    public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
         Logger.log(Logger.INFO, "Downloading assets");
 
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);

@@ -2,6 +2,7 @@ package pojlib.instance;
 
 import com.google.gson.Gson;
 import pojlib.install.*;
+import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 
 import java.io.File;
@@ -49,19 +50,29 @@ public class MinecraftInstance {
 
         if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
 
-        String clientClasspath = Installer.downloadClient(minecraftVersionInfo, gameDir);
+        String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
 
-        String minecraftClasspath = Installer.downloadLibraries(minecraftVersionInfo, gameDir);
-        String modLoaderClasspath = Installer.downloadLibraries(modLoaderVersionInfo, gameDir);
+        String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
+        String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
         instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath;
 
-        instance.assetDir = Installer.downloadAssets(minecraftVersionInfo, gameDir);
+        instance.assetDir = Installer.installAssets(minecraftVersionInfo, gameDir);
         instance.assetIndex = minecraftVersionInfo.assetIndex.id;
 
         File instanceFile = new File(gameDir + "/instances/" + instanceName);
-        if (instanceFile.mkdirs()) new Gson().toJson(instance, new FileWriter(instanceFile.getAbsolutePath() + "/instance.json"));
-        else Logger.log(Logger.ERROR, "Could not write instance to disk!");
+        instanceFile.mkdirs();
+        new Gson().toJson(instance, new FileWriter(instanceFile.getAbsolutePath() + "/instance.json"));
 
         return instance;
+    }
+
+    // Load an instance from json
+    public static MinecraftInstance load(String instanceName, String gameDir) {
+        return GsonUtils.jsonFileToObject(gameDir + "/instances/" + instanceName + "/instance.json", MinecraftInstance.class);
+    }
+
+    // Return true if instance was deleted
+    public static boolean delete(String instanceName, String gameDir) {
+        return new File(gameDir + "/instances/" + instanceName).delete();
     }
 }

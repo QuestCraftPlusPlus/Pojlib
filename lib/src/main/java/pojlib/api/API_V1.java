@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.google.gson.JsonObject;
 import org.json.JSONException;
+import pojlib.account.MicrosoftLoginGUIActivity;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.instance.MinecraftInstance;
@@ -91,4 +92,12 @@ public class API_V1 {
         object.addProperty("pog", "champ");
         GsonUtils.objectToJsonFile("test.json", object);
     }
+
+    public static void activity(Activity activity)
+    {
+        System.out.println("API_V1 Called");
+        MicrosoftLoginGUIActivity mslActivity = new MicrosoftLoginGUIActivity();
+        mslActivity.ActivitySwitch(activity);
+    }
+
 }

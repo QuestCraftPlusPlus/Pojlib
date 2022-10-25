@@ -4,9 +4,9 @@ plugins {
 }
 
 android {
-    compileSdkVersion = "android-29"
+    compileSdkVersion = "android-31"
     defaultConfig {
-        minSdkVersion(29)
+        minSdkVersion(28)
     }
 
     externalNativeBuild {
@@ -23,4 +23,13 @@ dependencies {
     implementation("com.google.code.gson:gson:2.9.1")
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-codec:commons-codec:1.15")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.preference:preference:1.1.1")
+    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("androidx.legacy:legacy-preference-v14:1.0.0")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.annotation:annotation:1.3.0")
+    implementation("androidx.browser:browser:1.4.0")
+
+    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
 }

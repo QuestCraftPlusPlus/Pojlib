@@ -1,13 +1,11 @@
 package pojlib.instance;
 
-import com.google.gson.Gson;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,19 +28,25 @@ public class MinecraftInstance {
 
         MinecraftInstance instance = new MinecraftInstance();
         instance.versionName = minecraftVersion.id;
+        instance.gameDir = new File(gameDir).getAbsolutePath();
 
         VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
         instance.versionType = minecraftVersionInfo.type;
         VersionInfo modLoaderVersionInfo = null;
 
         // Get mod loader info
-        if (modLoader == 1) {
+        if (modLoader == 0) {
+            instance.mainClass = minecraftVersionInfo.mainClass;
+        }
+
+        else if (modLoader == 1) {
             FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
             if (fabricVersion != null) {
                 modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
         }
+
         else if (modLoader == 2) {
             QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
             if (quiltVersion != null) {
@@ -50,6 +54,7 @@ public class MinecraftInstance {
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
         }
+
         else if (modLoader == 3) {
             throw new RuntimeException("Forge not yet implemented\nExiting...");
         }
@@ -67,11 +72,7 @@ public class MinecraftInstance {
         instance.assetIndex = minecraftVersionInfo.assetIndex.id;
 
         // Write instance to json file
-        File instanceFile = new File(gameDir + "/instances/" + instanceName);
-        instance.gameDir = instanceFile.getAbsolutePath();
-        instanceFile.mkdirs();
-        new Gson().toJson(instance, new FileWriter(instance.gameDir + "/instance.json"));
-
+        GsonUtils.objectToJsonFile(gameDir + "/instances/" + instanceName + "/instance.json", instance);
         return instance;
     }
 
@@ -93,7 +94,6 @@ public class MinecraftInstance {
         List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
         allArgs.add(mainClass);
         allArgs.addAll(Arrays.asList(mcArgs));
-
         return allArgs;
     }
 }

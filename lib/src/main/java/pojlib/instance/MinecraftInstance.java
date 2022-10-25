@@ -1,13 +1,11 @@
 package pojlib.instance;
 
-import com.google.gson.Gson;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

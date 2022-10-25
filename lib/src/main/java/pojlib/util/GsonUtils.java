@@ -1,9 +1,12 @@
 package pojlib.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class GsonUtils {
 
@@ -12,6 +15,19 @@ public class GsonUtils {
             return new Gson().fromJson(new FileReader(path), tClass);
         } catch (FileNotFoundException e) {
             return null;
+        }
+    }
+
+    public static boolean objectToJsonFile(String path, Object object) {
+        File dir = new File(path).getParentFile();
+        if (dir != null) dir.mkdirs();
+
+        try (Writer writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(object, writer);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 }

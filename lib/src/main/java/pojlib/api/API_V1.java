@@ -5,7 +5,6 @@ import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.instance.MinecraftInstance;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -41,15 +40,15 @@ public class API_V1 {
     /**
      * Creates a new game instance with a selected mod loader. The latest version of the mod loader will be installed
      *
-     * @param instanceName The name of the instance being created - can be anything, used for identification
-     * @param home The base directory where minecraft should be setup
+     * @param instanceName     The name of the instance being created - can be anything, used for identification
+     * @param home             The base directory where minecraft should be setup
      * @param minecraftVersion The version of minecraft to install
-     * @param modLoader The type of mod loader to install
-     *
+     * @param modLoader        The type of mod loader to install
+     * @return A minecraft instance object
      * @throws IOException Throws if download of library or asset fails
      */
-    public static void createNewInstance(String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) throws IOException {
-        MinecraftInstance.create(instanceName, home, minecraftVersion, modLoader.index);
+    public static MinecraftInstance createNewInstance(String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) throws IOException {
+        return MinecraftInstance.create(instanceName, home, minecraftVersion, modLoader.index);
     }
 
     /**

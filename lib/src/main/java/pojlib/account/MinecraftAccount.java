@@ -13,6 +13,8 @@ public class MinecraftAccount {
     public String uuid;
     public String username;
 
+    public final String userType = "msa";
+
     public static MinecraftAccount login(String path, String authCode) throws IOException, JSONException {
         MinecraftAccount account = Msa.getAccountFromAuthCode(false, authCode);
 

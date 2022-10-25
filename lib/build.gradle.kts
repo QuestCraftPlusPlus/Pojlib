@@ -3,16 +3,22 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-}
-
 android {
     compileSdkVersion = "android-31"
     defaultConfig {
         minSdkVersion(28)
     }
+
+    externalNativeBuild {
+        ndkBuild {
+            path(file("src/main/jni/Android.mk"))
+        }
+    }
+
+    buildToolsVersion = "30.0.3"
+    ndkVersion = "22.1.7171670"
+}
+
 
 dependencies {
     // Use JUnit Jupiter for testing.
@@ -40,9 +46,4 @@ dependencies {
     implementation("androidx.browser:browser:1.4.0")
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
-}
-
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
 }

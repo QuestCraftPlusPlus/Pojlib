@@ -1,12 +1,18 @@
 plugins {
-    // Apply the java-library plugin for API and implementation separation.
-    `java-library`
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
+
+android {
+    compileSdkVersion = "android-31"
+    defaultConfig {
+        minSdkVersion(28)
+    }
 
 dependencies {
     // Use JUnit Jupiter for testing.
@@ -25,6 +31,15 @@ dependencies {
     implementation("org.json:json:20220924")
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-codec:commons-codec:1.15")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.preference:preference:1.1.1")
+    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("androidx.legacy:legacy-preference-v14:1.0.0")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.annotation:annotation:1.3.0")
+    implementation("androidx.browser:browser:1.4.0")
+
+    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
 }
 
 tasks.named<Test>("test") {

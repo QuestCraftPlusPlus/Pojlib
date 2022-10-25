@@ -1,6 +1,7 @@
 package pojlib.instance;
 
 import com.google.gson.Gson;
+import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
@@ -8,14 +9,18 @@ import pojlib.util.Logger;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MinecraftInstance {
 
     public String versionName;
     public String versionType;
     public String classpath;
+    public String gameDir;
     public String assetIndex;
-    public String assetDir;
+    public String assetsDir;
     public String mainClass;
 
     //WIP!!!!!!
@@ -30,6 +35,7 @@ public class MinecraftInstance {
         instance.versionType = minecraftVersionInfo.type;
         VersionInfo modLoaderVersionInfo = null;
 
+        // Get mod loader info
         if (modLoader == 1) {
             FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
             if (fabricVersion != null) {
@@ -50,18 +56,21 @@ public class MinecraftInstance {
 
         if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
 
+        // Install minecraft
         String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
 
         String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
         String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
         instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath;
 
-        instance.assetDir = Installer.installAssets(minecraftVersionInfo, gameDir);
+        instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
         instance.assetIndex = minecraftVersionInfo.assetIndex.id;
 
+        // Write instance to json file
         File instanceFile = new File(gameDir + "/instances/" + instanceName);
+        instance.gameDir = instanceFile.getAbsolutePath();
         instanceFile.mkdirs();
-        new Gson().toJson(instance, new FileWriter(instanceFile.getAbsolutePath() + "/instance.json"));
+        new Gson().toJson(instance, new FileWriter(instance.gameDir + "/instance.json"));
 
         return instance;
     }
@@ -74,5 +83,17 @@ public class MinecraftInstance {
     // Return true if instance was deleted
     public static boolean delete(String instanceName, String gameDir) {
         return new File(gameDir + "/instances/" + instanceName).delete();
+    }
+
+    public List<String> generateLaunchArgs(MinecraftAccount account) {
+        String[] mcArgs = {"--username", account.username, "--version", versionName, "--gameDir", gameDir,
+                "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid,
+                "--accessToken", account.accessToken, "--userType", account.userType, "--versionType", versionType};
+
+        List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
+        allArgs.add(mainClass);
+        allArgs.addAll(Arrays.asList(mcArgs));
+
+        return allArgs;
     }
 }

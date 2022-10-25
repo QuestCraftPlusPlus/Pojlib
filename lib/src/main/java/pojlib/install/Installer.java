@@ -90,7 +90,7 @@ public class Installer {
                 DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
             }
         }
-        return gameDir + "/assets";
+        return new File(gameDir + "/assets").getAbsolutePath();
     }
 
     //Used for mod libraries, vanilla is handled a different (tbh better) way

@@ -3,8 +3,12 @@ package pojlib.account;
 import com.google.gson.Gson;
 import org.json.JSONException;
 import pojlib.util.Constants;
+import pojlib.util.GsonUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class MinecraftAccount {
 
@@ -15,10 +19,9 @@ public class MinecraftAccount {
 
     public final String userType = "msa";
 
-    public static MinecraftAccount login(String path, String authCode) throws IOException, JSONException {
+    public static MinecraftAccount login(String gameDir, String authCode) throws IOException, JSONException {
         MinecraftAccount account = Msa.getAccountFromAuthCode(false, authCode);
-
-        new Gson().toJson(account, new FileWriter(path + "/account.json"));
+        GsonUtils.objectToJsonFile(gameDir + "/account.json", account);
         return account;
     }
 

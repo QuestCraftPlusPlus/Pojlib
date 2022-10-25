@@ -2,10 +2,12 @@ package pojlib.api;
 
 import android.app.Activity;
 
+import com.google.gson.JsonObject;
 import org.json.JSONException;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.instance.MinecraftInstance;
+import pojlib.util.GsonUtils;
 
 import java.io.IOException;
 
@@ -84,15 +86,9 @@ public class API_V1 {
         return MinecraftAccount.logout(home);
     }
 
-    /**
-     *  Fetches the current Unity activity for use in other classes (i.e: this one)
-     */
-    public int Add(int i, int j) {
-        return i + j;
-    }
-
-    private static Activity unityActivity;
-    public static void recieveUnityActivity(Activity tActivity) {
-        unityActivity = tActivity;
+    public static void testFunction2() {
+        JsonObject object = new JsonObject();
+        object.addProperty("pog", "champ");
+        GsonUtils.objectToJsonFile("test.json", object);
     }
 }

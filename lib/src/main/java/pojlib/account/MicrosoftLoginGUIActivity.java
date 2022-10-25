@@ -62,4 +62,11 @@ public class MicrosoftLoginGUIActivity extends AppCompatActivity {
             waitDialog.hide();
         }
     }
+
+    public void ActivitySwitch(Activity activity)
+    {
+        System.out.println("MicrosoftLoginGUIActivity is being called");
+        Intent intent = new Intent(activity, MicrosoftLoginGUIActivity.class);
+        startActivity(intent);
+    }
 }

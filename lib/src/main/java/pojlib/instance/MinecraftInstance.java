@@ -30,6 +30,7 @@ public class MinecraftInstance {
 
         MinecraftInstance instance = new MinecraftInstance();
         instance.versionName = minecraftVersion.id;
+        instance.gameDir = new File(gameDir).getAbsolutePath();
 
         VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
         instance.versionType = minecraftVersionInfo.type;
@@ -67,11 +68,7 @@ public class MinecraftInstance {
         instance.assetIndex = minecraftVersionInfo.assetIndex.id;
 
         // Write instance to json file
-        File instanceFile = new File(gameDir + "/instances/" + instanceName);
-        instance.gameDir = instanceFile.getAbsolutePath();
-        instanceFile.mkdirs();
-        new Gson().toJson(instance, new FileWriter(instance.gameDir + "/instance.json"));
-
+        GsonUtils.objectToJsonFile(gameDir + "/instances/" + instanceName + "/instance.json", instance);
         return instance;
     }
 
@@ -93,7 +90,6 @@ public class MinecraftInstance {
         List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
         allArgs.add(mainClass);
         allArgs.addAll(Arrays.asList(mcArgs));
-
         return allArgs;
     }
 }

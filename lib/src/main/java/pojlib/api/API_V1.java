@@ -87,17 +87,11 @@ public class API_V1 {
         return MinecraftAccount.logout(home);
     }
 
-    public static void testFunction2() {
-        JsonObject object = new JsonObject();
-        object.addProperty("pog", "champ");
-        GsonUtils.objectToJsonFile("test.json", object);
-    }
-
-    public static void activity(Activity activity)
-    {
-        System.out.println("API_V1 Called");
-        MicrosoftLoginGUIActivity mslActivity = new MicrosoftLoginGUIActivity();
-        mslActivity.ActivitySwitch(activity);
-    }
+//    public static void activity(Activity activity)
+//    {
+//        System.out.println("API_V1 Called");
+//        MicrosoftLoginGUIActivity mslActivity = new MicrosoftLoginGUIActivity();
+//        mslActivity.ActivitySwitch(activity);
+//    }
 
 }

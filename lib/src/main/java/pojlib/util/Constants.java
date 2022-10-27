@@ -1,5 +1,9 @@
 package pojlib.util;
 
+import android.os.Environment;
+
+import java.io.File;
+
 public class Constants {
 
     public static String MOJANG_META_URL = "https://piston-meta.mojang.com";
@@ -14,6 +18,8 @@ public class Constants {
     public static String MC_LOGIN_URL = "https://api.minecraftservices.com/authentication/login_with_xbox";
     public static String MC_STORE_URL = "https://api.minecraftservices.com/entitlements/mcstore";
     public static String MC_PROFILE_URL = "https://api.minecraftservices.com/minecraft/profile";
+    public static String MC_DIR = new File(Environment.getExternalStorageDirectory(),"Android/data/com.qcxr.qcxr/files/.minecraft").getAbsolutePath();
+    public static String USER_HOME = new File(Environment.getExternalStorageDirectory(),"Android/data/com.qcxr.qcxr/files").getAbsolutePath();
 
     public static String CRAFATAR_URL = "https://crafatar.com";
 }

@@ -10,7 +10,7 @@ public class PluginInstance {
         return i + j;
     }
 
-    private static Activity unityActivity;
+    public static Activity unityActivity;
 
     public static void receiveUnityActivity(Activity tActivity) {
         unityActivity = tActivity;

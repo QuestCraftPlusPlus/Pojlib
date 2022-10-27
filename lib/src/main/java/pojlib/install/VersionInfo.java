@@ -17,6 +17,8 @@ public class VersionInfo {
     public List<Library> libraries;
     @SerializedName("mainClass")
     public String mainClass;
+    @SerializedName("arguments")
+    public Arguments arguments;
 
     public static class AssetIndex {
         @SerializedName("id")
@@ -36,6 +38,36 @@ public class VersionInfo {
             public String sha1;
             @SerializedName("url")
             public String url;
+        }
+    }
+
+    public static class Arguments {
+        @SerializedName("game")
+        public String[] game;
+        @SerializedName("jvm")
+        public String[] jvm;
+
+        public static class ArgValue {
+            @SerializedName("rules")
+            public ArgRules[] rules;
+            @SerializedName("value")
+            public String value;
+
+            public static class ArgRules {
+                @SerializedName("action")
+                public String action;
+                @SerializedName("features")
+                public String features;
+                @SerializedName("os")
+                public ArgOS os;
+
+                public static class ArgOS {
+                    @SerializedName("name")
+                    public String name;
+                    @SerializedName("version")
+                    public String version;
+                }
+            }
         }
     }
 

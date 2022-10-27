@@ -56,6 +56,10 @@ public class API_V1 {
         return MinecraftInstance.create(instanceName, home, minecraftVersion, modLoader.index);
     }
 
+    public static void launchMinecraft(MinecraftInstance instance, MinecraftAccount acc) {
+        instance.launchInstance(acc);
+    }
+
     /**
      * Logs the user in and keeps them logged in unless they log out
      *

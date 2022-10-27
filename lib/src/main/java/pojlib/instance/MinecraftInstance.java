@@ -1,8 +1,15 @@
 package pojlib.instance;
 
+import static pojlib.util.Constants.USER_HOME;
+
+import android.os.Environment;
+
 import pojlib.account.MinecraftAccount;
+import pojlib.api.PluginInstance;
 import pojlib.install.*;
+import pojlib.util.FileUtil;
 import pojlib.util.GsonUtils;
+import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 
 import java.io.File;
@@ -66,7 +73,12 @@ public class MinecraftInstance {
 
         String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
         String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
-        instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath;
+        File lwjglDir = new File(USER_HOME + "/lwjgl3");
+        if(!lwjglDir.exists()) {
+            lwjglDir.mkdir();
+            FileUtil.write(lwjglDir + "/lwjgl-glfw-classes-3.2.3.jar", FileUtil.loadFromAssetToByte(PluginInstance.unityActivity, "lwjgl-glfw-classes-3.2.3.jar"));
+        }
+        instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjglDir + "/lwjgl-glfw-classes-3.2.3.jar";
 
         instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
         instance.assetIndex = minecraftVersionInfo.assetIndex.id;
@@ -95,5 +107,14 @@ public class MinecraftInstance {
         allArgs.add(mainClass);
         allArgs.addAll(Arrays.asList(mcArgs));
         return allArgs;
+    }
+
+    public void launchInstance(MinecraftAccount acc) {
+        try {
+            JREUtils.redirectAndPrintJRELog();
+            JREUtils.launchJavaVM(PluginInstance.unityActivity, generateLaunchArgs(acc));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }

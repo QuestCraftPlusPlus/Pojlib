@@ -63,7 +63,7 @@ public class MicrosoftLoginGUIActivity extends AppCompatActivity {
         }
     }
 
-    public void ActivitySwitch(Activity activity)
+    public void activitySwitch(Activity activity)
     {
         System.out.println("MicrosoftLoginGUIActivity is being called");
         Intent intent = new Intent(activity, MicrosoftLoginGUIActivity.class);

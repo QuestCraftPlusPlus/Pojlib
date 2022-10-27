@@ -11,8 +11,6 @@
 typedef int (*Main_Function_t)(int, char**);
 typedef void (*android_update_LD_LIBRARY_PATH_t)(char*);
 
-long shared_awt_surface;
-
 char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	char **cArray = (char **) malloc(num_rows * sizeof(char*));
@@ -26,18 +24,6 @@ char** convert_to_char_array(JNIEnv *env, jobjectArray jstringArray) {
     return cArray;
 }
 
-jobjectArray convert_from_char_array(JNIEnv *env, char **charArray, int num_rows) {
-	jobjectArray resultArr = (*env)->NewObjectArray(env, num_rows, (*env)->FindClass(env, "java/lang/String"), NULL);
-	jstring row;
-	
-	for (int i = 0; i < num_rows; i++) {
-		row = (jstring) (*env)->NewStringUTF(env, charArray[i]);
-		(*env)->SetObjectArrayElement(env, resultArr, i, row);
-    }
-
-	return resultArr;
-}
-
 void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray) {
 	int num_rows = (*env)->GetArrayLength(env, jstringArray);
 	jstring row;
@@ -46,25 +32,6 @@ void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charAr
 		row = (jstring) (*env)->GetObjectArrayElement(env, jstringArray, i);
 		(*env)->ReleaseStringUTFChars(env, row, charArray[i]);
 	}
-}
-
-jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr) {
-    if (srcStr == NULL) {
-        return NULL;
-    }
-    
-    const char* srcStrC = (*srcEnv)->GetStringUTFChars(srcEnv, srcStr, 0);
-    jstring dstStr = (*dstEnv)->NewStringUTF(dstEnv, srcStrC);
-	(*srcEnv)->ReleaseStringUTFChars(srcEnv, srcStr, srcStrC);
-    return dstStr;
-}
-
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeSurfaceAWT(JNIEnv *env, jclass clazz, jlong surface) {
-	shared_awt_surface = surface;
-}
-
-JNIEXPORT jlong JNICALL Java_android_view_Surface_nativeGetBridgeSurfaceAWT(JNIEnv *env, jclass clazz) {
-	return (jlong) shared_awt_surface;
 }
 
 JNIEXPORT jint JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNatives(JNIEnv *env, jclass clazz, jstring registerSymbol) {
@@ -82,7 +49,7 @@ JNIEXPORT jint JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNativ
 	return (jint) result;
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
+JNIEXPORT void JNICALL Java_pojlib_util_JREUtils_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
 	// jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	
 	android_update_LD_LIBRARY_PATH_t android_update_LD_LIBRARY_PATH;
@@ -104,7 +71,7 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setLdLibraryPath(
 	(*env)->ReleaseStringUTFChars(env, ldLibraryPath, ldLibPathUtf);
 }
 
-JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_dlopen(JNIEnv *env, jclass clazz, jstring name) {
+JNIEXPORT jboolean JNICALL Java_pojlib_util_JREUtils_dlopen(JNIEnv *env, jclass clazz, jstring name) {
 	const char *nameUtf = (*env)->GetStringUTFChars(env, name, 0);
 	void* handle = dlopen(nameUtf, RTLD_GLOBAL | RTLD_LAZY);
 	if (!handle) {
@@ -116,14 +83,14 @@ JNIEXPORT jboolean JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_dlopen(JNIEnv
 	return handle != NULL;
 }
 
-JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_chdir(JNIEnv *env, jclass clazz, jstring nameStr) {
+JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_chdir(JNIEnv *env, jclass clazz, jstring nameStr) {
 	const char *name = (*env)->GetStringUTFChars(env, nameStr, NULL);
 	int retval = chdir(name);
 	(*env)->ReleaseStringUTFChars(env, nameStr, name);
 	return retval;
 }
 
-JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
+JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_executeBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
 	jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
 	jstring execFile = (*env)->GetObjectArrayElement(env, cmdArgs, 0);
 	
@@ -156,18 +123,4 @@ JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_executeBinary(JNI
 	free_char_array(env, cmdArgs, cmd_args_c);
 	return result;
 }
-
-// METHOD 2
-/*
-JNIEXPORT jint JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_executeForkedBinary(JNIEnv *env, jclass clazz, jobjectArray cmdArgs) {
-	int x, status;
-	x = fork();
-	if (x > 0) {
-		wait(&status);
-	} else {
-		execvpe();
-	}
-	return status;
-}
-*/
 

@@ -214,7 +214,6 @@ void pojavSwapBuffers() {
     if (!eglSwapBuffers_p(eglDisplay, eglGetCurrentSurface_p(EGL_DRAW))) {
         if (eglGetError_p() == EGL_BAD_SURFACE) {
             stopSwapBuffers = true;
-            closeGLFWWindow();
         }
     }
 }

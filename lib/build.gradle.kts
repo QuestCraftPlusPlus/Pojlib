@@ -9,6 +9,15 @@ android {
         minSdkVersion(28)
     }
 
+    buildTypes {
+        release {
+            ndk.abiFilters.add("arm64-v8a")
+        }
+        debug {
+            ndk.abiFilters.add("arm64-v8a")
+        }
+    }
+
     externalNativeBuild {
         ndkBuild {
             path(file("src/main/jni/Android.mk"))

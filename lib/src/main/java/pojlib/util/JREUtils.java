@@ -186,15 +186,6 @@ public class JREUtils {
 
     public static int launchJavaVM(final Activity activity,final List<String> JVMArgs) throws Throwable {
         JREUtils.relocateLibPath(activity);
-        // For debugging only!
-/*
-        StringBuilder sbJavaArgs = new StringBuilder();
-        for (String s : javaArgList) {
-            sbJavaArgs.append(s + " ");
-        }
-        ctx.appendlnToLog("Executing JVM: \"" + sbJavaArgs.toString() + "\"");
-*/
-
         setJavaEnvironment(activity);
 
         final String graphicsLib = loadGraphicsLibrary();

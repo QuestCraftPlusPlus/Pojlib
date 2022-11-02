@@ -1,12 +1,10 @@
 package pojlib.install;
 
+import android.app.Activity;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import pojlib.util.APIHandler;
-import pojlib.util.Constants;
-import pojlib.util.DownloadUtils;
-import pojlib.util.Logger;
+import pojlib.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +89,15 @@ public class Installer {
             }
         }
         return new File(gameDir + "/assets").getAbsolutePath();
+    }
+
+    public static String installLwjgl(Activity activity) throws IOException {
+        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes-3.2.3.jar");
+        if (!lwjgl.exists()) {
+            lwjgl.getParentFile().mkdirs();
+            FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl-glfw-classes-3.2.3.jar"));
+        }
+        return lwjgl.getAbsolutePath();
     }
 
     //Used for mod libraries, vanilla is handled a different (tbh better) way

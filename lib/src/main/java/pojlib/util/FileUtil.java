@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class FileUtil {
     public static byte[] loadFromAssetToByte(Context ctx, String inFile) {
@@ -30,9 +32,9 @@ public class FileUtil {
     {
         File outPath = new File(path);
         outPath.getParentFile().mkdirs();
-        outPath.createNewFile();
+        //outPath.createNewFile();
 
-        BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(path));
+        BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(Paths.get(path)));
         fos.write(content, 0, content.length);
         fos.close();
     }

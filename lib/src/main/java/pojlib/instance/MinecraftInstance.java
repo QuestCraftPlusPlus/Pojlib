@@ -1,13 +1,8 @@
 package pojlib.instance;
 
-import static pojlib.util.Constants.USER_HOME;
-
-import android.os.Environment;
-
+import android.app.Activity;
 import pojlib.account.MinecraftAccount;
-import pojlib.api.PluginInstance;
 import pojlib.install.*;
-import pojlib.util.FileUtil;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
@@ -30,7 +25,7 @@ public class MinecraftInstance {
 
     //WIP!!!!!!
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstance create(String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, int modLoader) throws IOException {
+    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, int modLoader) throws IOException {
         Logger.log(Logger.INFO, "Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
@@ -70,15 +65,11 @@ public class MinecraftInstance {
 
         // Install minecraft
         String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
-
         String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
         String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
-        File lwjglDir = new File(USER_HOME + "/lwjgl3");
-        if(!lwjglDir.exists()) {
-            lwjglDir.mkdir();
-            FileUtil.write(lwjglDir + "/lwjgl-glfw-classes-3.2.3.jar", FileUtil.loadFromAssetToByte(PluginInstance.unityActivity, "lwjgl-glfw-classes-3.2.3.jar"));
-        }
-        instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjglDir + "/lwjgl-glfw-classes-3.2.3.jar";
+        String lwjgl = Installer.installLwjgl(activity);
+
+        instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
         instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
         instance.assetIndex = minecraftVersionInfo.assetIndex.id;
@@ -109,10 +100,10 @@ public class MinecraftInstance {
         return allArgs;
     }
 
-    public void launchInstance(MinecraftAccount acc) {
+    public void launchInstance(Activity activity, MinecraftAccount account) {
         try {
             JREUtils.redirectAndPrintJRELog();
-            JREUtils.launchJavaVM(PluginInstance.unityActivity, generateLaunchArgs(acc));
+            JREUtils.launchJavaVM(activity, generateLaunchArgs(account));
         } catch (Throwable e) {
             e.printStackTrace();
         }

@@ -1,13 +1,20 @@
 package pojlib.install;
 
 import android.app.Activity;
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import pojlib.instance.MinecraftInstance;
 import pojlib.util.*;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -56,13 +63,19 @@ public class Installer {
                     VersionInfo.Library.Artifact artifact = library.downloads.artifact;
                     libraryFile = new File(gameDir + "/libraries/", artifact.path);
                     sha1 = artifact.sha1;
-                    if (!libraryFile.exists()) {
+                    if (!libraryFile.exists() && !artifact.path.contains("glfw") && !artifact.path.contains("natives")) {
                         Logger.log(Logger.INFO, "Downloading: " + library.name);
                         DownloadUtils.downloadFile(artifact.url, libraryFile);
+                    } else if(artifact.path.contains("glfw") && !artifact.path.contains("natives")) {
+                        copyAssetFolder(MinecraftInstance.context, "lwjgl3", MinecraftInstance.context.getFilesDir().getAbsolutePath() + "/lwjgl3");
                     }
                 }
 
                 if (DownloadUtils.compareSHA1(libraryFile, sha1)) {
+                    // Add our GLFW
+                    classpath.add(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/lwjgl3/jsr305.jar");
+                    classpath.add(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/lwjgl3/lwjgl-glfw-classes.jar");
+
                     classpath.add(libraryFile.getAbsolutePath());
                     break;
                 }
@@ -70,6 +83,47 @@ public class Installer {
         }
 
         return classpath.toString();
+    }
+
+    public static boolean copyAssetFolder(Context context, String srcName, String dstName) {
+        try {
+            boolean result;
+            String fileList[] = context.getAssets().list(srcName);
+            if (fileList == null) return false;
+
+            if (fileList.length == 0) {
+                result = copyAssetFile(context, srcName, dstName);
+            } else {
+                File file = new File(dstName);
+                result = file.mkdirs();
+                for (String filename : fileList) {
+                    result &= copyAssetFolder(context, srcName + File.separator + filename, dstName + File.separator + filename);
+                }
+            }
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean copyAssetFile(Context context, String srcName, String dstName) {
+        try {
+            InputStream in = context.getAssets().open(srcName);
+            File outFile = new File(dstName);
+            OutputStream out = new FileOutputStream(outFile);
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            out.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     //Only works on minecraft, not fabric, quilt, etc...
@@ -95,7 +149,7 @@ public class Installer {
         File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes-3.2.3.jar");
         if (!lwjgl.exists()) {
             lwjgl.getParentFile().mkdirs();
-            FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl-glfw-classes-3.2.3.jar"));
+            FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes-3.2.3.jar"));
         }
         return lwjgl.getAbsolutePath();
     }

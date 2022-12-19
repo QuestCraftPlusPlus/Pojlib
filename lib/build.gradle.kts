@@ -28,7 +28,6 @@ android {
     ndkVersion = "22.1.7171670"
 }
 
-
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api("org.apache.commons:commons-math3:3.6.1")
@@ -50,6 +49,7 @@ dependencies {
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.annotation:annotation:1.3.0")
     implementation("androidx.browser:browser:1.4.0")
+    implementation("blank:unity-classes")
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
 }

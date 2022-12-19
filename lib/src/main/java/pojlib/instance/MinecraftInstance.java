@@ -1,11 +1,14 @@
 package pojlib.instance;
 
 import android.app.Activity;
+
+import pojlib.UnityPlayerActivity;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
+import pojlib.util.VLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +18,7 @@ import java.util.List;
 
 public class MinecraftInstance {
 
+    public static UnityPlayerActivity context;
     public String versionName;
     public String versionType;
     public String classpath;
@@ -103,6 +107,8 @@ public class MinecraftInstance {
     public void launchInstance(Activity activity, MinecraftAccount account) {
         try {
             JREUtils.redirectAndPrintJRELog();
+            VLoader.setAndroidInitInfo(context);
+            VLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
             JREUtils.launchJavaVM(activity, generateLaunchArgs(account));
         } catch (Throwable e) {
             e.printStackTrace();

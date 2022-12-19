@@ -153,7 +153,7 @@ public class JREUtils {
         envMap.put("LIBGL_MIPMAP", "3");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
-        envMap.put("PATH", activity.getFilesDir() + "runtimes/jre-17" + "/bin:" + Os.getenv("PATH"));
+        envMap.put("PATH", activity.getFilesDir() + "runtimes/jre-17/bin:" + Os.getenv("PATH"));
 
         envMap.put("LIBGL_GLES", "/system/lib64/libGLESv3.so");
         envMap.put("LIBGL_EGL", "/system/lib64/libEGL.so");
@@ -190,13 +190,6 @@ public class JREUtils {
 
         final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity);
-
-        //Remove arguments that can interfere with the good working of the launcher
-        purgeArg(userArgs,"-Xms");
-        purgeArg(userArgs,"-Xmx");
-        purgeArg(userArgs,"-d32");
-        purgeArg(userArgs,"-d64");
-        purgeArg(userArgs, "-Dorg.lwjgl.opengl.libname");
 
         //Add automatically generated args
         userArgs.add("-Xms" + 2048 + "M");
@@ -307,36 +300,9 @@ public class JREUtils {
         return "libgl4es_114.so";
     }
 
-    /**
-     * Remove the argument from the list, if it exists
-     * If the argument exists multiple times, they will all be removed.
-     * @param argList The argument list to purge
-     * @param argStart The argument to purge from the list.
-     */
-    private static void purgeArg(List<String> argList, String argStart) {
-        for(int i = 0; i < argList.size(); i++) {
-            final String arg = argList.get(i);
-            if(arg.startsWith(argStart)) {
-                argList.remove(i);
-            }
-        }
-    }
-    private static final int EGL_OPENGL_ES_BIT = 0x0001;
-    private static final int EGL_OPENGL_ES2_BIT = 0x0004;
-    private static final int EGL_OPENGL_ES3_BIT_KHR = 0x0040;
-    private static boolean hasExtension(String extensions, String name) {
-        int start = extensions.indexOf(name);
-        while (start >= 0) {
-            // check that we didn't find a prefix of a longer extension name
-            int end = start + name.length();
-            if (end == extensions.length() || extensions.charAt(end) == ' ') {
-                return true;
-            }
-            start = extensions.indexOf(name, end);
-        }
-        return false;
-    }
-
+    public static native long getEGLContextPtr();
+    public static native long getEGLDisplayPtr();
+    public static native long getEGLConfigPtr();
     public static native int chdir(String path);
     public static native void logToLogger(final Logger logger);
     public static native boolean dlopen(String libPath);

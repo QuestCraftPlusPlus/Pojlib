@@ -22,6 +22,9 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://repo.u-team.info")
         }
+        flatDir {
+            dirs("libs")
+        }
     }
 }
 

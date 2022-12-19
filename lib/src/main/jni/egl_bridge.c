@@ -274,17 +274,17 @@ void pojavMakeCurrent(void* window) {
 }
 
 JNIEXPORT JNICALL jlong
-Java_net_kdt_pojavlaunch_utils_JREUtils_getEGLDisplayPtr(JNIEnv *env, jclass clazz) {
+Java_pojlib_util_JREUtils_getEGLDisplayPtr(JNIEnv *env, jclass clazz) {
     return (jlong) &eglDisplay;
 }
 
 JNIEXPORT JNICALL jlong
-Java_net_kdt_pojavlaunch_utils_JREUtils_getEGLContextPtr(JNIEnv *env, jclass clazz) {
+Java_pojlib_util_JREUtils_getEGLContextPtr(JNIEnv *env, jclass clazz) {
     return (jlong) &eglContext;
 }
 
 JNIEXPORT JNICALL jlong
-Java_net_kdt_pojavlaunch_utils_JREUtils_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
+Java_pojlib_util_JREUtils_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
     return (jlong) &config;
 }
 

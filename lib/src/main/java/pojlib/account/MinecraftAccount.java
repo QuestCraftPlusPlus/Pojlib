@@ -19,8 +19,9 @@ public class MinecraftAccount {
 
     public final String userType = "msa";
 
-    public static MinecraftAccount login(String gameDir, String authCode) throws IOException, JSONException {
-        MinecraftAccount account = Msa.getAccountFromAuthCode(false, authCode);
+    public static MinecraftAccount login(String gameDir, String accessToken, String refreshToken) throws IOException, JSONException {
+        MinecraftAccount account = Msa.acquireXBLToken(accessToken);
+        account.msaRefreshToken = refreshToken;
         GsonUtils.objectToJsonFile(gameDir + "/account.json", account);
         return account;
     }

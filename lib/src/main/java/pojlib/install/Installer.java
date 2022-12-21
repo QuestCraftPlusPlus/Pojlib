@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.apache.commons.io.FileUtils;
+
 import pojlib.instance.MinecraftInstance;
 import pojlib.util.*;
 
@@ -25,7 +27,7 @@ public class Installer {
     // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath
     public static String installClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
-        Logger.log(Logger.INFO, "Downloading Client");
+        Logger.getInstance().appendToLog("Downloading Client");
 
         File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
         for (int i = 0; i < 5; i++) {
@@ -40,7 +42,7 @@ public class Installer {
     // Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
     // Returns the classpath of the downloaded libraries
     public static String installLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
-        Logger.log(Logger.INFO, "Downloading Libraries for: " + versionInfo.id);
+        Logger.getInstance().appendToLog("Downloading Libraries for: " + versionInfo.id);
 
         StringJoiner classpath = new StringJoiner(File.pathSeparator);
         for (VersionInfo.Library library : versionInfo.libraries) {
@@ -56,25 +58,22 @@ public class Installer {
                     libraryFile = new File(gameDir + "/libraries/", path);
                     sha1 = APIHandler.getRaw(library.url + path + ".sha1");
                     if (!libraryFile.exists()) {
-                        Logger.log(Logger.INFO, "Downloading: " + library.name);
+                        Logger.getInstance().appendToLog("Downloading: " + library.name);
                         DownloadUtils.downloadFile(library.url + path, libraryFile);
                     }
                 } else {
                     VersionInfo.Library.Artifact artifact = library.downloads.artifact;
                     libraryFile = new File(gameDir + "/libraries/", artifact.path);
                     sha1 = artifact.sha1;
-                    if (!libraryFile.exists() && !artifact.path.contains("glfw") && !artifact.path.contains("natives")) {
-                        Logger.log(Logger.INFO, "Downloading: " + library.name);
+                    if (!libraryFile.exists() && !artifact.path.contains("lwjgl")) {
+                        Logger.getInstance().appendToLog("Downloading: " + library.name);
                         DownloadUtils.downloadFile(artifact.url, libraryFile);
-                    } else if(artifact.path.contains("glfw") && !artifact.path.contains("natives")) {
-                        copyAssetFolder(MinecraftInstance.context, "lwjgl3", MinecraftInstance.context.getFilesDir().getAbsolutePath() + "/lwjgl3");
                     }
                 }
 
                 if (DownloadUtils.compareSHA1(libraryFile, sha1)) {
                     // Add our GLFW
-                    classpath.add(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/lwjgl3/jsr305.jar");
-                    classpath.add(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/lwjgl3/lwjgl-glfw-classes.jar");
+                    classpath.add(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
 
                     classpath.add(libraryFile.getAbsolutePath());
                     break;
@@ -85,63 +84,29 @@ public class Installer {
         return classpath.toString();
     }
 
-    public static boolean copyAssetFolder(Context context, String srcName, String dstName) {
-        try {
-            boolean result;
-            String fileList[] = context.getAssets().list(srcName);
-            if (fileList == null) return false;
-
-            if (fileList.length == 0) {
-                result = copyAssetFile(context, srcName, dstName);
-            } else {
-                File file = new File(dstName);
-                result = file.mkdirs();
-                for (String filename : fileList) {
-                    result &= copyAssetFolder(context, srcName + File.separator + filename, dstName + File.separator + filename);
-                }
-            }
-            return result;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean copyAssetFile(Context context, String srcName, String dstName) {
-        try {
-            InputStream in = context.getAssets().open(srcName);
-            File outFile = new File(dstName);
-            OutputStream out = new FileOutputStream(outFile);
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            in.close();
-            out.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     //Only works on minecraft, not fabric, quilt, etc...
     //Will only download asset if it is missing
     public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
-        Logger.log(Logger.INFO, "Downloading assets");
+        Logger.getInstance().appendToLog("Downloading assets");
 
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
             VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
             String path = asset.hash.substring(0, 2) + "/" + asset.hash;
-            File assetFile = new File(gameDir + "/assets/", path);
+            File assetFile = new File(gameDir + "/assets/objects/", path);
             if (!assetFile.exists()) {
-                Logger.log(Logger.INFO, "Downloading: " + entry.getKey());
+                Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
                 DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
             }
         }
+
+        DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"));
+
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/sodium-extra.properties"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "sodium-extra.properties"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/sodium-mixins.properties"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "sodium-mixins.properties"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/vivecraft-config.properties"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "vivecraft-config.properties"));
+
         return new File(gameDir + "/assets").getAbsolutePath();
     }
 

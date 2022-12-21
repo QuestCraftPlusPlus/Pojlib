@@ -25,7 +25,7 @@ static void *logger_thread() {
         }
         buf[rsize]=0x00;
         str = (*env)->NewStringUTF(env,buf);
-        (*env)->CallStaticVoidMethod(env,_______obj,_______method, _______obj, str);
+        (*env)->CallVoidMethod(env,_______obj,_______method,str);
         (*env)->DeleteLocalRef(env,str);
     }
     (*env)->DeleteGlobalRef(env,_______method);
@@ -36,6 +36,7 @@ JNIEXPORT void JNICALL
 Java_pojlib_util_JREUtils_logToLogger(JNIEnv *env, jclass clazz, jobject javaLogger) {
     // TODO: implement logToActivity()
     jclass loggableActivityClass = (*env)->FindClass(env,"pojlib/util/Logger");
+    _______method = (*env)->GetMethodID(env,loggableActivityClass,"appendToLog", "(Ljava/lang/String;)V");
     (*env)->GetJavaVM(env,&_______jvm);
     _______obj = (*env)->NewGlobalRef(env, javaLogger);
 
@@ -50,7 +51,7 @@ Java_pojlib_util_JREUtils_logToLogger(JNIEnv *env, jclass clazz, jobject javaLog
     /* spawn the logging thread */
     if(pthread_create(&logger, 0, logger_thread, 0) == -1) {
         jstring str = (*env)->NewStringUTF(env,"Failed to start logging!");
-        (*env)->CallStaticVoidMethod(env,_______obj,_______method, _______obj, str);
+        (*env)->CallVoidMethod(env,_______obj,_______method,str);
         (*env)->DeleteLocalRef(env,str);
         (*env)->DeleteGlobalRef(env,_______method);
         (*env)->DeleteGlobalRef(env,_______obj);

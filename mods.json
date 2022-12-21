@@ -1,0 +1,80 @@
+{
+	"1.19.3": {
+		"vivecraft": {
+			"version": "1.2",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.2-1.19.3/vivecraft.jar"
+		},
+		"fabric-api": {
+			"version": "0.69.1",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/pCfxz2JH/fabric-api-0.69.1%2B1.19.3.jar"
+		},
+		"lazydfu": {
+			"version": "1.3",
+			"download_link": "https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.3/lazydfu-0.1.3.jar"
+		},
+		"simple-voice-chat": {
+			"version": "2.3.24",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/aWSzugT7/voicechat-fabric-1.19.3-2.3.24.jar"
+		},
+		"lithium": {
+			"version": "0.10.4",
+			"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/XS6vJwop/lithium-fabric-mc1.19.3-0.10.4.jar"
+		},
+		"ferrite-core": {
+			"version": "5.1.0",
+			"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/GHcKib6J/ferritecore-5.1.0-fabric.jar"
+		},
+		"smooth-boot": {
+			"version": "1.7.1",
+			"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/1.19-1.7.1/smoothboot-fabric-1.19-1.7.1.jar"
+		},
+		"entity-culling": {
+			"version": "1.5.2",
+			"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/Wq0up4B4/entityculling-forge-1.5.2-mc1.19.3.jar"
+		}
+		,
+		"sodium": {
+			"version": "0.4.6",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/Nr39FOaS/sodium-fabric-mc1.19.3-0.4.6%2Bbuild.20.jar"
+		}
+	},
+	"1.18.2": {
+		"vivecraft": {
+			"version": "1.2",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.2-1.18.2/vivecraft.jar"
+		},
+		"fabric-api": {
+			"version": "0.67.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/YDlOLdpm/fabric-api-0.67.0%2B1.18.2.jar"
+		},
+		"lazydfu": {
+			"version": "1.2",
+			"download_link": "https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.2/lazydfu-0.1.2.jar"
+		},
+		"simple-voice-chat": {
+			"version": "2.3.24",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/Uf3QfIZH/voicechat-fabric-1.18.2-2.3.24.jar"
+		},
+		"lithium": {
+			"version": "0.10.3",
+			"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/ALnv7Npy/lithium-fabric-mc1.18.2-0.10.3.jar"
+		},
+		"ferrite-core": {
+			"version": "4.2.1",
+			"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/4.2.0/ferritecore-4.2.0-fabric.jar"
+		},
+		"smooth-boot": {
+			"version": "1.7.0",
+			"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/iy4eaYy2/smoothboot-fabric-1.18.2-1.7.0.jar"
+		},
+		"entity-culling": {
+			"version": "1.5.1",
+			"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/1.5.1-fabric-1.18/entityculling-fabric-mc1.18-1.5.1.jar"
+		}
+		,
+		"sodium": {
+			"version": "0.4.1",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
+		}
+	}
+}

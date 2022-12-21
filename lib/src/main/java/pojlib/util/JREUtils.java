@@ -210,7 +210,7 @@ public class JREUtils {
         runtimeDir = activity.getFilesDir() + "/runtimes/jre-17";
 
         initJavaRuntime();
-        chdir(Constants.USER_HOME);
+        chdir(Constants.MC_DIR);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 
         final int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));

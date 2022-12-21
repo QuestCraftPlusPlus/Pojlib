@@ -64,7 +64,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
                 ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
                 ZipEntry zipEntry = zis.getNextEntry();
                 while (zipEntry != null) {
-                    File newFile = newFile(new File(this.getFilesDir() + "/runtimes"), zipEntry);
+                    File newFile = newFile(new File(this.getFilesDir() + "/runtimes/jre-17"), zipEntry);
                     if (zipEntry.isDirectory()) {
                         if (!newFile.isDirectory() && !newFile.mkdirs()) {
                             throw new IOException("Failed to create directory " + newFile);

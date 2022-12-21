@@ -12,12 +12,20 @@ import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.MultiWindowSupport;
 import com.unity3d.player.UnityPlayer;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.instance.MinecraftInstance;
+import pojlib.util.FileUtil;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents
 {
@@ -48,6 +56,56 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
         MinecraftInstance.context = this;
+        File zip = new File(this.getFilesDir() + "/runtimes/jre-17.zip");
+        if(!zip.exists()) {
+            try {
+                FileUtils.writeByteArrayToFile(zip, FileUtil.loadFromAssetToByte(this, "jre-17.zip"));
+                byte[] buffer = new byte[1024];
+                ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
+                ZipEntry zipEntry = zis.getNextEntry();
+                while (zipEntry != null) {
+                    File newFile = newFile(new File(this.getFilesDir() + "/runtimes"), zipEntry);
+                    if (zipEntry.isDirectory()) {
+                        if (!newFile.isDirectory() && !newFile.mkdirs()) {
+                            throw new IOException("Failed to create directory " + newFile);
+                        }
+                    } else {
+                        // fix for Windows-created archives
+                        File parent = newFile.getParentFile();
+                        if (!parent.isDirectory() && !parent.mkdirs()) {
+                            throw new IOException("Failed to create directory " + parent);
+                        }
+
+                        // write file content
+                        FileOutputStream fos = new FileOutputStream(newFile);
+                        int len;
+                        while ((len = zis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, len);
+                        }
+                        fos.close();
+                    }
+                    zipEntry = zis.getNextEntry();
+                }
+
+                zis.closeEntry();
+                zis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
     }
 
     @Override

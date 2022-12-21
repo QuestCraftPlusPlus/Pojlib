@@ -38,6 +38,7 @@ public class API_V1 {
     public static String msaMessage = "";
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
+    public static boolean finishedDownloading = false;
 
     /**
      * @return A list of every minecraft version

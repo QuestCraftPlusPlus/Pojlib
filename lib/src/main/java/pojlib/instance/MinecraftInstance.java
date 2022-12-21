@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import pojlib.UnityPlayerActivity;
 import pojlib.account.MinecraftAccount;
+import pojlib.api.API_V1;
 import pojlib.install.*;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
@@ -38,13 +39,14 @@ public class MinecraftInstance {
 
         VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
         instance.versionType = minecraftVersionInfo.type;
-        VersionInfo modLoaderVersionInfo = null;
+        FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
+        VersionInfo modLoaderVersionInfo =  FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
+        instance.mainClass = modLoaderVersionInfo.mainClass;
 
         // Get mod loader info
         if (modLoader == 0) {
             instance.mainClass = minecraftVersionInfo.mainClass;
         } else if (modLoader == 1) {
-            FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
             if (fabricVersion != null) {
                 modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
                 instance.mainClass = modLoaderVersionInfo.mainClass;
@@ -62,18 +64,26 @@ public class MinecraftInstance {
         if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
 
         // Install minecraft
-        String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
-        String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
-        String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
-        String lwjgl = Installer.installLwjgl(activity);
+        VersionInfo finalModLoaderVersionInfo = modLoaderVersionInfo;
+        new Thread(() -> {
+            try {
+                String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
+                String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
+                String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
+                String lwjgl = Installer.installLwjgl(activity);
 
-        instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
+                instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
-        instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
-        instance.assetIndex = minecraftVersionInfo.assetIndex.id;
+                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            instance.assetIndex = minecraftVersionInfo.assetIndex.id;
 
-        // Write instance to json file
-        GsonUtils.objectToJsonFile(gameDir + "/instances/" + instanceName + "/instance.json", instance);
+            // Write instance to json file
+            GsonUtils.objectToJsonFile(gameDir + "/instances/" + instanceName + "/instance.json", instance);
+            API_V1.finishedDownloading = true;
+        }).start();
         return instance;
     }
 
@@ -89,7 +99,7 @@ public class MinecraftInstance {
 
     public List<String> generateLaunchArgs(MinecraftAccount account) {
         String[] mcArgs = {"--username", account.username, "--version", versionName, "--gameDir", gameDir,
-                "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid,
+                "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid.replaceAll("-", ""),
                 "--accessToken", account.accessToken, "--userType", account.userType, "--versionType", versionType};
 
         List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));

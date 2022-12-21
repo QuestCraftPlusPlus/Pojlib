@@ -24,7 +24,9 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import pojlib.account.MinecraftAccount;
+import pojlib.api.API_V1;
 import pojlib.instance.MinecraftInstance;
+import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents
@@ -92,6 +94,9 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        if(new File(Constants.MC_DIR + "/assets").exists()) {
+            API_V1.finishedDownloading = true;
         }
     }
 

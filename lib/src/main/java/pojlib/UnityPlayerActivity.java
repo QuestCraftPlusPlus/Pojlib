@@ -12,6 +12,11 @@ import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.MultiWindowSupport;
 import com.unity3d.player.UnityPlayer;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
+import pojlib.account.MinecraftAccount;
 import pojlib.instance.MinecraftInstance;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents

@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class VLoader {
     static {
-        System.loadLibrary("vloader");
+        System.loadLibrary("openvr_api");
     }
 
     public static native void setAndroidInitInfo(Context ctx);

@@ -34,6 +34,17 @@ void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charAr
 	}
 }
 
+jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr) {
+	if (srcStr == NULL) {
+		return NULL;
+	}
+
+	const char* srcStrC = (*srcEnv)->GetStringUTFChars(srcEnv, srcStr, 0);
+	jstring dstStr = (*dstEnv)->NewStringUTF(dstEnv, srcStrC);
+	(*srcEnv)->ReleaseStringUTFChars(srcEnv, srcStr, srcStrC);
+	return dstStr;
+}
+
 JNIEXPORT jint JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNatives(JNIEnv *env, jclass clazz, jstring registerSymbol) {
 	const char *register_symbol_c = (*env)->GetStringUTFChars(env, registerSymbol, 0);
 	void *symbol = dlsym(RTLD_DEFAULT, register_symbol_c);

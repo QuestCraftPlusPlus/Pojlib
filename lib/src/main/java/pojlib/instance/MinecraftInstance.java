@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MinecraftInstance {
 
-    public static UnityPlayerActivity context;
+    public static Activity context;
     public String versionName;
     public String versionType;
     public String classpath;
@@ -30,7 +30,7 @@ public class MinecraftInstance {
     //WIP!!!!!!
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
     public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, int modLoader) throws IOException {
-        Logger.log(Logger.INFO, "Creating new instance: " + instanceName);
+        Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
         instance.versionName = minecraftVersion.id;
@@ -43,25 +43,19 @@ public class MinecraftInstance {
         // Get mod loader info
         if (modLoader == 0) {
             instance.mainClass = minecraftVersionInfo.mainClass;
-        }
-
-        else if (modLoader == 1) {
+        } else if (modLoader == 1) {
             FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
             if (fabricVersion != null) {
                 modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
-        }
-
-        else if (modLoader == 2) {
+        } else if (modLoader == 2) {
             QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
             if (quiltVersion != null) {
                 modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
-        }
-
-        else if (modLoader == 3) {
+        } else if (modLoader == 3) {
             throw new RuntimeException("Forge not yet implemented\nExiting...");
         }
 

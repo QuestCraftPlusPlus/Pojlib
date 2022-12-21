@@ -31,46 +31,14 @@ public class Msa {
         return out.toString();
     }
 
-    public static MinecraftAccount getAccountFromAuthCode(boolean isRefresh, String authcode) throws IOException, JSONException {
-        URL url = new URL(Constants.OAUTH_TOKEN_URL);
-
-        Map<Object, Object> data = new HashMap<>();
-        data.put("client_id", "00000000402b5328");
-        data.put(isRefresh ? "refresh_token" : "code", authcode);
-        data.put("grant_type", isRefresh ? "refresh_token" : "authorization_code");
-        data.put("redirect_url", "https://login.live.com/oauth20_desktop.srf");
-        data.put("scope", "service::user.auth.xboxlive.com::MBI_SSL");
-
-        String req = ofFormData(data);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
-        conn.setRequestMethod("POST");
-        conn.setUseCaches(false);
-        conn.setDoInput(true);
-        conn.setDoOutput(true);
-        conn.connect();
-        try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes(StandardCharsets.UTF_8));
-        }
-
-        if (!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) throwResponseError(conn);
-
-        JSONObject jo = new JSONObject(read(conn.getInputStream()));
-        MinecraftAccount account = acquireXBLToken(jo.getString("access_token"));
-        account.msaRefreshToken = jo.getString("refresh_token");
-        return account;
-    }
-
-    private static MinecraftAccount acquireXBLToken(String accessToken) throws IOException, JSONException {
+    public static MinecraftAccount acquireXBLToken(String accessToken) throws IOException, JSONException {
         URL url = new URL(Constants.XBL_AUTH_URL);
 
         Map<Object, Object> data = new HashMap<>();
         Map<Object, Object> properties = new HashMap<>();
         properties.put("AuthMethod", "RPS");
         properties.put("SiteName", "user.auth.xboxlive.com");
-        properties.put("RpsTicket", accessToken);
+        properties.put("RpsTicket", "d=" + accessToken);
         data.put("Properties",properties);
         data.put("RelyingParty", "http://auth.xboxlive.com");
         data.put("TokenType", "JWT");
@@ -78,9 +46,6 @@ public class Msa {
         String req = ofJSONData(data);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("Accept", "application/json");
-        conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
@@ -110,9 +75,6 @@ public class Msa {
         String req = ofJSONData(data);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("Accept", "application/json");
-        conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);

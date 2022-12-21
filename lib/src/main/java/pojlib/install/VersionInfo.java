@@ -14,11 +14,13 @@ public class VersionInfo {
     @SerializedName("downloads")
     public Downloads downloads;
     @SerializedName("libraries")
-    public List<Library> libraries;
+    public Library[] libraries;
     @SerializedName("mainClass")
     public String mainClass;
     @SerializedName("arguments")
     public Arguments arguments;
+    @SerializedName("assets")
+    public String assets;
 
     public static class AssetIndex {
         @SerializedName("id")
@@ -43,9 +45,9 @@ public class VersionInfo {
 
     public static class Arguments {
         @SerializedName("game")
-        public String[] game;
+        public Object[] game;
         @SerializedName("jvm")
-        public String[] jvm;
+        public Object[] jvm;
 
         public static class ArgValue {
             @SerializedName("rules")

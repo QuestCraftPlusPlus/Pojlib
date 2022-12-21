@@ -26,7 +26,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := ocovr
 LOCAL_STATIC_LIBRARIES := drvopenxr occore drvopenxr
-LOCAL_SRC_FILES := ./OpenOVR/libOCOVR.a
+LOCAL_SRC_FILES := ./OpenOVR/OCOVR.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -49,13 +49,22 @@ LOCAL_SHARED_LIBRARIES := openvr_api
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
     egl_bridge.c \
-    utils.c
+    utils.c \
+    input_bridge_v3.c
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := istdio
 LOCAL_SRC_FILES := \
     stdio_is.c
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := jrelauncher
+LOCAL_SHARED_LIBRARIES := pojavexec
+LOCAL_LDLIBS := -llog -landroid
+LOCAL_SRC_FILES := \
+    jre_launcher.c
 include $(BUILD_SHARED_LIBRARY)
 
 # Helper to get current thread

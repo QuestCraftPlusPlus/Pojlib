@@ -14,8 +14,10 @@ import android.widget.Toast;
 import com.oracle.dalvik.VMLauncher;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,8 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
+
+import pojlib.instance.MinecraftInstance;
 
 public class JREUtils {
     private JREUtils() {}
@@ -87,7 +91,7 @@ public class JREUtils {
         dlopen(findInLdLibPath("libawt_headless.so"));
         dlopen(findInLdLibPath("libfreetype.so"));
         dlopen(findInLdLibPath("libfontmanager.so"));
-        for(File f : locateLibs(new File(runtimeDir + "/lib/arm64"))) {
+        for(File f : locateLibs(new File(runtimeDir + "/lib"))) {
             dlopen(f.getAbsolutePath());
         }
         dlopen(sNativeLibDir + "/libopenal.so");
@@ -95,7 +99,7 @@ public class JREUtils {
 
     public static void redirectAndPrintJRELog() {
         Log.v("jrelog","Log starts here");
-        JREUtils.logToLogger(Logger.INFO);
+        JREUtils.logToLogger(Logger.getInstance());
         new Thread(new Runnable(){
             int failTime = 0;
             ProcessBuilder logcatPb;
@@ -114,7 +118,7 @@ public class JREUtils {
                     int len;
                     while ((len = p.getInputStream().read(buf)) != -1) {
                         String currStr = new String(buf, 0, len);
-                        Logger.log(Logger.INFO, currStr);
+                        Logger.getInstance().appendToLog(currStr);
                     }
                             if (p.waitFor() != 0) {
                         Log.e("jrelog-logcat", "Logcat exited with code " + p.exitValue());
@@ -123,13 +127,13 @@ public class JREUtils {
                         if (failTime <= 10) {
                             run();
                         } else {
-                            Logger.log(Logger.INFO, "ERROR: Unable to get more log.");
+                            Logger.getInstance().appendToLog("ERROR: Unable to get more log.");
                         }
                         return;
                     }
                 } catch (Throwable e) {
                     Log.e("jrelog-logcat", "Exception on logging thread", e);
-                    Logger.log(Logger.INFO, "Exception on logging thread:\n" + Log.getStackTraceString(e));
+                    Logger.getInstance().appendToLog("Exception on logging thread:\n" + Log.getStackTraceString(e));
                 }
             }
         }).start();
@@ -139,7 +143,7 @@ public class JREUtils {
     public static void relocateLibPath(final Context ctx) {
         sNativeLibDir = ctx.getApplicationInfo().nativeLibraryDir;
 
-        LD_LIBRARY_PATH = ctx.getFilesDir() + "runtimes/jre-17" + "/lib64/jli:" + ctx.getFilesDir() + "runtimes/jre-17" + "/arm64:" +
+        LD_LIBRARY_PATH = ctx.getFilesDir() + "/runtimes/jre-17/bin" + "/lib64/jli:" + ctx.getFilesDir() + "/runtimes/jre-17/lib:" +
                 "/system/lib64:lib64/vendor/lib64:/vendor/lib64/hw:" +
                 sNativeLibDir;
     }
@@ -147,15 +151,17 @@ public class JREUtils {
     public static void setJavaEnvironment(Activity activity) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("POJAV_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
-        envMap.put("JAVA_HOME", activity.getFilesDir() + "runtimes/jre-17");
-        envMap.put("HOME", instanceHome);
+        envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/jre-17");
+        envMap.put("HOME", Constants.MC_DIR);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("LIBGL_MIPMAP", "3");
+        envMap.put("POJAV_RENDERER", "opengles2_gl4es");
+        envMap.put("LIBGL_NOINTOVLHACK", "1");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
-        envMap.put("PATH", activity.getFilesDir() + "runtimes/jre-17/bin:" + Os.getenv("PATH"));
+        envMap.put("PATH", activity.getFilesDir() + "/runtimes/jre-17/bin:" + Os.getenv("PATH"));
 
-        envMap.put("LIBGL_GLES", "/system/lib64/libGLESv3.so");
+        envMap.put("LIBGL_GLES", "/system/lib64/libGLESv2.so");
         envMap.put("LIBGL_EGL", "/system/lib64/libEGL.so");
 
         File customEnvFile = new File(Constants.USER_HOME, "custom_env.txt");
@@ -171,12 +177,12 @@ public class JREUtils {
         }
         envMap.put("LIBGL_ES", "2");
         for (Map.Entry<String, String> env : envMap.entrySet()) {
-            Logger.log(Logger.INFO, "Added custom env: " + env.getKey() + "=" + env.getValue());
+            Logger.getInstance().appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
             Os.setenv(env.getKey(), env.getValue(), true);
         }
 
-        File serverFile = new File(activity.getFilesDir() + "/runtimes/jre-17/server/libjvm.so");
-        jvmLibraryPath = activity.getFilesDir() + "/runtimes/" + "jre-17" + "/" + (serverFile.exists() ? "server" : "client");
+        File serverFile = new File(activity.getFilesDir() + "/runtimes/jre-17/lib/server/libjvm.so");
+        jvmLibraryPath = activity.getFilesDir() + "/runtimes/jre-17/lib/" + (serverFile.exists() ? "server" : "client");
         Log.d("DynamicLoader","Base LD_LIBRARY_PATH: "+LD_LIBRARY_PATH);
         Log.d("DynamicLoader","Internal LD_LIBRARY_PATH: "+jvmLibraryPath+":"+LD_LIBRARY_PATH);
         setLdLibraryPath(jvmLibraryPath+":"+LD_LIBRARY_PATH);
@@ -201,14 +207,14 @@ public class JREUtils {
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);
 
-        runtimeDir = activity.getFilesDir() + "runtimes/jre-17";
+        runtimeDir = activity.getFilesDir() + "/runtimes/jre-17";
 
         initJavaRuntime();
-        chdir(instanceHome);
+        chdir(Constants.USER_HOME);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 
         final int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
-        Logger.log(Logger.INFO, "Java Exit code: " + exitCode);
+        Logger.getInstance().appendToLog("Java Exit code: " + exitCode);
         return exitCode;
     }
 
@@ -307,4 +313,9 @@ public class JREUtils {
     public static native void logToLogger(final Logger logger);
     public static native boolean dlopen(String libPath);
     public static native void setLdLibraryPath(String ldLibraryPath);
+
+    static {
+        System.loadLibrary("pojavexec");
+        System.loadLibrary("istdio");
+    }
 }

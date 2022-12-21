@@ -4,4 +4,8 @@ public final class VMLauncher {
 	private VMLauncher() {
 	}
 	public static native int launchJVM(String[] args);
+
+	static {
+		System.loadLibrary("jrelauncher");
+	}
 }

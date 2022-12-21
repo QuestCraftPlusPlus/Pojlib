@@ -124,9 +124,7 @@ bool loadSymbols() {
         printf("DlLoader: unable to load: %s\n",dlerror());
         return 0;
     }
-    switch(config_renderer) {
-        dlsym_EGL(dl_handle);
-    }
+    dlsym_EGL(dl_handle);
 
     free(fileName);
     free(fileNameExt);
@@ -162,7 +160,7 @@ int pojavInit() {
             EGL_ALPHA_SIZE, 8,
             // Minecraft required on initial 24
             EGL_DEPTH_SIZE, 24,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
             EGL_NONE
     };
 
@@ -201,7 +199,7 @@ int pojavInit() {
            eglSurface
     );
 
-    return 0;
+    return 1;
 }
 
 ANativeWindow_Buffer buf;
@@ -308,8 +306,7 @@ Java_org_lwjgl_glfw_GLFW_nativeEglDetachOnCurrentThread(JNIEnv *env, jclass claz
 
 void* pojavCreateContext(void* contextSrc) {
     const EGLint ctx_attribs[] = {
-            EGL_CONTEXT_MAJOR_VERSION, 3,
-            EGL_CONTEXT_MINOR_VERSION, 2,
+            EGL_CONTEXT_CLIENT_VERSION, atoi(getenv("LIBGL_ES")),
             EGL_NONE
     };
     EGLContext* ctx = eglCreateContext_p(eglDisplay, config, (void*)contextSrc, ctx_attribs);

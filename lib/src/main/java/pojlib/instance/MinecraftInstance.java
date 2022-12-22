@@ -149,8 +149,9 @@ public class MinecraftInstance {
                 stream.close();
                 FileUtil.write(modsOld.getAbsolutePath(), buffer);
                 int i = 0;
+                boolean downloadAll = !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists());
                 for (String download : downloads) {
-                    if(!Objects.equals(versions.get(i), ((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString()) || !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists())) {
+                    if(!Objects.equals(versions.get(i), ((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString()) || downloadAll) {
                         DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
                     }
                     i++;

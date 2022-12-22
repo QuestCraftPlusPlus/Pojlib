@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class MinecraftInstance {
 
@@ -132,33 +133,27 @@ public class MinecraftInstance {
             ArrayList<String> downloads = new ArrayList<>();
             ArrayList<String> name = new ArrayList<>();
 
-            if(mods.exists()) {
-                JsonArray verMods = obj.getAsJsonArray(this.versionName);
-                for (JsonElement verMod : verMods) {
-                    JsonObject object = verMod.getAsJsonObject();
-                    versions.add(object.get("version").getAsString());
-                    downloads.add(object.get("download_link").getAsString());
-                    name.add(object.get("slug").getAsString());
-                }
+            JsonArray verMods = obj.getAsJsonArray(this.versionName);
+            for (JsonElement verMod : verMods) {
+                JsonObject object = verMod.getAsJsonObject();
+                versions.add(object.get("version").getAsString());
+                downloads.add(object.get("download_link").getAsString());
+                name.add(object.get("slug").getAsString());
             }
 
-            if(!modsOld.exists()) {
-                JsonArray verMods = obj.getAsJsonArray(this.versionName);
-                for (JsonElement verMod : verMods) {
-                    JsonObject object = verMod.getAsJsonObject();
-                    for (String version : versions) {
-                        if (!version.equals(object.get("version").getAsString())) {
-                            InputStream stream = new FileInputStream(mods);
-                            int size = stream.available();
-                            byte[] buffer = new byte[size];
-                            stream.read(buffer);
-                            stream.close();
-                            FileUtil.write(modsOld.getAbsolutePath(), buffer);
-
-                            DownloadUtils.downloadFile(object.getAsJsonObject("download_link").getAsString(), new File(Constants.MC_DIR + "/mods/" + this.versionName  + "/" + object.get("slug").getAsString() + ".jar"));
-                            break;
-                        }
+            if(modsOld.exists()) {
+                InputStream stream = new FileInputStream(mods);
+                int size = stream.available();
+                byte[] buffer = new byte[size];
+                stream.read(buffer);
+                stream.close();
+                FileUtil.write(modsOld.getAbsolutePath(), buffer);
+                int i = 0;
+                for (String download : downloads) {
+                    if(!Objects.equals(versions.get(i), ((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString())) {
+                        DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
                     }
+                    i++;
                 }
                 mods.delete();
             } else {
@@ -170,7 +165,7 @@ public class MinecraftInstance {
                 FileUtil.write(modsOld.getAbsolutePath(), buffer);
                 int i = 0;
                 for (String download : downloads) {
-                    DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName  + "/" + name.get(i) + ".jar"));
+                    DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
                     i++;
                 }
                 mods.delete();

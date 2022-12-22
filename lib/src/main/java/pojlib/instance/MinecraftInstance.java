@@ -150,7 +150,7 @@ public class MinecraftInstance {
                 FileUtil.write(modsOld.getAbsolutePath(), buffer);
                 int i = 0;
                 for (String download : downloads) {
-                    if(!Objects.equals(versions.get(i), ((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString())) {
+                    if(!Objects.equals(versions.get(i), ((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString()) || !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists())) {
                         DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
                     }
                     i++;

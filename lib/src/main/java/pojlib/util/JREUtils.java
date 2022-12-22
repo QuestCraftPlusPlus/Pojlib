@@ -190,7 +190,7 @@ public class JREUtils {
         // return ldLibraryPath;
     }
 
-    public static int launchJavaVM(final Activity activity,final List<String> JVMArgs) throws Throwable {
+    public static int launchJavaVM(final Activity activity,final List<String> JVMArgs, String versionName) throws Throwable {
         JREUtils.relocateLibPath(activity);
         setJavaEnvironment(activity);
 
@@ -203,6 +203,7 @@ public class JREUtils {
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");
+        userArgs.add("-Dfabric.addMods=" + Constants.MC_DIR + "/mods/" + versionName);
 
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);

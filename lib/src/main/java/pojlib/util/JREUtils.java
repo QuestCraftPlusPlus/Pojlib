@@ -190,7 +190,7 @@ public class JREUtils {
         // return ldLibraryPath;
     }
 
-    public static int launchJavaVM(final Activity activity,final List<String> JVMArgs) throws Throwable {
+    public static int launchJavaVM(final Activity activity,final List<String> JVMArgs, String versionName) throws Throwable {
         JREUtils.relocateLibPath(activity);
         setJavaEnvironment(activity);
 
@@ -203,6 +203,7 @@ public class JREUtils {
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");
+        userArgs.add("-Dfabric.addMods=" + Constants.MC_DIR + "/mods/" + versionName);
 
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);
@@ -210,7 +211,7 @@ public class JREUtils {
         runtimeDir = activity.getFilesDir() + "/runtimes/jre-17";
 
         initJavaRuntime();
-        chdir(Constants.USER_HOME);
+        chdir(Constants.MC_DIR);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 
         final int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
@@ -228,7 +229,7 @@ public class JREUtils {
         ArrayList<String> overridableArguments = new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + new File(ctx.getFilesDir(), "runtimes/jre-17"),
                 "-Djava.io.tmpdir=" + ctx.getCacheDir().getAbsolutePath(),
-                "-Duser.home=" + Constants.USER_HOME,
+                "-Duser.home=" + Constants.MC_DIR,
                 "-Duser.language=" + System.getProperty("user.language"),
                 "-Dos.name=Linux",
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,

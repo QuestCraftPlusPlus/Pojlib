@@ -3,11 +3,10 @@ package pojlib.modmanager.api;
 import android.os.Build;
 import com.google.gson.annotations.SerializedName;
 
-import net.kdt.pojavlaunch.Tools;
 import pojlib.modmanager.ModData;
 import pojlib.modmanager.ModManager;
-import net.kdt.pojavlaunch.utils.APIUtils;
-import net.kdt.pojavlaunch.utils.UiUitls;
+import pojlib.util.APIHandler;
+import pojlib.util.DownloadUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class Modrinth {
 
-    private static final APIUtils.APIHandler handler = new APIUtils.APIHandler("https://api.modrinth.com/v2");
+    private static final APIHandler handler = new APIHandler("https://api.modrinth.com/v2");
 
     public static class Project {
         @SerializedName("title")
@@ -106,7 +105,7 @@ public class Modrinth {
                     return false;
                 });
 
-                ArrayList<ModData> installedMods = ModManager.listInstalledMods("fabric-loader-" + Tools.getModJsonFabricLoaderVersion() + "-" + version);
+                ArrayList<ModData> installedMods = ModManager.listInstalledMods("fabric-loader-" + DownloadUtils.getModJsonFabricLoaderVersion() + "-" + version);
                 for (ModData mod : result.hits) {
                     mod.platform = "modrinth";
                     for (ModData installedMod : installedMods) {

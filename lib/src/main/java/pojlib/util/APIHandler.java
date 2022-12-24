@@ -1,6 +1,8 @@
 package pojlib.util;
 
+import android.os.Build;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -95,5 +97,12 @@ public class APIHandler {
 
     public static <T> T postFullUrl(String url, HashMap<String, Object> query, T body, Class<T> tClass) {
         return new Gson().fromJson(postRaw(url + parseQueries(query), body.toString()), tClass);
+    }
+
+    public static String getCurseforgeJsonURL(String raw) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return null;
+        JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(raw), JsonObject.class);
+        raw = String.valueOf(jsonObject.get("data")).replaceAll("\"", "");
+        return raw;
     }
 }

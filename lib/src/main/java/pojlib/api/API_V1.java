@@ -28,6 +28,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -96,8 +98,8 @@ public class API_V1 {
      * @param authCode  The token received from the microsoft login window
      * @return          A minecraft account object
      */
-    public static MinecraftAccount login(String home, String authCode, String refreshToken) throws IOException, JSONException {
-        return MinecraftAccount.login(home, authCode, refreshToken);
+    public static MinecraftAccount login(String home, String authCode, JsonObject response) throws IOException, JSONException {
+        return MinecraftAccount.login(home, response);
     }
 
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstance instance) {
@@ -110,8 +112,8 @@ public class API_V1 {
      * @param home  The base directory where minecraft should be setup
      * @return      A minecraft account object, null if no account found
      */
-    public static MinecraftAccount fetchSavedLogin(String home) {
-        return MinecraftAccount.load(home);
+    public static MinecraftAccount fetchSavedLogin(String home, String client_id) {
+        return MinecraftAccount.load(home, client_id);
     }
 
     /**
@@ -126,7 +128,7 @@ public class API_V1 {
 
     public static MinecraftAccount login(String client_id)
     {
-        MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/.minecraft");
+        MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/.minecraft", client_id);
         if(acc != null) {
             return acc;
         }
@@ -169,7 +171,7 @@ public class API_V1 {
                 JsonObject jsonObject2 = (JsonObject) JsonParser.parseReader(new InputStreamReader(response2, StandardCharsets.UTF_8));
 
                 // Finally, log in
-                return MinecraftAccount.login(Constants.USER_HOME + "/.minecraft", jsonObject2.get("access_token").getAsString(), jsonObject2.get("refresh_token").getAsString());
+                return MinecraftAccount.login(Constants.USER_HOME + "/.minecraft", jsonObject2);
             }
             hasQueried = true;
         } catch (IOException | JSONException e) {

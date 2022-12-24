@@ -5,10 +5,11 @@ import android.util.Pair;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.kdt.pojavlaunch.Tools;
 import pojlib.modmanager.State.Instance;
 import pojlib.modmanager.api.*;
-import net.kdt.pojavlaunch.utils.DownloadUtils;
+import pojlib.util.DownloadUtils;
+import pojlib.util.FileUtil;
+import pojlib.util.GsonUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +46,6 @@ public class ModManager {
                         repoList.add("QuestCraftPlusPlus/MCXR");
                         repoList.add("QuestCraftPlusPlus/TitleWorlds");
                     }*/
-                    Github.setRepoList(repoList);
 
                     //Init outside to cache version (see Fabric/Quilt.java)
                     String flVersion = Fabric.getLatestLoaderVersion();
@@ -53,7 +53,7 @@ public class ModManager {
 
                     if (!modsJson.exists()) {
                         state.fabricLoaderVersion = flVersion;
-                        String gameVersion = Tools.getCompatibleVersions("releases").get(0);
+                        String gameVersion = DownloadUtils.getCompatibleVersions("releases").get(0);
                         Fabric.downloadJson(gameVersion, flVersion);
                         String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
@@ -62,7 +62,7 @@ public class ModManager {
                         instance.setLoaderVersion(fabricLoaderName);
                         state.addInstance(instance);
 
-                        gameVersion = Tools.getCompatibleVersions("releases").get(1);
+                        gameVersion = DownloadUtils.getCompatibleVersions("releases").get(1);
                         Fabric.downloadJson(gameVersion, flVersion);
                         fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         instance = new Instance();
@@ -71,8 +71,8 @@ public class ModManager {
                         instance.setLoaderVersion(fabricLoaderName);
                         state.addInstance(instance);
 
-                        Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
-                    } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
+                        FileUtil.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
+                    } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), pojlib.modmanager.State.class);
 
                     //Remove mod metadata if they were deleted manually
                     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
@@ -104,22 +104,6 @@ public class ModManager {
         thread.start();
     }
 
-    public static ArrayList<Pair<String, String>> getCoreModsFromJson(String version) {
-        try {
-            ArrayList<Pair<String, String>> mods = new ArrayList<>();
-            JsonObject json = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
-
-            for (JsonElement element : json.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
-                JsonObject mod = element.getAsJsonObject();
-                mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
-            }
-            return mods;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
-
     public static String getModCompat(String platform, String name) {
         JsonElement compatLevel = null;
         if (platform.equals("modrinth")) compatLevel = modrinthCompat.get(name);
@@ -134,7 +118,7 @@ public class ModManager {
 
         if (instance == null) {
             try {
-                state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), State.class);
+                state = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(modsJson.getPath()), State.class);
                 instance = state.getInstance(name);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -179,7 +163,7 @@ public class ModManager {
         return currentDownloadSlugs.contains(slug);
     }
 
-    public static void createInstance(PojavLauncherActivity activity, String name, String gameVersion, String loaderType) {
+    public static void createInstance(String name, String gameVersion, String loaderType) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -219,7 +203,6 @@ public class ModManager {
                     ModData modData = null;
                     if (platform.equals("modrinth")) modData = Modrinth.getModData(slug, gameVersion);
                     else if (platform.equals("curseforge")) modData = Curseforge.getModData(slug, gameVersion);
-                    else if (platform.equals("github")) modData = Github.getModData(slug, gameVersion);
                     if (modData == null) return;
                     modData.isActive = true;
 
@@ -239,7 +222,7 @@ public class ModManager {
                     DownloadUtils.downloadFile(modData.fileData.url, new File(path.getPath() + "/" + modData.fileData.filename));
                     currentDownloadSlugs.remove(slug);
 
-                    Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
+                    Tools.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state));
                     synchronized (state) {
                         state.notifyAll();
                     }
@@ -261,19 +244,8 @@ public class ModManager {
         if (modJar.delete()) {
             instance.getMods().remove(modData);
             try {
-                Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void removeCoreMod(String version, ModData modData) {
-        File modJar = new File(workDir + "/core/" + version + "/" + modData.fileData.filename);
-        if (modJar.delete()) {
-            state.getCoreMods(version).remove(modData);
-            try {
-                Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
+                Tools.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state));
+                FileUtil.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -292,8 +264,6 @@ public class ModManager {
                         modData = Modrinth.getModData(mod.slug, instance.getGameVersion());
                     else if (mod.platform.equals("curseforge"))
                         modData = Curseforge.getModData(mod.slug, instance.getGameVersion());
-                    else if (mod.platform.equals("github"))
-                        modData = Github.getModData(mod.slug, instance.getGameVersion());
                     if (modData != null && !mod.fileData.id.equals(modData.fileData.id) && !Objects.equals(modData.slug, "simple-voice-chat"))
                         mods.add(mod);
                 }
@@ -313,28 +283,6 @@ public class ModManager {
             } else {
                 addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), false);
             }
-        }
-    }
-
-    public static ArrayList<ModData> checkCoreModsForUpdate(String instanceName) {
-        ArrayList<ModData> mods = new ArrayList<>();
-        try {
-            for (ModData mod : state.getCoreMods(instanceName)) {
-                ModData modData = null;
-                if (mod.platform.equals("github")) modData = Github.getModData(mod.slug, instanceName);
-                if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) mods.add(mod);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return mods;
-    }
-
-    public static void updateCoreMods(String instanceName, ArrayList<ModData> modsToUpdate) {
-        Instance instance = state.getInstance(instanceName);
-        for (ModData mod : modsToUpdate) {
-            removeCoreMod(instance.getGameVersion(), mod);
-            addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), true);
         }
     }
 

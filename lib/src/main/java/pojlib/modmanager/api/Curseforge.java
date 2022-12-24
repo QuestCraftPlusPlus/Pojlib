@@ -81,7 +81,7 @@ public class Curseforge {
         return null;
     }
 
-    public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
+    public static void addProjectsToRecycler(String version, int offset, String query) {
         Thread thread = new Thread() {
             @Override
             public void run() {

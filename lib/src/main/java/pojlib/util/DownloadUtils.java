@@ -1,5 +1,6 @@
 package pojlib.util;
 
+import android.content.res.AssetManager;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Hex;
@@ -18,6 +19,8 @@ import static pojlib.util.FileUtil.read;
 import static pojlib.util.GsonUtils.GLOBAL_GSON;
 
 public class DownloadUtils {
+
+    public static AssetManager assetManager;
 
     private static void download(URL url, OutputStream os) throws IOException {
         InputStream is = null;
@@ -86,7 +89,7 @@ public class DownloadUtils {
     public static ArrayList<String> getCompatibleVersions(String tag) {
         ArrayList<String> versions = new ArrayList<>();
         try {
-            InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
+            InputStream stream = assetManager.open("jsons/modmanager.json");
             JsonObject versionsJson = GLOBAL_GSON.fromJson(read(stream), JsonObject.class);
 
             for (JsonElement version : versionsJson.get("compatible_versions").getAsJsonObject().getAsJsonArray(tag)) {

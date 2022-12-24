@@ -69,6 +69,8 @@ public class MinecraftAccount {
                     JsonObject jsonObject = (JsonObject) JsonParser.parseReader(new InputStreamReader(response, StandardCharsets.UTF_8));
 
                     acc = Msa.acquireXBLToken(jsonObject.get("access_token").getAsString());
+                    acc.msaRefreshToken = jsonObject.get("refresh_token").getAsString();
+                    acc.expiresIn = Instant.now().plusSeconds(jsonObject.get("expires_in").getAsInt()).getNano();
                     GsonUtils.objectToJsonFile(path + "/account.json", acc);
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();

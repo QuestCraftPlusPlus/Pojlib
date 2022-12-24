@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class ModManager {
 
-    public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
+    public static final String workDir = FileUtil.DIR_GAME_NEW + "/modmanager";
     public static State state = new State();
     private static final File modsJson = new File(workDir + "/mods.json");
     private static JsonObject modrinthCompat = new JsonObject();
@@ -35,9 +35,9 @@ public class ModManager {
             public void run() {
                 try {
                     //InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
-                    JsonObject modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
-                    modrinthCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modrinth-compat.json"), JsonObject.class);
-                    curseforgeCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/curseforge-compat.json"), JsonObject.class);
+                    JsonObject modManagerJson = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/modmanager.json"), JsonObject.class);
+                    modrinthCompat = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/modrinth-compat.json"), JsonObject.class);
+                    curseforgeCompat = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/curseforge-compat.json"), JsonObject.class);
 
                     JsonArray repoList = modManagerJson.getAsJsonArray("repos");
                     /*if (repoList == null) {
@@ -71,8 +71,8 @@ public class ModManager {
                         instance.setLoaderVersion(fabricLoaderName);
                         state.addInstance(instance);
 
-                        FileUtil.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
-                    } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), pojlib.modmanager.State.class);
+                        FileUtil.write(modsJson.getPath(), GsonUtils.GLOBAL_GSON.toJson(state).getBytes()); //Cant use save state cause async issues
+                    } else state = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(modsJson.getPath()), pojlib.modmanager.State.class);
 
                     //Remove mod metadata if they were deleted manually
                     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
@@ -146,7 +146,7 @@ public class ModManager {
                 }
 
                 try {
-                    Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
+                    FileUtil.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state).getBytes());
                     saveStateCalled = false;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -222,7 +222,7 @@ public class ModManager {
                     DownloadUtils.downloadFile(modData.fileData.url, new File(path.getPath() + "/" + modData.fileData.filename));
                     currentDownloadSlugs.remove(slug);
 
-                    Tools.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state));
+                    FileUtil.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state).getBytes());
                     synchronized (state) {
                         state.notifyAll();
                     }
@@ -244,8 +244,7 @@ public class ModManager {
         if (modJar.delete()) {
             instance.getMods().remove(modData);
             try {
-                Tools.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state));
-                FileUtil.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state));
+                FileUtil.write(workDir + "/mods.json", GsonUtils.GLOBAL_GSON.toJson(state).getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }

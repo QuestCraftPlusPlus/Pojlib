@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 
 public class GsonUtils {
 
+    public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
+
     public static <T> T jsonFileToObject(String path, Class<T> tClass) {
         try {
             return new Gson().fromJson(new FileReader(path), tClass);

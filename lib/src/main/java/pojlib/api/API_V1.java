@@ -131,6 +131,7 @@ public class API_V1 {
     {
         MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/.minecraft", client_id);
         if(acc != null) {
+            profileImage = MinecraftAccount.getSkinFaceUrl(acc);
             return acc;
         }
         try {
@@ -172,10 +173,11 @@ public class API_V1 {
                 JsonObject jsonObject2 = (JsonObject) JsonParser.parseReader(new InputStreamReader(response2, StandardCharsets.UTF_8));
 
                 // Finally, log in
-                return MinecraftAccount.login(Constants.USER_HOME + "/.minecraft", jsonObject2);
+                acc = MinecraftAccount.login(Constants.USER_HOME + "/.minecraft", jsonObject2);
+                profileImage = MinecraftAccount.getSkinFaceUrl(acc);
+                return acc;
             }
             hasQueried = true;
-            profileImage = MinecraftAccount.getSkinFaceUrl(acc).toString();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

@@ -83,7 +83,7 @@ public class MinecraftAccount {
     }
 
     public static String getSkinFaceUrl(MinecraftAccount account) {
-        return Constants.CRAFATAR_URL + "/avatar/" + account.uuid;
+        return Constants.CRAFATAR_URL + "/avatars/" + account.uuid;
     }
 
     public static String getSkinBodyUrl(MinecraftAccount account) {

@@ -81,7 +81,7 @@ public class Curseforge {
         return null;
     }
 
-    public static void addProjectsToRecycler(String version, int offset, String query) {
+/*    public static void addProjectsToRecycler(String version, int offset, String query) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -130,17 +130,5 @@ public class Curseforge {
             }
         };
         thread.start();
-    }
-
-    public static void loadProjectPage(MarkdownView view, String id) {
-        view.loadMarkdown("", "file:///android_asset/ModDescription.css");
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                Description description = handler.get("getModDescription/" + id, Description.class);
-                if (description != null) UiUitls.runOnUI(() -> view.loadMarkdown(description.data, "file:///android_asset/ModDescription.css"));
-            }
-        };
-        thread.start();
-    }
+    }*/
 }

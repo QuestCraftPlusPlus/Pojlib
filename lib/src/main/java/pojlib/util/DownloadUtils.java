@@ -1,15 +1,26 @@
 package pojlib.util;
 
+import android.content.res.AssetManager;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import pojlib.modmanager.State;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.ArrayList;
+
+import static pojlib.modmanager.ModManager.workDir;
+import static pojlib.util.FileUtil.read;
+import static pojlib.util.GsonUtils.GLOBAL_GSON;
 
 public class DownloadUtils {
+
+    public static AssetManager assetManager;
 
     private static void download(URL url, OutputStream os) throws IOException {
         InputStream is = null;
@@ -74,4 +85,30 @@ public class DownloadUtils {
             return true;
         }
     }
+
+    public static ArrayList<String> getCompatibleVersions(String tag) {
+        ArrayList<String> versions = new ArrayList<>();
+        try {
+            InputStream stream = assetManager.open("jsons/modmanager.json");
+            JsonObject versionsJson = GLOBAL_GSON.fromJson(read(stream), JsonObject.class);
+
+            for (JsonElement version : versionsJson.get("compatible_versions").getAsJsonObject().getAsJsonArray(tag)) {
+                versions.add(version.getAsString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return versions;
+    }
+
+    public static String getModJsonFabricLoaderVersion() {
+        File modsJson = new File(workDir + "/mods.json");
+        try {
+            return GLOBAL_GSON.fromJson(read(modsJson.getPath()), State.class).fabricLoaderVersion;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

@@ -83,7 +83,7 @@ public class Modrinth {
         return null;
     }
 
-    public static void addProjectsToRecycler(String version, int offset, String query) {
+/*    public static void addProjectsToRecycler(String version, int offset, String query) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -123,17 +123,5 @@ public class Modrinth {
             }
         };
         thread.start();
-    }
-
-    public static void loadProjectPage(MarkdownView view, String slug) {
-        view.loadMarkdown("", "file:///android_asset/ModDescription.css");
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                Project project = handler.get("project/" + slug, Project.class);
-                if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body, "file:///android_asset/ModDescription.css"));
-            }
-        };
-        thread.start();
-    }
+    }*/
 }

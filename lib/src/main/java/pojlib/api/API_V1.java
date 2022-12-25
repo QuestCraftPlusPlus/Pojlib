@@ -39,6 +39,7 @@ public class API_V1 {
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
     public static boolean finishedDownloading = false;
+    public static String profileImage;
 
     /**
      * @return A list of every minecraft version
@@ -172,6 +173,7 @@ public class API_V1 {
                 return MinecraftAccount.login(Constants.USER_HOME + "/.minecraft", jsonObject2.get("access_token").getAsString(), jsonObject2.get("refresh_token").getAsString());
             }
             hasQueried = true;
+            profileImage = MinecraftAccount.getSkinFaceUrl(acc).toString();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }

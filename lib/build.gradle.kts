@@ -3,6 +3,18 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+dependencies {
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.withType<Test>{
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
+}
+
 android {
     compileSdkVersion = "android-31"
     defaultConfig {
@@ -50,6 +62,5 @@ dependencies {
     implementation("androidx.annotation:annotation:1.3.0")
     implementation("androidx.browser:browser:1.4.0")
     implementation("blank:unity-classes")
-
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
 }

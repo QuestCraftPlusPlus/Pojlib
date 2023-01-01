@@ -1,22 +1,13 @@
 package pojlib.util;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.*;
 class StreamDLTest {
-
-    @Test
-    void StreamDLTest() throws IOException {
-        File file = new File("/home/izzydotexe/helloworld.png");
-        downloadFile("https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387__480.png", file);
-
-    }
 
     private static void download(URL url, OutputStream os) throws IOException {
         InputStream is = null;

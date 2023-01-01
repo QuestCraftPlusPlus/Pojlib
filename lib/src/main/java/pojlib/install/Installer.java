@@ -22,7 +22,7 @@ import java.util.StringJoiner;
 
 //This class reads data from a game version json and downloads its contents.
 //This works for the base game as well as mod loaders
-public class Installer {
+public class Installer extends Thread {
 
     // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath
@@ -88,17 +88,11 @@ public class Installer {
     //Will only download asset if it is missing
     public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
         Logger.getInstance().appendToLog("Downloading assets");
-
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
-            VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
-            String path = asset.hash.substring(0, 2) + "/" + asset.hash;
-            File assetFile = new File(gameDir + "/assets/objects/", path);
-            if (!assetFile.exists()) {
-                Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
-                DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
-            }
+            AsyncDownload thread = new AsyncDownload(entry);
+            thread.start();
         }
 
         DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"));
@@ -110,6 +104,25 @@ public class Installer {
         FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/servers.dat"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "servers.dat"));
 
         return new File(gameDir + "/assets").getAbsolutePath();
+    }
+
+    public static class AsyncDownload extends Thread {
+        Map.Entry<String, JsonElement> entry;
+
+        public void run(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+            VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
+            String path = asset.hash.substring(0, 2) + "/" + asset.hash;
+            File assetFile = new File(gameDir + "/assets/objects/", path);
+
+            if (!assetFile.exists()) {
+                Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
+                DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+            }
+        }
+
+        public AsyncDownload( Map.Entry<String, JsonElement> entry) {
+            this.entry = entry;
+        }
     }
 
     public static String installLwjgl(Activity activity) throws IOException {

@@ -3,6 +3,7 @@ package pojlib.install;
 import android.app.Activity;
 import android.content.Context;
 
+import android.provider.Telephony;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -114,10 +115,12 @@ public class Installer extends Thread {
             String path = asset.hash.substring(0, 2) + "/" + asset.hash;
             File assetFile = new File(gameDir + "/assets/objects/", path);
 
-            if (!assetFile.exists()) {
-                Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
-                DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
-            }
+            while (Installer.AsyncDownload.activeCount() >= 5) {
+
+            }   if (!assetFile.exists()) {
+                    Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
+                    DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+                }
         }
 
         public AsyncDownload( Map.Entry<String, JsonElement> entry) {

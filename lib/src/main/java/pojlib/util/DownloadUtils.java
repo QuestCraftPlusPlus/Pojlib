@@ -33,8 +33,7 @@ public class DownloadUtils {
             conn.setDoInput(true);
             conn.connect();
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new IOException("Server returned HTTP " + conn.getResponseCode()
-                        + ": " + conn.getResponseMessage());
+                is = conn.getInputStream();
             }
 
             String[] segments = url.getPath().split("/");

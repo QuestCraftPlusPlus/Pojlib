@@ -92,7 +92,7 @@ public class Installer extends Thread {
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
-            AsyncDownload thread = new AsyncDownload(entry);
+            AsyncDownload thread = new AsyncDownload(entry, minecraftVersionInfo, gameDir);
             thread.start();
         }
 
@@ -109,8 +109,10 @@ public class Installer extends Thread {
 
     public static class AsyncDownload extends Thread {
         Map.Entry<String, JsonElement> entry;
+        VersionInfo versionInfo;
+        String gameDir;
 
-        public void run(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+        public void run() {
             VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
             String path = asset.hash.substring(0, 2) + "/" + asset.hash;
             File assetFile = new File(gameDir + "/assets/objects/", path);
@@ -119,12 +121,18 @@ public class Installer extends Thread {
 
             }   if (!assetFile.exists()) {
                     Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
+                try {
                     DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
+            }
         }
 
-        public AsyncDownload( Map.Entry<String, JsonElement> entry) {
+        public AsyncDownload( Map.Entry<String, JsonElement> entry, VersionInfo versionInfo, String gameDir) {
             this.entry = entry;
+            this.versionInfo = versionInfo;
+            this.gameDir = gameDir;
         }
     }
 

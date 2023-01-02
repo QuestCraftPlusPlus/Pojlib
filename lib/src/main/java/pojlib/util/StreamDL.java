@@ -9,9 +9,9 @@ import java.util.Collection;
 
 public class StreamDL extends InputStream {
 
-    private InputStream in;
+    private final InputStream in;
     private int count;
-    private Collection<StreamListener> listeners = new ArrayList<StreamListener>();
+    private final Collection<StreamListener> listeners = new ArrayList<StreamListener>();
 
     StreamDL(InputStream in) {
         this.in = in;

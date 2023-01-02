@@ -80,8 +80,7 @@ public class Logger {
      * @return Whether the log should be censored
      */
     private static boolean shouldCensorLog(String text){
-        if(text.contains("Session ID is")) return true;
-        return false;
+        return text.contains("Session ID is");
     }
 
     /** Small listener for anything listening to the log */

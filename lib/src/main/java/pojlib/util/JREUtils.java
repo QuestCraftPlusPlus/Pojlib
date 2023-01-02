@@ -129,8 +129,7 @@ public class JREUtils {
                         } else {
                             Logger.getInstance().appendToLog("ERROR: Unable to get more log.");
                         }
-                        return;
-                    }
+                            }
                 } catch (Throwable e) {
                     Log.e("jrelog-logcat", "Exception on logging thread", e);
                     Logger.getInstance().appendToLog("Exception on logging thread:\n" + Log.getStackTraceString(e));

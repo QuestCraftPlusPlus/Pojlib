@@ -5,6 +5,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import pojlib.util.Constants;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -55,10 +58,16 @@ public class Msa {
             wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
 
-        if (!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) throwResponseError(conn);
-
         JSONObject jo = new JSONObject(read(conn.getInputStream()));
-        return acquireXsts(jo.getString("Token"));
+        if(!jo.isNull("Token")) {
+            return acquireXsts(jo.getString("Token"));
+        }
+
+        File errorFile = new File(Constants.USER_HOME + "/errors.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+        writer.write(jo.toString());
+        writer.flush();
+        throw new RuntimeException();
     }
 
     private static MinecraftAccount acquireXsts(String xblToken) throws IOException, JSONException {
@@ -84,11 +93,18 @@ public class Msa {
             wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
 
-        if (!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) throwResponseError(conn);
-
         JSONObject jo = new JSONObject(read(conn.getInputStream()));
-        String uhs = jo.getJSONObject("DisplayClaims").getJSONArray("xui").getJSONObject(0).getString("uhs");
-        return acquireMinecraftToken(uhs,jo.getString("Token"));
+
+        if(!jo.isNull("Token")) {
+            String uhs = jo.getJSONObject("DisplayClaims").getJSONArray("xui").getJSONObject(0).getString("uhs");
+            return acquireMinecraftToken(uhs,jo.getString("Token"));
+        }
+
+        File errorFile = new File(Constants.USER_HOME + "/errors.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+        writer.write(jo.toString());
+        writer.flush();
+        throw new RuntimeException();
     }
 
     private static MinecraftAccount acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
@@ -111,13 +127,20 @@ public class Msa {
             wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
 
-        if (!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) throwResponseError(conn);
-
         JSONObject jo = new JSONObject(read(conn.getInputStream()));
-        checkMcStore(jo.getString("access_token"));
-        MinecraftAccount account = checkMcProfile(jo.getString("access_token"));
-        account.accessToken = jo.getString("access_token");
-        return account;
+
+        if(!jo.isNull("access_token")) {
+            checkMcStore(jo.getString("access_token"));
+            MinecraftAccount account = checkMcProfile(jo.getString("access_token"));
+            account.accessToken = jo.getString("access_token");
+            return account;
+        }
+
+        File errorFile = new File(Constants.USER_HOME + "/errors.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+        writer.write(jo.toString());
+        writer.flush();
+        throw new RuntimeException();
     }
 
     private static void checkMcStore(String mcAccessToken) throws IOException, JSONException {
@@ -129,20 +152,30 @@ public class Msa {
         conn.setUseCaches(false);
         conn.connect();
 
-        if (!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) throwResponseError(conn);
+        String errStr = read(conn.getInputStream());
+        if(errStr.contains("NOT_FOUND") && errStr.contains("The server has not found anything matching the request URI")) {
+            File errorFile = new File(Constants.USER_HOME + "/errors.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+            writer.write(errStr);
+            writer.flush();
+        }
     }
 
     private static MinecraftAccount checkMcProfile(String mcAccessToken) throws IOException, JSONException {
         URL url = new URL(Constants.MC_PROFILE_URL);
 
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + mcAccessToken);
         conn.setUseCaches(false);
         conn.connect();
 
-        if (!(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300)) throwResponseError(conn);
-
         String s= read(conn.getInputStream());
+        if (s.contains("NOT_FOUND") && s.contains("The server has not found anything matching the request URI")) {
+            File errorFile = new File(Constants.USER_HOME + "/errors.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+            writer.write(s);
+            writer.flush();
+        }
         JSONObject jsonObject = new JSONObject(s);
         String name = (String) jsonObject.get("name");
         String uuid = (String) jsonObject.get("id");
@@ -175,17 +208,5 @@ public class Msa {
             }
         }
         return builder.toString();
-    }
-
-    private static void throwResponseError(HttpURLConnection conn) throws IOException {
-        String otherErrStr = "";
-        String errStr = read(conn.getInputStream());
-
-        if (errStr.contains("NOT_FOUND") && errStr.contains("The server has not found anything matching the request URI")) {
-            // TODO localize this
-            otherErrStr = "It seems that this Microsoft Account does not own the game. Make sure that you have bought/migrated to your Microsoft account.";
-        }
-
-        throw new RuntimeException(otherErrStr + "\n\nMSA Error: " + conn.getResponseCode() + ": " + conn.getResponseMessage() + ", error stream:\n" + errStr);
     }
 }

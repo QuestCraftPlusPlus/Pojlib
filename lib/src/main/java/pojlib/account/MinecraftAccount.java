@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -49,9 +50,9 @@ public class MinecraftAccount {
 
     //Try this before using login - the account will have been saved to disk if previously logged in
     public static MinecraftAccount load(String path, String client_id) {
+        MinecraftAccount acc = null;
         try {
-            MinecraftAccount acc = new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);
-            try {
+            acc = new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);
                 URLConnection connection2 = new URL("https://login.microsoftonline.com/consumers/oauth2/v2.0/token").openConnection();
                 connection2.setDoOutput(true);
                 connection2.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -71,11 +72,11 @@ public class MinecraftAccount {
                 acc.msaRefreshToken = jsonObject.get("refresh_token").getAsString();
                 acc.expiresIn = jsonObject.get("expires_in").getAsInt();
                 GsonUtils.objectToJsonFile(path + "/account.json", acc);
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
             return acc;
-        } catch (FileNotFoundException e) {
+        } catch (JSONException | IOException e) {
+            if(e instanceof SocketTimeoutException && acc != null) {
+                return acc;
+            }
             return null;
         }
     }

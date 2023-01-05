@@ -3,6 +3,7 @@ package pojlib.api;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.os.Environment;
 import android.os.Looper;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.json.JSONWriter;
 
+import pojlib.UnityPlayerActivity;
 import pojlib.account.MinecraftAccount;
 import pojlib.android.R;
 import pojlib.install.*;
@@ -19,6 +21,9 @@ import pojlib.instance.MinecraftInstance;
 import pojlib.util.Constants;
 import pojlib.util.GsonUtils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -129,7 +134,7 @@ public class API_V1 {
 
     public static MinecraftAccount login(String client_id)
     {
-        MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getExternalFilesDir(null).getAbsolutePath() + "/.minecraft", client_id);
+        MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getFilesDir() + "/accounts", client_id);
         if(acc != null) {
             profileImage = MinecraftAccount.getSkinFaceUrl(acc);
             return acc;
@@ -152,7 +157,18 @@ public class API_V1 {
 
                 initialResponse = (JsonObject) JsonParser.parseReader(new InputStreamReader(response, StandardCharsets.UTF_8));
 
-                msaMessage = initialResponse.get("message").getAsString();
+                if(initialResponse.get("message") != null) {
+                    msaMessage = initialResponse.get("message").getAsString();
+                    hasQueried = true;
+                    return null;
+                }
+
+                File errorFile = new File(Constants.USER_HOME + "/errors.txt");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+                writer.write(initialResponse.toString());
+                writer.flush();
+
+                throw new RuntimeException();
             }
 
             if(hasQueried) {
@@ -172,10 +188,19 @@ public class API_V1 {
 
                 JsonObject jsonObject2 = (JsonObject) JsonParser.parseReader(new InputStreamReader(response2, StandardCharsets.UTF_8));
 
-                // Finally, log in
-                acc = MinecraftAccount.login(Constants.USER_HOME + "/.minecraft", jsonObject2);
-                profileImage = MinecraftAccount.getSkinFaceUrl(acc);
-                return acc;
+                if(jsonObject2.get("access_token") != null) {
+                    // Finally, log in
+                    acc = MinecraftAccount.login(MinecraftInstance.context.getFilesDir() + "/accounts", jsonObject2);
+                    profileImage = MinecraftAccount.getSkinFaceUrl(acc);
+                    return acc;
+                }
+
+                File errorFile = new File(Constants.USER_HOME + "/errors.txt");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+                writer.write(jsonObject2.toString());
+                writer.flush();
+
+                throw new RuntimeException();
             }
             hasQueried = true;
         } catch (IOException | JSONException e) {

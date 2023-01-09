@@ -6,15 +6,6 @@ A Minecraft: Java Edition launcher library partially made with the PojavLauncher
 
 This library was initially meant for use in QuestCraft but has turned into the perfect library for Minecraft: Java Edition launchers. This includes everything needed for a basic and (soon) even advanced MCJE launchers written in Java (or any other language with interop).
 
-## Features (More soon)
-* Microsoft Authentication
-
-* Game File Downloading
-
-* Fabric, Forge and Quilt Mod Loading
-
-* Version Switching
-
 ## Contributing
 
 Contributions are always welcome!

@@ -152,6 +152,61 @@
 			"slug": "sodium",
 			"version": "0.4.1",
 			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
+		},
+		{
+			"slug": "alternate-current",
+			"version": "1.4.0",
+			"download_link": "https://cdn.modrinth.com/data/r0v8vy1s/versions/mc1.18-1.4.0/alternate-current-mc1.18-1.4.0.jar"
+		},
+		{
+			"slug": "better-biome-blend",
+			"version": "1.3.5",
+			"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.18.2-1.3.5-fabric/betterbiomeblend-1.18.2-1.3.5-fabric.jar"
+		},
+		{
+			"slug": "c2me-fabric",
+			"version": "0.2.0",
+			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/U5BK0DTf/c2me-fabric-mc1.18.2-0.2.0%2Balpha.7.35.jar"
+		},
+		{
+			"slug": "cloth-config",
+			"version": "6.3.81",
+			"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/gPqHXnrg/cloth-config-6.3.81-fabric.jar"
+		},
+		{
+			"slug": "cull-less-leaves",
+			"version": "1.0.1",
+			"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/1.0.1/CullLessLeaves-1.0.1.jar"
+		},
+		{
+			"slug": "fastload",
+			"version": "1.5.9",
+			"download_link": "https://cdn.modrinth.com/data/kCpssoSb/versions/K9vr5fdy/Fastload%2B1.18.2-1.5.9.jar"
+		},
+		{
+			"slug": "immediatelyfast",
+			"version": "1.1.6",
+			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/zImGOGqD/ImmediatelyFast-1.1.6%2B1.18.2.jar"
+		},
+		{
+			"slug": "notenoughcrashes",
+			"version": "4.2.0",
+			"download_link": "https://cdn.modrinth.com/data/yM94ont6/versions/lWmXt6Pj/notenoughcrashes-4.2.0%2B1.18.2-fabric.jar"
+		},
+		{
+			"slug": "malilib",
+			"version": "0.12.1",
+			"download_link": "https://www.curseforge.com/minecraft/mc-mods/malilib/download/3692220/file"
+		},
+		{
+			"slug": "starlight",
+			"version": "1.0.2",
+			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.0.2%2B1.18.2/starlight-1.0.2%2Bfabric.89b8d9f.jar"
+		},
+		{
+			"slug": "tweakeroo",
+			"version": "0.13.3",
+			"download_link": "https://www.curseforge.com/minecraft/mc-mods/tweakeroo/download/3783910/file"
 		}
 	]
 }

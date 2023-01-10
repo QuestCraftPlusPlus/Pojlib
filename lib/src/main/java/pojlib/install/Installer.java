@@ -20,6 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 //This class reads data from a game version json and downloads its contents.
 //This works for the base game as well as mod loaders
@@ -91,10 +94,17 @@ public class Installer extends Thread {
         Logger.getInstance().appendToLog("Downloading assets");
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
+        ThreadPoolExecutor tp = new ThreadPoolExecutor(5, 5, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
             AsyncDownload thread = new AsyncDownload(entry, minecraftVersionInfo, gameDir);
-            thread.start();
+            tp.execute(thread);
         }
+
+        tp.shutdown();
+        try {
+            while (!tp.awaitTermination(100, TimeUnit.MILLISECONDS));
+        } catch (InterruptedException e) {}
 
         DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"));
 
@@ -107,7 +117,7 @@ public class Installer extends Thread {
         return new File(gameDir + "/assets").getAbsolutePath();
     }
 
-    public static class AsyncDownload extends Thread {
+    public static class AsyncDownload implements Runnable {
         Map.Entry<String, JsonElement> entry;
         VersionInfo versionInfo;
         String gameDir;
@@ -117,9 +127,7 @@ public class Installer extends Thread {
             String path = asset.hash.substring(0, 2) + "/" + asset.hash;
             File assetFile = new File(gameDir + "/assets/objects/", path);
 
-            while (Installer.AsyncDownload.activeCount() >= 5) {
-
-            }   if (!assetFile.exists()) {
+            if (!assetFile.exists()) {
                     Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
                 try {
                     DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);

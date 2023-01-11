@@ -81,11 +81,6 @@
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/vA8NWTKD/ImmediatelyFast-1.1.6%2B1.19.3.jar"
 		},
 		{
-			"slug": "notenoughcrashes",
-			"version": "4.2.0",
-			"download_link": "https://cdn.modrinth.com/data/yM94ont6/versions/f3lqB3uY/notenoughcrashes-4.2.0%2B1.19.3-fabric.jar"
-		},
-		{
 			"slug": "malilib",
 			"version": "0.14.0",
 			"download_link": "https://www.curseforge.com/minecraft/mc-mods/malilib/download/4147598/file"
@@ -187,11 +182,7 @@
 			"slug": "immediatelyfast",
 			"version": "1.1.6",
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/zImGOGqD/ImmediatelyFast-1.1.6%2B1.18.2.jar"
-		},
-		{
-			"slug": "notenoughcrashes",
-			"version": "4.2.0",
-			"download_link": "https://cdn.modrinth.com/data/yM94ont6/versions/lWmXt6Pj/notenoughcrashes-4.2.0%2B1.18.2-fabric.jar"
+		}
 		},
 		{
 			"slug": "malilib",

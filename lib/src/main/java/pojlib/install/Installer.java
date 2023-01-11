@@ -3,6 +3,7 @@ package pojlib.install;
 import android.app.Activity;
 import android.content.Context;
 
+import android.provider.Telephony;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,10 +20,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 //This class reads data from a game version json and downloads its contents.
 //This works for the base game as well as mod loaders
-public class Installer {
+public class Installer extends Thread {
 
     // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath
@@ -88,18 +92,19 @@ public class Installer {
     //Will only download asset if it is missing
     public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
         Logger.getInstance().appendToLog("Downloading assets");
-
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
+        ThreadPoolExecutor tp = new ThreadPoolExecutor(5, 5, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
-            VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
-            String path = asset.hash.substring(0, 2) + "/" + asset.hash;
-            File assetFile = new File(gameDir + "/assets/objects/", path);
-            if (!assetFile.exists()) {
-                Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
-                DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
-            }
+            AsyncDownload thread = new AsyncDownload(entry, minecraftVersionInfo, gameDir);
+            tp.execute(thread);
         }
+
+        tp.shutdown();
+        try {
+            while (!tp.awaitTermination(100, TimeUnit.MILLISECONDS));
+        } catch (InterruptedException e) {}
 
         DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"));
 
@@ -119,6 +124,33 @@ public class Installer {
         FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/optionsviveprofiles.txt"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "optionsviveprofiles.txt"));
 
         return new File(gameDir + "/assets").getAbsolutePath();
+    }
+
+    public static class AsyncDownload implements Runnable {
+        Map.Entry<String, JsonElement> entry;
+        VersionInfo versionInfo;
+        String gameDir;
+
+        public void run() {
+            VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
+            String path = asset.hash.substring(0, 2) + "/" + asset.hash;
+            File assetFile = new File(gameDir + "/assets/objects/", path);
+
+            if (!assetFile.exists()) {
+                    Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
+                try {
+                    DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        public AsyncDownload( Map.Entry<String, JsonElement> entry, VersionInfo versionInfo, String gameDir) {
+            this.entry = entry;
+            this.versionInfo = versionInfo;
+            this.gameDir = gameDir;
+        }
     }
 
     public static String installLwjgl(Activity activity) throws IOException {

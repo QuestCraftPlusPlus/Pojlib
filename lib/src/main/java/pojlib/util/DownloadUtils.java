@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import pojlib.api.API_V1;
 import pojlib.modmanager.State;
 
 import java.io.*;
@@ -22,6 +23,7 @@ public class DownloadUtils {
 
     public static AssetManager assetManager;
 
+
     private static void download(URL url, OutputStream os) throws IOException {
         InputStream is = null;
         try {
@@ -31,11 +33,27 @@ public class DownloadUtils {
             conn.setDoInput(true);
             conn.connect();
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new IOException("Server returned HTTP " + conn.getResponseCode()
-                        + ": " + conn.getResponseMessage());
+                is = conn.getInputStream();
             }
-            is = conn.getInputStream();
+
+            String[] segments = url.getPath().split("/");
+            API_V1.currentDownload = segments[segments.length - 1];
+
+            is = new StreamDL(conn.getInputStream());
+
+            ((StreamDL)is).addListener((b, count) -> {
+
+                if (b == -1) {
+                    API_V1.downloadStatus = 0;
+                    API_V1.currentDownload = "";
+                } else {
+                    API_V1.downloadStatus = count * 0.000001;
+                }
+
+            });
+
             IOUtils.copy(is, os);
+
         } catch (IOException e) {
             throw new IOException("Unable to download from " + url, e);
         } finally {
@@ -70,7 +88,6 @@ public class DownloadUtils {
             throw th3;
         }
     }
-
     public static boolean compareSHA1(File f, String sourceSHA) {
         try {
             String sha1_dst;

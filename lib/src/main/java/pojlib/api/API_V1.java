@@ -42,10 +42,13 @@ import java.time.Instant;
  * having to make changes to either project deeply.
  */
 public class API_V1 {
+
     public static String msaMessage = "";
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
     public static boolean finishedDownloading = false;
+    public static double downloadStatus;
+    public static String currentDownload;
     public static String profileImage;
 
     /**
@@ -208,4 +211,5 @@ public class API_V1 {
         }
         return null;
     }
+
 }

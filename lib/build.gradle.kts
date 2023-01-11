@@ -50,6 +50,5 @@ dependencies {
     implementation("androidx.annotation:annotation:1.3.0")
     implementation("androidx.browser:browser:1.4.0")
     implementation("blank:unity-classes")
-
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
 }

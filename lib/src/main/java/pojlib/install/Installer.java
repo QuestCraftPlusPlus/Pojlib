@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 //This class reads data from a game version json and downloads its contents.
 //This works for the base game as well as mod loaders
-public class Installer extends Thread {
+public class Installer {
 
     // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath

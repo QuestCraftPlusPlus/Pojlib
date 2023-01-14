@@ -61,11 +61,6 @@
 			"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/M3yxljrZ/cloth-config-9.0.94-fabric.jar"
 		},
 		{
-			"slug": "cull-less-leaves",
-			"version": "1.1.0",
-			"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/BxA1B1tp/CullLessLeaves-1.1.0.jar"
-		},
-		{
 			"slug": "fastload",
 			"version": "2.6.10",
 			"download_link": "https://cdn.modrinth.com/data/kCpssoSb/versions/OQyAqgWH/Fastload%2B1.19.3-2.6.10.jar"
@@ -89,11 +84,6 @@
 			"slug": "tweakeroo",
 			"version": "0.15.0",
 			"download_link": "https://www.curseforge.com/minecraft/mc-mods/tweakeroo/download/4162596/file"
-		},
-		{
-			"slug": "yacl",
-			"version": "2.2.0",
-			"download_link": "https://cdn.modrinth.com/data/1eAoo2KR/versions/3EWbdCzX/YetAnotherConfigLib-2.2.0.jar"
 		},
 		{
 			"slug": "krypton",

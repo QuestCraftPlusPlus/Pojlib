@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import pojlib.api.API_V1;
 import pojlib.modmanager.State;
 
+import javax.net.ssl.SSLException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -55,7 +56,7 @@ public class DownloadUtils {
             IOUtils.copy(is, os);
 
         } catch (IOException e) {
-            if (IOException e) {
+            if (e instanceof SSLException) {
                 download(url, os);
                 return;
             }

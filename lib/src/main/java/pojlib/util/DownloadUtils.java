@@ -55,6 +55,10 @@ public class DownloadUtils {
             IOUtils.copy(is, os);
 
         } catch (IOException e) {
+            if (IOException e) {
+                download(url, os);
+                return;
+            }
             throw new IOException("Unable to download from " + url, e);
         } finally {
             if (is != null) {

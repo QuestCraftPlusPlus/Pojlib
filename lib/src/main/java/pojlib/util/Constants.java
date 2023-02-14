@@ -10,6 +10,10 @@ public class Constants {
     public static String MOJANG_RESOURCES_URL = "https://resources.download.minecraft.net";
     
     public static String FABRIC_META_URL = "https://meta.fabricmc.net/v2";
+
+    //TODO: Implement Correct API Endpoints.
+    public static String FORGE_META_URL = "https://mrnavastar.github.io/ForgeVersionAPI/";
+
     public static String QUILT_META_URL = "https://meta.quiltmc.org/v3";
 
     public static String OAUTH_TOKEN_URL = "https://login.live.com/oauth20_token.srf";

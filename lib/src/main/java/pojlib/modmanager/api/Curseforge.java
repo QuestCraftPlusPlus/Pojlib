@@ -81,7 +81,7 @@ public class Curseforge {
         return null;
     }
 
-/*    public static void addProjectsToRecycler(String version, int offset, String query) {
+    public static void addProjectsToRecycler(String version, int offset, String query) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -116,19 +116,22 @@ public class Curseforge {
                     mods.add(modData);
                 }
 
-                mods.removeIf(modData -> {
-                    for (ModData coreMod : ModManager.listCoreMods(version)) {
-                        if (coreMod.slug.equals(modData.slug)) return true;
-                    }
-                    return false;
-                });
-
-                UiUitls.runOnUI(() -> {
-                    adapter.addMods(mods);
-                    if (offset == 0 && mods.size() > 0) adapter.loadProjectPage(mods.get(0), null);
-                });
+                adapter.addMods(mods);
+                if (offset == 0 && mods.size() > 0) adapter.loadProjectPage(mods.get(0), null);
             }
         };
         thread.start();
-    }*/
+    }
+
+    public static void loadProjectPage(String id) {
+        view.loadMarkdown("", "file:///android_asset/ModDescription.css");
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                Description description = handler.get("getModDescription/" + id, Description.class);
+                if (description != null) view.loadMarkdown(description.data, "file:///android_asset/ModDescription.css");
+            }
+        };
+        thread.start();
+    }
 }

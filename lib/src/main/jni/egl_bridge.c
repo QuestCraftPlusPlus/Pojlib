@@ -236,20 +236,6 @@ void pojavMakeCurrent(void* window) {
     EGLContext *currCtx = eglGetCurrentContext_p();
     printf("EGLBridge: Comparing: thr=%d, this=%p, curr=%p\n", gettid(), window, currCtx);
     if (currCtx == NULL || window == 0) {
-        /*if (window != 0x0 && eglContextOld != NULL && eglContextOld != (void *) window) {
-            // Create new pbuffer per thread
-            // TODO get window size for 2nd+ window!
-            int surfaceWidth, surfaceHeight;
-            eglQuerySurface(eglDisplay, eglSurface, EGL_WIDTH, &surfaceWidth);
-            eglQuerySurface(eglDisplay, eglSurface, EGL_HEIGHT, &surfaceHeight);
-            int surfaceAttr[] = {
-                EGL_WIDTH, surfaceWidth,
-                EGL_HEIGHT, surfaceHeight,
-                EGL_NONE
-            };
-            eglSurface = eglCreatePbufferSurface(eglDisplay, config, surfaceAttr);
-            printf("EGLBridge: created pbuffer surface %p for context %p\n", eglSurface, window);
-        }*/
         //eglContextOld = (void *) window;
         // eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         printf("EGLBridge: Making current on window %p on thread %d\n", window, gettid());

@@ -53,8 +53,8 @@ public class MinecraftInstance {
         VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
         instance.versionType = minecraftVersionInfo.type;
         FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
-        VersionInfo modLoaderVersionInfo =  FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
-        instance.mainClass = modLoaderVersionInfo.mainClass;
+        ForgeMeta.ForgeVersion forgeVersion = ForgeMeta.getLatestStableVersion();
+        VersionInfo modLoaderVersionInfo = null;
 
         // Get mod loader info
         if (modLoader == 0) {
@@ -71,7 +71,10 @@ public class MinecraftInstance {
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
         } else if (modLoader == 3) {
-            throw new RuntimeException("Forge not yet implemented\nExiting...");
+            if (forgeVersion != null) {
+                modLoaderVersionInfo = ForgeMeta.getVersionInfo(forgeVersion, minecraftVersion);
+                instance.mainClass = modLoaderVersionInfo.mainClass;
+            }
         }
 
         if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");

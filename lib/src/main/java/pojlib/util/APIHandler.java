@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class APIHandler {
-    private final String baseUrl;
+    public final String baseUrl;
 
     public APIHandler(String url) {
         baseUrl = url;

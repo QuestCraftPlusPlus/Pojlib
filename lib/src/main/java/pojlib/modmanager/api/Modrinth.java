@@ -83,7 +83,7 @@ public class Modrinth {
         return null;
     }
 
-/*    public static void addProjectsToRecycler(String version, int offset, String query) {
+    public static void addProjectsToRecycler(String version, int offset, String query) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -98,13 +98,6 @@ public class Modrinth {
                     return;
                 }
 
-                result.hits.removeIf(modData -> {
-                    for (ModData coreMod : ModManager.listCoreMods(version)) {
-                        if (coreMod.slug.equals(modData.slug)) return true;
-                    }
-                    return false;
-                });
-
                 ArrayList<ModData> installedMods = ModManager.listInstalledMods("fabric-loader-" + DownloadUtils.getModJsonFabricLoaderVersion() + "-" + version);
                 for (ModData mod : result.hits) {
                     mod.platform = "modrinth";
@@ -116,12 +109,22 @@ public class Modrinth {
                     }
                 }
 
-                UiUitls.runOnUI(() -> {
-                    adapter.addMods((ArrayList<ModData>) result.hits);
-                    if (offset == 0 && result.hits.size() > 0) adapter.loadProjectPage(result.hits.get(0), null);
-                });
+                //adapter.addMods((ArrayList<ModData>) result.hits);
+                //if (offset == 0 && result.hits.size() > 0) adapter.loadProjectPage(result.hits.get(0), null);
             }
         };
         thread.start();
-    }*/
+    }
+
+    public static void loadProjectPage(String slug) {
+        //TODO: Update (view.loadMarkdown("", "file:///android_asset/ModDescription.css")); to UnityView.
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                Project project = handler.get("project/" + slug, Project.class);
+                //if (project != null) view.loadMarkdown(project.body, "file:///android_asset/ModDescription.css");
+            }
+        };
+        thread.start();
+    }
 }

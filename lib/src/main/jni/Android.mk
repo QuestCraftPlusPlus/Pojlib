@@ -8,6 +8,11 @@ HERE_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(HERE_PATH)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := libadrenotools
+LOCAL_SRC_FILES := adrenotools/libadrenotools.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := openxr_loader
 LOCAL_SRC_FILES := libopenxr_loader.so
 include $(PREBUILT_SHARED_LIBRARY)
@@ -45,7 +50,7 @@ LOCAL_LDLIBS := -ldl -llog -landroid -lGLESv2 -lEGL
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG
-LOCAL_SHARED_LIBRARIES := openvr_api
+LOCAL_SHARED_LIBRARIES := openvr_api libadrenotools
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
     egl_bridge.c \

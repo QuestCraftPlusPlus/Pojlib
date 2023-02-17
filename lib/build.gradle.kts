@@ -25,7 +25,6 @@ android {
     }
 
     buildToolsVersion = "30.0.3"
-    ndkVersion = "22.1.7171670"
 }
 
 dependencies {

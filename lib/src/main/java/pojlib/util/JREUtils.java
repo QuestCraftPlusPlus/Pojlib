@@ -154,8 +154,12 @@ public class JREUtils {
         envMap.put("HOME", Constants.MC_DIR);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("LIBGL_MIPMAP", "3");
-        envMap.put("POJAV_RENDERER", "opengles2_gl4es");
+        envMap.put("POJAV_RENDERER", "vulkan_zink");
         envMap.put("LIBGL_NOINTOVLHACK", "1");
+        envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
+        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+        envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+        envMap.put("ZINK_NO_TIMELINES", "true");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/jre-17/bin:" + Os.getenv("PATH"));
@@ -199,6 +203,12 @@ public class JREUtils {
         //Add automatically generated args
         userArgs.add("-Xms" + 2048 + "M");
         userArgs.add("-Xmx" + 2048 + "M");
+        userArgs.add("-XX:+UnlockExperimentalVMOptions");
+        userArgs.add("-XX:+UseG1GC");
+        userArgs.add("-XX:G1NewSizePercent=20");
+        userArgs.add("-XX:G1ReservePercent=20");
+        userArgs.add("-XX:MaxGCPauseMillis=50");
+        userArgs.add("-XX:G1HeapRegionSize=32M");
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");
@@ -303,7 +313,7 @@ public class JREUtils {
      * @return The name of the loaded library
      */
     public static String loadGraphicsLibrary(){
-        return "libgl4es_114.so";
+        return "libOSMesa_8.so";
     }
 
     public static native long getEGLContextPtr();

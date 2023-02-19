@@ -75,8 +75,8 @@ Java_pojlib_util_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlong ctx, jlon
 extern "C"
 JNIEXPORT jint JNICALL
 Java_org_vivecraft_utils_VLoader_createGLImage(JNIEnv* env, jclass clazz, jint width, jint height) {
-    GLuint image;
-    glGenTextures(1, &image);
+    GLint image;
+    glGenTextures(1, reinterpret_cast<GLuint *>(&image));
     glBindTexture(GL_TEXTURE_2D, image);
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER, 9729.0F);
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER, 9729.0F);

@@ -203,12 +203,6 @@ public class JREUtils {
         //Add automatically generated args
         userArgs.add("-Xms" + 2048 + "M");
         userArgs.add("-Xmx" + 2048 + "M");
-        userArgs.add("-XX:+UnlockExperimentalVMOptions");
-        userArgs.add("-XX:+UseG1GC");
-        userArgs.add("-XX:G1NewSizePercent=20");
-        userArgs.add("-XX:G1ReservePercent=20");
-        userArgs.add("-XX:MaxGCPauseMillis=50");
-        userArgs.add("-XX:G1HeapRegionSize=32M");
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");

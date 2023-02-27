@@ -53,7 +53,7 @@ public class MinecraftInstance {
         VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
         instance.versionType = minecraftVersionInfo.type;
         FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
-        ForgeMeta.ForgeVersion forgeVersion = ForgeMeta.getLatestStableVersion();
+        //ForgeMeta.ForgeVersion forgeVersion = ForgeMeta.getLatestStableVersion();
         VersionInfo modLoaderVersionInfo = null;
 
         // Get mod loader info
@@ -70,12 +70,12 @@ public class MinecraftInstance {
                 modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
-        } else if (modLoader == 3) {
-            if (forgeVersion != null) {
+        } /*else if (modLoader == 3) {
+           if (forgeVersion != null) {
                 modLoaderVersionInfo = ForgeMeta.getVersionInfo(forgeVersion, minecraftVersion);
                 instance.mainClass = modLoaderVersionInfo.mainClass;
             }
-        }
+        }*/
 
         if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
 

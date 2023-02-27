@@ -116,20 +116,18 @@ public class Curseforge {
                     mods.add(modData);
                 }
 
-                adapter.addMods(mods);
-                if (offset == 0 && mods.size() > 0) adapter.loadProjectPage(mods.get(0), null);
+/*                adapter.addMods(mods);
+                if (offset == 0 && mods.size() > 0) adapter.loadProjectPage(mods.get(0), null);*/
             }
         };
         thread.start();
     }
 
     public static void loadProjectPage(String id) {
-        view.loadMarkdown("", "file:///android_asset/ModDescription.css");
         Thread thread = new Thread() {
             @Override
             public void run() {
                 Description description = handler.get("getModDescription/" + id, Description.class);
-                if (description != null) view.loadMarkdown(description.data, "file:///android_asset/ModDescription.css");
             }
         };
         thread.start();

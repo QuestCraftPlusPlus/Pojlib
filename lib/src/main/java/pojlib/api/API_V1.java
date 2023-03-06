@@ -111,8 +111,8 @@ public class API_V1 {
         return MinecraftAccount.login(home, response);
     }
 
-    public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstance instance) {
-        instance.launchInstance(activity, account);
+    public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstance instance, boolean zink, boolean leftHanded) {
+        instance.launchInstance(activity, account, zink, leftHanded);
     }
 
     /**

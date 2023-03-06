@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public class MinecraftInstance {
 
-    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
+    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Zink/mods.json";
     public static Activity context;
     public String versionName;
     public String versionType;
@@ -176,13 +176,13 @@ public class MinecraftInstance {
         }
     }
 
-    public void launchInstance(Activity activity, MinecraftAccount account) {
+    public void launchInstance(Activity activity, MinecraftAccount account, boolean zink, boolean leftHanded) {
         try {
             updateOrDownloadsMods();
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(context);
             VLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
-            JREUtils.launchJavaVM(activity, generateLaunchArgs(account), versionName);
+            JREUtils.launchJavaVM(activity, generateLaunchArgs(account), versionName, zink, leftHanded);
         } catch (Throwable e) {
             e.printStackTrace();
         }

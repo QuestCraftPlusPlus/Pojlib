@@ -160,7 +160,7 @@ public class JREUtils {
             envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
             envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
             envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-            envMap.put("POJLIB_RENDERER", "vulkan_zink");
+            envMap.put("POJAV_RENDERER", "vulkan_zink");
         }
         envMap.put("POJLIB_LEFT_HANDED", "doge");
         if(leftHanded) {

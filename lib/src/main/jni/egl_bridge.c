@@ -794,7 +794,7 @@ int pojavInit() {
     savedWidth = 1980;
     savedHeight = 1080;
 
-    if(getenv("POJLIB_RENDERER") == "vulkan_zink") {
+    if(strcmp(getenv("POJAV_RENDERER"), "vulkan_zink") == 0) {
         isZink = true;
     }
 

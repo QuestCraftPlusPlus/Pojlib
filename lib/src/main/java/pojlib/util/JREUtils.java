@@ -154,7 +154,6 @@ public class JREUtils {
         envMap.put("HOME", Constants.MC_DIR);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("LIBGL_MIPMAP", "3");
-        envMap.put("POJLIB_RENDERER", "gl4es");
         envMap.put("LIBGL_NOINTOVLHACK", "1");
         if(zink) {
             envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");

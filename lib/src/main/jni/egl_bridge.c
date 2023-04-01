@@ -780,9 +780,9 @@ void dlsym_OSMesa() {
        asprintf(&alt_path, "%s/libOSMesa.so.8", getenv("POJAV_NATIVEDIR")) == -1) {
         abort();
     }
-    void* dl_handle = NULL;
-    dl_handle = dlopen(alt_path, RTLD_GLOBAL);
-    if(dl_handle == NULL) dl_handle = dlopen(main_path, RTLD_GLOBAL);
+    void* dl_handle;
+    dl_handle = dlopen(alt_path, RTLD_NOW);
+    if(dl_handle == NULL) dl_handle = dlopen(main_path, RTLD_NOW);
     if(dl_handle == NULL) abort();
     OSMesaMakeCurrent_p = dlsym(dl_handle, "OSMesaMakeCurrent");
     OSMesaGetCurrentContext_p = dlsym(dl_handle,"OSMesaGetCurrentContext");

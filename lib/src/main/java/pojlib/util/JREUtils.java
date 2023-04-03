@@ -201,8 +201,8 @@ public class JREUtils {
         List<String> userArgs = getJavaArgs(activity);
 
         //Add automatically generated args
-        userArgs.add("-Xms" + 4096 + "M");
-        userArgs.add("-Xmx" + 4096 + "M");
+        userArgs.add("-Xms" + 3072 + "M");
+        userArgs.add("-Xmx" + 3072 + "M");
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");

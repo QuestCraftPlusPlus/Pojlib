@@ -147,7 +147,7 @@ public class JREUtils {
                 sNativeLibDir;
     }
 
-    public static void setJavaEnvironment(Activity activity, boolean zink, boolean leftHanded) throws Throwable {
+    public static void setJavaEnvironment(Activity activity) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("POJAV_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
         envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE-17");
@@ -155,17 +155,11 @@ public class JREUtils {
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("LIBGL_MIPMAP", "3");
         envMap.put("LIBGL_NOINTOVLHACK", "1");
-        if(zink) {
-            envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
-            envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-            envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-            envMap.put("POJAV_RENDERER", "vulkan_zink");
-            envMap.put("ZINK_DESCRIPTORS", "db");
-        }
-        envMap.put("POJLIB_LEFT_HANDED", "doge");
-        if(leftHanded) {
-            envMap.put("POJLIB_LEFT_HANDED", "wack");
-        }
+        envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
+        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+        envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+        envMap.put("POJAV_RENDERER", "vulkan_zink");
+        envMap.put("ZINK_DESCRIPTORS", "db");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE-17/bin:" + Os.getenv("PATH"));
@@ -199,11 +193,11 @@ public class JREUtils {
         // return ldLibraryPath;
     }
 
-    public static int launchJavaVM(final Activity activity,final List<String> JVMArgs, String versionName, boolean zink, boolean leftHanded) throws Throwable {
+    public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, String versionName) throws Throwable {
         JREUtils.relocateLibPath(activity);
-        setJavaEnvironment(activity, zink, leftHanded);
+        setJavaEnvironment(activity);
 
-        final String graphicsLib = loadGraphicsLibrary(zink);
+        final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity);
 
         //Add automatically generated args
@@ -312,11 +306,8 @@ public class JREUtils {
      * It will fallback if it fails to load the library.
      * @return The name of the loaded library
      */
-    public static String loadGraphicsLibrary(boolean zink){
-        if(zink) {
-            return "libOSMesa_8.so";
-        }
-        return "libgl4es_114.so";
+    public static String loadGraphicsLibrary(){
+        return "libOSMesa_8.so";
     }
 
     public static native long getEGLContextPtr();

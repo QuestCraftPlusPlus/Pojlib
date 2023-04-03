@@ -588,54 +588,13 @@ typedef struct osmesa_context
     //safe to remove
 };
 
-EGLContext eglContext;
-EGLDisplay eglDisplay;
-EGLSurface eglSurface;
-EGLConfig config;
-
-/*EGL functions */
-EGLBoolean (*eglMakeCurrent_p) (EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx);
-EGLBoolean (*eglDestroyContext_p) (EGLDisplay dpy, EGLContext ctx);
-EGLBoolean (*eglDestroySurface_p) (EGLDisplay dpy, EGLSurface surface);
-EGLBoolean (*eglTerminate_p) (EGLDisplay dpy);
-EGLBoolean (*eglReleaseThread_p) (void);
-EGLContext (*eglGetCurrentContext_p) (void);
-EGLDisplay (*eglGetDisplay_p) (NativeDisplayType display);
-EGLBoolean (*eglInitialize_p) (EGLDisplay dpy, EGLint *major, EGLint *minor);
-EGLBoolean (*eglChooseConfig_p) (EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config);
-EGLBoolean (*eglGetConfigAttrib_p) (EGLDisplay dpy, EGLConfig config, EGLint attribute, EGLint *value);
-EGLBoolean (*eglBindAPI_p) (EGLenum api);
-EGLSurface (*eglCreatePbufferSurface_p) (EGLDisplay dpy, EGLConfig config, const EGLint *attrib_list);
-EGLSurface (*eglCreateWindowSurface_p) (EGLDisplay dpy, EGLConfig config, NativeWindowType window, const EGLint *attrib_list);
-EGLBoolean (*eglSwapBuffers_p) (EGLDisplay dpy, EGLSurface draw);
-EGLint (*eglGetError_p) (void);
-EGLContext (*eglCreateContext_p) (EGLDisplay dpy, EGLConfig config, EGLContext share_list, const EGLint *attrib_list);
-EGLBoolean (*eglSwapInterval_p) (EGLDisplay dpy, EGLint interval);
-EGLSurface (*eglGetCurrentSurface_p) (EGLint readdraw);
-
 GLboolean (*OSMesaMakeCurrent_p) (OSMesaContext ctx, void *buffer, GLenum type,
                                   GLsizei width, GLsizei height);
 OSMesaContext (*OSMesaGetCurrentContext_p) (void);
 OSMesaContext  (*OSMesaCreateContext_p) (GLenum format, OSMesaContext sharelist);
 GLubyte* (*glGetString_p) (GLenum name);
-bool isZink = false;
 
 void* gbuffer;
-
-void* egl_make_current(void* window) {
-    EGLBoolean success = eglMakeCurrent_p(
-            eglDisplay,
-            window==0 ? (EGLSurface *) 0 : eglSurface,
-            window==0 ? (EGLSurface *) 0 : eglSurface,
-            /* window==0 ? EGL_NO_CONTEXT : */ (EGLContext *) window
-    );
-
-    if (success == EGL_FALSE) {
-        printf("EGLBridge: Error: eglMakeCurrent() failed: %p\n", eglGetError_p());
-    } else {
-        printf("EGLBridge: eglMakeCurrent() succeed!\n");
-    }
-}
 
 void pojav_openGLOnLoad() {
 }
@@ -644,43 +603,12 @@ void pojav_openGLOnUnload() {
 }
 
 void pojavTerminate() {
-    if(isZink) {
-        return;
-    }
-    eglMakeCurrent_p(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-    eglDestroySurface_p(eglDisplay, eglSurface);
-    eglDestroyContext_p(eglDisplay, eglContext);
-    eglTerminate_p(eglDisplay);
-    eglReleaseThread_p();
+    return;
 }
 
 
 void* pojavGetCurrentContext() {
-    if(isZink) {
-        return OSMesaGetCurrentContext_p();
-    }
-    return (void *)eglGetCurrentContext_p();
-}
-
-void dlsym_EGL(void* dl_handle) {
-    eglBindAPI_p = dlsym(dl_handle,"eglBindAPI");
-    eglChooseConfig_p = dlsym(dl_handle, "eglChooseConfig");
-    eglCreateContext_p = dlsym(dl_handle, "eglCreateContext");
-    eglCreatePbufferSurface_p = dlsym(dl_handle, "eglCreatePbufferSurface");
-    eglCreateWindowSurface_p = dlsym(dl_handle, "eglCreateWindowSurface");
-    eglDestroyContext_p = dlsym(dl_handle, "eglDestroyContext");
-    eglDestroySurface_p = dlsym(dl_handle, "eglDestroySurface");
-    eglGetConfigAttrib_p = dlsym(dl_handle, "eglGetConfigAttrib");
-    eglGetCurrentContext_p = dlsym(dl_handle, "eglGetCurrentContext");
-    eglGetDisplay_p = dlsym(dl_handle, "eglGetDisplay");
-    eglGetError_p = dlsym(dl_handle, "eglGetError");
-    eglInitialize_p = dlsym(dl_handle, "eglInitialize");
-    eglMakeCurrent_p = dlsym(dl_handle, "eglMakeCurrent");
-    eglSwapBuffers_p = dlsym(dl_handle, "eglSwapBuffers");
-    eglReleaseThread_p = dlsym(dl_handle, "eglReleaseThread");
-    eglSwapInterval_p = dlsym(dl_handle, "eglSwapInterval");
-    eglTerminate_p = dlsym(dl_handle, "eglTerminate");
-    eglGetCurrentSurface_p = dlsym(dl_handle,"eglGetCurrentSurface");
+    return OSMesaGetCurrentContext_p();
 }
 
 int xrEglInit() {
@@ -791,193 +719,75 @@ void dlsym_OSMesa() {
 }
 
 int pojavInit() {
-    savedWidth = 1980;
-    savedHeight = 1080;
+    savedWidth = 1080;
+    savedHeight = 720;
 
-    if(strcmp(getenv("POJAV_RENDERER"), "vulkan_zink") == 0) {
-        isZink = true;
-    }
+    xrEglInit();
 
-    if(isZink) {
-        xrEglInit();
+    char *natives = getenv("POJAV_NATIVEDIR");
+    char *gpuStuff = getenv("HOME");
+    strcat(natives, "/");
+    strcat(gpuStuff, "/gpu_stuff/");
+    void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
+                                                 gpuStuff, natives,
+                                                 "libvulkan_freedreno.so", NULL, NULL);
+    adrenotools_set_turbo(true);
+    printf("libvulkan: %p\n", libvulkan);
+    char *vulkanPtrString;
+    asprintf(&vulkanPtrString, "%p", libvulkan);
+    printf("%s\n", vulkanPtrString);
+    setenv("VULKAN_PTR", vulkanPtrString, 1);
 
-        char *natives = getenv("POJAV_NATIVEDIR");
-        char *gpuStuff = getenv("HOME");
-        strcat(natives, "/");
-        strcat(gpuStuff, "/gpu_stuff/");
-        void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
-                                                     gpuStuff, natives,
-                                                     "libvulkan_freedreno.so", NULL, NULL);
-        adrenotools_set_turbo(true);
-        printf("libvulkan: %p\n", libvulkan);
-        char *vulkanPtrString;
-        asprintf(&vulkanPtrString, "%p", libvulkan);
-        printf("%s\n", vulkanPtrString);
-        setenv("VULKAN_PTR", vulkanPtrString, 1);
+    setenv("GALLIUM_DRIVER", "zink", 1);
+    dlsym_OSMesa();
 
-        setenv("GALLIUM_DRIVER", "zink", 1);
-        dlsym_OSMesa();
-
-        if (OSMesaCreateContext_p == NULL) {
-            printf("OSMDroid: %s\n", dlerror());
-            return 0;
-        }
-
-        printf("OSMDroid: width=%i;height=%i, reserving %i bytes for frame buffer\n", savedWidth,
-               savedHeight,
-               savedWidth * 4 * savedHeight);
-        gbuffer = malloc(savedWidth * 4 * savedHeight + 1);
-        if (gbuffer) {
-            printf("OSMDroid: created frame buffer\n");
-            return 1;
-        } else {
-            printf("OSMDroid: can't generate frame buffer\n");
-            return 0;
-        }
-    }
-
-    dlsym_EGL(dlopen("libEGL.so", RTLD_NOW|RTLD_GLOBAL));
-
-    if (eglDisplay == NULL || eglDisplay == EGL_NO_DISPLAY) {
-        eglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
-        if (eglDisplay == EGL_NO_DISPLAY) {
-            printf("EGLBridge: Error eglGetDefaultDisplay() failed: %p\n", eglGetError_p());
-            return 0;
-        }
-    }
-
-    printf("EGLBridge: Initializing\n");
-    // printf("EGLBridge: ANativeWindow pointer = %p\n", androidWindow);
-    //(*env)->ThrowNew(env,(*env)->FindClass(env,"java/lang/Exception"),"Trace exception");
-    if (!eglInitialize_p(eglDisplay, NULL, NULL)) {
-        printf("EGLBridge: Error eglInitialize() failed: %s\n", eglGetError_p());
+    if (OSMesaCreateContext_p == NULL) {
+        printf("OSMDroid: %s\n", dlerror());
         return 0;
     }
 
-    static const EGLint attribs[] = {
-            EGL_RED_SIZE, 8,
-            EGL_GREEN_SIZE, 8,
-            EGL_BLUE_SIZE, 8,
-            EGL_ALPHA_SIZE, 8,
-            // Minecraft required on initial 24
-            EGL_DEPTH_SIZE, 24,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-            EGL_NONE
-    };
-
-    EGLint num_configs;
-    EGLint vid;
-
-    if (!eglChooseConfig_p(eglDisplay, attribs, &config, 1, &num_configs)) {
-        printf("EGLBridge: Error couldn't get an EGL visual config: %s\n", eglGetError_p());
+    printf("OSMDroid: width=%i;height=%i, reserving %i bytes for frame buffer\n", savedWidth,
+           savedHeight,
+           savedWidth * 4 * savedHeight);
+    gbuffer = malloc(savedWidth * 4 * savedHeight + 1);
+    if (gbuffer) {
+        printf("OSMDroid: created frame buffer\n");
+        return 1;
+    } else {
+        printf("OSMDroid: can't generate frame buffer\n");
         return 0;
     }
-
-    assert(config);
-    assert(num_configs > 0);
-
-    if (!eglGetConfigAttrib_p(eglDisplay, config, EGL_NATIVE_VISUAL_ID, &vid)) {
-        printf("EGLBridge: Error eglGetConfigAttrib() failed: %s\n", eglGetError_p());
-        return 0;
-    }
-
-    eglBindAPI_p(EGL_OPENGL_ES_API);
-
-    eglSurface = eglCreatePbufferSurface_p(eglDisplay, config,
-                                           NULL);
-    if (!eglSurface) {
-        printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError_p());
-        return 0;
-    }
-
-    printf("Created pbuffersurface\n");
-
-    printf("EGLBridge: Initialized!\n");
-    printf("EGLBridge: ThreadID=%d\n", gettid());
-    printf("EGLBridge: EGLDisplay=%p, EGLSurface=%p\n",
-/* window==0 ? EGL_NO_CONTEXT : */
-           eglDisplay,
-           eglSurface
-    );
-
-    return 1;
 }
 
 int32_t stride;
-bool stopSwapBuffers;
 void pojavSwapBuffers() {
-    if (stopSwapBuffers || isZink) {
-        return;
-    }
-    if (!eglSwapBuffers_p(eglDisplay, eglGetCurrentSurface_p(EGL_DRAW))) {
-        if (eglGetError_p() == EGL_BAD_SURFACE) {
-            stopSwapBuffers = true;
-        }
-    }
+    return;
 }
 
 bool locked = false;
 void pojavMakeCurrent(void* window) {
-    if(isZink) {
-        printf("OSMDroid: making current\n");
-        OSMesaMakeCurrent_p((OSMesaContext) window, gbuffer, GL_UNSIGNED_BYTE, savedWidth,
-                            savedHeight);
+    printf("OSMDroid: making current\n");
+    OSMesaMakeCurrent_p((OSMesaContext) window, gbuffer, GL_UNSIGNED_BYTE, savedWidth,
+                        savedHeight);
 
-        printf("OSMDroid: vendor: %s\n", glGetString_p(GL_VENDOR));
-        printf("OSMDroid: renderer: %s\n", glGetString_p(GL_RENDERER));
-        return;
-    }
-    EGLContext *currCtx = eglGetCurrentContext_p();
-    printf("EGLBridge: Comparing: thr=%d, this=%p, curr=%p\n", gettid(), window, currCtx);
-    if (currCtx == NULL || window == 0) {
-        /*if (window != 0x0 && eglContextOld != NULL && eglContextOld != (void *) window) {
-            // Create new pbuffer per thread
-            // TODO get window size for 2nd+ window!
-            int surfaceWidth, surfaceHeight;
-            eglQuerySurface(eglDisplay, eglSurface, EGL_WIDTH, &surfaceWidth);
-            eglQuerySurface(eglDisplay, eglSurface, EGL_HEIGHT, &surfaceHeight);
-            int surfaceAttr[] = {
-                EGL_WIDTH, surfaceWidth,
-                EGL_HEIGHT, surfaceHeight,
-                EGL_NONE
-            };
-            eglSurface = eglCreatePbufferSurface(eglDisplay, config, surfaceAttr);
-            printf("EGLBridge: created pbuffer surface %p for context %p\n", eglSurface, window);
-        }*/
-        //eglContextOld = (void *) window;
-        // eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        printf("EGLBridge: Making current on window %p on thread %d\n", window, gettid());
-        egl_make_current((void *)window);
-
-        // Test
-#ifdef GLES_TEST
-        glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT);
-                eglSwapBuffers(eglDisplay, eglSurface);
-                printf("First frame error: %p\n", eglGetError());
-#endif
-
-        // idk this should convert or just `return success;`...
-        return; //success == EGL_TRUE ? JNI_TRUE : JNI_FALSE;
-    } else {
-        // (*env)->ThrowNew(env,(*env)->FindClass(env,"java/lang/Exception"),"Trace exception");
-        return;
-    }
+    printf("OSMDroid: vendor: %s\n", glGetString_p(GL_VENDOR));
+    printf("OSMDroid: renderer: %s\n", glGetString_p(GL_RENDERER));
+    return;
 }
 
 JNIEXPORT JNICALL jlong
 Java_pojlib_util_JREUtils_getEGLDisplayPtr(JNIEnv *env, jclass clazz) {
-    return (jlong) ((jlong) isZink ? &xrEglDisplay : &eglDisplay);
+    return (jlong) &xrEglDisplay;
 }
 
 JNIEXPORT JNICALL jlong
 Java_pojlib_util_JREUtils_getEGLContextPtr(JNIEnv *env, jclass clazz) {
-    return (jlong) ((jlong) isZink ? &xrEglContext : &eglContext);
+    return (jlong) &xrEglContext;
 }
 
 JNIEXPORT JNICALL jlong
 Java_pojlib_util_JREUtils_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
-    return (jlong) ((jlong) isZink ? &xrConfig : &config);
+    return (jlong) &xrConfig;
 }
 
 /*
@@ -999,21 +809,10 @@ Java_org_lwjgl_glfw_GLFW_nativeEglDetachOnCurrentThread(JNIEnv *env, jclass claz
 */
 
 void* pojavCreateContext(void* contextSrc) {
-    if(isZink) {
-        printf("OSMDroid: generating context\n");
-        void *ctx = OSMesaCreateContext_p(OSMESA_RGBA, contextSrc);
-        printf("OSMDroid: context=%p\n", ctx);
-        return ctx;
-    }
-    const EGLint ctx_attribs[] = {
-            EGL_CONTEXT_CLIENT_VERSION, atoi(getenv("LIBGL_ES")),
-            EGL_NONE
-    };
-    EGLContext* ctx = eglCreateContext_p(eglDisplay, config, (void*)contextSrc, ctx_attribs);
-    eglContext = ctx;
-    printf("EGLBridge: Created CTX pointer = %p\n",ctx);
-    //(*env)->ThrowNew(env,(*env)->FindClass(env,"java/lang/Exception"),"Trace exception");
-    return (long)ctx;
+    printf("OSMDroid: generating context\n");
+    void *ctx = OSMesaCreateContext_p(OSMESA_RGBA, contextSrc);
+    printf("OSMDroid: context=%p\n", ctx);
+    return ctx;
 }
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *env, jclass clazz) {
@@ -1037,8 +836,5 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
     return ret;
 }
 void pojavSwapInterval(int interval) {
-    if(isZink) {
-        return;
-    }
-    eglSwapInterval_p(eglDisplay, interval);
+    return;
 }

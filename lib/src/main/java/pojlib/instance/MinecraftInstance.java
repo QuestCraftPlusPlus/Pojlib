@@ -43,7 +43,7 @@ public class MinecraftInstance {
 
     //WIP!!!!!!
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, int modLoader) throws IOException {
+    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
@@ -56,33 +56,12 @@ public class MinecraftInstance {
         VersionInfo modLoaderVersionInfo =  FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
         instance.mainClass = modLoaderVersionInfo.mainClass;
 
-        // Get mod loader info
-        if (modLoader == 0) {
-            instance.mainClass = minecraftVersionInfo.mainClass;
-        } else if (modLoader == 1) {
-            if (fabricVersion != null) {
-                modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
-                instance.mainClass = modLoaderVersionInfo.mainClass;
-            }
-        } else if (modLoader == 2) {
-            QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
-            if (quiltVersion != null) {
-                modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
-                instance.mainClass = modLoaderVersionInfo.mainClass;
-            }
-        } else if (modLoader == 3) {
-            throw new RuntimeException("Forge not yet implemented\nExiting...");
-        }
-
-        if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
-
         // Install minecraft
-        VersionInfo finalModLoaderVersionInfo = modLoaderVersionInfo;
         new Thread(() -> {
             try {
                 String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
                 String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
-                String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
+                String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
                 String lwjgl = Installer.installLwjgl(activity);
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
@@ -102,7 +81,8 @@ public class MinecraftInstance {
 
     // Load an instance from json
     public static MinecraftInstance load(String instanceName, String gameDir) {
-        return GsonUtils.jsonFileToObject(gameDir + "/instances/" + instanceName + "/instance.json", MinecraftInstance.class);
+        String path = gameDir + "/instances/" + instanceName + "/instance.json";
+        return GsonUtils.jsonFileToObject(path, MinecraftInstance.class);
     }
 
     // Return true if instance was deleted
@@ -176,13 +156,13 @@ public class MinecraftInstance {
         }
     }
 
-    public void launchInstance(Activity activity, MinecraftAccount account, boolean zink, boolean leftHanded) {
+    public void launchInstance(Activity activity, MinecraftAccount account) {
         try {
             updateOrDownloadsMods();
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(context);
             VLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
-            JREUtils.launchJavaVM(activity, generateLaunchArgs(account), versionName, zink, leftHanded);
+            JREUtils.launchJavaVM(activity, generateLaunchArgs(account), versionName);
         } catch (Throwable e) {
             e.printStackTrace();
         }

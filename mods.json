@@ -3,7 +3,7 @@
 		{
 			"slug": "vivecraft",
 			"version": "1.4.0",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.19.3-Zink/vivecraft.jar"
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.4-1.19.3/vivecraft.jar"
 		},
 		{
 			"slug": "fabric-api",

@@ -17,7 +17,7 @@ import pojlib.install.MinecraftMeta;
 import pojlib.instance.MinecraftInstance;
 
 public class APIHandler {
-    private final String baseUrl;
+    public final String baseUrl;
 
     public APIHandler(String url) {
         baseUrl = url;

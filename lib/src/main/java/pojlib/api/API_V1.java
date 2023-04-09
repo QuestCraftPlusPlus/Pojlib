@@ -59,6 +59,20 @@ public class API_V1 {
         return MinecraftMeta.getVersions();
     }
 
+    public static void addCustomMod(MinecraftInstance instance, String name, String version, String url) {
+        instance.addCustomMod(name, version, url);
+    }
+
+    public static boolean hasMod(MinecraftInstance instance, String name) {
+        return instance.hasCustomMod(name);
+    }
+
+    /**
+     * @return if the operation succeeds
+     */
+    public static boolean removeMod(MinecraftInstance instance, String name) {
+        return instance.removeMod(name);
+    }
     public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
         return APIHandler.getQCSupportedVersions();
     }

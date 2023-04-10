@@ -104,13 +104,6 @@ public class APIHandler {
         return new Gson().fromJson(postRaw(url + parseQueries(query), body.toString()), tClass);
     }
 
-    public static String getCurseforgeJsonURL(String raw) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return null;
-        JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(raw), JsonObject.class);
-        raw = String.valueOf(jsonObject.get("data")).replaceAll("\"", "");
-        return raw;
-    }
-
     public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
         JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.MODS), JsonObject.class);
         ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();

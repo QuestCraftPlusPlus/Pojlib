@@ -241,18 +241,12 @@ public class JREUtils {
                 "-Djna.nosys=true",
                 "-Djava.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
 
-                //LWJGL 3 DEBUG FLAGS
-                //"-Dorg.lwjgl.util.Debug=true",
-                //"-Dorg.lwjgl.util.DebugFunctions=true",
-                //"-Dorg.lwjgl.util.DebugLoader=true",
-                // GLFW Stub width height
                 "-Dglfwstub.windowWidth=" + 1920,
                 "-Dglfwstub.windowHeight=" + 1080,
                 "-Dglfwstub.initEgl=false",
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
-                "-Dnet.minecraft.clientmodname=" + "null",
-                "-Dfml.earlyprogresswindow=false" //Forge 1.14+ workaround
+                "-Dnet.minecraft.clientmodname=" + "null"
         ));
         return overridableArguments;
     }

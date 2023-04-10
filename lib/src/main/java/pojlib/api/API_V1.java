@@ -87,8 +87,7 @@ public class API_V1 {
     public enum ModLoader {
         Vanilla(0),
         Fabric(1),
-        Quilt(2),
-        Forge(3);
+        Quilt(2);
 
         public final int index;
 

@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -63,7 +64,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
             try {
                 FileUtils.writeByteArrayToFile(zip, FileUtil.loadFromAssetToByte(this, "JRE-17.zip"));
                 byte[] buffer = new byte[1024];
-                ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
+                ZipInputStream zis = new ZipInputStream(Files.newInputStream(zip.toPath()));
                 ZipEntry zipEntry = zis.getNextEntry();
                 while (zipEntry != null) {
                     File newFile = newFile(new File(this.getFilesDir() + "/runtimes/JRE-17"), zipEntry);

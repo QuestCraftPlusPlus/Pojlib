@@ -46,7 +46,7 @@ public class DownloadUtils {
 
                 if (b == -1) {
                     API_V1.downloadStatus = 0;
-                    API_V1.currentDownload = "";
+                    API_V1.currentDownload = null;
                 } else {
                     API_V1.downloadStatus = count * 0.000001;
                 }

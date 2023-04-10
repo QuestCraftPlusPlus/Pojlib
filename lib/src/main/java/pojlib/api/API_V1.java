@@ -18,6 +18,7 @@ import pojlib.account.MinecraftAccount;
 import pojlib.android.R;
 import pojlib.install.*;
 import pojlib.instance.MinecraftInstance;
+import pojlib.util.APIHandler;
 import pojlib.util.Constants;
 import pojlib.util.GsonUtils;
 
@@ -58,6 +59,28 @@ public class API_V1 {
         return MinecraftMeta.getVersions();
     }
 
+    public static void addCustomMod(MinecraftInstance instance, String name, String version, String url) {
+        instance.addCustomMod(name, version, url);
+    }
+
+    public static boolean hasMod(MinecraftInstance instance, String name) {
+        return instance.hasCustomMod(name);
+    }
+
+    /**
+     * @return if the operation succeeds
+     */
+    public static boolean removeMod(MinecraftInstance instance, String name) {
+        return instance.removeMod(name);
+    }
+    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
+        return APIHandler.getQCSupportedVersions();
+    }
+
+    public static String getQCSupportedVersionName(MinecraftMeta.MinecraftVersion version) {
+        return APIHandler.getQCSupportedVersionName(version);
+    }
+
     /**
      * A collection of loader types
      */
@@ -92,12 +115,11 @@ public class API_V1 {
      * @param instanceName      The name of the instance being created - can be anything, used for identification
      * @param home              The base directory where minecraft should be setup
      * @param minecraftVersion  The version of minecraft to install
-     * @param modLoader         The type of mod loader to install
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) throws IOException {
-        return MinecraftInstance.create(activity, instanceName, home, minecraftVersion, modLoader.index);
+    public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
+        return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
     }
 
     /**

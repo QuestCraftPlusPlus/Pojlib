@@ -2,17 +2,22 @@ package pojlib.util;
 
 import android.os.Build;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import pojlib.install.MinecraftMeta;
+import pojlib.instance.MinecraftInstance;
+
 public class APIHandler {
-    private final String baseUrl;
+    public final String baseUrl;
 
     public APIHandler(String url) {
         baseUrl = url;
@@ -104,5 +109,24 @@ public class APIHandler {
         JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(raw), JsonObject.class);
         raw = String.valueOf(jsonObject.get("data")).replaceAll("\"", "");
         return raw;
+    }
+
+    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
+        JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.MODS), JsonObject.class);
+        ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
+        for(String verName : jsonObject.keySet()) {
+            MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
+            for(MinecraftMeta.MinecraftVersion version : versions) {
+                if(version.id.equals(verName)) {
+                    versionsList.add(version);
+                }
+            }
+        }
+
+        return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
+    }
+
+    public static String getQCSupportedVersionName(MinecraftMeta.MinecraftVersion version) {
+        return version.id;
     }
 }

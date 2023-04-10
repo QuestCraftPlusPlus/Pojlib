@@ -12,8 +12,6 @@ public class State {
     public String fabricLoaderVersion;
     @SerializedName("instances")
     private final List<Instance> instances = new ArrayList<>();
-    @SerializedName("core_mods")
-    private final HashMap<String, List<ModData>> coreMods = new HashMap<>();
 
     public List<Instance> getInstances() {
         return instances;
@@ -24,19 +22,6 @@ public class State {
             if (instance.name.equalsIgnoreCase(name)) return instance;
         }
         return null;
-    }
-
-    public void addCoreMod(String version, ModData modData) {
-        List<ModData> mods = coreMods.get(version);
-        if (mods == null) mods = new ArrayList<>();
-        mods.add(modData);
-        coreMods.put(version, mods);
-    }
-
-    public List<ModData> getCoreMods(String version) {
-        List<ModData> mods = coreMods.get(version);
-        if (mods != null) return mods;
-        return new ArrayList<>();
     }
 
     public void addInstance(Instance instance) {
@@ -94,4 +79,3 @@ public class State {
         }
     }
 }
-

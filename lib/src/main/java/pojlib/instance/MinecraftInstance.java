@@ -11,6 +11,7 @@ import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
 import pojlib.install.*;
 import pojlib.util.Constants;
+import pojlib.util.CustomMods;
 import pojlib.util.DownloadUtils;
 import pojlib.util.FileUtil;
 import pojlib.util.GsonUtils;
@@ -18,9 +19,13 @@ import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.VLoader;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,8 +35,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class MinecraftInstance {
-
-    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
+    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Zink/mods.json";
+    public static final String CUSTOM_MODS = "custom_mods.json";
     public static Activity context;
     public String versionName;
     public String versionType;
@@ -43,7 +48,7 @@ public class MinecraftInstance {
 
     //WIP!!!!!!
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, int modLoader) throws IOException {
+    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
@@ -56,33 +61,12 @@ public class MinecraftInstance {
         VersionInfo modLoaderVersionInfo =  FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
         instance.mainClass = modLoaderVersionInfo.mainClass;
 
-        // Get mod loader info
-        if (modLoader == 0) {
-            instance.mainClass = minecraftVersionInfo.mainClass;
-        } else if (modLoader == 1) {
-            if (fabricVersion != null) {
-                modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
-                instance.mainClass = modLoaderVersionInfo.mainClass;
-            }
-        } else if (modLoader == 2) {
-            QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
-            if (quiltVersion != null) {
-                modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
-                instance.mainClass = modLoaderVersionInfo.mainClass;
-            }
-        } else if (modLoader == 3) {
-            throw new RuntimeException("Forge not yet implemented\nExiting...");
-        }
-
-        if (modLoaderVersionInfo == null) throw new RuntimeException("Error fetching mod loader data");
-
         // Install minecraft
-        VersionInfo finalModLoaderVersionInfo = modLoaderVersionInfo;
         new Thread(() -> {
             try {
                 String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
                 String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
-                String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
+                String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
                 String lwjgl = Installer.installLwjgl(activity);
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
@@ -102,7 +86,8 @@ public class MinecraftInstance {
 
     // Load an instance from json
     public static MinecraftInstance load(String instanceName, String gameDir) {
-        return GsonUtils.jsonFileToObject(gameDir + "/instances/" + instanceName + "/instance.json", MinecraftInstance.class);
+        String path = gameDir + "/instances/" + instanceName + "/instance.json";
+        return GsonUtils.jsonFileToObject(path, MinecraftInstance.class);
     }
 
     // Return true if instance was deleted
@@ -174,6 +159,84 @@ public class MinecraftInstance {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addCustomMod(String name, String version, String url) {
+        File customMods = new File(Constants.MC_DIR, CUSTOM_MODS);
+        if(!customMods.exists()) {
+            CustomMods mods = new CustomMods();
+            mods.instances = new CustomMods.InstanceMods[1];
+            mods.instances[0].version = this.versionName;
+            mods.instances[0].mods = new CustomMods.ModInfo[1];
+            mods.instances[0].mods[0].name = name;
+            mods.instances[0].mods[0].version = version;
+            mods.instances[0].mods[0].url = url;
+
+            GsonUtils.objectToJsonFile(customMods.getPath(), mods);
+            return;
+        }
+
+        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
+        for(CustomMods.InstanceMods instance : mods.instances) {
+            if(instance.version.equals(this.versionName)) {
+                ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
+                CustomMods.ModInfo info = new CustomMods.ModInfo();
+                info.name = name;
+                info.version = version;
+                info.url = url;
+                modInfoArray.add(info);
+
+                CustomMods.ModInfo[] infos = new CustomMods.ModInfo[modInfoArray.size()];
+                infos = modInfoArray.toArray(infos);
+
+                instance.mods = infos;
+                GsonUtils.objectToJsonFile(customMods.getPath(), mods);
+                break;
+            }
+        }
+    }
+
+    public boolean hasCustomMod(String name) {
+        File customMods = new File(Constants.MC_DIR, CUSTOM_MODS);
+        if(!customMods.exists()) {
+            return false;
+        }
+
+        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
+        for(CustomMods.InstanceMods instance : mods.instances) {
+            if(instance.version.equals(this.versionName)) {
+                for (CustomMods.ModInfo info : instance.mods) {
+                    if(info.name.equals(name)) {
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeMod(String name) {
+        File customMods = new File(Constants.MC_DIR, CUSTOM_MODS);
+        if(!customMods.exists()) {
+            return false;
+        }
+
+        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
+        for(CustomMods.InstanceMods instance : mods.instances) {
+            if(instance.version.equals(this.versionName)) {
+                for (CustomMods.ModInfo info : instance.mods) {
+                    if(info.name.equals(name)) {
+                        ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
+                        modInfoArray.remove(info);
+                        GsonUtils.objectToJsonFile(customMods.getPath(), mods);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return true;
     }
 
     public void launchInstance(Activity activity, MinecraftAccount account) {

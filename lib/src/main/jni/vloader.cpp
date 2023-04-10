@@ -9,6 +9,7 @@
 #include <OpenOVR/openxr_platform.h>
 #include <jni.h>
 #include "log.h"
+#include <GLES3/gl32.h>
 
 static JavaVM* jvm;
 XrInstanceCreateInfoAndroidKHR* OpenComposite_Android_Create_Info;
@@ -69,6 +70,27 @@ Java_pojlib_util_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlong ctx, jlon
             (void*)cfg,
             (void*)ctx
     };
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_org_vivecraft_utils_VLoader_createGLImage(JNIEnv* env, jclass clazz, jint width, jint height) {
+    GLint image;
+    glGenTextures(1, reinterpret_cast<GLuint *>(&image));
+    glBindTexture(GL_TEXTURE_2D, image);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MIN_FILTER, 9729.0F);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER, 9729.0F);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    return image;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_vivecraft_utils_VLoader_writeImage(JNIEnv* env, jclass clazz, jint tex, jint width, jint height, jlong byteBuf) {
+    void* pixels = reinterpret_cast<void *>(byteBuf);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 }
 
 static std::string load_file(const char *path) {

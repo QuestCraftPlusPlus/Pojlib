@@ -12,7 +12,6 @@ import java.lang.ref.WeakReference;
  */
 @Keep
 public class Logger {
-    private static Logger sLoggerSingleton = null;
 
     /* Instance variables */
     private final File mLogFile;
@@ -35,15 +34,12 @@ public class Logger {
 
     }
 
+    private static final class SLoggerSingletonHolder {
+        static final Logger sLoggerSingleton = new Logger();
+    }
+
     public static Logger getInstance(){
-        if(sLoggerSingleton == null){
-            synchronized(Logger.class){
-                if(sLoggerSingleton == null){
-                    sLoggerSingleton = new Logger();
-                }
-            }
-        }
-        return sLoggerSingleton;
+        return SLoggerSingletonHolder.sLoggerSingleton;
     }
 
 

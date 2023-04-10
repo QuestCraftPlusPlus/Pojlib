@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 public class FileUtil {
 
     public static String DIR_GAME_NEW;
+    public static String DIR_HOME_VERSION;
+
 
     public static byte[] loadFromAssetToByte(Context ctx, String inFile) {
         byte[] buffer = null;

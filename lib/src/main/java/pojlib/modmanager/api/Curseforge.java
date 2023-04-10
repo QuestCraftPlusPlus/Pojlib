@@ -81,7 +81,7 @@ public class Curseforge {
         return null;
     }
 
-/*    public static void addProjectsToRecycler(String version, int offset, String query) {
+    public static void addProjectsToRecycler(String version, int offset, String query) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -115,20 +115,8 @@ public class Curseforge {
                     }
                     mods.add(modData);
                 }
-
-                mods.removeIf(modData -> {
-                    for (ModData coreMod : ModManager.listCoreMods(version)) {
-                        if (coreMod.slug.equals(modData.slug)) return true;
-                    }
-                    return false;
-                });
-
-                UiUitls.runOnUI(() -> {
-                    adapter.addMods(mods);
-                    if (offset == 0 && mods.size() > 0) adapter.loadProjectPage(mods.get(0), null);
-                });
             }
         };
         thread.start();
-    }*/
+    }
 }

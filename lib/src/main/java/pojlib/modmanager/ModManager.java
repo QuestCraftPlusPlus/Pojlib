@@ -25,7 +25,6 @@ public class ModManager {
     public static State state = new State();
     private static final File modsJson = new File(workDir + "/mods.json");
     private static JsonObject modrinthCompat = new JsonObject();
-    private static JsonObject curseforgeCompat = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
@@ -36,7 +35,6 @@ public class ModManager {
                 try {
                     JsonObject modManagerJson = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/modmanager.json"), JsonObject.class);
                     modrinthCompat = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/modrinth-compat.json"), JsonObject.class);
-                    curseforgeCompat = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/curseforge-compat.json"), JsonObject.class);
 
                     JsonArray repoList = modManagerJson.getAsJsonArray("repos");
 
@@ -99,7 +97,6 @@ public class ModManager {
     public static String getModCompat(String platform, String name) {
         JsonElement compatLevel = null;
         if (platform.equals("modrinth")) compatLevel = modrinthCompat.get(name);
-        if (platform.equals("curseforge")) compatLevel = curseforgeCompat.get(name);
 
         if (compatLevel != null) return compatLevel.getAsString();
         return "Untested";
@@ -185,7 +182,6 @@ public class ModManager {
                 try {
                     ModData modData = null;
                     if (platform.equals("modrinth")) modData = Modrinth.getModData(slug, gameVersion);
-                    else if (platform.equals("curseforge")) modData = Curseforge.getModData(slug, gameVersion);
                     if (modData == null) return;
                     modData.isActive = true;
 
@@ -233,8 +229,6 @@ public class ModManager {
                     ModData modData = null;
                     if (mod.platform.equals("modrinth"))
                         modData = Modrinth.getModData(mod.slug, instance.getGameVersion());
-                    else if (mod.platform.equals("curseforge"))
-                        modData = Curseforge.getModData(mod.slug, instance.getGameVersion());
                     if (modData != null && !mod.fileData.id.equals(modData.fileData.id) && !Objects.equals(modData.slug, "simple-voice-chat"))
                         mods.add(mod);
                 }

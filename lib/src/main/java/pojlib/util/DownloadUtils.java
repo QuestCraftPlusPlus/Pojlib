@@ -28,7 +28,6 @@ public class DownloadUtils {
     private static void download(URL url, OutputStream os) throws IOException {
         InputStream is = null;
         try {
-            // System.out.println("Connecting: " + url.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(10000);
             conn.setDoInput(true);

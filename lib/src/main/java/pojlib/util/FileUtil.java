@@ -30,7 +30,7 @@ public class FileUtil {
     }
 
     public static String read(String path) throws IOException {
-        return read(new FileInputStream(path));
+        return read(Files.newInputStream(Paths.get(path)));
     }
 
     public static String read(InputStream is) throws IOException {
@@ -47,7 +47,6 @@ public class FileUtil {
     {
         File outPath = new File(path);
         outPath.getParentFile().mkdirs();
-        //outPath.createNewFile();
 
         BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(Paths.get(path)));
         fos.write(content, 0, content.length);

@@ -143,7 +143,7 @@ public class Msa {
         throw new RuntimeException();
     }
 
-    private static void checkMcStore(String mcAccessToken) throws IOException, JSONException {
+    private static void checkMcStore(String mcAccessToken) throws IOException {
         URL url = new URL(Constants.MC_STORE_URL);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();

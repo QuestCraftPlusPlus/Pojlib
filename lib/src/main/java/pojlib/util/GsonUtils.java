@@ -20,16 +20,14 @@ public class GsonUtils {
         }
     }
 
-    public static boolean objectToJsonFile(String path, Object object) {
+    public static void objectToJsonFile(String path, Object object) {
         File dir = new File(path).getParentFile();
         if (dir != null) dir.mkdirs();
 
         try (Writer writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(object, writer);
-            return true;
         } catch (IOException e) {
-            return false;
         }
     }
 }

@@ -11,7 +11,6 @@ public class CallbackBridge {
     public static final int CLIPBOARD_COPY = 2000;
     public static final int CLIPBOARD_PASTE = 2001;
     
-    public static volatile int windowWidth, windowHeight;
     public static volatile int physicalWidth, physicalHeight;
     public static float mouseX, mouseY;
     public static StringBuilder DEBUG_STRING = new StringBuilder();
@@ -110,10 +109,6 @@ public class CallbackBridge {
         nativeSendScroll(xoffset, yoffset);
     }
 
-    public static void sendUpdateWindowSize(int w, int h) {
-        nativeSendScreenSize(w, h);
-    }
-
     public static boolean isGrabbing() {
         // return isGrabbing;
         return nativeIsGrabbing();
@@ -131,24 +126,6 @@ public class CallbackBridge {
             default: return null;
         }
     }
-/*
-    private static String currData;
-    public static void sendData(int type, Object... dataArr) {
-        currData = "";
-        for (int i = 0; i < dataArr.length; i++) {
-            if (dataArr[i] instanceof Integer) {
-                currData += Integer.toString((int) dataArr[i]);
-            } else if (dataArr[i] instanceof String) {
-                currData += (String) dataArr[i];
-            } else {
-                currData += dataArr[i].toString();
-            }
-            currData += (i + 1 < dataArr.length ? ":" : "");
-        }
-        nativeSendData(true, type, currData);
-    }
-    private static native void nativeSendData(boolean isAndroid, int type, String data);
-*/
 
 
     public static int getCurrentMods() {
@@ -170,7 +147,6 @@ public class CallbackBridge {
     private static native void nativeSendMouseButton(int button, int action, int mods);
     private static native void nativeSendScroll(double xoffset, double yoffset);
     private static native void nativeSendScreenSize(int width, int height);
-    public static native void nativeSetWindowAttrib(int attrib, int value);
 
     public static native boolean nativeIsGrabbing();
     static {

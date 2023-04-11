@@ -118,7 +118,12 @@ public class API_V1 {
      * @throws                  IOException Throws if download of library or asset fails
      */
     public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
-        return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
+
+        if (instanceName.contains("/") || instanceName.contains(".")) {
+            throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
+        } else {
+            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
+        }
     }
 
     /**

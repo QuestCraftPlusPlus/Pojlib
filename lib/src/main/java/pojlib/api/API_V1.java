@@ -51,6 +51,7 @@ public class API_V1 {
     public static double downloadStatus;
     public static String currentDownload;
     public static String profileImage;
+    public static boolean developerMode;
 
     /**
      * @return A list of every minecraft version

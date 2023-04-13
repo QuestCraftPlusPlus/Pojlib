@@ -51,7 +51,10 @@ public class API_V1 {
     public static double downloadStatus;
     public static String currentDownload;
     public static String profileImage;
-    public static boolean developerMode;
+    public static int memoryValue = 3072;
+    public static boolean developerMods;
+    public static boolean advancedDebugger;
+
 
     /**
      * @return A list of every minecraft version

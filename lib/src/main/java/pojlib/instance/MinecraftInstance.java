@@ -28,6 +28,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -132,7 +133,7 @@ public class MinecraftInstance {
             }
 
             if(modsOld.exists()) {
-                InputStream stream = new FileInputStream(mods);
+                InputStream stream = Files.newInputStream(mods.toPath());
                 int size = stream.available();
                 byte[] buffer = new byte[size];
                 stream.read(buffer);
@@ -148,7 +149,7 @@ public class MinecraftInstance {
                 }
                 mods.delete();
             } else {
-                InputStream stream = new FileInputStream(mods);
+                InputStream stream = Files.newInputStream(mods.toPath());
                 int size = stream.available();
                 byte[] buffer = new byte[size];
                 stream.read(buffer);

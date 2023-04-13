@@ -29,7 +29,7 @@ public class MinecraftAccount {
     public String accessToken;
     public String msaRefreshToken;
     public String uuid;
-    public String username;
+    public static String username;
     public int expiresIn;
 
     public final String userType = "msa";

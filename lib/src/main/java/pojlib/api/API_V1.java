@@ -51,6 +51,7 @@ public class API_V1 {
     public static double downloadStatus;
     public static String currentDownload;
     public static String profileImage;
+    public static String profileName;
     public static int memoryValue = 3072;
     public static boolean developerMods;
     public static boolean advancedDebugger;
@@ -170,6 +171,7 @@ public class API_V1 {
         MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getFilesDir() + "/accounts", client_id);
         if(acc != null) {
             profileImage = MinecraftAccount.getSkinFaceUrl(acc);
+            profileName = MinecraftAccount.username;
             return acc;
         }
         try {
@@ -225,6 +227,7 @@ public class API_V1 {
                     // Finally, log in
                     acc = MinecraftAccount.login(MinecraftInstance.context.getFilesDir() + "/accounts", jsonObject2);
                     profileImage = MinecraftAccount.getSkinFaceUrl(acc);
+                    profileName = MinecraftAccount.username;
                     return acc;
                 }
 

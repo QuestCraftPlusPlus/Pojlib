@@ -118,7 +118,7 @@ public class MinecraftInstance {
             File mods = new File(Constants.USER_HOME + "/mods-new.json");
             File modsOld = new File(Constants.USER_HOME + "/mods.json");
 
-            if (API_V1.developerMode) {
+            if (API_V1.developerMods) {
                 DownloadUtils.downloadFile(DEV_MODS, mods);
             } else { DownloadUtils.downloadFile(MODS, mods); }
 

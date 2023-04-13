@@ -29,6 +29,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
+import pojlib.api.API_V1;
 import pojlib.instance.MinecraftInstance;
 
 public class JREUtils {
@@ -201,8 +202,8 @@ public class JREUtils {
         List<String> userArgs = getJavaArgs(activity);
 
         //Add automatically generated args
-        userArgs.add("-Xms" + 3072 + "M");
-        userArgs.add("-Xmx" + 3072 + "M");
+        userArgs.add("-Xms" + API_V1.memoryValue + "M");
+        userArgs.add("-Xmx" + API_V1.memoryValue + "M");
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");

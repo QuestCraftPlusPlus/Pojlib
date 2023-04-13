@@ -36,7 +36,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class MinecraftInstance {
-    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Zink/mods.json";
+    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
+    public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
     public static final String CUSTOM_MODS = "custom_mods.json";
     public static Activity context;
     public String versionName;
@@ -116,7 +117,11 @@ public class MinecraftInstance {
         try {
             File mods = new File(Constants.USER_HOME + "/mods-new.json");
             File modsOld = new File(Constants.USER_HOME + "/mods.json");
-            DownloadUtils.downloadFile(MODS, mods);
+
+            if (API_V1.developerMode) {
+                DownloadUtils.downloadFile(DEV_MODS, mods);
+            } else { DownloadUtils.downloadFile(MODS, mods); }
+
             JsonObject obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), JsonObject.class);
             JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
 

@@ -48,6 +48,8 @@ public class API_V1 {
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
     public static boolean finishedDownloading = false;
+    public static boolean ignoreInstanceName;
+    public static boolean customRAMValue = false;
     public static double downloadStatus;
     public static String currentDownload;
     public static String profileImage;
@@ -124,7 +126,9 @@ public class API_V1 {
      */
     public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
 
-        if (instanceName.contains("/") || instanceName.contains(".")) {
+        if(ignoreInstanceName) {
+            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
+        } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
             return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);

@@ -94,7 +94,9 @@ public class MinecraftInstance {
 
     // Return true if instance was deleted
     public static boolean delete(String instanceName, String gameDir) throws IOException {
-        if (instanceName.contains("/") || instanceName.contains(".")) {
+        if (API_V1.ignoreInstanceName) {
+            return new File(gameDir + "/instances/" + instanceName).delete();
+        } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when deleting instances.");
         } else {
             return new File(gameDir + "/instances/" + instanceName).delete();

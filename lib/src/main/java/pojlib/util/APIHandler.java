@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import pojlib.api.API_V1;
 import pojlib.install.MinecraftMeta;
 import pojlib.instance.MinecraftInstance;
 
@@ -105,18 +106,34 @@ public class APIHandler {
     }
 
     public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
-        JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.MODS), JsonObject.class);
-        ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
-        for(String verName : jsonObject.keySet()) {
-            MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
-            for(MinecraftMeta.MinecraftVersion version : versions) {
-                if(version.id.equals(verName)) {
-                    versionsList.add(version);
+
+        if (API_V1.developerMods) {
+            JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.DEV_MODS), JsonObject.class);
+            ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
+            for(String verName : jsonObject.keySet()) {
+                MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
+                for(MinecraftMeta.MinecraftVersion version : versions) {
+                    if(version.id.equals(verName)) {
+                        versionsList.add(version);
+                    }
                 }
             }
-        }
 
-        return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
+            return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
+        } else {
+            JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.MODS), JsonObject.class);
+            ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
+            for(String verName : jsonObject.keySet()) {
+                MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
+                for(MinecraftMeta.MinecraftVersion version : versions) {
+                    if(version.id.equals(verName)) {
+                        versionsList.add(version);
+                    }
+                }
+            }
+
+            return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
+        }
     }
 
     public static String getQCSupportedVersionName(MinecraftMeta.MinecraftVersion version) {

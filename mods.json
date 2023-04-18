@@ -71,19 +71,9 @@
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/vA8NWTKD/ImmediatelyFast-1.1.6%2B1.19.3.jar"
 		},
 		{
-			"slug": "malilib",
-			"version": "0.14.0",
-			"download_link": "https://www.curseforge.com/minecraft/mc-mods/malilib/download/4147598/file"
-		},
-		{
 			"slug": "starlight",
 			"version": "1.1.1",
 			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.1.1%2B1.19/starlight-1.1.1%2Bfabric.ae22326.jar"
-		},
-		{
-			"slug": "tweakeroo",
-			"version": "0.15.0",
-			"download_link": "https://www.curseforge.com/minecraft/mc-mods/tweakeroo/download/4162596/file"
 		},
 		{
 			"slug": "krypton",
@@ -169,19 +159,9 @@
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/zImGOGqD/ImmediatelyFast-1.1.6%2B1.18.2.jar"
 		},
 		{
-			"slug": "malilib",
-			"version": "0.12.1",
-			"download_link": "https://www.curseforge.com/minecraft/mc-mods/malilib/download/3692220/file"
-		},
-		{
 			"slug": "starlight",
 			"version": "1.0.2",
 			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.0.2%2B1.18.2/starlight-1.0.2%2Bfabric.89b8d9f.jar"
-		},
-		{
-			"slug": "tweakeroo",
-			"version": "0.13.3",
-			"download_link": "https://www.curseforge.com/minecraft/mc-mods/tweakeroo/download/3783910/file"
 		},
 		{
 			"slug": "krypton",

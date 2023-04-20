@@ -52,6 +52,8 @@ public class API_V1 {
     public static boolean customRAMValue = false;
     public static double downloadStatus;
     public static String currentDownload;
+    public Activity context;
+    public static MinecraftInstance minecraftInstance = new MinecraftInstance();
     public static String profileImage;
     public static String profileName;
     public static int memoryValue = 3072;
@@ -127,11 +129,11 @@ public class API_V1 {
     public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
 
         if(ignoreInstanceName) {
-            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
+            return minecraftInstance.create(activity, instanceName, home, minecraftVersion);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
+            return minecraftInstance.create(activity, instanceName, home, minecraftVersion);
         }
     }
 
@@ -170,9 +172,9 @@ public class API_V1 {
         return MinecraftAccount.logout(home);
     }
 
-    public static MinecraftAccount login(String client_id)
+    public MinecraftAccount login(String client_id)
     {
-        MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getFilesDir() + "/accounts", client_id);
+        MinecraftAccount acc = MinecraftAccount.load(context.getFilesDir() + "/accounts", client_id);
         if(acc != null) {
             profileImage = MinecraftAccount.getSkinFaceUrl(acc);
             profileName = MinecraftAccount.username;
@@ -229,7 +231,7 @@ public class API_V1 {
 
                 if(jsonObject2.get("access_token") != null) {
                     // Finally, log in
-                    acc = MinecraftAccount.login(MinecraftInstance.context.getFilesDir() + "/accounts", jsonObject2);
+                    acc = MinecraftAccount.login(context.getFilesDir() + "/accounts", jsonObject2);
                     profileImage = MinecraftAccount.getSkinFaceUrl(acc);
                     profileName = MinecraftAccount.username;
                     return acc;

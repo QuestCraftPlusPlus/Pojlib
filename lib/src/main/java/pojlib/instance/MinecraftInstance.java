@@ -39,7 +39,7 @@ public class MinecraftInstance {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
     public static final String CUSTOM_MODS = "custom_mods.json";
-    public static Activity context;
+    public Activity context;
     public String versionName;
     public String versionType;
     public String classpath;
@@ -47,10 +47,11 @@ public class MinecraftInstance {
     public String assetIndex;
     public String assetsDir;
     public String mainClass;
+    public Installer installer = new Installer();
 
     //WIP!!!!!!
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
+    public MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
@@ -72,8 +73,7 @@ public class MinecraftInstance {
                 String lwjgl = Installer.installLwjgl(activity);
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
-
-                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
+                instance.assetsDir = installer.installAssets(minecraftVersionInfo, gameDir);
             } catch (IOException e) {
                 e.printStackTrace();
             }

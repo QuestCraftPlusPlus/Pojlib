@@ -1,5 +1,6 @@
 package pojlib;
 
+import android.app.Activity;
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -33,6 +34,7 @@ import pojlib.util.FileUtil;
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
+    public Activity context;
 
     // Override this in your custom UnityPlayerActivity to tweak the command line arguments passed to the Unity Android Player
     // The command line arguments are passed as a string, separated by spaces
@@ -58,7 +60,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
-        MinecraftInstance.context = this;
+        context = this;
         File zip = new File(this.getFilesDir() + "/runtimes/JRE-17.zip");
         if(!zip.exists()) {
             try {

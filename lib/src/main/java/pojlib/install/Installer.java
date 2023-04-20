@@ -29,6 +29,8 @@ import java.util.concurrent.TimeUnit;
 //This works for the base game as well as mod loaders
 public class Installer {
 
+    public Activity context;
+
     // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath
     public static String installClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
@@ -91,7 +93,7 @@ public class Installer {
 
     //Only works on minecraft, not fabric, quilt, etc...
     //Will only download asset if it is missing
-    public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+    public String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
         Logger.getInstance().appendToLog("Downloading assets");
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
@@ -109,17 +111,17 @@ public class Installer {
 
         DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"));
 
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/sodium-options.json"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "sodium-options.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/vivecraft-config.properties"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "vivecraft-config.properties"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/tweakeroo.json"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "tweakeroo.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/smoothboot.json"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "smoothboot.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/malilib.json"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "malilib.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/immediatelyfast.json"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "immediatelyfast.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/c2me.toml"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "c2me.toml"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/moreculling.toml"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "moreculling.toml"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/options.txt"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "options.txt"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/servers.dat"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "servers.dat"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/optionsviveprofiles.txt"), FileUtil.loadFromAssetToByte(MinecraftInstance.context, "optionsviveprofiles.txt"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/sodium-options.json"), FileUtil.loadFromAssetToByte(context, "sodium-options.json"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/vivecraft-config.properties"), FileUtil.loadFromAssetToByte(context, "vivecraft-config.properties"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/tweakeroo.json"), FileUtil.loadFromAssetToByte(context, "tweakeroo.json"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/smoothboot.json"), FileUtil.loadFromAssetToByte(context, "smoothboot.json"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/malilib.json"), FileUtil.loadFromAssetToByte(context, "malilib.json"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/immediatelyfast.json"), FileUtil.loadFromAssetToByte(context, "immediatelyfast.json"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/c2me.toml"), FileUtil.loadFromAssetToByte(context, "c2me.toml"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/moreculling.toml"), FileUtil.loadFromAssetToByte(context, "moreculling.toml"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/options.txt"), FileUtil.loadFromAssetToByte(context, "options.txt"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/servers.dat"), FileUtil.loadFromAssetToByte(context, "servers.dat"));
+        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/optionsviveprofiles.txt"), FileUtil.loadFromAssetToByte(context, "optionsviveprofiles.txt"));
 
         return new File(gameDir + "/assets").getAbsolutePath();
     }

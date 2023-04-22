@@ -64,9 +64,20 @@ public class Msa {
         }
 
         File errorFile = new File(Constants.USER_HOME + "/errors.txt");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
-        writer.write(jo.toString());
-        writer.flush();
+
+        if (!errorFile.exists()) {
+            errorFile.createNewFile();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+            writer.write(jo.toString());
+            writer.flush();
+            writer.close();
+        } else {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
+            writer.write(jo.toString());
+            writer.flush();
+            writer.close();
+        }
+
         throw new RuntimeException();
     }
 

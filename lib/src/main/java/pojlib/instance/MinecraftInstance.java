@@ -48,7 +48,6 @@ public class MinecraftInstance {
     public String assetsDir;
     public String mainClass;
 
-    //WIP!!!!!!
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
     public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
@@ -123,6 +122,8 @@ public class MinecraftInstance {
             if (API_V1.developerMods) {
                 DownloadUtils.downloadFile(DEV_MODS, mods);
             } else { DownloadUtils.downloadFile(MODS, mods); }
+
+            DownloadUtils.downloadFile(CUSTOM_MODS, mods);
 
             JsonObject obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), JsonObject.class);
             JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);

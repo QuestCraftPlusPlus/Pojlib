@@ -123,8 +123,6 @@ public class MinecraftInstance {
                 DownloadUtils.downloadFile(DEV_MODS, mods);
             } else { DownloadUtils.downloadFile(MODS, mods); }
 
-            DownloadUtils.downloadFile(CUSTOM_MODS, mods);
-
             JsonObject obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), JsonObject.class);
             JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
 

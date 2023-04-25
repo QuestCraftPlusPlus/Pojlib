@@ -178,8 +178,10 @@ public class MinecraftInstance {
         if(!customMods.exists()) {
             CustomMods mods = new CustomMods();
             mods.instances = new CustomMods.InstanceMods[1];
+            mods.instances[0] = new CustomMods.InstanceMods();
             mods.instances[0].version = this.versionName;
             mods.instances[0].mods = new CustomMods.ModInfo[1];
+            mods.instances[0].mods[0] = new CustomMods.ModInfo();
             mods.instances[0].mods[0].name = name;
             mods.instances[0].mods[0].version = version;
             mods.instances[0].mods[0].url = url;

@@ -118,11 +118,13 @@ public class MinecraftInstance {
         try {
             File mods = new File(Constants.USER_HOME + "/mods-new.json");
             File modsOld = new File(Constants.USER_HOME + "/mods.json");
+            File customMods = new File(Constants.MC_DIR + "/custom_mods.json");
 
             if (API_V1.developerMods) {
                 DownloadUtils.downloadFile(DEV_MODS, mods);
             } else { DownloadUtils.downloadFile(MODS, mods); }
 
+            CustomMods customModsObj = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomMods.class);
             JsonObject obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), JsonObject.class);
             JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
 
@@ -136,6 +138,17 @@ public class MinecraftInstance {
                 versions.add(object.get("version").getAsString());
                 downloads.add(object.get("download_link").getAsString());
                 name.add(object.get("slug").getAsString());
+            }
+
+            if(customMods.exists()) {
+                for(CustomMods.InstanceMods instMods : customModsObj.instances) {
+                    if(!instMods.version.equals(this.versionName)) {
+                        continue;
+                    }
+                    for(CustomMods.ModInfo info : instMods.mods) {
+                        DownloadUtils.downloadFile(info.url, new File(Constants.MC_DIR + "/mods/" + this.versionName));
+                    }
+                }
             }
 
             if(modsOld.exists()) {

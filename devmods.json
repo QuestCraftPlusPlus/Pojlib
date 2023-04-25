@@ -94,6 +94,11 @@
 			"slug": "server-core",
 			"version": "1.3.5-1.19.4",
 			"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/aq6o4qRe/servercore-1.3.5-1.19.4.jar"
+		},
+		{
+			"slug": "mod-menu",
+			"version": "6.2.1",
+			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/yjjsLqbS/modmenu-6.2.1.jar"
 		}
 	],
 	"1.19.3": [
@@ -249,6 +254,11 @@
 			"slug": "krypton",
 			"version": "0.2.1",
 			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar"
+		},
+		{
+			"slug": "mod_menu",
+			"version": "4.2.0-beta.2",
+			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/gSoPJyVn/modmenu-4.2.0-beta.2.jar"
 		}
 
 	],
@@ -329,24 +339,19 @@
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/zImGOGqD/ImmediatelyFast-1.1.6%2B1.18.2.jar"
 		},
 		{
-			"slug": "malilib",
-			"version": "0.12.1",
-			"download_link": "https://www.curseforge.com/minecraft/mc-mods/malilib/download/3692220/file"
-		},
-		{
 			"slug": "starlight",
 			"version": "1.0.2",
 			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.0.2%2B1.18.2/starlight-1.0.2%2Bfabric.89b8d9f.jar"
 		},
 		{
-			"slug": "tweakeroo",
-			"version": "0.13.3",
-			"download_link": "https://www.curseforge.com/minecraft/mc-mods/tweakeroo/download/3783910/file"
-		},
-		{
 			"slug": "krypton",
 			"version": "0.1.9",
 			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar"
+		},
+		{
+			"slug": "mod-menu",
+			"version": "3.2.5",
+			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/nVxObSbX/modmenu-3.2.5.jar"
 		}
 	]
 }

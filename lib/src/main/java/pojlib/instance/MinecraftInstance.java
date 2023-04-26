@@ -260,6 +260,8 @@ public class MinecraftInstance {
                 for (CustomMods.ModInfo info : instance.mods) {
                     if(info.name.equals(name)) {
                         ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
+                        File mod = new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + info.name + ".jar");
+                        mod.delete();
                         modInfoArray.remove(info);
                         instance.mods = modInfoArray.toArray(new CustomMods.ModInfo[0]);
                         GsonUtils.objectToJsonFile(customMods.getAbsolutePath(), mods);

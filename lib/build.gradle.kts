@@ -37,18 +37,18 @@ dependencies {
 }
 
 dependencies {
-    implementation("org.jetbrains:annotations:20.1.0")
-    implementation("com.google.code.gson:gson:2.9.1")
+    implementation("org.jetbrains:annotations:24.0.0")
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.json:json:20220924")
     implementation("commons-io:commons-io:2.11.0")
     implementation("commons-codec:commons-codec:1.15")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.preference:preference:1.1.1")
-    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("androidx.preference:preference:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.legacy:legacy-preference-v14:1.0.0")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.annotation:annotation:1.3.0")
-    implementation("androidx.browser:browser:1.4.0")
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.annotation:annotation:1.6.0")
+    implementation("androidx.browser:browser:1.5.0")
     implementation("blank:unity-classes")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 }

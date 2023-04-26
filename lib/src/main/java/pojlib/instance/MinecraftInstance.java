@@ -140,17 +140,6 @@ public class MinecraftInstance {
                 name.add(object.get("slug").getAsString());
             }
 
-            if(customMods.exists()) {
-                for(CustomMods.InstanceMods instMods : customModsObj.instances) {
-                    if(!instMods.version.equals(this.versionName)) {
-                        continue;
-                    }
-                    for(CustomMods.ModInfo info : instMods.mods) {
-                        DownloadUtils.downloadFile(info.url, new File(Constants.MC_DIR + "/mods/" + this.versionName));
-                    }
-                }
-            }
-
             if(modsOld.exists()) {
                 InputStream stream = Files.newInputStream(mods.toPath());
                 int size = stream.available();
@@ -181,9 +170,25 @@ public class MinecraftInstance {
                 }
                 mods.delete();
             }
+
+            if(customMods.exists()) {
+                for(CustomMods.InstanceMods instMods : customModsObj.instances) {
+                    System.out.println("Before mod download | Line 145");
+                    if(!instMods.version.equals(this.versionName)) {
+                        continue;
+                    }
+                    for(CustomMods.ModInfo info : instMods.mods) {
+                        System.out.println("Before mod download | Line 150");
+                        DownloadUtils.downloadFile(info.url, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + info.name + ".jar"));
+                    }
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
+
         }
+
     }
 
     public void addCustomMod(String name, String version, String url) {

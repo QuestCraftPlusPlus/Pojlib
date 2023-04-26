@@ -99,6 +99,11 @@
 			"slug": "mod-menu",
 			"version": "6.2.1",
 			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/yjjsLqbS/modmenu-6.2.1.jar"
+		},
+		{
+			"slug": "c2me",
+			"version": "0.2.0+alpha.10",
+			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/FpgVeSQK/c2me-fabric-mc1.19.3-0.2.0%2Balpha.10.0.jar"
 		}
 	],
 	"1.19.3": [
@@ -259,8 +264,12 @@
 			"slug": "mod_menu",
 			"version": "4.2.0-beta.2",
 			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/gSoPJyVn/modmenu-4.2.0-beta.2.jar"
+		},
+		{
+			"slug": "c2me",
+			"version": "0.2.0+alpha.9.9",
+			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/8rUarScX/c2me-fabric-mc1.19.2-0.2.0%2Balpha.9.9.jar"
 		}
-
 	],
 	"1.18.2": [
 	  	{

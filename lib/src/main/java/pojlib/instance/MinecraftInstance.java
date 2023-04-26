@@ -254,21 +254,22 @@ public class MinecraftInstance {
             return false;
         }
 
-        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
+        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomMods.class);
         for(CustomMods.InstanceMods instance : mods.instances) {
             if(instance.version.equals(this.versionName)) {
                 for (CustomMods.ModInfo info : instance.mods) {
                     if(info.name.equals(name)) {
                         ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
                         modInfoArray.remove(info);
-                        GsonUtils.objectToJsonFile(customMods.getPath(), mods);
-                        break;
+                        instance.mods = modInfoArray.toArray(new CustomMods.ModInfo[0]);
+                        GsonUtils.objectToJsonFile(customMods.getAbsolutePath(), mods);
+                        return true;
                     }
                 }
                 break;
             }
         }
-        return true;
+        return false;
     }
 
     public void launchInstance(Activity activity, MinecraftAccount account) {

@@ -66,11 +66,6 @@
 			"download_link": "https://cdn.modrinth.com/data/kCpssoSb/versions/tykaPrWr/Fastload%2B1.18.2-1.19.4-3.1.1.jar"
 		},
 		{
-			"slug": "No-Telemetry",
-			"version": "1.7.0",
-			"download_link": "https://cdn.modrinth.com/data/hg77g4Pw/versions/l9SfLZDA/no-telemetry-1.7.0.jar"
-		},
-		{
 			"slug": "Fabric-Language-Kotlin",
 			"version": "1.9.3+kotlin.1.8.20",
 			"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/MkcO8aQ0/fabric-language-kotlin-1.9.3%2Bkotlin.1.8.20.jar"

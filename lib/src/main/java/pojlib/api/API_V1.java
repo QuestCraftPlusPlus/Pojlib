@@ -54,7 +54,7 @@ public class API_V1 {
     public static String currentDownload;
     public static String profileImage;
     public static String profileName;
-    public static int memoryValue = 3072;
+    public static String memoryValue = "3072";
     public static boolean developerMods;
     public static boolean advancedDebugger;
 
@@ -170,9 +170,9 @@ public class API_V1 {
         return MinecraftAccount.logout(home);
     }
 
-    public static MinecraftAccount login(String client_id)
+    public static MinecraftAccount login(String client_id, Activity activity)
     {
-        MinecraftAccount acc = MinecraftAccount.load(MinecraftInstance.context.getFilesDir() + "/accounts", client_id);
+        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", client_id);
         if(acc != null) {
             profileImage = MinecraftAccount.getSkinFaceUrl(acc);
             profileName = MinecraftAccount.username;
@@ -229,7 +229,7 @@ public class API_V1 {
 
                 if(jsonObject2.get("access_token") != null) {
                     // Finally, log in
-                    acc = MinecraftAccount.login(MinecraftInstance.context.getFilesDir() + "/accounts", jsonObject2);
+                    acc = MinecraftAccount.login(activity.getFilesDir() + "/accounts", jsonObject2);
                     profileImage = MinecraftAccount.getSkinFaceUrl(acc);
                     profileName = MinecraftAccount.username;
                     return acc;

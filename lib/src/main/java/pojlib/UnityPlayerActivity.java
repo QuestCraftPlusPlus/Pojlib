@@ -58,7 +58,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
-        MinecraftInstance.context = this;
         File zip = new File(this.getFilesDir() + "/runtimes/JRE-17.zip");
         if(!zip.exists()) {
             try {

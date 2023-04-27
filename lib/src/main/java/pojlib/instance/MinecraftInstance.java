@@ -39,7 +39,6 @@ public class MinecraftInstance {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
     public static final String CUSTOM_MODS = "custom_mods.json";
-    public static Activity context;
     public String versionName;
     public String versionType;
     public String classpath;
@@ -72,7 +71,7 @@ public class MinecraftInstance {
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
-                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
+                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir, activity);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -278,7 +277,7 @@ public class MinecraftInstance {
         try {
             updateOrDownloadsMods();
             JREUtils.redirectAndPrintJRELog();
-            VLoader.setAndroidInitInfo(context);
+            VLoader.setAndroidInitInfo(activity);
             VLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
             JREUtils.launchJavaVM(activity, generateLaunchArgs(account), versionName);
         } catch (Throwable e) {

@@ -2,8 +2,6 @@ package pojlib.install;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class VersionInfo {
     @SerializedName("id")
     public String id;

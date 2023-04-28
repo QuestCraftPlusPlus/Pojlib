@@ -3,11 +3,9 @@ package pojlib.modmanager.api;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
-import java.io.IOException;
 
 import pojlib.util.APIHandler;
 import pojlib.util.Constants;
-import pojlib.util.FileUtil;
 import pojlib.util.GsonUtils;
 
 public class Fabric {

@@ -1,36 +1,24 @@
 package pojlib.util;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
-import android.os.Environment;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.ArrayMap;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.oracle.dalvik.VMLauncher;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLContext;
-import javax.microedition.khronos.egl.EGLDisplay;
-
 import pojlib.api.API_V1;
-import pojlib.instance.MinecraftInstance;
 
 public class JREUtils {
     private JREUtils() {}
@@ -210,6 +198,7 @@ public class JREUtils {
             userArgs.add("-Xmx" + 2048 + "M");
         }
 
+        userArgs.add("-XX:+HeapDumpOnOutOfMemoryError");
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");

@@ -1,26 +1,17 @@
 package pojlib.api;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.os.Environment;
-import android.os.Looper;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.json.JSONException;
-import org.json.JSONWriter;
 
-import pojlib.UnityPlayerActivity;
 import pojlib.account.MinecraftAccount;
-import pojlib.android.R;
 import pojlib.install.*;
 import pojlib.instance.MinecraftInstance;
 import pojlib.util.APIHandler;
 import pojlib.util.Constants;
-import pojlib.util.GsonUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,13 +20,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.Instant;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -66,8 +54,9 @@ public class API_V1 {
         return MinecraftMeta.getVersions();
     }
 
-    public static void addCustomMod(MinecraftInstance instance, String name, String version, String url) {
+    public static boolean addCustomMod(MinecraftInstance instance, String name, String version, String url) {
         instance.addCustomMod(name, version, url);
+        return true;
     }
 
     public static boolean hasMod(MinecraftInstance instance, String name) {

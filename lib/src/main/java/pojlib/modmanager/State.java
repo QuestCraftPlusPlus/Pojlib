@@ -2,9 +2,7 @@ package pojlib.modmanager;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class State {

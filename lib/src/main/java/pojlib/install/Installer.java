@@ -1,26 +1,19 @@
 package pojlib.install;
 
 import android.app.Activity;
-import android.content.Context;
 
-import android.provider.Telephony;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.apache.commons.io.FileUtils;
 
-import pojlib.instance.MinecraftInstance;
 import pojlib.util.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;

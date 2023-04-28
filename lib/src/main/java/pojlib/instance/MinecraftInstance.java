@@ -6,7 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import pojlib.UnityPlayerActivity;
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
 import pojlib.install.*;
@@ -19,19 +18,12 @@ import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.VLoader;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 

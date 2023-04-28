@@ -1,7 +1,5 @@
 package org.lwjgl.glfw;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -130,10 +128,6 @@ public class CallbackBridge {
 
     public static int getCurrentMods() {
         return 0;
-    }
-
-    public static void setModifiers(int keyCode, boolean isDown){
-
     }
 
     public static native boolean nativeAttachThreadToOther(boolean isAndroid, boolean isUsePushPoll);

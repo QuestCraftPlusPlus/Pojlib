@@ -94,6 +94,11 @@
 			"slug": "ImmediatelyFast",
 			"version": "1.1.12",
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/8IFFeKYy/ImmediatelyFast-1.1.12%2B1.19.4.jar"
+		},
+		{
+			"slug": "Noxesium",
+			"version": "0.1.8",
+			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
 		}
 	],
 	"1.19.3": [
@@ -176,6 +181,11 @@
 			"slug": "Krypton",
 			"version": "0.2.1",
 			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar"
+		},
+		{
+			"slug": "Noxesium",
+			"version": "0.1.6",
+			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/YJ3s9buY/noxesium-0.1.6.jar"
 		}
 
 	],
@@ -259,6 +269,11 @@
 			"slug": "ImmediatelyFast",
 			"version": "1.1.12",
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4yVqQKQO/ImmediatelyFast-1.1.12%2B1.19.jar"
+		},
+		{
+			"slug": "Noxesium",
+			"version": "0.1.4",
+			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
 		}
 	],
 	"1.18.2": [

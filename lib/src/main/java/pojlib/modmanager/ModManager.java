@@ -1,7 +1,7 @@
 package pojlib.modmanager;
 
 import android.os.Build;
-import android.util.Pair;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

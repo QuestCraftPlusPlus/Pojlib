@@ -1,172 +1,371 @@
 {
-	"1.19.3": [
-		{
-			"slug": "vivecraft",
-			"version": "1.4.0",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.4-1.19.3/vivecraft.jar"
+	"1.19.4": [
+	  	{
+			"slug": "Vivecraft",
+			"version": "0.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.19.4-Zink/vivecraft.jar"
 		},
 		{
-			"slug": "fabric-api",
-			"version": "0.70.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/MtLQsb99/fabric-api-0.70.0%2B1.19.3.jar"
+			"slug": "Fabric-API",
+			"version": "0.76.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/Pz1hLqTB/fabric-api-0.76.0%2B1.19.4.jar"
 		},
 		{
-			"slug": "lazydfu",
-			"version": "1.3",
-			"download_link": "https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.3/lazydfu-0.1.3.jar"
+			"slug": "Simple-Voice-Chat",
+			"version": "2.3.28",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/pBGz0fqU/voicechat-fabric-1.19.4-2.3.28.jar"
 		},
 		{
-			"slug": "simple-voice-chat",
-			"version": "2.3.24",
-			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/aWSzugT7/voicechat-fabric-1.19.3-2.3.24.jar"
+			"slug": "Lithium",
+			"version": "0.11.1",
+			"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/14hWYkog/lithium-fabric-mc1.19.4-0.11.1.jar"
 		},
 		{
-			"slug": "litihum",
-			"version": "0.10.4",
-			"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/XS6vJwop/lithium-fabric-mc1.19.3-0.10.4.jar"
+			"slug": "Ferrite-Core",
+			"version": "5.2.0",
+			"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/RbR7EG8T/ferritecore-5.2.0-fabric.jar"
 		},
 		{
-			"slug": "ferrite-core",
-			"version": "5.1.0",
-			"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/GHcKib6J/ferritecore-5.1.0-fabric.jar"
+			"slug": "Smooth-Boot",
+			"version": "1.7.0",
+			"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/I9TkHxLI/smoothboot-fabric-1.19.4-1.7.0.jar"
 		},
 		{
-			"slug": "smooth-boot",
-			"version": "1.7.1",
-			"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/1.19-1.7.1/smoothboot-fabric-1.19-1.7.1.jar"
+			"slug": "Entity-Culling",
+			"version": "1.6.2",
+			"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/UvJN5Cy4/entityculling-fabric-1.6.2-mc1.19.4.jar"
 		},
 		{
-			"slug": "entity-culling",
-			"version": "1.5.2",
-			"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/Wq0up4B4/entityculling-forge-1.5.2-mc1.19.3.jar"
+			"slug": "Sodium",
+			"version": "0.4.10",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/b4hTi3mo/sodium-fabric-mc1.19.4-0.4.10%2Bbuild.24.jar"
 		},
 		{
-			"slug": "sodium",
-			"version": "0.4.8",
-			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/oYfJQ6lR/sodium-fabric-mc1.19.3-0.4.8%2Bbuild.22.jar"
-		},
-		{
-			"slug": "better-biome-blend",
-			"version": "1.3.6",
-			"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.19.0-1.3.6/betterbiomeblend-1.19.0-1.3.6-fabric.jar"
-		},
-		{
-			"slug": "c2me-fabric",
-			"version": "0.2.0",
-			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/kakddk9k/c2me-fabric-mc1.19.3-0.2.0%2Balpha.9.12.jar"
-		},
-		{
-			"slug": "cloth-config",
+			"slug": "Cloth-Config",
 			"version": "9.0.94",
 			"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/M3yxljrZ/cloth-config-9.0.94-fabric.jar"
 		},
 		{
-			"slug": "fastload",
-			"version": "2.6.10",
-			"download_link": "https://cdn.modrinth.com/data/kCpssoSb/versions/OQyAqgWH/Fastload%2B1.19.3-2.6.10.jar"
-		},
-		{
-			"slug": "immediatelyfast",
-			"version": "1.1.6",
-			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/vA8NWTKD/ImmediatelyFast-1.1.6%2B1.19.3.jar"
-		},
-		{
-			"slug": "starlight",
+			"slug": "Starlight",
 			"version": "1.1.1",
 			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.1.1%2B1.19/starlight-1.1.1%2Bfabric.ae22326.jar"
 		},
 		{
-			"slug": "krypton",
+			"slug": "Krypton",
+			"version": "0.2.2",
+			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/Tncui9tU/krypton-0.2.2.jar"
+		},
+		{
+			"slug": "Better-Biome-Blend",
+			"version": "1.19-1.3.6-fabric",
+			"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.19.0-1.3.6/betterbiomeblend-1.19.0-1.3.6-fabric.jar"
+		},
+		{
+			"slug": "FastLoad",
+			"version": "3.1.1",
+			"download_link": "https://cdn.modrinth.com/data/kCpssoSb/versions/tykaPrWr/Fastload%2B1.18.2-1.19.4-3.1.1.jar"
+		},
+		{
+			"slug": "Fabric-Language-Kotlin",
+			"version": "1.9.3+kotlin.1.8.20",
+			"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/MkcO8aQ0/fabric-language-kotlin-1.9.3%2Bkotlin.1.8.20.jar"
+		},
+		{
+			"slug": "Memory-Leak-Fix",
+			"version": "1.0.0",
+			"download_link": "https://cdn.modrinth.com/data/NRjRiSSD/versions/PtXTwQt6/memoryleakfix-fabric-1.17%2B-1.0.0.jar"
+		},
+		{
+			"slug": "Server-Core",
+			"version": "1.3.5-1.19.4",
+			"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/aq6o4qRe/servercore-1.3.5-1.19.4.jar"
+		},
+		{
+			"slug": "Mod-Menu",
+			"version": "6.2.1",
+			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/yjjsLqbS/modmenu-6.2.1.jar"
+		},
+		{
+			"slug": "C2me",
+			"version": "0.2.0+alpha.10.51",
+			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/2LxKBERD/c2me-fabric-mc1.19.4-0.2.0%2Balpha.10.51.jar"
+		},
+		{
+			"slug": "ImmediatelyFast",
+			"version": "1.1.12",
+			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/8IFFeKYy/ImmediatelyFast-1.1.12%2B1.19.4.jar"
+		},
+		{
+			"slug": "Noxesium",
+			"version": "0.1.8",
+			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
+		}
+	],
+	"1.19.3": [
+	  	{
+			"slug": "Vivecraft",
+			"version": "0.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.2-1.19.3-Zink/vivecraft.jar"
+		},
+		{
+			"slug": "Fabric-API",
+			"version": "0.70.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/MtLQsb99/fabric-api-0.70.0%2B1.19.3.jar"
+		},
+		{
+			"slug": "LazyDFU",
+			"version": "1.3",
+			"download_link": "https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.3/lazydfu-0.1.3.jar"
+		},
+		{
+			"slug": "Simple-Voice-Chat",
+			"version": "2.3.24",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/aWSzugT7/voicechat-fabric-1.19.3-2.3.24.jar"
+		},
+		{
+			"slug": "Lithium",
+			"version": "0.10.4",
+			"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/XS6vJwop/lithium-fabric-mc1.19.3-0.10.4.jar"
+		},
+		{
+			"slug": "Ferrite-Core",
+			"version": "5.1.0",
+			"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/GHcKib6J/ferritecore-5.1.0-fabric.jar"
+		},
+		{
+			"slug": "Smooth-Boot",
+			"version": "1.7.1",
+			"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/1.19-1.7.1/smoothboot-fabric-1.19-1.7.1.jar"
+		},
+		{
+			"slug": "Entity-Culling",
+			"version": "1.5.2",
+			"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/Wq0up4B4/entityculling-forge-1.5.2-mc1.19.3.jar"
+		},
+		{
+			"slug": "Sodium",
+			"version": "0.4.9",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/idtcaIVT/sodium-fabric-mc1.19.3-0.4.9%2Bbuild.23.jar"
+		},
+		{
+			"slug": "Better-Biome-Blend",
+			"version": "1.3.6",
+			"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.19.0-1.3.6/betterbiomeblend-1.19.0-1.3.6-fabric.jar"
+		},
+		{
+			"slug": "C2me",
+			"version": "0.2.0",
+			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/kakddk9k/c2me-fabric-mc1.19.3-0.2.0%2Balpha.9.12.jar"
+		},
+		{
+			"slug": "Cloth-Config",
+			"version": "9.0.94",
+			"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/M3yxljrZ/cloth-config-9.0.94-fabric.jar"
+		},
+		{
+			"slug": "Fastload",
+			"version": "2.6.10",
+			"download_link": "https://cdn.modrinth.com/data/kCpssoSb/versions/OQyAqgWH/Fastload%2B1.19.3-2.6.10.jar"
+		},
+		{
+			"slug": "ImmediatelyFast",
+			"version": "1.1.6",
+			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/vA8NWTKD/ImmediatelyFast-1.1.6%2B1.19.3.jar"
+		},
+		{
+			"slug": "Starlight",
+			"version": "1.1.1",
+			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.1.1%2B1.19/starlight-1.1.1%2Bfabric.ae22326.jar"
+		},
+		{
+			"slug": "Krypton",
 			"version": "0.2.1",
 			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar"
+		},
+		{
+			"slug": "Noxesium",
+			"version": "0.1.6",
+			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/YJ3s9buY/noxesium-0.1.6.jar"
 		}
 
 	],
-	"1.18.2": [
-		{
-			"slug": "vivecraft",
-			"version": "1.4.0",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.4-1.18.2/vivecraft.jar"
+	"1.19.2": [
+	  	{
+			"slug": "Vivecraft",
+			"version": "0.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.19.2-Zink/vivecraft.jar"
 		},
 		{
-			"slug": "fabric-api",
+			"slug": "Fabric-API",
+			"version": "0.76.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/hfsU4hXq/fabric-api-0.76.0%2B1.19.2.jar"
+		},
+		{
+			"slug": "LazyDFU",
+			"version": "1.3",
+			"download_link": "https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.3/lazydfu-0.1.3.jar"
+		},
+		{
+			"slug": "Simple-Voice-Chat",
+			"version": "2.3.28",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/rpBFgFO1/voicechat-fabric-1.19.2-2.3.28.jar"
+		},
+		{
+			"slug": "Lithium",
+			"version": "0.11.1",
+			"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/m6sVgAi6/lithium-fabric-mc1.19.2-0.11.1.jar"
+		},
+		{
+			"slug": "Ferrite-Core",
+			"version": "5.0.3",
+			"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/kwjHqfz7/ferritecore-5.0.3-fabric.jar"
+		},
+		{
+			"slug": "Smooth-Boot",
+			"version": "1.7.1",
+			"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/1.19-1.7.1/smoothboot-fabric-1.19-1.7.1.jar"
+		},
+		{
+			"slug": "Entity-Culling",
+			"version": "1.6.1",
+			"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/twdGLDHv/entityculling-fabric-1.6.1-mc1.19.2.jar"
+		},
+		{
+			"slug": "Sodium",
+			"version": "0.4.4",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/rAfhHfow/sodium-fabric-mc1.19.2-0.4.4%2Bbuild.18.jar"
+		},
+		{
+			"slug": "Cloth-Config",
+			"version": "8.2.88",
+			"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/EXrxCjl6/cloth-config-8.2.88-fabric.jar"
+		},
+		{
+			"slug": "Starlight",
+			"version": "1.1.1",
+			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.1.1%2B1.19/starlight-1.1.1%2Bfabric.ae22326.jar"
+		},
+		{
+			"slug": "Krypton",
+			"version": "0.2.1",
+			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar"
+		},
+		{
+			"slug": "Mod_Menu",
+			"version": "4.2.0-beta.2",
+			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/gSoPJyVn/modmenu-4.2.0-beta.2.jar"
+		},
+		{
+			"slug": "C2me",
+			"version": "0.2.0+alpha.9.9",
+			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/8rUarScX/c2me-fabric-mc1.19.2-0.2.0%2Balpha.9.9.jar"
+		},
+		{
+			"slug": "Better-Biome-Blend",
+			"version": "1.3.6",
+			"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.19.0-1.3.6/betterbiomeblend-1.19.0-1.3.6-fabric.jar"
+		},
+		{
+			"slug": "ImmediatelyFast",
+			"version": "1.1.12",
+			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4yVqQKQO/ImmediatelyFast-1.1.12%2B1.19.jar"
+		},
+		{
+			"slug": "Noxesium",
+			"version": "0.1.4",
+			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
+		}
+	],
+	"1.18.2": [
+	  	{
+			"slug": "Vivecraft",
+			"version": "0.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.18.2-Zink/vivecraft.jar"
+		},
+		{
+			"slug": "Fabric-API",
 			"version": "0.67.0",
 			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/YDlOLdpm/fabric-api-0.67.0%2B1.18.2.jar"
 		},
 		{
-			"slug": "lazydfu",
+			"slug": "LazyDFU",
 			"version": "1.2",
 			"download_link": "https://cdn.modrinth.com/data/hvFnDODi/versions/0.1.2/lazydfu-0.1.2.jar"
 		},
 		{
-			"slug": "simple-voice-chat",
-			"version": "2.3.24",
-			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/Uf3QfIZH/voicechat-fabric-1.18.2-2.3.24.jar"
+			"slug": "Simple-Voice-Chat",
+			"version": "2.3.28",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/CgMj10S7/voicechat-fabric-1.18.2-2.3.28.jar"
 		},
 		{
-			"slug": "lithium",
+			"slug": "Lithium",
 			"version": "0.10.3",
 			"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/ALnv7Npy/lithium-fabric-mc1.18.2-0.10.3.jar"
 		},
 		{
-			"slug": "ferrite-core",
+			"slug": "Ferrite-Core",
 			"version": "4.2.1",
 			"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/4.2.0/ferritecore-4.2.0-fabric.jar"
 		},
 		{
-			"slug": "smooth-boot",
+			"slug": "Smooth-Boot",
 			"version": "1.7.0",
 			"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/iy4eaYy2/smoothboot-fabric-1.18.2-1.7.0.jar"
 		},
 		{
-			"slug": "entity-culling",
+			"slug": "Entity-Culling",
 			"version": "1.5.1",
 			"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/1.5.1-fabric-1.18/entityculling-fabric-mc1.18-1.5.1.jar"
 		},
 		{
-			"slug": "sodium",
+			"slug": "Sodium",
 			"version": "0.4.1",
 			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
 		},
 		{
-			"slug": "better-biome-blend",
+			"slug": "Better-Biome-Blend",
 			"version": "1.3.5",
 			"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.18.2-1.3.5-fabric/betterbiomeblend-1.18.2-1.3.5-fabric.jar"
 		},
 		{
-			"slug": "c2me-fabric",
+			"slug": "C2me",
 			"version": "0.2.0",
 			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/U5BK0DTf/c2me-fabric-mc1.18.2-0.2.0%2Balpha.7.35.jar"
 		},
 		{
-			"slug": "cloth-config",
+			"slug": "Cloth-Config",
 			"version": "6.3.81",
 			"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/gPqHXnrg/cloth-config-6.3.81-fabric.jar"
 		},
 		{
-			"slug": "cull-less-leaves",
+			"slug": "Cull-Less-Leaves",
 			"version": "1.0.1",
 			"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/1.0.1/CullLessLeaves-1.0.1.jar"
 		},
 		{
-			"slug": "fastload",
+			"slug": "FastLoad",
 			"version": "1.5.9",
 			"download_link": "https://cdn.modrinth.com/data/kCpssoSb/versions/K9vr5fdy/Fastload%2B1.18.2-1.5.9.jar"
 		},
 		{
-			"slug": "immediatelyfast",
+			"slug": "ImmediatelyFast",
 			"version": "1.1.6",
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/zImGOGqD/ImmediatelyFast-1.1.6%2B1.18.2.jar"
 		},
 		{
-			"slug": "starlight",
+			"slug": "Starlight",
 			"version": "1.0.2",
 			"download_link": "https://cdn.modrinth.com/data/H8CaAYZC/versions/1.0.2%2B1.18.2/starlight-1.0.2%2Bfabric.89b8d9f.jar"
 		},
 		{
-			"slug": "krypton",
+			"slug": "Krypton",
 			"version": "0.1.9",
 			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar"
+		},
+		{
+			"slug": "Mod-Menu",
+			"version": "3.2.5",
+			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/nVxObSbX/modmenu-3.2.5.jar"
 		}
 	]
 }

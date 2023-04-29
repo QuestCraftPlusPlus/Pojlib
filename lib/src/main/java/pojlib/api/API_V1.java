@@ -54,9 +54,8 @@ public class API_V1 {
         return MinecraftMeta.getVersions();
     }
 
-    public static boolean addCustomMod(MinecraftInstance instance, String name, String version, String url) {
+    public static void addCustomMod(MinecraftInstance instance, String name, String version, String url) {
         instance.addCustomMod(name, version, url);
-        return true;
     }
 
     public static boolean hasMod(MinecraftInstance instance, String name) {

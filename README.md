@@ -2,7 +2,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![Lines of code](https://img.shields.io/tokei/lines/github/questcraftplusplus/pojlib?style=flat)
 
-A Minecraft: Java Edition launcher library partially made with the PojavLauncher base.
+A Minecraft: Java Edition launcher library partially made with elements from PojavLauncher.
 
 This library was initially meant for use in QuestCraft but has turned into the perfect library for Minecraft: Java Edition launchers. This includes everything needed for a basic and (soon) even advanced MCJE launchers written in Java (or any other language with interop).
 

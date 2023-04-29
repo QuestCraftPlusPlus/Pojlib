@@ -82,6 +82,11 @@ Java_org_vivecraft_utils_VLoader_createGLImage(JNIEnv* env, jclass clazz, jint w
     glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_MAG_FILTER, 9729.0F);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR) {
+        printf("OpenGLES error! %d.", error);
+    }
+
     return image;
 }
 
@@ -91,6 +96,11 @@ Java_org_vivecraft_utils_VLoader_writeImage(JNIEnv* env, jclass clazz, jint tex,
     void* pixels = reinterpret_cast<void *>(byteBuf);
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    GLenum error = glGetError();
+    if(error != GL_NO_ERROR) {
+        printf("OpenGLES error! %d.", error);
+    }
 }
 
 static std::string load_file(const char *path) {

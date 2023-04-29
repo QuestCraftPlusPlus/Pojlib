@@ -214,9 +214,24 @@ public class MinecraftInstance {
 
                 instance.mods = infos;
                 GsonUtils.objectToJsonFile(customMods.getPath(), mods);
-                break;
+                return;
             }
         }
+
+        // If instance does not exist in file, create it
+        ArrayList<CustomMods.InstanceMods> instanceInfo = new ArrayList<>(Arrays.asList(mods.instances));
+        CustomMods.InstanceMods instMods = new CustomMods.InstanceMods();
+        instMods.version = this.versionName;
+        instMods.mods = new CustomMods.ModInfo[1];
+        instMods.mods[0] = new CustomMods.ModInfo();
+        instMods.mods[0].name = name;
+        instMods.mods[0].version = version;
+        instMods.mods[0].url = url;
+        instanceInfo.add(instanceInfo.size(), instMods);
+
+        // Set the array
+        mods.instances = instanceInfo.toArray(new CustomMods.InstanceMods[0]);
+        GsonUtils.objectToJsonFile(customMods.getAbsolutePath(), mods);
     }
 
     public boolean hasCustomMod(String name) {

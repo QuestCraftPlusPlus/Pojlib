@@ -245,8 +245,8 @@ public class JREUtils {
                 "-Djna.nosys=true",
                 "-Djava.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
 
-                "-Dglfwstub.windowWidth=" + 1920,
-                "-Dglfwstub.windowHeight=" + 1080,
+                "-Dglfwstub.windowWidth=" + 1080,
+                "-Dglfwstub.windowHeight=" + 720,
                 "-Dglfwstub.initEgl=false",
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 

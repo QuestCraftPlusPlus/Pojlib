@@ -233,7 +233,7 @@ public class JREUtils {
      * @return A list filled with args.
      */
     public static List<String> getJavaArgs(Context ctx) {
-        ArrayList<String> overridableArguments = new ArrayList<>(Arrays.asList(
+        return new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + new File(ctx.getFilesDir(), "runtimes/JRE-17"),
                 "-Djava.io.tmpdir=" + ctx.getCacheDir().getAbsolutePath(),
                 "-Duser.home=" + Constants.MC_DIR,
@@ -244,15 +244,13 @@ public class JREUtils {
                 "-Djna.boot.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
                 "-Djna.nosys=true",
                 "-Djava.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
-
-                "-Dglfwstub.windowWidth=" + 1080,
+                "-Dglfwstub.windowWidth=" + 1280,
                 "-Dglfwstub.windowHeight=" + 720,
                 "-Dglfwstub.initEgl=false",
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
                 "-Dnet.minecraft.clientmodname=" + "null"
         ));
-        return overridableArguments;
     }
 
     /**

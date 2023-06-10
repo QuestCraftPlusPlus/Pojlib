@@ -53,15 +53,15 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
-        File zip = new File(this.getFilesDir() + "/runtimes/JRE-17.zip");
+        File zip = new File(this.getFilesDir() + "/runtimes/JRE-21.zip");
         if(!zip.exists()) {
             try {
-                FileUtils.writeByteArrayToFile(zip, FileUtil.loadFromAssetToByte(this, "JRE-17.zip"));
+                FileUtils.writeByteArrayToFile(zip, FileUtil.loadFromAssetToByte(this, "JRE-21.zip"));
                 byte[] buffer = new byte[1024];
                 ZipInputStream zis = new ZipInputStream(Files.newInputStream(zip.toPath()));
                 ZipEntry zipEntry = zis.getNextEntry();
                 while (zipEntry != null) {
-                    File newFile = newFile(new File(this.getFilesDir() + "/runtimes/JRE-17"), zipEntry);
+                    File newFile = newFile(new File(this.getFilesDir() + "/runtimes/JRE-21"), zipEntry);
                     if (zipEntry.isDirectory()) {
                         if (!newFile.isDirectory() && !newFile.mkdirs()) {
                             throw new IOException("Failed to create directory " + newFile);

@@ -8,6 +8,22 @@ HERE_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(HERE_PATH)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := lwjgl_lib
+LOCAL_SRC_FILES := lwjgl/liblwjgl.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_CFLAGS := -DLWJGL_LINUX
+LOCAL_SHARED_LIBRARIES := lwjgl_lib
+LOCAL_MODULE := lwjgl_openvr
+LOCAL_SRC_FILES := \
+            lwjgl/org_lwjgl_openvr_VRChaperone.c \
+            lwjgl/org_lwjgl_openvr_VRCompositor.c \
+            lwjgl/org_lwjgl_openvr_VROverlay.c \
+            lwjgl/org_lwjgl_openvr_VRSystem.c
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := libadrenotools
 LOCAL_SRC_FILES := adrenotools/libadrenotools.so
 include $(PREBUILT_SHARED_LIBRARY)

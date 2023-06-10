@@ -727,7 +727,6 @@ int pojavInit() {
     char *natives = getenv("POJAV_NATIVEDIR");
     char *gpuStuff = getenv("HOME");
     strcat(natives, "/");
-    strcat(gpuStuff, "/gpu_stuff/");
     void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
                                                  gpuStuff, natives,
                                                  "libvulkan_freedreno.so", NULL, NULL);

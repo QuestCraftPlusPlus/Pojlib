@@ -19,8 +19,9 @@ std::string (*OpenComposite_Android_Load_Input_File)(const char *path);
 
 static std::string load_file(const char *path);
 
+extern "C"
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
-    if (jvm == nullptr) {
+    if(jvm == nullptr) {
         jvm = vm;
     }
     return JNI_VERSION_1_4;

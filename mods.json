@@ -7,8 +7,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/Pz1hLqTB/fabric-api-0.76.0%2B1.19.4.jar"
+			"version": "0.83.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/5U5Y73uW/fabric-api-0.83.0%2B1.19.4.jar"
 		},
 		{
 			"slug": "Simple-Voice-Chat",
@@ -109,8 +109,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.70.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/MtLQsb99/fabric-api-0.70.0%2B1.19.3.jar"
+			"version": "0.76.1",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/jyKnHEDY/fabric-api-0.76.1%2B1.19.3.jar"
 		},
 		{
 			"slug": "LazyDFU",

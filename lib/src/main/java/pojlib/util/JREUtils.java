@@ -194,18 +194,9 @@ public class JREUtils {
             userArgs.add("-Xms" + API_V1.memoryValue + "M");
             userArgs.add("-Xmx" + API_V1.memoryValue + "M");
         } else {
-            userArgs.add("-Xms" + 2048 + "M");
-            userArgs.add("-Xmx" + 2048 + "M");
+            userArgs.add("-Xms" + 3072 + "M");
+            userArgs.add("-Xmx" + 3072 + "M");
         }
-
-        userArgs.add("-XX:+UseG1GC");
-        userArgs.add("-Dsun.rmi.dgc.server.gcInterval=600000");
-        userArgs.add("-XX:+UnlockExperimentalVMOptions");
-        userArgs.add("-XX:+DisableExplicitGC");
-        userArgs.add("-XX:G1NewSizePercent=20");
-        userArgs.add("-XX:G1ReservePercent=20");
-        userArgs.add("-XX:MaxGCPauseMillis=50");
-        userArgs.add("-XX:G1HeapRegionSize=32");
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");

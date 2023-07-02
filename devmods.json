@@ -79,6 +79,11 @@
 			"slug": "ImmediatelyFast",
 			"version": "1.1.15",
 			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4IDo27OL/ImmediatelyFast-1.1.15%2B1.20.1.jar"
+		},
+		{
+			"slug": "Simple-Voice-Chat",
+			"version": "2.4.12",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/NkZguN8n/voicechat-fabric-1.20.1-2.4.12.jar"
 		}
 	],
 	"1.19.4": [
@@ -226,8 +231,8 @@
 		},
 		{
 			"slug": "Sodium",
-			"version": "0.4.9",
-			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/idtcaIVT/sodium-fabric-mc1.19.3-0.4.9%2Bbuild.23.jar"
+			"version": "0.4.8",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/oYfJQ6lR/sodium-fabric-mc1.19.3-0.4.8%2Bbuild.22.jar"
 		},
 		{
 			"slug": "Better-Biome-Blend",

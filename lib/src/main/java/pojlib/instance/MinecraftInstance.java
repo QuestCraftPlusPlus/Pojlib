@@ -177,9 +177,7 @@ public class MinecraftInstance {
 
         } catch (IOException e) {
             e.printStackTrace();
-
         }
-
     }
 
     public void addCustomMod(String name, String version, String url) {

@@ -69,15 +69,17 @@ public class Installer {
                     }
                 }
 
-                if (DownloadUtils.compareSHA1(libraryFile, sha1)) {
-                    // Add our GLFW
-                    classpath.add(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
-
-                    classpath.add(libraryFile.getAbsolutePath());
-                    break;
+                if (!libraryFile.getAbsolutePath().contains("lwjgl")) {
+                    if(DownloadUtils.compareSHA1(libraryFile, sha1)) {
+                        classpath.add(libraryFile.getAbsolutePath());
+                        break;
+                    }
                 }
             }
         }
+
+        // Add our GLFW
+        classpath.add(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
 
         return classpath.toString();
     }

@@ -106,6 +106,8 @@ public class MinecraftInstance {
     }
 
     public void updateOrDownloadsMods() {
+        API_V1.finishedDownloading = false;
+        new Thread(()->{
         try {
             File mods = new File(Constants.USER_HOME + "/mods-new.json");
             File modsOld = new File(Constants.USER_HOME + "/mods.json");
@@ -142,6 +144,7 @@ public class MinecraftInstance {
                 boolean downloadAll = !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists());
                 for (String download : downloads) {
                     if(!Objects.equals(versions.get(i), ((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString()) || downloadAll) {
+                        API_V1.currentDownload = name.get(i);
                         DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
                     }
                     i++;
@@ -156,6 +159,7 @@ public class MinecraftInstance {
                 FileUtil.write(modsOld.getAbsolutePath(), buffer);
                 int i = 0;
                 for (String download : downloads) {
+                    API_V1.currentDownload = name.get(i);
                     DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
                     i++;
                 }
@@ -164,12 +168,11 @@ public class MinecraftInstance {
 
             if(customMods.exists()) {
                 for(CustomMods.InstanceMods instMods : customModsObj.instances) {
-                    System.out.println("Before mod download | Line 145");
                     if(!instMods.version.equals(this.versionName)) {
                         continue;
                     }
                     for(CustomMods.ModInfo info : instMods.mods) {
-                        System.out.println("Before mod download | Line 150");
+                        API_V1.currentDownload = info.name;
                         DownloadUtils.downloadFile(info.url, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + info.name + ".jar"));
                     }
                 }
@@ -178,6 +181,9 @@ public class MinecraftInstance {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        API_V1.finishedDownloading = true;
+        }).start();
     }
 
     public void addCustomMod(String name, String version, String url) {
@@ -305,7 +311,6 @@ public class MinecraftInstance {
 
     public void launchInstance(Activity activity, MinecraftAccount account) {
         try {
-            updateOrDownloadsMods();
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
             VLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());

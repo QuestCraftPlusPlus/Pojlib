@@ -84,6 +84,11 @@
 			"slug": "Simple-Voice-Chat",
 			"version": "2.4.12",
 			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/NkZguN8n/voicechat-fabric-1.20.1-2.4.12.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.4.2",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/WYn556RC/modernfix-fabric-5.4.2%2Bmc1.20.1.jar"
 		}
 	],
 	"1.19.4": [
@@ -186,6 +191,11 @@
 			"slug": "Noxesium",
 			"version": "0.1.8",
 			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.4.2",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/Ggtcd6Lc/modernfix-fabric-5.4.2%2Bmc1.19.4.jar"
 		}
 	],
 	"1.19.3": [
@@ -361,6 +371,11 @@
 			"slug": "Noxesium",
 			"version": "0.1.4",
 			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.4.1",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/YDyqtNIH/modernfix-fabric-5.4.1%2Bmc1.19.2.jar"
 		}
 	],
 	"1.18.2": [
@@ -453,6 +468,11 @@
 			"slug": "Mod-Menu",
 			"version": "3.2.5",
 			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/nVxObSbX/modmenu-3.2.5.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.4.1",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FGNCOJKF/modernfix-fabric-5.4.1%2Bmc1.18.2.jar"
 		}
 	]
 }

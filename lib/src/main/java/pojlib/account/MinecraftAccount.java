@@ -42,7 +42,6 @@ public class MinecraftAccount {
         String mcToken = Msa.acquireXBLToken(response[0]);
         MinecraftAccount account = checkMcProfile(mcToken);
         account.expiresIn = Long.parseLong(response[1]);
-        account.refreshToken = response[2];
 
         GsonUtils.objectToJsonFile(gameDir + "/account.json", account);
         return account;

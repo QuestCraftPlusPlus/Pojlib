@@ -34,7 +34,7 @@ public class Msa {
         return out.toString();
     }
 
-    public static MinecraftAccount acquireXBLToken(String accessToken) throws IOException, JSONException {
+    public static String acquireXBLToken(String accessToken) throws IOException, JSONException {
         URL url = new URL(Constants.XBL_AUTH_URL);
 
         Map<Object, Object> data = new HashMap<>();
@@ -81,7 +81,7 @@ public class Msa {
         throw new RuntimeException();
     }
 
-    private static MinecraftAccount acquireXsts(String xblToken) throws IOException, JSONException {
+    private static String acquireXsts(String xblToken) throws IOException, JSONException {
         URL url = new URL(Constants.XSTS_AUTH_URL);
 
         Map<Object, Object> data = new HashMap<>();
@@ -118,7 +118,7 @@ public class Msa {
         throw new RuntimeException();
     }
 
-    private static MinecraftAccount acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
+    private static String acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
         URL url = new URL(Constants.MC_LOGIN_URL);
 
         Map<Object, Object> data = new HashMap<>();
@@ -142,9 +142,7 @@ public class Msa {
 
         if(!jo.isNull("access_token")) {
             checkMcStore(jo.getString("access_token"));
-            MinecraftAccount account = checkMcProfile(jo.getString("access_token"));
-            account.accessToken = jo.getString("access_token");
-            return account;
+            return jo.getString("access_token");
         }
 
         File errorFile = new File(Constants.USER_HOME + "/errors.txt");
@@ -172,7 +170,7 @@ public class Msa {
         }
     }
 
-    private static MinecraftAccount checkMcProfile(String mcAccessToken) throws IOException, JSONException {
+    public static MinecraftAccount checkMcProfile(String mcAccessToken) throws IOException, JSONException {
         URL url = new URL(Constants.MC_PROFILE_URL);
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -190,7 +188,7 @@ public class Msa {
         JSONObject jsonObject = new JSONObject(s);
         String name = (String) jsonObject.get("name");
         String uuid = (String) jsonObject.get("id");
-        String uuidDashes = uuid .replaceFirst(
+        String uuidDashes = uuid.replaceFirst(
                 "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
         );
 

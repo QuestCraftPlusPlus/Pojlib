@@ -1,5 +1,9 @@
 package pojlib.account;
 
+import static pojlib.account.Msa.checkMcProfile;
+
+import android.app.Activity;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -7,6 +11,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONException;
 import pojlib.util.Constants;
 import pojlib.util.GsonUtils;
+import pojlib.util.LoginHelper;
 
 import java.io.File;
 import java.io.FileReader;
@@ -19,21 +24,25 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
+
+import javax.annotation.Nullable;
 
 public class MinecraftAccount {
 
     public String accessToken;
-    public String msaRefreshToken;
+    public String refreshToken;
     public String uuid;
-    public static String username;
-    public int expiresIn;
+    public String username;
+    public long expiresIn;
 
     public final String userType = "msa";
 
-    public static MinecraftAccount login(String gameDir, JsonObject response) throws IOException, JSONException {
-        MinecraftAccount account = Msa.acquireXBLToken(response.get("access_token").getAsString());
-        account.msaRefreshToken = response.get("refresh_token").getAsString();
-        account.expiresIn = response.get("expires_in").getAsInt();
+    public static MinecraftAccount login(String gameDir, String[] response) throws IOException, JSONException {
+        String mcToken = Msa.acquireXBLToken(response[0]);
+        MinecraftAccount account = checkMcProfile(mcToken);
+        account.expiresIn = Long.parseLong(response[1]);
+        account.refreshToken = response[2];
 
         GsonUtils.objectToJsonFile(gameDir + "/account.json", account);
         return account;
@@ -45,34 +54,16 @@ public class MinecraftAccount {
     }
 
     //Try this before using login - the account will have been saved to disk if previously logged in
-    public static MinecraftAccount load(String path, String client_id) {
-        MinecraftAccount acc = null;
+    public static MinecraftAccount load(String path, @Nullable String newToken) {
+        MinecraftAccount acc;
         try {
             acc = new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);
-                URLConnection connection2 = new URL("https://login.microsoftonline.com/consumers/oauth2/v2.0/token").openConnection();
-                connection2.setDoOutput(true);
-                connection2.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-                String query = String.format("client_id=%s&grant_type=%s&refresh_token=%s",
-                        URLEncoder.encode(client_id, "UTF-8"),
-                        URLEncoder.encode("refresh_token", "UTF-8"),
-                        URLEncoder.encode(acc.msaRefreshToken, "UTF-8"));
-                try (OutputStream output = connection2.getOutputStream()) {
-                    output.write(query.getBytes(StandardCharsets.UTF_8));
-                }
-
-                InputStream response = connection2.getInputStream();
-                JsonObject jsonObject = (JsonObject) JsonParser.parseReader(new InputStreamReader(response, StandardCharsets.UTF_8));
-
-                acc = Msa.acquireXBLToken(jsonObject.get("access_token").getAsString());
-                acc.msaRefreshToken = jsonObject.get("refresh_token").getAsString();
-                acc.expiresIn = jsonObject.get("expires_in").getAsInt();
-                GsonUtils.objectToJsonFile(path + "/account.json", acc);
-            return acc;
-        } catch (JSONException | IOException e) {
-            if(e instanceof SocketTimeoutException && acc != null) {
-                return acc;
+            if(newToken != null) {
+                acc.accessToken = Msa.acquireXBLToken(newToken);
             }
+            GsonUtils.objectToJsonFile(path + "/account.json", acc);
+            return acc;
+        } catch (IOException | JSONException e) {
             return null;
         }
     }

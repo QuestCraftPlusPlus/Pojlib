@@ -1,17 +1,20 @@
 package pojlib.api;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 
+import pojlib.UnityPlayerActivity;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
 import pojlib.instance.MinecraftInstance;
 import pojlib.util.APIHandler;
 import pojlib.util.Constants;
+import pojlib.util.LoginHelper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,6 +27,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -44,6 +48,7 @@ public class API_V1 {
     public static String profileName;
     public static String memoryValue = "3072";
     public static boolean developerMods;
+    public static MinecraftAccount currentAcc;
     public static boolean advancedDebugger;
 
 
@@ -123,29 +128,8 @@ public class API_V1 {
         }
     }
 
-    /**
-     * Logs the user in and keeps them logged in unless they log out
-     *
-     * @param home      The base directory where minecraft should be setup
-     * @param authCode  The token received from the microsoft login window
-     * @return          A minecraft account object
-     */
-    public static MinecraftAccount login(String home, String authCode, JsonObject response) throws IOException, JSONException {
-        return MinecraftAccount.login(home, response);
-    }
-
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstance instance) {
         instance.launchInstance(activity, account);
-    }
-
-    /**
-     * Fetches the account data from disk if the user has logged in before.
-     *
-     * @param home  The base directory where minecraft should be setup
-     * @return      A minecraft account object, null if no account found
-     */
-    public static MinecraftAccount fetchSavedLogin(String home, String client_id) {
-        return MinecraftAccount.load(home, client_id);
     }
 
     /**
@@ -158,83 +142,17 @@ public class API_V1 {
         return MinecraftAccount.logout(home);
     }
 
-    public static MinecraftAccount login(String client_id, Activity activity)
+    public static void login(Activity activity)
     {
-        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", client_id);
-        if(acc != null) {
-            profileImage = MinecraftAccount.getSkinFaceUrl(acc);
-            profileName = MinecraftAccount.username;
-            return acc;
+        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null);
+        if(acc != null && acc.expiresIn > new Date().getTime()) {
+            currentAcc = acc;
+            API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
+            API_V1.profileName = API_V1.currentAcc.username;
+            return;
+        } else if(acc != null && acc.expiresIn <= new Date().getTime()) {
+            currentAcc = LoginHelper.getNewToken(activity);
         }
-        try {
-            // Stage 1
-            if(!hasQueried) {
-                URLConnection connection = new URL("https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode").openConnection();
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-                String query = String.format("client_id=%s&scope=%s",
-                        URLEncoder.encode(client_id, "UTF-8"),
-                        URLEncoder.encode("XboxLive.signin Xboxlive.offline_access", "UTF-8"));
-                try (OutputStream output = connection.getOutputStream()) {
-                    output.write(query.getBytes(StandardCharsets.UTF_8));
-                }
-
-                InputStream response = connection.getInputStream();
-
-                initialResponse = (JsonObject) JsonParser.parseReader(new InputStreamReader(response, StandardCharsets.UTF_8));
-
-                if(initialResponse.get("message") != null) {
-                    msaMessage = initialResponse.get("message").getAsString();
-                    hasQueried = true;
-                    return null;
-                }
-
-                File errorFile = new File(Constants.USER_HOME + "/errors.txt");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
-                writer.write(initialResponse.toString());
-                writer.flush();
-
-                throw new RuntimeException();
-            }
-
-            if(hasQueried) {
-                URLConnection connection2 = new URL("https://login.microsoftonline.com/consumers/oauth2/v2.0/token").openConnection();
-                connection2.setDoOutput(true);
-                connection2.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-                String query2 = String.format("client_id=%s&grant_type=%s&device_code=%s",
-                        URLEncoder.encode(client_id, "UTF-8"),
-                        URLEncoder.encode("urn:ietf:params:oauth:grant-type:device_code", "UTF-8"),
-                        URLEncoder.encode(initialResponse.get("device_code").getAsString(), "UTF-8"));
-                try (OutputStream output = connection2.getOutputStream()) {
-                    output.write(query2.getBytes(StandardCharsets.UTF_8));
-                }
-
-                InputStream response2 = connection2.getInputStream();
-
-                JsonObject jsonObject2 = (JsonObject) JsonParser.parseReader(new InputStreamReader(response2, StandardCharsets.UTF_8));
-
-                if(jsonObject2.get("access_token") != null) {
-                    // Finally, log in
-                    acc = MinecraftAccount.login(activity.getFilesDir() + "/accounts", jsonObject2);
-                    profileImage = MinecraftAccount.getSkinFaceUrl(acc);
-                    profileName = MinecraftAccount.username;
-                    return acc;
-                }
-
-                File errorFile = new File(Constants.USER_HOME + "/errors.txt");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(errorFile));
-                writer.write(jsonObject2.toString());
-                writer.flush();
-
-                throw new RuntimeException();
-            }
-            hasQueried = true;
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+        LoginHelper.beginLogin(activity);
     }
-
 }

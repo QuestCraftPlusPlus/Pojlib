@@ -30,4 +30,4 @@ Make sure your pull request describes exactly what the code does and explains wh
 ### Components:
 - [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) (Pojlib Base application): [GNU GPLv3](https://github.com/khanhduytran0/PojavLauncher/blob/master/LICENSE).
 
-- [OpenComposite]([https://github.com/iqiyi/xHook](https://gitlab.com/znixian/OpenOVR)) (Used for OpenVR to OpenXR interpretation): [GNU GPLv3](https://gitlab.com/znixian/OpenOVR/-/blob/openxr/LICENSE.txt).
+- [OpenComposite]([https://gitlab.com/znixian/OpenOVR]) (Used for OpenVR to OpenXR interpretation): [GNU GPLv3](https://gitlab.com/znixian/OpenOVR/-/blob/openxr/LICENSE.txt).

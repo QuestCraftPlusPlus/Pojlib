@@ -13,7 +13,6 @@ Contributions are always welcome!
 Please ensure your code follows the language's naming conventions, here's a list of a few of the most common languages used in our projects:
 
 - [Java's Conventions](https://www.oracle.com/java/technologies/javase/codeconventions-namingconventions.html)
-- [C#'s Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 - [C++'s Conventions](https://google.github.io/styleguide/cppguide.html)
 
 Make sure your pull request describes exactly what the code does and explains why you're making the pull request!
@@ -31,4 +30,4 @@ Make sure your pull request describes exactly what the code does and explains wh
 ### Components:
 - [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) (Pojlib Base application): [GNU GPLv3](https://github.com/khanhduytran0/PojavLauncher/blob/master/LICENSE).
 
-- [xHook](https://github.com/iqiyi/xHook) (Used for exit code trapping): [MIT and BSD-style licenses](https://github.com/iqiyi/xHook/blob/master/LICENSE).
+- [OpenComposite]([https://github.com/iqiyi/xHook](https://gitlab.com/znixian/OpenOVR)) (Used for OpenVR to OpenXR interpretation): [GNU GPLv3](https://gitlab.com/znixian/OpenOVR/-/blob/openxr/LICENSE.txt).

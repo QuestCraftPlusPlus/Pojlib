@@ -194,8 +194,8 @@ public class JREUtils {
             userArgs.add("-Xms" + API_V1.memoryValue + "M");
             userArgs.add("-Xmx" + API_V1.memoryValue + "M");
         } else {
-            userArgs.add("-Xms" + 2048 + "M");
-            userArgs.add("-Xmx" + 2048 + "M");
+            userArgs.add("-Xms" + 1024 + "M");
+            userArgs.add("-Xmx" + 1024 + "M");
         }
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);

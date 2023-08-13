@@ -31,7 +31,6 @@ import javax.annotation.Nullable;
 public class MinecraftAccount {
 
     public String accessToken;
-    public String refreshToken;
     public String uuid;
     public String username;
     public long expiresIn;

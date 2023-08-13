@@ -133,7 +133,7 @@ public class MinecraftInstance {
                     name.add(object.get("slug").getAsString());
                 }
 
-                if(mods.exists()) {
+                if(modsOld.exists()) {
                     InputStream stream = Files.newInputStream(mods.toPath());
                     int size = stream.available();
                     byte[] buffer = new byte[size];

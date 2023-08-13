@@ -195,6 +195,7 @@ public class Msa {
         MinecraftAccount account = new MinecraftAccount();
         account.username = name;
         account.uuid = uuidDashes;
+        account.accessToken = mcAccessToken;
         return account;
     }
 

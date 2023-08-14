@@ -48,7 +48,7 @@ public class FileUtil {
         File outPath = new File(path);
         outPath.getParentFile().mkdirs();
 
-        BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(Paths.get(path)));
+        BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(outPath.toPath()));
         fos.write(content, 0, content.length);
         fos.close();
     }

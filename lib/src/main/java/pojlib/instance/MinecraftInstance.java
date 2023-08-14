@@ -105,9 +105,9 @@ public class MinecraftInstance {
         return allArgs;
     }
 
-    public void updateOrDownloadsMods() {
+    public void updateOrDownloadMods() {
         API_V1.finishedDownloading = false;
-        new Thread(()->{
+        new Thread(() -> {
             try {
                 File mods = new File(Constants.USER_HOME + "/mods-new.json");
                 File modsOld = new File(Constants.USER_HOME + "/mods.json");

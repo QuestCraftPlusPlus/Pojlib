@@ -1,11 +1,13 @@
 package pojlib.util;
 
 import android.app.Activity;
+import android.os.Environment;
 
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
 import com.microsoft.aad.msal4j.DeviceCode;
 import com.microsoft.aad.msal4j.DeviceCodeFlowParameters;
 import com.microsoft.aad.msal4j.IAuthenticationResult;
+import com.microsoft.aad.msal4j.ITokenCacheAccessAspect;
 import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.SilentParameters;
 
@@ -26,14 +28,26 @@ import pojlib.api.API_V1;
 public class LoginHelper {
     public static Thread loginThread;
 
-    private static final PublicClientApplication pca;
+    private static PublicClientApplication pca;
 
     static {
         try {
+            File cache = new File(Environment.getExternalStorageDirectory() + "/Android/data/com.qcxr.qcxr/files/cache_data/serialized_cache.json");
+            if(!cache.exists()) {
+                cache.getParentFile().mkdirs();
+                cache.createNewFile();
+            }
+
+            // Loads cache from file
+            String dataToInitCache = FileUtil.read(cache.getPath());
+
+            TokenPersistence persistenceAspect = new TokenPersistence(dataToInitCache, cache);
+
             pca = PublicClientApplication.builder("d17a73a2-707c-40f5-8c90-d3eda0956f10")
+                    .setTokenCacheAccessAspect(persistenceAspect)
                     .authority("https://login.microsoftonline.com/consumers/")
                     .build();
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

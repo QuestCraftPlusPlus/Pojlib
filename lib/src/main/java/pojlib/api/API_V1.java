@@ -152,8 +152,12 @@ public class API_V1 {
             return;
         } else if(acc != null && acc.expiresIn <= new Date().getTime()) {
             currentAcc = LoginHelper.getNewToken(activity);
-            API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
-            API_V1.profileName = API_V1.currentAcc.username;
+            if(currentAcc == null) {
+                LoginHelper.beginLogin(activity);
+            } else {
+                API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
+                API_V1.profileName = API_V1.currentAcc.username;
+            }
         }
         LoginHelper.beginLogin(activity);
     }

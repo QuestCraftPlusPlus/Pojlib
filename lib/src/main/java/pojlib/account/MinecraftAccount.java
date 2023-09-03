@@ -52,12 +52,15 @@ public class MinecraftAccount {
     }
 
     //Try this before using login - the account will have been saved to disk if previously logged in
-    public static MinecraftAccount load(String path, @Nullable String newToken) {
+    public static MinecraftAccount load(String path, @Nullable String newToken, @Nullable String expire) {
         MinecraftAccount acc;
         try {
             acc = new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);
             if(newToken != null) {
                 acc.accessToken = Msa.acquireXBLToken(newToken);
+            }
+            if(expire != null) {
+                acc.expiresIn = Long.parseLong(expire);
             }
             GsonUtils.objectToJsonFile(path + "/account.json", acc);
             return acc;

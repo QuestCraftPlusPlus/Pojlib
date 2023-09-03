@@ -285,7 +285,7 @@
 	  	{
 			"slug": "Vivecraft",
 			"version": "1.0",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.19.2-Zink/vivecraft.jar"
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.0-1.19-LTS/vivecraft.jar"
 		},
 		{
 			"slug": "Fabric-API",

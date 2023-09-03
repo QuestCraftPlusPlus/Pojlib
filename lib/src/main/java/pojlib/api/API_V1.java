@@ -1,6 +1,10 @@
 package pojlib.api;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -144,8 +148,17 @@ public class API_V1 {
 
     public static void login(Activity activity)
     {
+        ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkCapabilities capabilities = connManager.getNetworkCapabilities(connManager.getActiveNetwork());
+
+        boolean hasWifi = false;
+
+        if(capabilities != null) {
+            hasWifi = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+        }
+
         MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
-        if(acc != null && acc.expiresIn > new Date().getTime()) {
+        if(acc != null && (acc.expiresIn > new Date().getTime() || !hasWifi)) {
             currentAcc = acc;
             API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
             API_V1.profileName = API_V1.currentAcc.username;

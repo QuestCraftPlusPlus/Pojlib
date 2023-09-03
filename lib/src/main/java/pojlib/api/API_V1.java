@@ -144,7 +144,7 @@ public class API_V1 {
 
     public static void login(Activity activity)
     {
-        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null);
+        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
         if(acc != null && acc.expiresIn > new Date().getTime()) {
             currentAcc = acc;
             API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
@@ -152,6 +152,8 @@ public class API_V1 {
             return;
         } else if(acc != null && acc.expiresIn <= new Date().getTime()) {
             currentAcc = LoginHelper.getNewToken(activity);
+            API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
+            API_V1.profileName = API_V1.currentAcc.username;
         }
         LoginHelper.beginLogin(activity);
     }

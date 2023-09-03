@@ -13,7 +13,9 @@ import com.microsoft.aad.msal4j.SilentParameters;
 
 import org.json.JSONException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -32,14 +34,16 @@ public class LoginHelper {
 
     static {
         try {
-            File cache = new File(Environment.getExternalStorageDirectory() + "/Android/data/com.qcxr.qcxr/files/cache_data/serialized_cache.json");
+            File cache = new File(Constants.USER_HOME + "/cache_data/serialized_cache.json");
             if(!cache.exists()) {
                 cache.getParentFile().mkdirs();
                 cache.createNewFile();
             }
 
             // Loads cache from file
-            String dataToInitCache = FileUtil.read(cache.getPath());
+            BufferedReader reader = new BufferedReader(new FileReader(cache.getPath()));
+            String dataToInitCache = reader.readLine();
+            reader.close();
 
             TokenPersistence persistenceAspect = new TokenPersistence(dataToInitCache, cache);
 
@@ -55,14 +59,14 @@ public class LoginHelper {
     public static MinecraftAccount getNewToken(Activity activity) {
         CompletableFuture<IAuthenticationResult> future;
         try {
-            future = pca.acquireTokenSilently(SilentParameters.builder(Set.of("clientId")).build());
+            future = pca.acquireTokenSilently(SilentParameters.builder(Set.of("XboxLive.SignIn", "XboxLive.offline_access"), pca.getAccounts().join().iterator().next()).build());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         try {
             IAuthenticationResult res = future.get();
             while (res.account() == null) ;
-            return MinecraftAccount.load(activity.getFilesDir() + "/accounts", res.accessToken());
+            return MinecraftAccount.load(activity.getFilesDir() + "/accounts", res.accessToken(), String.valueOf(res.expiresOnDate().getTime()));
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }

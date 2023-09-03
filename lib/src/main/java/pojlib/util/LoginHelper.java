@@ -68,7 +68,7 @@ public class LoginHelper {
             while (res.account() == null) ;
             return MinecraftAccount.load(activity.getFilesDir() + "/accounts", res.accessToken(), String.valueOf(res.expiresOnDate().getTime()));
         } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 

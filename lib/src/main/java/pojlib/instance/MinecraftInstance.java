@@ -254,13 +254,13 @@ public class MinecraftInstance {
                         JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
                         for (JsonElement verMod : objOld.getAsJsonArray(this.versionName)) {
                             JsonObject object = verMod.getAsJsonObject();
-                            String slug = object.get("slug").getAsString().replace("-", " ");
-                            if(name.equals(slug)) {
+                            String slug = object.get("slug").getAsString();
+                            if(name.equalsIgnoreCase(slug)) {
                                 return true;
                             }
                         }
                     }
-                    if(info.name.equals(name)) {
+                    if(info.name.equalsIgnoreCase(name)) {
                         return true;
                     }
                 }

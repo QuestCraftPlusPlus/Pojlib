@@ -7,8 +7,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.83.1",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/K1pOTt6K/fabric-api-0.83.1%2B1.20.1.jar"
+			"version": "0.88.1",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/pYtlDijL/fabric-api-0.88.1%2B1.20.1.jar"
 		},
 		{
 			"slug": "Simple-Voice-Chat",
@@ -47,8 +47,8 @@
 		},
 		{
 			"slug": "Fabric-Language-Kotlin",
-			"version": "1.9.5+kotlin.1.8.22",
-			"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/ADg3gvlr/fabric-language-kotlin-1.9.5%2Bkotlin.1.8.22.jar"
+			"version": "1.10.10+kotlin.1.9.10",
+			"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/48ri5y9r/fabric-language-kotlin-1.10.10%2Bkotlin.1.9.10.jar"
 		},
 		{
 			"slug": "Krypton",
@@ -94,8 +94,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/Pz1hLqTB/fabric-api-0.76.0%2B1.19.4.jar"
+			"version": "0.87.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/LKgVmlZB/fabric-api-0.87.0%2B1.19.4.jar"
 		},
 		{
 			"slug": "Simple-Voice-Chat",
@@ -196,8 +196,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.70.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/MtLQsb99/fabric-api-0.70.0%2B1.19.3.jar"
+			"version": "0.76.1",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/jyKnHEDY/fabric-api-0.76.1%2B1.19.3.jar"
 		},
 		{
 			"slug": "LazyDFU",
@@ -284,8 +284,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/hfsU4hXq/fabric-api-0.76.0%2B1.19.2.jar"
+			"version": "0.76.1",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/fO05PwUR/fabric-api-0.76.1%2B1.19.2.jar"
 		},
 		{
 			"slug": "LazyDFU",
@@ -371,8 +371,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.67.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/YDlOLdpm/fabric-api-0.67.0%2B1.18.2.jar"
+			"version": "0.76.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/95QMsRyb/fabric-api-0.76.0%2B1.18.2.jar"
 		},
 		{
 			"slug": "LazyDFU",

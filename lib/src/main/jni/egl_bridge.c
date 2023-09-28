@@ -591,7 +591,7 @@ typedef struct osmesa_context
 GLboolean (*OSMesaMakeCurrent_p) (OSMesaContext ctx, void *buffer, GLenum type,
                                   GLsizei width, GLsizei height);
 OSMesaContext (*OSMesaGetCurrentContext_p) (void);
-OSMesaContext  (*OSMesaCreateContext_p) (GLenum format, OSMesaContext sharelist);
+OSMesaContext  (*OSMesaCreateContextAttribs_p) ( const int *attribList, OSMesaContext sharelist );
 GLubyte* (*glGetString_p) (GLenum name);
 
 void* gbuffer;
@@ -714,21 +714,22 @@ void dlsym_OSMesa() {
     if(dl_handle == NULL) abort();
     OSMesaMakeCurrent_p = dlsym(dl_handle, "OSMesaMakeCurrent");
     OSMesaGetCurrentContext_p = dlsym(dl_handle,"OSMesaGetCurrentContext");
-    OSMesaCreateContext_p = dlsym(dl_handle, "OSMesaCreateContext");
+    OSMesaCreateContextAttribs_p = dlsym(dl_handle, "OSMesaCreateContextAttribs");
     glGetString_p = dlsym(dl_handle,"glGetString");
 }
 
 int pojavInit() {
-    savedWidth = 1080;
-    savedHeight = 720;
+    savedWidth = 1920;
+    savedHeight = 1080;
 
-    xrEglInit();
+    // xrEglInit();
 
-    char *natives = getenv("POJAV_NATIVEDIR");
-    char *gpuStuff = getenv("HOME");
-    strcat(natives, "/");
+    char *gpuStuff;
+    char *nativeDir;
+    asprintf(&nativeDir, "%s/", getenv("POJAV_NATIVEDIR"));
+    asprintf(&gpuStuff, "%s/gpustuff", getenv("HOME"));
     void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
-                                                 gpuStuff, natives,
+                                                 gpuStuff, nativeDir,
                                                  "libvulkan_freedreno.so", NULL, NULL);
     adrenotools_set_turbo(true);
     printf("libvulkan: %p\n", libvulkan);
@@ -740,7 +741,7 @@ int pojavInit() {
     setenv("GALLIUM_DRIVER", "zink", 1);
     dlsym_OSMesa();
 
-    if (OSMesaCreateContext_p == NULL) {
+    if (OSMesaCreateContextAttribs_p == NULL) {
         printf("OSMDroid: %s\n", dlerror());
         return 0;
     }
@@ -809,7 +810,22 @@ Java_org_lwjgl_glfw_GLFW_nativeEglDetachOnCurrentThread(JNIEnv *env, jclass claz
 
 void* pojavCreateContext(void* contextSrc) {
     printf("OSMDroid: generating context\n");
-    void *ctx = OSMesaCreateContext_p(OSMESA_RGBA, contextSrc);
+
+    int attribs[100], n = 0;
+
+    attribs[n++] = OSMESA_FORMAT;
+    attribs[n++] = OSMESA_RGBA;
+    attribs[n++] = OSMESA_DEPTH_BITS;
+    attribs[n++] = 24;
+    attribs[n++] = OSMESA_STENCIL_BITS;
+    attribs[n++] = 8;
+    attribs[n++] = OSMESA_ACCUM_BITS;
+    attribs[n++] = 0;
+    attribs[n++] = OSMESA_PROFILE;
+    attribs[n++] = OSMESA_CORE_PROFILE;
+    attribs[n++] = 0;
+
+    void *ctx = OSMesaCreateContextAttribs_p(attribs, contextSrc);
     printf("OSMDroid: context=%p\n", ctx);
     return ctx;
 }

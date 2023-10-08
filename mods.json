@@ -84,11 +84,6 @@
 			"slug": "Simple-Voice-Chat",
 			"version": "2.4.12",
 			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/NkZguN8n/voicechat-fabric-1.20.1-2.4.12.jar"
-		},
-		{
-			"slug": "Cit-Resewen",
-			"Version": "1.1.3",
-			"download_link": "https://cdn.modrinth.com/data/otVJckYQ/versions/c7Lo4vij/CITResewn-1.1.3%2B1.20.jar"
 		}
 	],
 	"1.19.4": [
@@ -191,11 +186,6 @@
 			"slug": "Noxesium",
 			"version": "0.1.8",
 			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
-		},
-		{
-			"slug": "Cit-Resewen",
-			"Version": "1.1.3",
-			"download_link": "https://cdn.modrinth.com/data/otVJckYQ/versions/8oMEcc2E/CITResewn-1.1.3%2B1.19.4.jar"
 		}
 	],
 	"1.19.3": [
@@ -283,11 +273,6 @@
 			"slug": "Noxesium",
 			"version": "0.1.6",
 			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/YJ3s9buY/noxesium-0.1.6.jar"
-		},
-		{
-			"slug": "Cit-Resewen",
-			"Version": "1.1.3",
-			"download_link": "https://cdn.modrinth.com/data/otVJckYQ/versions/hGatm5K8/CITResewn-1.1.3%2B1.19.3.jar"
 		}
 
 	],
@@ -376,11 +361,6 @@
 			"slug": "Noxesium",
 			"version": "0.1.4",
 			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
-		},
-		{
-			"slug": "Cit-Resewen",
-			"Version": "1.1.3",
-			"download_link": "https://cdn.modrinth.com/data/otVJckYQ/versions/lYmW1wnD/CITResewn-1.1.2%2B1.19.2.jar"
 		}
 	],
 	"1.18.2": [
@@ -470,9 +450,9 @@
 			"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar"
 		},
 		{
-			"slug": "Cit-Resewen",
-			"Version": "1.1.3",
-			"download_link": "https://cdn.modrinth.com/data/otVJckYQ/versions/1.1.1%2B1.18.2/CITResewn-1.1.1%2B1.18.2.jar"
+			"slug": "Mod-Menu",
+			"version": "3.2.5",
+			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/nVxObSbX/modmenu-3.2.5.jar"
 		}
 	]
 }

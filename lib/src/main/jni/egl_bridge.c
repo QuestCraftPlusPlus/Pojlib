@@ -728,9 +728,9 @@ int pojavInit() {
     char *nativeDir;
     asprintf(&nativeDir, "%s/", getenv("POJAV_NATIVEDIR"));
     asprintf(&gpuStuff, "%s/gpustuff", getenv("HOME"));
-    void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
+    void *libvulkan = strcmp(getenv("VR_MODEL"), "Oculus Quest2") == 0 ? adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
                                                  gpuStuff, nativeDir,
-                                                 "libvulkan_freedreno.so", NULL, NULL);
+                                                 "libvulkan_freedreno.so", NULL, NULL) : dlopen("libvulkan.so", RTLD_NOW);
     adrenotools_set_turbo(true);
     printf("libvulkan: %p\n", libvulkan);
     char *vulkanPtrString;

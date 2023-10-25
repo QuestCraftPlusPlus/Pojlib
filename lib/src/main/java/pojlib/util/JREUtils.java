@@ -142,8 +142,7 @@ public class JREUtils {
         envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE-17");
         envMap.put("HOME", Constants.MC_DIR);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
-        envMap.put("LIBGL_MIPMAP", "3");
-        envMap.put("LIBGL_NOINTOVLHACK", "1");
+        envMap.put("VR_MODEL", API_V1.model);
         envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
         envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
         envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
@@ -153,9 +152,6 @@ public class JREUtils {
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE-17/bin:" + Os.getenv("PATH"));
-
-        envMap.put("LIBGL_GLES", "/system/lib64/libGLESv2.so");
-        envMap.put("LIBGL_EGL", "/system/lib64/libEGL.so");
 
         File customEnvFile = new File(Constants.USER_HOME, "custom_env.txt");
         if (customEnvFile.exists() && customEnvFile.isFile()) {

@@ -7,13 +7,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.88.1",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/pYtlDijL/fabric-api-0.88.1%2B1.20.1.jar"
-		},
-		{
-			"slug": "Simple-Voice-Chat",
-			"version": "2.4.10",
-			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/krETAxFV/voicechat-fabric-1.20.1-2.4.10.jar"
+			"version": "0.87.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/lcnQpW9C/fabric-api-0.87.0%2B1.20.1.jar"
 		},
 		{
 			"slug": "Lithium",
@@ -32,8 +27,8 @@
 		},
 		{
 			"slug": "Sodium",
-			"version": "0.4.10",
-			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/vgceLbdH/sodium-fabric-mc1.20-0.4.10%2Bbuild.27.jar"
+			"version": "0.5.2",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/6SSPmLc9/sodium-fabric-mc1.20.1-0.5.2.jar"
 		},
 		{
 			"slug": "Cloth-Config",
@@ -47,8 +42,8 @@
 		},
 		{
 			"slug": "Fabric-Language-Kotlin",
-			"version": "1.10.10+kotlin.1.9.10",
-			"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/48ri5y9r/fabric-language-kotlin-1.10.10%2Bkotlin.1.9.10.jar"
+			"version": "1.9.5+kotlin.1.8.22",
+			"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/ADg3gvlr/fabric-language-kotlin-1.9.5%2Bkotlin.1.8.22.jar"
 		},
 		{
 			"slug": "Krypton",
@@ -84,6 +79,11 @@
 			"slug": "Simple-Voice-Chat",
 			"version": "2.4.12",
 			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/NkZguN8n/voicechat-fabric-1.20.1-2.4.12.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.9.0",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
 		}
 	],
 	"1.19.4": [
@@ -94,8 +94,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.87.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/LKgVmlZB/fabric-api-0.87.0%2B1.19.4.jar"
+			"version": "0.76.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/Pz1hLqTB/fabric-api-0.76.0%2B1.19.4.jar"
 		},
 		{
 			"slug": "Simple-Voice-Chat",
@@ -186,6 +186,11 @@
 			"slug": "Noxesium",
 			"version": "0.1.8",
 			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.7.2",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
 		}
 	],
 	"1.19.3": [
@@ -284,8 +289,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.1",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/fO05PwUR/fabric-api-0.76.1%2B1.19.2.jar"
+			"version": "0.76.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/hfsU4hXq/fabric-api-0.76.0%2B1.19.2.jar"
 		},
 		{
 			"slug": "LazyDFU",
@@ -361,6 +366,11 @@
 			"slug": "Noxesium",
 			"version": "0.1.4",
 			"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.9.0",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/b1FKKAz8/modernfix-fabric-5.9.0%2Bmc1.19.2.jar"
 		}
 	],
 	"1.18.2": [
@@ -453,6 +463,11 @@
 			"slug": "Mod-Menu",
 			"version": "3.2.5",
 			"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/nVxObSbX/modmenu-3.2.5.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.9.0",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/qNrVNwfw/modernfix-fabric-5.9.0%2Bmc1.18.2.jar"
 		}
 	]
 }

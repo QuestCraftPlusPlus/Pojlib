@@ -146,6 +146,9 @@ public class JREUtils {
         envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
         envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
         envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+        envMap.put("GALLIUM_DRIVER", "zink");
+        envMap.put("LIBGL_DEBUG", "verbose");
+        envMap.put("LIBGL_DRIVERS_PATH", sNativeLibDir);
         envMap.put("GALLIUM_THREAD", "0");
         envMap.put("MESA_LOG_FILE", Constants.MC_DIR + "/mesa-log.txt");
         envMap.put("POJAV_RENDERER", "vulkan_zink");
@@ -198,7 +201,7 @@ public class JREUtils {
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
-        userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");
+        userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL_dri.so");
         userArgs.add("-Dfabric.addMods=" + Constants.MC_DIR + "/mods/" + versionName);
 
         userArgs.addAll(JVMArgs);

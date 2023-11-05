@@ -711,7 +711,10 @@ void dlsym_OSMesa() {
     void* dl_handle;
     dl_handle = dlopen(alt_path, RTLD_NOW);
     if(dl_handle == NULL) dl_handle = dlopen(main_path, RTLD_NOW);
-    if(dl_handle == NULL) abort();
+    if(dl_handle == NULL) {
+        printf("Error opening OSMesa! %s\n", dlerror());
+        abort();
+    }
     OSMesaMakeCurrent_p = dlsym(dl_handle, "OSMesaMakeCurrent");
     OSMesaGetCurrentContext_p = dlsym(dl_handle,"OSMesaGetCurrentContext");
     OSMesaCreateContextAttribs_p = dlsym(dl_handle, "OSMesaCreateContextAttribs");
@@ -728,10 +731,10 @@ int pojavInit() {
     char *nativeDir;
     asprintf(&nativeDir, "%s/", getenv("POJAV_NATIVEDIR"));
     asprintf(&gpuStuff, "%s/gpustuff", getenv("HOME"));
-    void *libvulkan = strcmp(getenv("VR_MODEL"), "Meta Quest3") == 0 ? dlopen("libvulkan.so", RTLD_NOW) : adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
-                                                                                                                                       gpuStuff, nativeDir,
-                                                                                                                                       "libvulkan_freedreno.so", NULL, NULL);
-    adrenotools_set_turbo(true);
+    void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
+                      gpuStuff, nativeDir,
+                      "libvulkan_freedreno.so", NULL, NULL);
+    // adrenotools_set_turbo(true);
     printf("libvulkan: %p\n", libvulkan);
     char *vulkanPtrString;
 
@@ -739,7 +742,6 @@ int pojavInit() {
     printf("%s\n", vulkanPtrString);
     setenv("VULKAN_PTR", vulkanPtrString, 1);
 
-    setenv("GALLIUM_DRIVER", "zink", 1);
     dlsym_OSMesa();
 
     if (OSMesaCreateContextAttribs_p == NULL) {
@@ -750,7 +752,7 @@ int pojavInit() {
     printf("OSMDroid: width=%i;height=%i, reserving %i bytes for frame buffer\n", savedWidth,
            savedHeight,
            savedWidth * 4 * savedHeight);
-    gbuffer = malloc(savedWidth * 4 * savedHeight + 1);
+    gbuffer = malloc(savedWidth * 4 * savedHeight);
     if (gbuffer) {
         printf("OSMDroid: created frame buffer\n");
         return 1;

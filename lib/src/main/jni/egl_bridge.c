@@ -734,7 +734,7 @@ int pojavInit() {
     void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
                       gpuStuff, nativeDir,
                       "libvulkan_freedreno.so", NULL, NULL);
-    // adrenotools_set_turbo(true);
+    adrenotools_set_turbo(true);
     printf("libvulkan: %p\n", libvulkan);
     char *vulkanPtrString;
 

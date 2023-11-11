@@ -844,7 +844,7 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *e
 }
 JNIEXPORT JNICALL jlong
 Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
-    return &gbuffer;
+    return (jlong) &gbuffer;
 }
 JNIEXPORT JNICALL jintArray
 Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {

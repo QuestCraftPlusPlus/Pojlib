@@ -18,14 +18,14 @@ Please ensure your code follows the language's naming conventions, here's a list
 Make sure your pull request describes exactly what the code does and explains why you're making the pull request!
 
 
-
 ## Credits & Third Party Components
 ### Developers:
-* @MrNavaStar | Lead Feature Implementor
 
-* @thejudge156 | Senior Maintainer
+* @TheJudge156 | Senior Maintainer
 
 * @CADIndie | Jr. Maintainer
+
+* @MrNavaStar | Previous Main Feature Implementor
 
 ### Components:
 - [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) (Pojlib Base application): [GNU GPLv3](https://github.com/khanhduytran0/PojavLauncher/blob/master/LICENSE).

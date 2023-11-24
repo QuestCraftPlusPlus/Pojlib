@@ -3,6 +3,7 @@ package pojlib.account;
 import static pojlib.account.Msa.checkMcProfile;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -70,7 +71,11 @@ public class MinecraftAccount {
     }
 
     public static String getSkinFaceUrl(MinecraftAccount account) {
-        return Constants.CRAFATAR_URL + "/avatars/" + account.uuid;
+        try {
+            return Constants.CRAFATAR_URL + "/avatars/" + account.uuid;
+        } catch (NullPointerException e) {
+            System.out.println("Username not set! Please sign in on PC/Pojav first then try again.");
+            return null;
+        }
     }
-
 }

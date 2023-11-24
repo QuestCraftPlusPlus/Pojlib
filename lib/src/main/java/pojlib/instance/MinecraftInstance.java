@@ -314,6 +314,7 @@ public class MinecraftInstance {
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
             VLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
+            while(!API_V1.finishedDownloading);
             JREUtils.launchJavaVM(activity, generateLaunchArgs(account), versionName);
         } catch (Throwable e) {
             e.printStackTrace();

@@ -41,6 +41,7 @@ import java.util.Date;
 public class API_V1 {
 
     public static String msaMessage = "";
+    public static String model = "Quest";
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
     public static boolean finishedDownloading = false;

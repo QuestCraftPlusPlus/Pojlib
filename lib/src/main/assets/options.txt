@@ -189,4 +189,4 @@ modelPart_right_sleeve:true
 modelPart_left_pants_leg:true
 modelPart_right_pants_leg:true
 modelPart_hat:true
-fullscreenResolution:2960x1440@60:24
+fullscreenResolution:1920x1080@90:24

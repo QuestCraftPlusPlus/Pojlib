@@ -28,72 +28,6 @@ public class ModManager {
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
-    public static void init() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    JsonObject modManagerJson = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/modmanager.json"), JsonObject.class);
-                    modrinthCompat = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(workDir + "/modrinth-compat.json"), JsonObject.class);
-
-                    JsonArray repoList = modManagerJson.getAsJsonArray("repos");
-
-                    //Init outside to cache version (see Fabric/Quilt.java)
-                    String flVersion = Fabric.getLatestLoaderVersion();
-
-                    if (!modsJson.exists()) {
-                        state.fabricLoaderVersion = flVersion;
-                        String gameVersion = DownloadUtils.getCompatibleVersions("releases").get(0);
-                        Fabric.downloadJson(gameVersion, flVersion);
-                        String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
-                        Instance instance = new Instance();
-                        instance.setName(fabricLoaderName);
-                        instance.setGameVersion(gameVersion);
-                        instance.setLoaderVersion(fabricLoaderName);
-                        state.addInstance(instance);
-
-                        gameVersion = DownloadUtils.getCompatibleVersions("releases").get(1);
-                        Fabric.downloadJson(gameVersion, flVersion);
-                        fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
-                        instance = new Instance();
-                        instance.setName(fabricLoaderName);
-                        instance.setGameVersion(gameVersion);
-                        instance.setLoaderVersion(fabricLoaderName);
-                        state.addInstance(instance);
-
-                        GsonUtils.objectToJsonFile(modsJson.getPath(), GsonUtils.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
-                    } else state = GsonUtils.GLOBAL_GSON.fromJson(FileUtil.read(modsJson.getPath()), pojlib.modmanager.State.class);
-
-                    //Remove mod metadata if they were deleted manually
-                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
-                    for (Instance instance : state.getInstances()) {
-                        ArrayList<String> purgeList = new ArrayList<>();
-                        File[] modFiles = new File(workDir + "/" + instance.getName()).listFiles();
-                        if (modFiles == null) {
-                            for (ModData mod : instance.getMods()) purgeList.add(mod.slug);
-                            continue;
-                        }
-
-                        for (ModData mod : instance.getMods()) {
-                            boolean foundMod = false;
-                            for (File modFile : modFiles) {
-                                if (modFile.getName().equals(mod.fileData.filename)) {
-                                    foundMod = true;
-                                    break;
-                                }
-                            }
-                            if (!foundMod) purgeList.add(mod.slug);
-                        }
-                        instance.getMods().removeIf(mod -> purgeList.contains(mod.slug));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-    }
-
     public static String getModCompat(String platform, String name) {
         JsonElement compatLevel = null;
         if (platform.equals("modrinth")) compatLevel = modrinthCompat.get(name);
@@ -114,10 +48,6 @@ public class ModManager {
             }
         }
         return instance;
-    }
-
-    public static String getWorkDir() {
-        return workDir;
     }
 
     //Will only save the state if there is nothing currently happening
@@ -146,28 +76,6 @@ public class ModManager {
 
     public static boolean isDownloading(String slug) {
         return currentDownloadSlugs.contains(slug);
-    }
-
-    public static void createInstance(String name, String gameVersion, String loaderType) {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                String loaderVersion;
-                if (loaderType.equals("fabric")) {
-                    loaderVersion = Fabric.getLatestLoaderVersion();
-                    Fabric.downloadJson(gameVersion, loaderVersion);
-                }
-
-                String profileName = String.format("%s-%s-%s", loaderType + "-loader", loaderType, gameVersion);
-                Instance instance = new Instance();
-                instance.setName(name);
-                instance.setGameVersion(gameVersion);
-                instance.setLoaderVersion(profileName);
-                state.addInstance(instance);
-                saveState();
-            }
-        };
-        thread.start();
     }
 
     public static void addMod(Instance instance, String platform, String slug, String gameVersion) {
@@ -204,11 +112,6 @@ public class ModManager {
             }
         };
         thread.start();
-    }
-
-    public static void removeMod(String instanceName, String slug) {
-        Instance instance = state.getInstance(instanceName);
-        removeMod(instance, instance.getMod(slug));
     }
 
     public static void removeMod(Instance instance, ModData modData) {

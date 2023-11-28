@@ -48,7 +48,7 @@ dependencies {
     implementation("androidx.legacy:legacy-preference-v14:1.0.0")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.annotation:annotation:1.6.0")
-    implementation("com.microsoft.azure:msal4j:1.13.9")
+    implementation("com.microsoft.azure:msal4j:1.14.0")
     implementation("androidx.browser:browser:1.5.0")
     implementation("blank:unity-classes")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

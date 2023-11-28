@@ -148,10 +148,10 @@ public class Installer {
     }
 
     public static String installLwjgl(Activity activity) throws IOException {
-        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes-3.2.3.jar");
+        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
         if (!lwjgl.exists()) {
             lwjgl.getParentFile().mkdirs();
-            FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes-3.2.3.jar"));
+            FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar"));
         }
         return lwjgl.getAbsolutePath();
     }

@@ -91,7 +91,6 @@ public class LoginHelper {
             } catch (ExecutionException | InterruptedException e) {
                 API_V1.msaMessage = "Something went wrong! Couldn't reach the Microsoft Auth servers.\n"
                         + e.getMessage();
-                throw new RuntimeException(e);
             }
         });
 

@@ -111,7 +111,7 @@ public class MinecraftInstance {
             try {
                 File mods = new File(Constants.USER_HOME + "/mods-new.json");
                 File modsOld = new File(Constants.USER_HOME + "/mods.json");
-                File customMods = new File(Constants.MC_DIR + "/custom_mods.json");
+                File customMods = new File(Constants.USER_HOME + "/custom_mods.json");
 
                 if (API_V1.developerMods) {
                     DownloadUtils.downloadFile(DEV_MODS, mods);
@@ -238,7 +238,7 @@ public class MinecraftInstance {
         GsonUtils.objectToJsonFile(customMods.getAbsolutePath(), mods);
     }
 
-    public boolean hasCustomMod(String name) {
+    public boolean hasCustomMod(String name) throws IOException {
         File customMods = new File(Constants.MC_DIR, CUSTOM_MODS);
         if(!customMods.exists()) {
             return false;
@@ -250,14 +250,17 @@ public class MinecraftInstance {
                 for (CustomMods.ModInfo info : instance.mods) {
                     // Check if core mod is already included
                     File modsOld = new File(Constants.USER_HOME + "/mods.json");
-                    if(modsOld.exists()) {
-                        JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
-                        for (JsonElement verMod : objOld.getAsJsonArray(this.versionName)) {
-                            JsonObject object = verMod.getAsJsonObject();
-                            String slug = object.get("slug").getAsString();
-                            if(name.equalsIgnoreCase(slug)) {
-                                return true;
-                            }
+                    if(!modsOld.exists()) {
+                        if (API_V1.developerMods) {
+                            DownloadUtils.downloadFile(DEV_MODS, modsOld);
+                        } else { DownloadUtils.downloadFile(MODS, modsOld); }
+                    }
+                    JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
+                    for (JsonElement verMod : objOld.getAsJsonArray(this.versionName)) {
+                        JsonObject object = verMod.getAsJsonObject();
+                        String slug = object.get("slug").getAsString();
+                        if(name.equalsIgnoreCase(slug)) {
+                            return true;
                         }
                     }
                     if(info.name.equalsIgnoreCase(name)) {

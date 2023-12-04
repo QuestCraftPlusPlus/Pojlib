@@ -2,8 +2,8 @@
 	"1.20.2": [
 		{
 			"slug": "Vivecraft",
-			"version": "1.0",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.0-1.20.2-LTS/vivecraft.jar"
+			"version": "1.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.2/vivecraft.jar"
 		},
 		{
 			"slug": "Fabric-API",
@@ -79,8 +79,8 @@
 	"1.20.1": [
 		{
 			"slug": "Vivecraft",
-			"version": "1.0.2",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.0-1.20.1-LTS/vivecraft.jar"
+			"version": "1.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.1/vivecraft.jar"
 		},
 		{
 			"slug": "Fabric-API",
@@ -161,8 +161,8 @@
 	"1.19.4": [
 	  	{
 			"slug": "Vivecraft",
-			"version": "1.0.2",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.0-1.19.4-LTS/vivecraft.jar"
+			"version": "1.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.4/vivecraft.jar"
 		},
 		{
 			"slug": "Fabric-API",
@@ -263,8 +263,8 @@
 	"1.19.2": [
 	  	{
 			"slug": "Vivecraft",
-			"version": "1.0.1",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.0-1.19-LTS/vivecraft.jar"
+			"version": "1.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.2/vivecraft.jar"
 		},
 		{
 			"slug": "Fabric-API",
@@ -355,8 +355,8 @@
 	"1.18.2": [
 	  	{
 			"slug": "Vivecraft",
-			"version": "1.0.1",
-			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.0-1.18.2-LTS/vivecraft.jar"
+			"version": "1.1",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.18.2/vivecraft.jar"
 		},
 		{
 			"slug": "Fabric-API",

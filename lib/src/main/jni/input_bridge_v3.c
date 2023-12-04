@@ -132,6 +132,43 @@ void sendData(int type, int i1, int i2, int i3, int i4) {
     );
 }
 
+/** Setup the amount of event that will get pumped into each window */
+void pojavComputeEventTarget() {
+    // Stub
+}
+
+/** Apply index offsets after events have been pumped */
+void pojavRewindEvents() {
+    // Stub
+}
+
+JNIEXPORT void JNICALL
+Java_org_lwjgl_glfw_GLFW_nglfwGetCursorPos(JNIEnv *env, __attribute__((unused)) jclass clazz, __attribute__((unused)) jlong window, jobject xpos,
+                                           jobject ypos) {
+    // Stub
+}
+
+JNIEXPORT void JNICALL JavaCritical_org_lwjgl_glfw_GLFW_nglfwGetCursorPosA(__attribute__((unused)) jlong window, jint lengthx, jdouble* xpos, jint lengthy, jdouble* ypos) {
+    // Stub
+}
+
+JNIEXPORT void JNICALL
+Java_org_lwjgl_glfw_GLFW_nglfwGetCursorPosA(JNIEnv *env, __attribute__((unused)) jclass clazz, __attribute__((unused)) jlong window,
+                                            jdoubleArray xpos, jdoubleArray ypos) {
+    // Stub
+}
+
+JNIEXPORT void JNICALL JavaCritical_org_lwjgl_glfw_GLFW_glfwSetCursorPos(__attribute__((unused)) jlong window, jdouble xpos,
+                                                                         jdouble ypos) {
+    // Stub
+}
+
+JNIEXPORT void JNICALL
+Java_org_lwjgl_glfw_GLFW_glfwSetCursorPos(__attribute__((unused)) JNIEnv *env, __attribute__((unused)) jclass clazz, __attribute__((unused)) jlong window, jdouble xpos,
+                                          jdouble ypos) {
+    // Stub
+}
+
 void closeGLFWWindow() {
     /*
     jclass glfwClazz = (*runtimeJNIEnvPtr_JRE)->FindClass(runtimeJNIEnvPtr_JRE, "org/lwjgl/glfw/GLFW");

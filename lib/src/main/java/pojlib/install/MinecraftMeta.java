@@ -10,7 +10,7 @@ public class MinecraftMeta {
 
     public static class MinecraftVersions {
         @SerializedName("versions")
-        public MinecraftVersion[] verisons;
+        public MinecraftVersion[] versions;
     }
 
     public static class MinecraftVersion {
@@ -21,7 +21,7 @@ public class MinecraftMeta {
     }
 
     public static MinecraftVersion[] getVersions() {
-        return handler.get("mc/game/version_manifest_v2.json", MinecraftVersions.class).verisons;
+        return handler.get("mc/game/version_manifest_v2.json", MinecraftVersions.class).versions;
     }
 
     public static VersionInfo getVersionInfo(MinecraftVersion minecraftVersion) {

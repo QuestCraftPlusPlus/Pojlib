@@ -68,7 +68,7 @@ public class API_V1 {
         instance.addCustomMod(name, version, url);
     }
 
-    public static boolean hasMod(MinecraftInstance instance, String name) {
+    public static boolean hasMod(MinecraftInstance instance, String name) throws IOException {
         return instance.hasCustomMod(name);
     }
 

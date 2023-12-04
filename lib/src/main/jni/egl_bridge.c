@@ -603,7 +603,6 @@ void pojav_openGLOnUnload() {
 }
 
 void pojavTerminate() {
-    return;
 }
 
 
@@ -736,6 +735,9 @@ int pojavInit() {
                       "libvulkan_freedreno.so", NULL, NULL);
     adrenotools_set_turbo(true);
     printf("libvulkan: %p\n", libvulkan);
+    if(!libvulkan) {
+        printf("Could not load libvulkan: %s\n", dlerror());
+    }
     char *vulkanPtrString;
 
     asprintf(&vulkanPtrString, "%p", libvulkan);
@@ -760,6 +762,14 @@ int pojavInit() {
         printf("OSMDroid: can't generate frame buffer\n");
         return 0;
     }
+}
+
+void pojavSetWindowHint(int hint, int value) {
+    // Stub
+}
+
+void pojavPumpEvents(void* window) {
+    // Stub
 }
 
 int32_t stride;

@@ -39,26 +39,54 @@ public class MinecraftInstance {
     public String assetsDir;
     public String mainClass;
 
+    public enum ModLoader {
+        Fabric(0),
+        Quilt(1),
+        Forge(2),
+        NeoForge(3);
+
+        public final int index;
+
+        ModLoader(int i) {
+            this.index = i;
+        }
+    }
+
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
+    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) throws IOException {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
         instance.versionName = minecraftVersion.id;
         instance.gameDir = new File(gameDir).getAbsolutePath();
 
+        VersionInfo modLoaderVersionInfo = null;
+        switch (modLoader) {
+            case Fabric: {
+                FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
+                modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
+            }
+            case Quilt: {
+                QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
+                modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
+            }
+            default: {
+                FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
+                modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
+            }
+        }
+
         VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);
         instance.versionType = minecraftVersionInfo.type;
-        FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
-        VersionInfo modLoaderVersionInfo =  FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
         instance.mainClass = modLoaderVersionInfo.mainClass;
 
         // Install minecraft
+        VersionInfo finalModLoaderVersionInfo = modLoaderVersionInfo;
         new Thread(() -> {
             try {
                 String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
                 String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
-                String modLoaderClasspath = Installer.installLibraries(modLoaderVersionInfo, gameDir);
+                String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
                 String lwjgl = Installer.installLwjgl(activity);
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;

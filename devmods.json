@@ -7,8 +7,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.90.7",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/FhOnpSMY/fabric-api-0.90.7%2B1.20.2.jar"
+			"version": "0.91.1",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/qg6wQgub/fabric-api-0.91.1%2B1.20.2.jar"
 		},
 		{
 			"slug": "Lithium",
@@ -84,8 +84,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.89.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/1sf8i9fy/fabric-api-0.89.0%2B1.20.1.jar"
+			"version": "0.91.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/YblXfKtI/fabric-api-0.91.0%2B1.20.1.jar"
 		},
 		{
 			"slug": "Lithium",
@@ -166,8 +166,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/Pz1hLqTB/fabric-api-0.76.0%2B1.19.4.jar"
+			"version": "0.87.2",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/nyAmoHlr/fabric-api-0.87.2%2B1.19.4.jar"
 		},
 		{
 			"slug": "Simple-Voice-Chat",
@@ -268,8 +268,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/hfsU4hXq/fabric-api-0.76.0%2B1.19.2.jar"
+			"version": "0.77.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/6g95K303/fabric-api-0.77.0%2B1.19.2.jar"
 		},
 		{
 			"slug": "LazyDFU",
@@ -360,8 +360,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.67.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/YDlOLdpm/fabric-api-0.67.0%2B1.18.2.jar"
+			"version": "0.77.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/qk28POfr/fabric-api-0.77.0%2B1.18.2.jar"
 		},
 		{
 			"slug": "LazyDFU",

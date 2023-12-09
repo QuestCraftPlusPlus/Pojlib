@@ -7,8 +7,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.87.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/lcnQpW9C/fabric-api-0.87.0%2B1.20.1.jar"
+			"version": "0.91.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/YblXfKtI/fabric-api-0.91.0%2B1.20.1.jar"
 		},
 		{
 			"slug": "Lithium",
@@ -181,8 +181,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/hfsU4hXq/fabric-api-0.76.0%2B1.19.2.jar"
+			"version": "0.77.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/6g95K303/fabric-api-0.77.0%2B1.19.2.jar"
 		},
 		{
 			"slug": "LazyDFU",
@@ -268,8 +268,8 @@
 		},
 		{
 			"slug": "Fabric-API",
-			"version": "0.76.0",
-			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/95QMsRyb/fabric-api-0.76.0%2B1.18.2.jar"
+			"version": "0.77.0",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/qk28POfr/fabric-api-0.77.0%2B1.18.2.jar"
 		},
 		{
 			"slug": "LazyDFU",

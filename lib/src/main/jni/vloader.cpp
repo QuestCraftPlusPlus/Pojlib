@@ -258,7 +258,7 @@ void createVkImage(uint32_t width, uint32_t height, VkImage* img, VkDeviceMemory
             .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
             .pNext = &emai,
             .imageType = VK_IMAGE_TYPE_2D,
-            .format = VK_FORMAT_R8G8B8A8_UNORM,
+            .format = VK_FORMAT_R8G8B8A8_SRGB,
             .extent = {
                     .width = width,
                     .height = height,

@@ -132,7 +132,7 @@ public class JREUtils {
         sNativeLibDir = ctx.getApplicationInfo().nativeLibraryDir;
 
         LD_LIBRARY_PATH = ctx.getFilesDir() + "/runtimes/JRE-17/bin" + "/lib64/jli:" + ctx.getFilesDir() + "/runtimes/JRE-17/lib:" +
-                "/system/lib64:lib64/vendor/lib64:/vendor/lib64/hw:" +
+                "/system/lib64:/vendor/lib64:/vendor/lib64/hw:" +
                 sNativeLibDir;
     }
 

@@ -87,21 +87,6 @@ public class API_V1 {
     }
 
     /**
-     * A collection of loader types
-     */
-    public enum ModLoader {
-        Vanilla(0),
-        Fabric(1),
-        Quilt(2);
-
-        public final int index;
-
-        ModLoader(int i) {
-            this.index = i;
-        }
-    }
-
-    /**
      * Loads an instance from the filesystem.
      *
      * @param instanceName      The instance being loaded
@@ -119,17 +104,18 @@ public class API_V1 {
      * @param instanceName      The name of the instance being created - can be anything, used for identification
      * @param home              The base directory where minecraft should be setup
      * @param minecraftVersion  The version of minecraft to install
+     * @param modLoader         The mod loader to install
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion) throws IOException {
+    public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion, MinecraftInstance.ModLoader modLoader) throws IOException {
 
         if(ignoreInstanceName) {
-            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
+            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion, modLoader);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion);
+            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion, modLoader);
         }
     }
 

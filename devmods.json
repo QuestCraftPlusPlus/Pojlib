@@ -1,4 +1,56 @@
 {
+	"1.20.4": [
+		{
+			"slug": "Vivecraft",
+			"version": "1.0",
+			"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.4/vivecraft.jar"
+		},
+		{
+			"slug": "Fabric-API",
+			"version": "0.91.2",
+			"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/yGY1P8Yr/fabric-api-0.91.2%2B1.20.4.jar"
+		},
+		{
+			"slug": "Sodium",
+			"version": "0.5.5",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/InGKdfel/sodium-fabric-mc1.20.3-0.5.5.jar"
+		},
+		{
+			"slug": "Cloth-Config",
+			"version": "13.0.114",
+			"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/YFpDLLdu/cloth-config-13.0.114-fabric.jar"
+		},
+		{
+			"slug": "Fabric-Language-Kotlin",
+			"version": "1.10.16+kotlin.1.9.21",
+			"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/VJUqKopR/fabric-language-kotlin-1.10.16%2Bkotlin.1.9.21.jar"
+		},
+		{
+			"slug": "Server-Core",
+			"version": "1.4.0",
+			"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/H1fXXdNC/servercore-fabric-1.4.0%2B1.20.3.jar"
+		},
+		{
+			"slug": "C2me",
+			"version": "0.2.0+alpha.11.38",
+			"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/o0DcaA0L/c2me-fabric-mc1.20.4-0.2.0%2Balpha.11.38.jar"
+		},
+		{
+			"slug": "ImmediatelyFast",
+			"version": "1.2.8",
+			"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/3EgIBnht/ImmediatelyFast-Fabric-1.2.8%2B1.20.4.jar"
+		},
+		{
+			"slug": "Simple-Voice-Chat",
+			"version": "2.4.30",
+			"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/kp8RtRlH/voicechat-fabric-1.20.4-2.4.30.jar"
+		},
+		{
+			"slug": "Modern-Fix",
+			"version": "5.10.0",
+			"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/vxDb5tOq/modernfix-fabric-5.10.0%2Bmc1.20.3.jar"
+		}
+	],
 	"1.20.2": [
 		{
 			"slug": "Vivecraft",
@@ -27,8 +79,8 @@
 		},
 		{
 			"slug": "Sodium",
-			"version": "0.5.3",
-			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/bbP1qBMr/sodium-fabric-mc1.20.2-0.5.3.jar"
+			"version": "0.5.5",
+			"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/pmgeU5yX/sodium-fabric-mc1.20.2-0.5.5.jar"
 		},
 		{
 			"slug": "Cloth-Config",

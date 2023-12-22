@@ -73,7 +73,6 @@ public class JREUtils {
         }
         dlopen(findInLdLibPath("libverify.so"));
         dlopen(findInLdLibPath("libjava.so"));
-        // dlopen(findInLdLibPath("libjsig.so"));
         dlopen(findInLdLibPath("libnet.so"));
         dlopen(findInLdLibPath("libnio.so"));
         dlopen(findInLdLibPath("libawt.so"));
@@ -96,7 +95,7 @@ public class JREUtils {
             public void run() {
                 try {
                     if (logcatPb == null) {
-                        logcatPb = new ProcessBuilder().command("logcat", /* "-G", "1mb", */ "-v", "brief", "-s", "jrelog:I", "LIBGL:I").redirectErrorStream(true);
+                        logcatPb = new ProcessBuilder().command("logcat", "-v", "brief", "-s", "jrelog:I", "LIBGL:I").redirectErrorStream(true);
                     }
                             Log.i("jrelog-logcat","Clearing logcat");
                     new ProcessBuilder().command("logcat", "-c").redirectErrorStream(true).start();
@@ -138,7 +137,7 @@ public class JREUtils {
 
     public static void setJavaEnvironment(Activity activity) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
-        envMap.put("POJAV_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
+        envMap.put("POJLIB_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
         envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE-17");
         envMap.put("HOME", Constants.MC_DIR);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
@@ -151,7 +150,7 @@ public class JREUtils {
         envMap.put("LIBGL_DRIVERS_PATH", sNativeLibDir);
         envMap.put("GALLIUM_THREAD", "0");
         envMap.put("MESA_LOG_FILE", Constants.MC_DIR + "/mesa-log.txt");
-        envMap.put("POJAV_RENDERER", "vulkan_zink");
+        envMap.put("POJLIB_RENDERER", "vulkan_zink");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE-17/bin:" + Os.getenv("PATH"));
@@ -178,8 +177,6 @@ public class JREUtils {
         Log.d("DynamicLoader","Base LD_LIBRARY_PATH: "+LD_LIBRARY_PATH);
         Log.d("DynamicLoader","Internal LD_LIBRARY_PATH: "+jvmLibraryPath+":"+LD_LIBRARY_PATH);
         setLdLibraryPath(jvmLibraryPath+":"+LD_LIBRARY_PATH);
-
-        // return ldLibraryPath;
     }
 
     public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, String versionName) throws Throwable {
@@ -240,7 +237,6 @@ public class JREUtils {
                 "-Dglfwstub.windowHeight=" + 720,
                 "-Dglfwstub.initEgl=false",
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
-
                 "-Dnet.minecraft.clientmodname=" + "null"
         ));
     }

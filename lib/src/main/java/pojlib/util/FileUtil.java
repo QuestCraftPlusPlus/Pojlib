@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class FileUtil {
 
@@ -46,7 +47,7 @@ public class FileUtil {
     public static void write(String path, byte[] content) throws IOException
     {
         File outPath = new File(path);
-        outPath.getParentFile().mkdirs();
+        Objects.requireNonNull(outPath.getParentFile()).mkdirs();
 
         BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(outPath.toPath()));
         fos.write(content, 0, content.length);

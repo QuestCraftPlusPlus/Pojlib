@@ -62,16 +62,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     return JNI_VERSION_1_4;
 }
 
-// Should be?
 void JNI_OnUnload(JavaVM* vm, void* reserved) {
-/*
-    if (dalvikJavaVMPtr == vm) {
-    } else {
-    }
-    
-    DetachCurrentThread(vm);
-*/
-
     dalvikJNIEnvPtr_JRE = NULL;
     runtimeJNIEnvPtr_ANDROID = NULL;
 }
@@ -170,18 +161,6 @@ Java_org_lwjgl_glfw_GLFW_glfwSetCursorPos(__attribute__((unused)) JNIEnv *env, _
 }
 
 void closeGLFWWindow() {
-    /*
-    jclass glfwClazz = (*runtimeJNIEnvPtr_JRE)->FindClass(runtimeJNIEnvPtr_JRE, "org/lwjgl/glfw/GLFW");
-    assert(glfwClazz != NULL);
-    jmethodID glfwMethod = (*runtimeJNIEnvPtr_JRE)->GetStaticMethodID(runtimeJNIEnvPtr_JRE, glfwMethod, "glfwSetWindowShouldClose", "(JZ)V");
-    assert(glfwMethod != NULL);
-    
-    (*runtimeJNIEnvPtr_JRE)->CallStaticVoidMethod(
-        runtimeJNIEnvPtr_JRE,
-        glfwClazz, glfwMethod,
-        (jlong) showingWindow, JNI_TRUE
-    );
-    */
     exit(-1);
 }
 
@@ -197,7 +176,6 @@ JNIEXPORT jboolean JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeAttachThread
         result = attachThread(true, &runtimeJNIEnvPtr_ANDROID);
     } else {
         result = attachThread(false, &dalvikJNIEnvPtr_JRE);
-        // getJavaInputBridge(&inputBridgeClass_JRE, &inputBridgeMethod_JRE);
     }
     
     if (isUseStackQueueCall && isAndroid && result) {
@@ -273,13 +251,7 @@ JNIEXPORT jboolean JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSendCharMods
     }
     return JNI_FALSE;
 }
-/*
-JNIEXPORT void JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSendCursorEnter(JNIEnv* env, jclass clazz, jint entered) {
-    if (GLFW_invoke_CursorEnter && isInputReady) {
-        GLFW_invoke_CursorEnter(showingWindow, entered);
-    }
-}
-*/
+
 JNIEXPORT void JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSendCursorPos(JNIEnv* env, jclass clazz, jfloat x, jfloat y) {
     if (GLFW_invoke_CursorPos && isInputReady) {
         if (!isCursorEntered) {
@@ -332,7 +304,6 @@ JNIEXPORT void JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSendKey(JNIEnv* 
         }
     }
 }
-
 
 
 JNIEXPORT void JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSendMouseButton(JNIEnv* env, jclass clazz, jint button, jint action, jint mods) {
@@ -388,7 +359,6 @@ JNIEXPORT void JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSendScroll(JNIEn
 JNIEXPORT void JNICALL Java_org_lwjgl_glfw_GLFW_nglfwSetShowingWindow(JNIEnv* env, jclass clazz, jlong window) {
     showingWindow = (long) window;
 }
-
 
 JNIEXPORT void JNICALL
 Java_org_lwjgl_glfw_CallbackBridge_setClass(JNIEnv *env, jclass clazz) {

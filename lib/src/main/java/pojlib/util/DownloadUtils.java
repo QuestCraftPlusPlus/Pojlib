@@ -7,7 +7,6 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import pojlib.api.API_V1;
-import pojlib.modmanager.State;
 
 import javax.net.ssl.SSLException;
 import java.io.*;
@@ -15,8 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Objects;
 
-import static pojlib.modmanager.ModManager.workDir;
 import static pojlib.util.FileUtil.read;
 import static pojlib.util.GsonUtils.GLOBAL_GSON;
 
@@ -72,7 +71,7 @@ public class DownloadUtils {
     }
 
     public static void downloadFile(String url, File out) throws IOException {
-        out.getParentFile().mkdirs();
+        Objects.requireNonNull(out.getParentFile()).mkdirs();
         File tempOut = File.createTempFile(out.getName(), ".part", out.getParentFile());
         BufferedOutputStream bos = null;
         try {
@@ -121,15 +120,4 @@ public class DownloadUtils {
         }
         return versions;
     }
-
-    public static String getModJsonFabricLoaderVersion() {
-        File modsJson = new File(workDir + "/mods.json");
-        try {
-            return GLOBAL_GSON.fromJson(read(modsJson.getPath()), State.class).fabricLoaderVersion;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

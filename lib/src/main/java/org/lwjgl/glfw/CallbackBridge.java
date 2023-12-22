@@ -43,26 +43,16 @@ public class CallbackBridge {
     
     public static void sendPrepareGrabInitialPos() {
         DEBUG_STRING.append("Prepare set grab initial posititon: ignored");
-        //sendMouseKeycode(-1, CallbackBridge.getCurrentMods(), false);
     }
 
     public static void sendKeycode(int keycode, char keychar, int scancode, int modifiers, boolean isDown) {
         DEBUG_STRING.append("KeyCode=").append(keycode).append(", Char=").append(keychar);
-/*
-        if (!nativeSendCharMods((int) keychar, modifiers) || !nativeSendChar(keychar)) {
-            nativeSendKey(keycode, 0, isDown ? 1 : 0, modifiers);
-        }
-*/
 
-        //nativeSendKeycode(keycode, keychar, scancode, isDown ? 1 : 0, modifiers);
         if(keycode != 0)  nativeSendKey(keycode,scancode,isDown ? 1 : 0, modifiers);
-        //else nativeSendKey(32,scancode,isDown ? 1 : 0, modifiers);
         if(isDown && keychar != '\u0000') {
             nativeSendCharMods(keychar,modifiers);
             nativeSendChar(keychar);
         }
-        //throw new IllegalStateException("Tracing call");
-        // sendData(JRE_TYPE_KEYCODE_CONTROL, keycode, Character.toString(keychar), Boolean.toString(isDown), modifiers);
     }
 
     public static void sendChar(char keychar, int modifiers){
@@ -93,7 +83,6 @@ public class CallbackBridge {
 
     public static void sendMouseKeycode(int button, int modifiers, boolean isDown) {
         DEBUG_STRING.append("MouseKey=").append(button).append(", down=").append(isDown).append("\n");
-        // if (isGrabbing()) DEBUG_STRING.append("MouseGrabStrace: " + android.util.Log.getStackTraceString(new Throwable()) + "\n");
         nativeSendMouseButton(button, isDown ? 1 : 0, modifiers);
     }
 
@@ -108,7 +97,6 @@ public class CallbackBridge {
     }
 
     public static boolean isGrabbing() {
-        // return isGrabbing;
         return nativeIsGrabbing();
     }
 
@@ -117,10 +105,10 @@ public class CallbackBridge {
         switch (type) {
             case CLIPBOARD_COPY:
                 return null;
-                
+
             case CLIPBOARD_PASTE:
                 return "";
-                
+
             default: return null;
         }
     }

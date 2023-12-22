@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
-// Boardwalk: missing include
 #include <string.h>
 
 #include "log.h"
@@ -39,7 +38,6 @@
 // Uncomment to try redirect signal handling to JVM
 // #define TRY_SIG2JVM
 
-// PojavLancher: fixme: are these wrong?
 #define FULL_VERSION "1.8.0-internal"
 #define DOT_VERSION "1.8"
 
@@ -115,12 +113,6 @@ static jint launchJVM(int margc, char** margv) {
                    *margv, // (const_launcher != NULL) ? const_launcher : *margv,
                    (const_jargs != NULL) ? JNI_TRUE : JNI_FALSE,
                    const_cpwildcard, const_javaw, const_ergo_class);
-/*
-   return pJLI_Launch(argc, argv, 
-       0, NULL, 0, NULL, FULL_VERSION,
-       DOT_VERSION, *margv, *margv, // "java", "openjdk",
-       JNI_FALSE, JNI_TRUE, JNI_FALSE, 0);
-*/
 }
 
 /*

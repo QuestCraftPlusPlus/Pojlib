@@ -105,9 +105,10 @@ public class APIHandler {
 
     public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
 
+        JsonObject jsonObject;
+        ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
         if (API_V1.developerMods) {
-            JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.DEV_MODS), JsonObject.class);
-            ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
+            jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.DEV_MODS), JsonObject.class);
             for(String verName : jsonObject.keySet()) {
                 MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
                 for(MinecraftMeta.MinecraftVersion version : versions) {
@@ -117,10 +118,8 @@ public class APIHandler {
                 }
             }
 
-            return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
         } else {
-            JsonObject jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.MODS), JsonObject.class);
-            ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
+            jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.MODS), JsonObject.class);
             for(String verName : jsonObject.keySet()) {
                 MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
                 for(MinecraftMeta.MinecraftVersion version : versions) {
@@ -130,8 +129,8 @@ public class APIHandler {
                 }
             }
 
-            return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
         }
+        return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
     }
 
     public static String getQCSupportedVersionName(MinecraftMeta.MinecraftVersion version) {

@@ -2,32 +2,18 @@ package pojlib.account;
 
 import static pojlib.account.Msa.checkMcProfile;
 
-import android.app.Activity;
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.json.JSONException;
-import pojlib.util.Constants;
-import pojlib.util.GsonUtils;
-import pojlib.util.LoginHelper;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Set;
 
 import javax.annotation.Nullable;
+
+import pojlib.util.Constants;
+import pojlib.util.GsonUtils;
 
 public class MinecraftAccount {
 

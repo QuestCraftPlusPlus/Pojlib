@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class MinecraftInstance {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
@@ -53,7 +52,7 @@ public class MinecraftInstance {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) throws IOException {
+    public static MinecraftInstance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader) {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
@@ -64,14 +63,17 @@ public class MinecraftInstance {
         switch (modLoader) {
             case Fabric: {
                 FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
+                assert fabricVersion != null;
                 modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
             }
             case Quilt: {
                 QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
+                assert quiltVersion != null;
                 modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
             }
             default: {
                 FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
+                assert fabricVersion != null;
                 modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
             }
         }
@@ -153,6 +155,7 @@ public class MinecraftInstance {
                 ArrayList<String> downloads = new ArrayList<>();
                 ArrayList<String> name = new ArrayList<>();
 
+                assert obj != null;
                 JsonArray verMods = obj.getAsJsonArray(this.versionName);
                 for (JsonElement verMod : verMods) {
                     JsonObject object = verMod.getAsJsonObject();
@@ -171,6 +174,7 @@ public class MinecraftInstance {
                     int i = 0;
                     boolean downloadAll = !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists());
                     for (String download : downloads) {
+                        assert objOld != null;
                         if(!versions.get(i).equals(((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString()) || downloadAll) {
                             API_V1.currentDownload = name.get(i);
                             DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
@@ -195,6 +199,7 @@ public class MinecraftInstance {
                 }
 
                 if(customMods.exists()) {
+                    assert customModsObj != null;
                     for(CustomMods.InstanceMods instMods : customModsObj.instances) {
                         if(!instMods.version.equals(this.versionName)) {
                             continue;
@@ -273,6 +278,7 @@ public class MinecraftInstance {
         }
 
         CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
+        assert mods != null;
         for(CustomMods.InstanceMods instance : mods.instances) {
             if(instance.version.equals(this.versionName)) {
                 for (CustomMods.ModInfo info : instance.mods) {
@@ -284,6 +290,7 @@ public class MinecraftInstance {
                         } else { DownloadUtils.downloadFile(MODS, modsOld); }
                     }
                     JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
+                    assert objOld != null;
                     for (JsonElement verMod : objOld.getAsJsonArray(this.versionName)) {
                         JsonObject object = verMod.getAsJsonObject();
                         String slug = object.get("slug").getAsString();
@@ -311,6 +318,7 @@ public class MinecraftInstance {
         File modsOld = new File(Constants.USER_HOME + "/mods.json");
         if(modsOld.exists()) {
             JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
+            assert objOld != null;
             for (JsonElement verMod : objOld.getAsJsonArray(this.versionName)) {
                 JsonObject object = verMod.getAsJsonObject();
                 String slug = object.get("slug").getAsString().replace("-", " ");
@@ -321,6 +329,7 @@ public class MinecraftInstance {
         }
 
         CustomMods mods = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomMods.class);
+        assert mods != null;
         for(CustomMods.InstanceMods instance : mods.instances) {
             if(instance.version.equals(this.versionName)) {
                 for (CustomMods.ModInfo info : instance.mods) {

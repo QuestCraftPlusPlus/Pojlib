@@ -13,6 +13,7 @@ import pojlib.util.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -150,7 +151,7 @@ public class Installer {
     public static String installLwjgl(Activity activity) throws IOException {
         File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
         if (!lwjgl.exists()) {
-            lwjgl.getParentFile().mkdirs();
+            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
             FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar"));
         }
         return lwjgl.getAbsolutePath();

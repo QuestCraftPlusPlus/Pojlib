@@ -61,8 +61,6 @@ JNIEXPORT jint JNICALL Java_android_os_OpenJDKNativeRegister_nativeRegisterNativ
 }
 
 JNIEXPORT void JNICALL Java_pojlib_util_JREUtils_setLdLibraryPath(JNIEnv *env, jclass clazz, jstring ldLibraryPath) {
-	// jclass exception_cls = (*env)->FindClass(env, "java/lang/UnsatisfiedLinkError");
-	
 	android_update_LD_LIBRARY_PATH_t android_update_LD_LIBRARY_PATH;
 	
 	void *libdl_handle = dlopen("libdl.so", RTLD_LAZY);
@@ -72,7 +70,6 @@ JNIEXPORT void JNICALL Java_pojlib_util_JREUtils_setLdLibraryPath(JNIEnv *env, j
 		if (updateLdLibPath == NULL) {
 			char *dl_error_c = dlerror();
 			LOGE("Error getting symbol android_update_LD_LIBRARY_PATH: %s", dl_error_c);
-			// (*env)->ThrowNew(env, exception_cls, dl_error_c);
 		}
 	}
 	
@@ -108,7 +105,6 @@ JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_executeBinary(JNIEnv *env, jcla
 	char *exec_file_c = (char*) (*env)->GetStringUTFChars(env, execFile, 0);
 	void *exec_binary_handle = dlopen(exec_file_c, RTLD_LAZY);
 	
-	// (*env)->ReleaseStringUTFChars(env, ldLibraryPath, ld_library_path_c);
 	(*env)->ReleaseStringUTFChars(env, execFile, exec_file_c);
 	
 	char *exec_error_c = dlerror();

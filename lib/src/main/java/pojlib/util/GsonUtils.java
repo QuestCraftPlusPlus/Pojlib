@@ -27,7 +27,6 @@ public class GsonUtils {
         try (Writer writer = Files.newBufferedWriter(Paths.get(path), StandardCharsets.UTF_8)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(object, writer);
-        } catch (IOException e) {
-        }
+        } catch (IOException ignored) {}
     }
 }

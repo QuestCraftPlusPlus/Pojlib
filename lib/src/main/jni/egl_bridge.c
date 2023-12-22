@@ -703,8 +703,8 @@ int xrEglInit() {
 void dlsym_OSMesa() {
     char* main_path = NULL;
     char* alt_path = NULL;
-    if(asprintf(&main_path, "%s/libOSMesa_8.so", getenv("POJAV_NATIVEDIR")) == -1 ||
-       asprintf(&alt_path, "%s/libOSMesa.so.8", getenv("POJAV_NATIVEDIR")) == -1) {
+    if(asprintf(&main_path, "%s/libOSMesa_8.so", getenv("POJLIB_NATIVEDIR")) == -1 ||
+       asprintf(&alt_path, "%s/libOSMesa.so.8", getenv("POJLIB_NATIVEDIR")) == -1) {
         abort();
     }
     void* dl_handle;
@@ -724,11 +724,9 @@ int pojavInit() {
     savedWidth = 1920;
     savedHeight = 1080;
 
-    // xrEglInit();
-
     char *gpuStuff;
     char *nativeDir;
-    asprintf(&nativeDir, "%s/", getenv("POJAV_NATIVEDIR"));
+    asprintf(&nativeDir, "%s/", getenv("POJLIB_NATIVEDIR"));
     asprintf(&gpuStuff, "%s/gpustuff", getenv("HOME"));
     void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
                       gpuStuff, nativeDir,
@@ -803,24 +801,6 @@ Java_pojlib_util_JREUtils_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
     return (jlong) &xrConfig;
 }
 
-/*
-JNIEXPORT void JNICALL
-Java_org_lwjgl_glfw_GLFW_nativeEglDetachOnCurrentThread(JNIEnv *env, jclass clazz) {
-    //Obstruct the context on the current thread
-
-    switch (config_renderer) {
-        case RENDERER_GL4ES: {
-            eglMakeCurrent_p(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-        } break;
-
-        case RENDERER_VIRGL:
-        case RENDERER_VK_ZINK: {
-            // Nothing to do here
-        } break;
-    }
-}
-*/
-
 void* pojavCreateContext(void* contextSrc) {
     printf("OSMDroid: generating context\n");
 
@@ -844,11 +824,6 @@ void* pojavCreateContext(void* contextSrc) {
 }
 
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *env, jclass clazz) {
-    /*printf("Regal: making current");
-
-    RegalMakeCurrent_func *RegalMakeCurrent = (RegalMakeCurrent_func *) dlsym(RTLD_DEFAULT, "RegalMakeCurrent");
-    RegalMakeCurrent(eglContext);*/
-
     printf("regal removed\n");
     abort();
 }

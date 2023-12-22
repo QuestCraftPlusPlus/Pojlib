@@ -46,7 +46,7 @@ dependencies {
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.legacy:legacy-preference-v14:1.0.0")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.annotation:annotation:1.7.1")
     implementation("com.microsoft.azure:msal4j:1.14.0")
     implementation("androidx.browser:browser:1.7.0")

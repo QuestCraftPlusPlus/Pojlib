@@ -61,7 +61,7 @@ public class MinecraftAccount {
         try {
             return Constants.MINOTAR_URL + "/helm/" + account.uuid;
         } catch (NullPointerException e) {
-            System.out.println("Username not set! Please sign in on PC/Pojav first then try again.");
+            System.out.println("Username not set! Please set your username at Minecraft.net and try again.");
             return null;
         }
     }

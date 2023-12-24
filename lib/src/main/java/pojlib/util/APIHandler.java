@@ -108,7 +108,7 @@ public class APIHandler {
 
     public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() throws IOException {
         ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
-        File mods = new File(Constants.USER_HOME + "/mods.json");
+        File mods = new File(Constants.USER_HOME + "/mods-new.json");
         if (API_V1.developerMods) {
             DownloadUtils.downloadFile(DEV_MODS, mods);
         } else { DownloadUtils.downloadFile(MODS, mods); }
@@ -122,6 +122,8 @@ public class APIHandler {
                 }
             }
         }
+
+        mods.delete();
 
         return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
     }

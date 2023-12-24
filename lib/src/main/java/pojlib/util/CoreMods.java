@@ -8,9 +8,6 @@ public class CoreMods {
     public static class Version {
         public String name;
         public List<Mod> mods;
-        public Version(String name) {
-            this.name = name;
-        }
     }
 
     public static class Mod {

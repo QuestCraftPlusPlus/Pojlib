@@ -57,8 +57,9 @@ public class MinecraftAccount {
     }
 
     public static String getSkinFaceUrl(MinecraftAccount account) {
+        //TODO: Log this to latestlog.txt for Support staff
         try {
-            return Constants.CRAFATAR_URL + "/avatars/" + account.uuid;
+            return Constants.MINOTAR_URL + "/avatar/" + account.uuid;
         } catch (NullPointerException e) {
             System.out.println("Username not set! Please sign in on PC/Pojav first then try again.");
             return null;

@@ -1,5 +1,8 @@
 package pojlib.util;
 
+import static pojlib.instance.MinecraftInstance.DEV_MODS;
+import static pojlib.instance.MinecraftInstance.MODS;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -103,33 +106,25 @@ public class APIHandler {
         return new Gson().fromJson(postRaw(url + parseQueries(query), body.toString()), tClass);
     }
 
-    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
-
-        JsonObject jsonObject;
+    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() throws IOException {
         ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
+        File mods = new File(Constants.USER_HOME + "/mods-new.json");
         if (API_V1.developerMods) {
-            jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.DEV_MODS), JsonObject.class);
-            for(String verName : jsonObject.keySet()) {
-                MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
-                for(MinecraftMeta.MinecraftVersion version : versions) {
-                    if(version.id.equals(verName)) {
-                        versionsList.add(version);
-                    }
+            DownloadUtils.downloadFile(DEV_MODS, mods);
+        } else { DownloadUtils.downloadFile(MODS, mods); }
+
+        CoreMods modsJson = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), CoreMods.class);
+        for(CoreMods.Version version : modsJson.versions) {
+            MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
+            for(MinecraftMeta.MinecraftVersion mcVer : versions) {
+                if(mcVer.id.equals(version.name)) {
+                    versionsList.add(mcVer);
                 }
             }
-
-        } else {
-            jsonObject = GsonUtils.GLOBAL_GSON.fromJson(getRaw(MinecraftInstance.MODS), JsonObject.class);
-            for(String verName : jsonObject.keySet()) {
-                MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
-                for(MinecraftMeta.MinecraftVersion version : versions) {
-                    if(version.id.equals(verName)) {
-                        versionsList.add(version);
-                    }
-                }
-            }
-
         }
+
+        mods.delete();
+
         return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
     }
 

@@ -6,10 +6,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.apache.commons.io.FileUtils;
+
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
 import pojlib.install.*;
 import pojlib.util.Constants;
+import pojlib.util.CoreMods;
 import pojlib.util.CustomMods;
 import pojlib.util.DownloadUtils;
 import pojlib.util.FileUtil;
@@ -148,55 +151,8 @@ public class MinecraftInstance {
                 } else { DownloadUtils.downloadFile(MODS, mods); }
 
                 CustomMods customModsObj = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomMods.class);
-                JsonObject obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), JsonObject.class);
-                JsonObject objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), JsonObject.class);
-
-                ArrayList<String> versions = new ArrayList<>();
-                ArrayList<String> downloads = new ArrayList<>();
-                ArrayList<String> name = new ArrayList<>();
-
-                assert obj != null;
-                JsonArray verMods = obj.getAsJsonArray(this.versionName);
-                for (JsonElement verMod : verMods) {
-                    JsonObject object = verMod.getAsJsonObject();
-                    versions.add(object.get("version").getAsString());
-                    downloads.add(object.get("download_link").getAsString());
-                    name.add(object.get("slug").getAsString());
-                }
-
-                if(modsOld.exists()) {
-                    InputStream stream = Files.newInputStream(mods.toPath());
-                    int size = stream.available();
-                    byte[] buffer = new byte[size];
-                    stream.read(buffer);
-                    stream.close();
-                    FileUtil.write(modsOld.getAbsolutePath(), buffer);
-                    int i = 0;
-                    boolean downloadAll = !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists());
-                    for (String download : downloads) {
-                        assert objOld != null;
-                        if(!versions.get(i).equals(((JsonObject) objOld.getAsJsonArray(versionName).get(i)).getAsJsonPrimitive("version").getAsString()) || downloadAll) {
-                            API_V1.currentDownload = name.get(i);
-                            DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
-                        }
-                        i++;
-                    }
-                    mods.delete();
-                } else {
-                    InputStream stream = Files.newInputStream(mods.toPath());
-                    int size = stream.available();
-                    byte[] buffer = new byte[size];
-                    stream.read(buffer);
-                    stream.close();
-                    FileUtil.write(modsOld.getAbsolutePath(), buffer);
-                    int i = 0;
-                    for (String download : downloads) {
-                        API_V1.currentDownload = name.get(i);
-                        DownloadUtils.downloadFile(download, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + name.get(i) + ".jar"));
-                        i++;
-                    }
-                    mods.delete();
-                }
+                CoreMods obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), CoreMods.class);
+                CoreMods objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), CoreMods.class);
 
                 if(customMods.exists()) {
                     assert customModsObj != null;
@@ -211,6 +167,37 @@ public class MinecraftInstance {
                     }
                 }
 
+                if(modsOld.exists()) {
+                    for(CoreMods.Version version : objOld.versions) {
+                        if(!version.name.equals(this.versionName)) {
+                            continue;
+                        }
+                        for(CoreMods.Mod mod : version.mods) {
+                            for(CoreMods.Version newVer : obj.versions) {
+                                if (!newVer.name.equals(this.versionName)) {
+                                    continue;
+                                }
+                                for(CoreMods.Mod newMod : version.mods) {
+                                    if(!newMod.version.equals(mod.version) && newMod.slug.equals(mod.slug)) {
+                                        DownloadUtils.downloadFile(newMod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + mod.slug + ".jar"));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for(CoreMods.Version version : obj.versions) {
+                        if (!version.name.equals(this.versionName)) {
+                            continue;
+                        }
+                        for(CoreMods.Mod mod : version.mods) {
+                            DownloadUtils.downloadFile(mod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + mod.slug + ".jar"));
+                        }
+                    }
+                }
+
+                FileUtils.copyFile(mods, modsOld);
+                mods.delete();
             } catch (IOException e) {
                 e.printStackTrace();
             }

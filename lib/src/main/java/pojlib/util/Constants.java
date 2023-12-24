@@ -26,7 +26,7 @@ public class Constants {
 
     public static String MC_PROFILE_URL = "https://api.minecraftservices.com/minecraft/profile";
 
-    public static String CRAFATAR_URL = "https://crafatar.com";
+    public static String MINOTAR_URL = "https://minotar.net";
 
     public static String MC_DIR = new File(Environment.getExternalStorageDirectory(),"Android/data/com.qcxr.qcxr/files/.minecraft").getAbsolutePath();
 

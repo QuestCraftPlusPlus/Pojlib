@@ -78,7 +78,7 @@ public class API_V1 {
     public static boolean removeMod(MinecraftInstance instance, String name) {
         return instance.removeMod(name);
     }
-    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() {
+    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() throws IOException {
         return APIHandler.getQCSupportedVersions();
     }
 

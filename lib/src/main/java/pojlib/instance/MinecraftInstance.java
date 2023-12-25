@@ -166,6 +166,7 @@ public class MinecraftInstance {
                         }
                     }
                 }
+                boolean downloadAll = !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists());
 
                 if(modsOld.exists()) {
                     for(CoreMods.Version version : objOld.versions) {
@@ -178,7 +179,7 @@ public class MinecraftInstance {
                                     continue;
                                 }
                                 for(CoreMods.Mod newMod : newVer.mods) {
-                                    if(!newMod.version.equals(mod.version) && newMod.slug.equals(mod.slug)) {
+                                    if((!newMod.version.equals(mod.version) || downloadAll) && newMod.slug.equals(mod.slug)) {
                                         API_V1.currentDownload = newMod.slug;
                                         DownloadUtils.downloadFile(newMod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + newMod.slug + ".jar"));
                                     }

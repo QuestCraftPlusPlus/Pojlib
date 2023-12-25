@@ -3,8 +3,17 @@
 
 # Ignore Gradle build output directory
 build
-
 lib/build
+# Misc files
 .idea
 local.properties
-local.properties
+.github
+.DS_Store
+*.iml
+*.ipr
+*.iws
+.settings
+.vscode
+bin
+.classpath
+.project

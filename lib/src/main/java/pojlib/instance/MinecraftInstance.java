@@ -177,9 +177,10 @@ public class MinecraftInstance {
                                 if (!newVer.name.equals(this.versionName)) {
                                     continue;
                                 }
-                                for(CoreMods.Mod newMod : version.mods) {
+                                for(CoreMods.Mod newMod : newVer.mods) {
                                     if(!newMod.version.equals(mod.version) && newMod.slug.equals(mod.slug)) {
-                                        DownloadUtils.downloadFile(newMod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + mod.slug + ".jar"));
+                                        API_V1.currentDownload = newMod.slug;
+                                        DownloadUtils.downloadFile(newMod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + newMod.slug + ".jar"));
                                     }
                                 }
                             }
@@ -191,6 +192,7 @@ public class MinecraftInstance {
                             continue;
                         }
                         for(CoreMods.Mod mod : version.mods) {
+                            API_V1.currentDownload = mod.slug;
                             DownloadUtils.downloadFile(mod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + mod.slug + ".jar"));
                         }
                     }

@@ -5,8 +5,8 @@
 			"mods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.1/vivecraft.jar"
+					"version": "0.2",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.20-Zink/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -30,8 +30,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.2",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/6SSPmLc9/sodium-fabric-mc1.20.1-0.5.2.jar"
+					"version": "0.5.3",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/4OZL6q9h/sodium-fabric-mc1.20.1-0.5.3.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -82,6 +82,11 @@
 					"slug": "Modern-Fix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
+				},
+				{
+					"slug": "Fabric-Language-Kotlin",
+					"version": "1.9.5+kotlin.1.8.22",
+					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/ADg3gvlr/fabric-language-kotlin-1.9.5%2Bkotlin.1.8.22.jar"
 				}
 			]
 		},
@@ -90,8 +95,8 @@
 			"mods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.4/vivecraft.jar"
+					"version": "0.1",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.19.4-Zink/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -187,6 +192,11 @@
 					"slug": "Modern-Fix",
 					"version": "5.7.2",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
+				},
+				{
+					"slug": "Fabric-Language-Kotlin",
+					"version": "1.9.3+kotlin.1.8.20",
+					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/MkcO8aQ0/fabric-language-kotlin-1.9.3%2Bkotlin.1.8.20.jar"
 				}
 			]
 		},
@@ -195,8 +205,8 @@
 			"mods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.3",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.2/vivecraft.jar"
+					"version": "0.1",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.19.2-Zink/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -290,8 +300,8 @@
 			"mods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.3",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.18.2/vivecraft.jar"
+					"version": "0.1",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v0.1-1.18.2-Zink/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",

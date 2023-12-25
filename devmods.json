@@ -132,6 +132,11 @@
 					"slug": "Modern-Fix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
+				},
+				{
+					"slug": "EBE",
+					"version": "0.9.1",
+					"download_link": "https://cdn.modrinth.com/data/OVuFYfre/versions/eIFo7wvq/enhancedblockentities-0.9.1%2B1.20.2.jar"
 				}
 			]
 		},

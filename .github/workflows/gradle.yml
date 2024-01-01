@@ -8,8 +8,8 @@
 name: Java CI with Gradle
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "master", "QuestCraft" ]
   pull_request:
     branches: [ "master", "QuestCraft" ]
 
@@ -28,9 +28,9 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: make gradle wrapper executable
+    - name: Make Gradle wrapper executable
       run: chmod +x ./gradlew
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@v2
       with:
         arguments: build

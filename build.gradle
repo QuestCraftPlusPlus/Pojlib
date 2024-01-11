@@ -1,9 +1,9 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    id("com.android.library") version("7.4.0")
 }
 
 android {
+    //namespace = "pojlib"
     ndkVersion = "26.1.10909125"
     compileSdkVersion = "android-32"
     defaultConfig {

@@ -3,7 +3,6 @@ plugins {
 }
 
 android {
-    //namespace = "pojlib"
     ndkVersion = "26.1.10909125"
     compileSdkVersion = "android-32"
     defaultConfig {

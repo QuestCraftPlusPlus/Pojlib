@@ -68,16 +68,19 @@ public class MinecraftInstance {
                 FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
                 assert fabricVersion != null;
                 modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
+                break;
             }
             case Quilt: {
                 QuiltMeta.QuiltVersion quiltVersion = QuiltMeta.getLatestVersion();
                 assert quiltVersion != null;
                 modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
+                break;
             }
-            default: {
-                FabricMeta.FabricVersion fabricVersion = FabricMeta.getLatestStableVersion();
-                assert fabricVersion != null;
-                modLoaderVersionInfo = FabricMeta.getVersionInfo(fabricVersion, minecraftVersion);
+            case Forge:
+            case NeoForge:
+            {
+                System.out.println("Error!: You cannot use Forge or NeoForge with QuestCraft!");
+                break;
             }
         }
 

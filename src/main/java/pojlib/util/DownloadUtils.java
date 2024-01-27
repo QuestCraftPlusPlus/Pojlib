@@ -1,6 +1,7 @@
 package pojlib.util;
 
 import android.content.res.AssetManager;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Hex;
@@ -25,46 +26,39 @@ public class DownloadUtils {
 
 
     private static void download(URL url, OutputStream os) throws IOException {
-        InputStream is = null;
-        try {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(10000);
-            conn.setDoInput(true);
-            conn.connect();
-            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                is = conn.getInputStream();
-            }
+        final int MAX_RETRIES = 3;
+        int attempts = 0;
 
-            String[] segments = url.getPath().split("/");
-            API_V1.currentDownload = segments[segments.length - 1];
+        while (true) {
+            try {
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(10000);
+                conn.setDoInput(true);
+                conn.connect();
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    try (InputStream is = new StreamDL(conn.getInputStream())) {
+                        String[] segments = url.getPath().split("/");
+                        API_V1.currentDownload = segments[segments.length - 1];
 
-            is = new StreamDL(conn.getInputStream());
+                        ((StreamDL)is).addListener((b, count) -> {
 
-            ((StreamDL)is).addListener((b, count) -> {
+                            if (b == -1) {
+                                API_V1.downloadStatus = 0;
+                                API_V1.currentDownload = null;
+                            } else {
+                                API_V1.downloadStatus = count * 0.000001;
+                            }
 
-                if (b == -1) {
-                    API_V1.downloadStatus = 0;
-                    API_V1.currentDownload = null;
-                } else {
-                    API_V1.downloadStatus = count * 0.000001;
+                        });
+
+                        IOUtils.copy(is, os);
+                    }
+                    return;
                 }
 
-            });
-
-            IOUtils.copy(is, os);
-
-        } catch (IOException e) {
-            if (e instanceof SSLException) {
-                download(url, os);
-                return;
-            }
-            throw new IOException("Unable to download from " + url, e);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            } catch (IOException e) {
+                if (++attempts >= MAX_RETRIES || e instanceof SSLException) {
+                    throw new IOException("Unable to download from " + url, e);
                 }
             }
         }

@@ -8,9 +8,19 @@ import com.google.gson.JsonObject;
 
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
-import pojlib.install.*;
+import pojlib.install.FabricMeta;
+import pojlib.install.Installer;
+import pojlib.install.MinecraftMeta;
+import pojlib.install.QuiltMeta;
+import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
 import pojlib.util.CoreMods;
 import pojlib.util.CustomMods;
@@ -21,19 +31,12 @@ import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.VLoader;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class MinecraftInstance {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
     public static final String CUSTOM_MODS = "custom_mods.json";
     public String versionName;
+    public String instanceName;
     public String versionType;
     public String classpath;
     public String gameDir;
@@ -59,6 +62,7 @@ public class MinecraftInstance {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstance instance = new MinecraftInstance();
+        instance.instanceName = instanceName;
         instance.versionName = minecraftVersion.id;
         instance.gameDir = new File(gameDir).getAbsolutePath();
 
@@ -109,7 +113,34 @@ public class MinecraftInstance {
             GsonUtils.objectToJsonFile(gameDir + "/instances/" + instanceName + "/instance.json", instance);
             API_V1.finishedDownloading = true;
         }).start();
+
+        updateInstancesJson(gameDir, instance);
         return instance;
+    }
+
+    private static synchronized void updateInstancesJson(String gameDir, MinecraftInstance instance) {
+        String instancesFilePath = gameDir + "/instances.json";
+        JsonArray instancesArray;
+
+        try {
+            if (new File(instancesFilePath).exists()) {
+                String jsonContent = FileUtil.read(instancesFilePath);
+                instancesArray = GsonUtils.GLOBAL_GSON.fromJson(jsonContent, JsonArray.class);
+            } else {
+                instancesArray = new JsonArray();
+            }
+
+            JsonObject instancesJson = new JsonObject();
+            instancesJson.addProperty("instanceName", instance.instanceName);
+            instancesJson.addProperty("instanceVersion", instance.versionName);
+            instancesJson.addProperty("gameDir", instance.gameDir);
+
+            instancesArray.add(instancesJson);
+
+            GsonUtils.objectToJsonFile(instancesFilePath, instancesArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Load an instance from json

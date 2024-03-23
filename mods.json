@@ -59,11 +59,6 @@
 					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/exA4UxFq/servercore-fabric-1.3.7%2B1.20.1.jar"
 				},
 				{
-					"slug": "Mod-Menu",
-					"version": "7.0.1",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/RTFDnTKf/modmenu-7.0.1.jar"
-				},
-				{
 					"slug": "C2me",
 					"version": "0.2.0+alpha.10.91",
 					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/t4juSkze/c2me-fabric-mc1.20.1-0.2.0%2Balpha.10.91.jar"
@@ -80,13 +75,13 @@
 				},
 				{
 					"slug": "Modern-Fix",
-					"version": "5.9.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
+					"version": "5.15.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/zlah1a6M/modernfix-fabric-5.15.0%2Bmc1.20.1.jar"
 				},
 				{
-					"slug": "Fabric-Language-Kotlin",
-					"version": "1.9.5+kotlin.1.8.22",
-					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/ADg3gvlr/fabric-language-kotlin-1.9.5%2Bkotlin.1.8.22.jar"
+					"slug": "Cull-Less-Leaves",
+					"version": "1.3.0",
+					"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/TFvkv8XK/CullLessLeaves-1.3.0.jar"
 				}
 			]
 		},
@@ -169,11 +164,6 @@
 					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/aq6o4qRe/servercore-1.3.5-1.19.4.jar"
 				},
 				{
-					"slug": "Mod-Menu",
-					"version": "6.2.1",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/yjjsLqbS/modmenu-6.2.1.jar"
-				},
-				{
 					"slug": "C2me",
 					"version": "0.2.0+alpha.10.51",
 					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/2LxKBERD/c2me-fabric-mc1.19.4-0.2.0%2Balpha.10.51.jar"
@@ -184,11 +174,6 @@
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/8IFFeKYy/ImmediatelyFast-1.1.12%2B1.19.4.jar"
 				},
 				{
-					"slug": "Noxesium",
-					"version": "0.1.8",
-					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
-				},
-				{
 					"slug": "Modern-Fix",
 					"version": "5.7.2",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
@@ -197,6 +182,11 @@
 					"slug": "Fabric-Language-Kotlin",
 					"version": "1.9.3+kotlin.1.8.20",
 					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/MkcO8aQ0/fabric-language-kotlin-1.9.3%2Bkotlin.1.8.20.jar"
+				},
+				{
+					"slug": "Cull-Less-Leaves",
+					"version": "1.2.0",
+					"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/mafk58Fm/CullLessLeaves-1.2.0.jar"
 				}
 			]
 		},
@@ -264,11 +254,6 @@
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar"
 				},
 				{
-					"slug": "Mod_Menu",
-					"version": "4.2.0-beta.2",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/gSoPJyVn/modmenu-4.2.0-beta.2.jar"
-				},
-				{
 					"slug": "C2me",
 					"version": "0.2.0+alpha.9.9",
 					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/8rUarScX/c2me-fabric-mc1.19.2-0.2.0%2Balpha.9.9.jar"
@@ -284,14 +269,14 @@
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4yVqQKQO/ImmediatelyFast-1.1.12%2B1.19.jar"
 				},
 				{
-					"slug": "Noxesium",
-					"version": "0.1.4",
-					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
+					"slug": "Modern-Fix",
+					"version": "5.15.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/5LHKYBfs/modernfix-fabric-5.15.0%2Bmc1.19.2.jar"
 				},
 				{
-					"slug": "Modern-Fix",
-					"version": "5.9.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/b1FKKAz8/modernfix-fabric-5.9.0%2Bmc1.19.2.jar"
+					"slug": "Cull-Less-Leaves",
+					"version": "1.0.5",
+					"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/1.0.5/CullLessLeaves-1.0.5.jar"
 				}
 			]
 		},
@@ -390,8 +375,8 @@
 				},
 				{
 					"slug": "Modern-Fix",
-					"version": "5.9.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/qNrVNwfw/modernfix-fabric-5.9.0%2Bmc1.18.2.jar"
+					"version": "5.15.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/jXMYPayd/modernfix-fabric-5.15.0%2Bmc1.18.2.jar"
 				}
 			]
 		}

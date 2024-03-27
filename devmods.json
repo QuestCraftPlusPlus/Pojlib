@@ -50,8 +50,8 @@
 				},
 				{
 					"slug": "Modern-Fix",
-					"version": "5.15.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/lQs9avbD/modernfix-fabric-5.15.0%2Bmc1.20.4.jar"
+					"version": "5.10.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/vxDb5tOq/modernfix-fabric-5.10.0%2Bmc1.20.3.jar"
 				}
 			]
 		},
@@ -125,13 +125,18 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "2.5.9",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/CTsTZY4N/voicechat-fabric-1.20.2-2.5.9.jar"
+					"version": "2.4.28",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/Pq4BryXi/voicechat-fabric-1.20.2-2.5.1.jar"
 				},
 				{
 					"slug": "Modern-Fix",
-					"version": "5.10.1",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/rRcwOsPa/modernfix-fabric-5.10.1%2Bmc1.20.2.jar"
+					"version": "5.9.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
+				},
+				{
+					"slug": "EBE",
+					"version": "0.9.1",
+					"download_link": "https://cdn.modrinth.com/data/OVuFYfre/versions/eIFo7wvq/enhancedblockentities-0.9.1%2B1.20.2.jar"
 				}
 			]
 		},
@@ -215,13 +220,8 @@
 				},
 				{
 					"slug": "Modern-Fix",
-					"version": "5.15.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/zlah1a6M/modernfix-fabric-5.15.0%2Bmc1.20.1.jar"
-				},
-				{
-					"slug": "Cull-Less-Leaves",
-					"version": "1.3.0",
-					"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/TFvkv8XK/CullLessLeaves-1.3.0.jar"
+					"version": "5.9.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
 				}
 			]
 		},
@@ -319,14 +319,14 @@
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/8IFFeKYy/ImmediatelyFast-1.1.12%2B1.19.4.jar"
 				},
 				{
+					"slug": "Noxesium",
+					"version": "0.1.8",
+					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
+				},
+				{
 					"slug": "Modern-Fix",
 					"version": "5.7.2",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
-				},
-				{
-					"slug": "Cull-Less-Leaves",
-					"version": "1.2.0",
-					"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/mafk58Fm/CullLessLeaves-1.2.0.jar"
 				}
 			]
 		},
@@ -394,7 +394,7 @@
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar"
 				},
 				{
-					"slug": "Mod-Menu",
+					"slug": "Mod_Menu",
 					"version": "4.2.0-beta.2",
 					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/gSoPJyVn/modmenu-4.2.0-beta.2.jar"
 				},
@@ -414,14 +414,14 @@
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4yVqQKQO/ImmediatelyFast-1.1.12%2B1.19.jar"
 				},
 				{
-					"slug": "Modern-Fix",
-					"version": "5.15.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/5LHKYBfs/modernfix-fabric-5.15.0%2Bmc1.19.2.jar"
+					"slug": "Noxesium",
+					"version": "0.1.4",
+					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
 				},
 				{
-					"slug": "Cull-Less-Leaves",
-					"version": "1.0.5",
-					"download_link": "https://cdn.modrinth.com/data/iG6ZHsUV/versions/1.0.5/CullLessLeaves-1.0.5.jar"
+					"slug": "Modern-Fix",
+					"version": "5.9.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/b1FKKAz8/modernfix-fabric-5.9.0%2Bmc1.19.2.jar"
 				}
 			]
 		},
@@ -520,8 +520,8 @@
 				},
 				{
 					"slug": "Modern-Fix",
-					"version": "5.15.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/jXMYPayd/modernfix-fabric-5.15.0%2Bmc1.18.2.jar"
+					"version": "5.9.0",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/qNrVNwfw/modernfix-fabric-5.9.0%2Bmc1.18.2.jar"
 				}
 			]
 		}

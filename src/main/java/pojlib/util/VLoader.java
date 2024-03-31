@@ -9,5 +9,4 @@ public class VLoader {
     }
 
     public static native void setAndroidInitInfo(Context ctx);
-    public static native void setEGLGlobal(long context, long display, long config);
 }

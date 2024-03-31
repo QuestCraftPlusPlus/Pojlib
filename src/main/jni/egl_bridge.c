@@ -23,7 +23,7 @@
 #include "utils.h"
 #include "GL/gl.h"
 #include "GL/osmesa.h"
-#include "adrenotools/driver.h"
+#include "GL/Regal.h"
 
 EGLContext xrEglContext;
 EGLDisplay xrEglDisplay;
@@ -607,7 +607,7 @@ void pojavTerminate() {
 
 
 void* pojavGetCurrentContext() {
-    return OSMesaGetCurrentContext_p();
+    return xrEglContext;
 }
 
 int xrEglInit() {
@@ -674,29 +674,6 @@ int xrEglInit() {
            xrEglSurface
     );
 
-    const EGLint ctx_attribs[] = {
-            EGL_CONTEXT_CLIENT_VERSION, 3,
-            EGL_NONE
-    };
-    EGLContext* ctx = eglCreateContext(xrEglDisplay, xrConfig, NULL, ctx_attribs);
-
-    printf("XREGLBridge: %p\n", ctx);
-
-    EGLBoolean success = eglMakeCurrent(
-            xrEglDisplay,
-            xrEglSurface,
-            xrEglSurface,
-            ctx
-    );
-
-    xrEglContext = ctx;
-
-    if (success == EGL_FALSE) {
-        printf("EGLBridge: Error: eglMakeCurrent() failed: %p\n", eglGetError());
-    } else {
-        printf("EGLBridge: eglMakeCurrent() succeed!\n");
-    }
-
     return 1;
 }
 
@@ -721,45 +698,10 @@ void dlsym_OSMesa() {
 }
 
 int pojavInit() {
-    savedWidth = 1920;
-    savedHeight = 1080;
+    savedWidth = 1;
+    savedHeight = 1;
 
-    char *gpuStuff;
-    char *nativeDir;
-    asprintf(&nativeDir, "%s/", getenv("POJLIB_NATIVEDIR"));
-    asprintf(&gpuStuff, "%s/gpustuff", getenv("HOME"));
-    void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, NULL,
-                      gpuStuff, nativeDir,
-                      "libvulkan_freedreno.so", NULL, NULL);
-    adrenotools_set_turbo(true);
-    printf("libvulkan: %p\n", libvulkan);
-    if(!libvulkan) {
-        printf("Could not load libvulkan: %s\n", dlerror());
-    }
-    char *vulkanPtrString;
-
-    asprintf(&vulkanPtrString, "%p", libvulkan);
-    printf("%s\n", vulkanPtrString);
-    setenv("VULKAN_PTR", vulkanPtrString, 1);
-
-    dlsym_OSMesa();
-
-    if (OSMesaCreateContextAttribs_p == NULL) {
-        printf("OSMDroid: %s\n", dlerror());
-        return 0;
-    }
-
-    printf("OSMDroid: width=%i;height=%i, reserving %i bytes for frame buffer\n", savedWidth,
-           savedHeight,
-           savedWidth * 4 * savedHeight);
-    gbuffer = malloc(savedWidth * 4 * savedHeight);
-    if (gbuffer) {
-        printf("OSMDroid: created frame buffer\n");
-        return 1;
-    } else {
-        printf("OSMDroid: can't generate frame buffer\n");
-        return 0;
-    }
+    xrEglInit();
 }
 
 void pojavSetWindowHint(int hint, int value) {
@@ -772,18 +714,27 @@ void pojavPumpEvents(void* window) {
 
 int32_t stride;
 void pojavSwapBuffers() {
-    return;
+    eglSwapBuffers(xrEglDisplay, xrEglSurface);
 }
 
 bool locked = false;
 void pojavMakeCurrent(void* window) {
-    printf("OSMDroid: making current\n");
-    OSMesaMakeCurrent_p((OSMesaContext) window, gbuffer, GL_UNSIGNED_BYTE, savedWidth,
-                        savedHeight);
+    EGLBoolean success = eglMakeCurrent(
+            xrEglDisplay,
+            xrEglSurface,
+            xrEglSurface,
+            window
+    );
 
-    printf("OSMDroid: vendor: %s\n", glGetString_p(GL_VENDOR));
-    printf("OSMDroid: renderer: %s\n", glGetString_p(GL_RENDERER));
-    return;
+    xrEglContext = window;
+
+    if (success == EGL_FALSE) {
+        printf("EGLBridge: Error: eglMakeCurrent() failed: %p\n", eglGetError());
+    } else {
+        printf("EGLBridge: eglMakeCurrent() succeed!\n");
+    }
+
+    RegalMakeCurrent(window);
 }
 
 JNIEXPORT JNICALL jlong
@@ -802,31 +753,16 @@ Java_pojlib_util_JREUtils_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
 }
 
 void* pojavCreateContext(void* contextSrc) {
-    printf("OSMDroid: generating context\n");
+    const EGLint ctx_attribs[] = {
+            EGL_CONTEXT_CLIENT_VERSION, 3,
+            EGL_NONE
+    };
+    EGLContext* ctx = eglCreateContext(xrEglDisplay, xrConfig, contextSrc, ctx_attribs);
 
-    int attribs[100], n = 0;
-
-    attribs[n++] = OSMESA_FORMAT;
-    attribs[n++] = OSMESA_RGBA;
-    attribs[n++] = OSMESA_DEPTH_BITS;
-    attribs[n++] = 24;
-    attribs[n++] = OSMESA_STENCIL_BITS;
-    attribs[n++] = 8;
-    attribs[n++] = OSMESA_ACCUM_BITS;
-    attribs[n++] = 0;
-    attribs[n++] = OSMESA_PROFILE;
-    attribs[n++] = OSMESA_CORE_PROFILE;
-    attribs[n++] = 0;
-
-    void *ctx = OSMesaCreateContextAttribs_p(attribs, contextSrc);
-    printf("OSMDroid: context=%p\n", ctx);
+    printf("XREGLBridge: %p\n", ctx);
     return ctx;
 }
 
-JNIEXPORT void JNICALL Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *env, jclass clazz) {
-    printf("regal removed\n");
-    abort();
-}
 JNIEXPORT JNICALL jlong
 Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
     return (jlong) &gbuffer;
@@ -839,5 +775,5 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
     return ret;
 }
 void pojavSwapInterval(int interval) {
-    return;
+    eglSwapInterval(xrEglDisplay, interval);
 }

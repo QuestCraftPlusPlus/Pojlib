@@ -51,7 +51,7 @@ public class API_V1 {
     public static String currentDownload;
     public static String profileImage;
     public static String profileName;
-    public static String memoryValue;
+    public static String memoryValue = "1800";
     public static boolean developerMods;
     public static MinecraftAccount currentAcc;
     public static boolean advancedDebugger;

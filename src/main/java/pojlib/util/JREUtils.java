@@ -142,15 +142,7 @@ public class JREUtils {
         envMap.put("HOME", Constants.MC_DIR);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("VR_MODEL", API_V1.model);
-        envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
-        envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-        envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
-        envMap.put("GALLIUM_DRIVER", "zink");
-        envMap.put("LIBGL_DEBUG", "verbose");
-        envMap.put("LIBGL_DRIVERS_PATH", sNativeLibDir);
-        envMap.put("GALLIUM_THREAD", "0");
-        envMap.put("MESA_LOG_FILE", Constants.MC_DIR + "/mesa-log.txt");
-        envMap.put("POJLIB_RENDERER", "vulkan_zink");
+        envMap.put("POJLIB_RENDERER", "regal");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE-17/bin:" + Os.getenv("PATH"));
@@ -291,7 +283,7 @@ public class JREUtils {
      * @return The name of the loaded library
      */
     public static String loadGraphicsLibrary(){
-        return "libOSMesa_8.so";
+        return "libtinywrapper.so";
     }
 
     public static native long getEGLContextPtr();

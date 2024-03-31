@@ -23,6 +23,11 @@ void(*gles_glGetTexLevelParameteriv)(GLenum target, GLint level, GLenum pname, G
 void(*gles_glShaderSource)(GLuint shader, GLsizei count, const GLchar * const *string, const GLint *length);
 GLuint (*gles_glCreateShader) (GLenum shaderType);
 void(*gles_glTexImage2D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data);
+void(*gles_glDrawElementsBaseVertex)(GLenum mode,
+                                  GLsizei count,
+                                  GLenum type,
+                                  void *indices,
+                                  GLint basevertex);
 
 void *glMapBuffer(GLenum target, GLenum access) {
     // Use: GL_EXT_map_buffer_range
@@ -103,7 +108,6 @@ void glShaderSource(GLuint shader, GLsizei count, const GLchar * const *string, 
 
     shaderc_compile_options_t opts = shaderc_compile_options_initialize();
     shaderc_compile_options_set_forced_version_profile(opts, 450, shaderc_profile_core);
-    shaderc_compile_options_set_auto_bind_uniforms(opts, true);
     shaderc_compile_options_set_auto_map_locations(opts, true);
     shaderc_compile_options_set_target_env(opts, shaderc_target_env_opengl, shaderc_env_version_opengl_4_5);
 
@@ -198,5 +202,23 @@ void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei widt
         // swizzle_internalformat((GLenum *) &internalformat, format, type);
     } else {
         gles_glTexImage2D(target, level, internalformat, width, height, border, format, type, data);
+    }
+}
+
+// Sodium
+GLAPI void GLAPIENTRY glMultiDrawElementsBaseVertex(	GLenum mode,
+                                       const GLsizei *count,
+                                       GLenum type,
+                                       const void * const *indices,
+                                       GLsizei drawcount,
+                                       const GLint *basevertex) {
+    LOOKUP_FUNC(glDrawElementsBaseVertex);
+    for (int i = 0; i < drawcount; i++) {
+        if (count[i] > 0)
+            gles_glDrawElementsBaseVertex(mode,
+                                     count[i],
+                                     type,
+                                     indices[i],
+                                     basevertex[i]);
     }
 }

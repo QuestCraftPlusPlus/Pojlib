@@ -184,8 +184,13 @@ public class JREUtils {
             userArgs.add("-Xms" + API_V1.memoryValue + "M");
             userArgs.add("-Xmx" + API_V1.memoryValue + "M");
         } else {
-            userArgs.add("-Xms" + 1800 + "M");
-            userArgs.add("-Xmx" + 1800 + "M");
+            if (API_V1.model.equals("Oculus Headset1")) {
+                userArgs.add("-Xms" + 4096 + "M");
+                userArgs.add("-Xmx" + 4096 + "M");
+            } else {
+                userArgs.add("-Xms" + 2048 + "M");
+                userArgs.add("-Xmx" + 2048 + "M");
+            }
         }
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);

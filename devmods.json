@@ -15,8 +15,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.5",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/InGKdfel/sodium-fabric-mc1.20.3-0.5.5.jar"
+					"version": "0.5.8",
+					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.4-0.5.8/sodium-fabric-0.5.8+mc1.20.4.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -85,8 +85,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.5",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/pmgeU5yX/sodium-fabric-mc1.20.2-0.5.5.jar"
+					"version": "0.5.5.1",
+					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.2-0.5.5/sodium-fabric-mc1.20.2-0.5.5.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -170,8 +170,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.2",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/6SSPmLc9/sodium-fabric-mc1.20.1-0.5.2.jar"
+					"version": "0.5.8",
+					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.1-0.5.8/sodium-fabric-0.5.8+mc1.20.1.jar"
 				},
 				{
 					"slug": "Cloth-Config",

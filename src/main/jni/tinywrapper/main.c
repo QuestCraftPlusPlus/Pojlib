@@ -5,7 +5,6 @@
 #include <malloc.h>
 
 #include "GL/gl.h"
-#include "GLES3/gl32.h"
 #include "SPIRVCross/include/spirv_cross_c.h"
 #include "shaderc/include/shaderc.h"
 #include "string_utils.h"
@@ -28,9 +27,15 @@ void(*gles_glDrawElementsBaseVertex)(GLenum mode,
                                   GLenum type,
                                   void *indices,
                                   GLint basevertex);
+void (*gles_glGetBufferParameteriv) (GLenum target, GLenum pname, GLint *params);
+void * (*gles_glMapBufferRange) (GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
+const GLubyte * (*gles_glGetString) (GLenum name);
+
 
 void *glMapBuffer(GLenum target, GLenum access) {
     // Use: GL_EXT_map_buffer_range
+    LOOKUP_FUNC(glGetBufferParameteriv);
+    LOOKUP_FUNC(glMapBufferRange);
 
     GLenum access_range;
     GLint length;
@@ -68,8 +73,8 @@ void *glMapBuffer(GLenum target, GLenum access) {
             break;
     }
 
-    glGetBufferParameteriv(target, GL_BUFFER_SIZE, &length);
-    return glMapBufferRange(target, 0, length, access_range);
+    gles_glGetBufferParameteriv(target, GL_BUFFER_SIZE, &length);
+    return gles_glMapBufferRange(target, 0, length, access_range);
 }
 
 static GLenum currShaderType = GL_VERTEX_SHADER;
@@ -109,6 +114,7 @@ void glShaderSource(GLuint shader, GLsizei count, const GLchar * const *string, 
     shaderc_compile_options_t opts = shaderc_compile_options_initialize();
     shaderc_compile_options_set_forced_version_profile(opts, 450, shaderc_profile_core);
     shaderc_compile_options_set_auto_map_locations(opts, true);
+    shaderc_compile_options_set_auto_bind_uniforms(opts, true);
     shaderc_compile_options_set_target_env(opts, shaderc_target_env_opengl, shaderc_env_version_opengl_4_5);
 
     shaderc_compilation_result_t outSPIRVRes = shaderc_compile_into_spv(compiler, *string,
@@ -220,5 +226,18 @@ GLAPI void GLAPIENTRY glMultiDrawElementsBaseVertex(	GLenum mode,
                                      type,
                                      indices[i],
                                      basevertex[i]);
+    }
+}
+
+const GLubyte * glGetString(GLenum name) {
+    LOOKUP_FUNC(glGetString);
+
+    switch (name) {
+        case GL_VERSION:
+            return "4.6";
+        case GL_SHADING_LANGUAGE_VERSION:
+            return "4.5";
+        default:
+            return gles_glGetString(name);
     }
 }

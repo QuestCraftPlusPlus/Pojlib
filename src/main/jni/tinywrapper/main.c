@@ -209,8 +209,8 @@ void glTexParameterf(GLenum target, GLenum pname, GLfloat param) {
 void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data) {
     LOOKUP_FUNC(glTexImage2D)
 
-    // Regal doesn't handle Depth textures well
-    // Convert it to sized GLES formats
+    // Regal doesn't handle depth formats well
+    // Convert it to sized GLES formats instead
     if(internalformat == GL_DEPTH_COMPONENT) {
         switch (type) {
             case GL_UNSIGNED_SHORT:

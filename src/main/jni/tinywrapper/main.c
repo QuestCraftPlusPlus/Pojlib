@@ -215,21 +215,28 @@ void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei widt
         switch (type) {
             case GL_UNSIGNED_SHORT:
                 internalformat = GL_DEPTH_COMPONENT16;
+                break;
             case GL_UNSIGNED_INT:
                 internalformat = GL_DEPTH_COMPONENT24;
+                break;
             case GL_FLOAT:
                 internalformat = GL_DEPTH_COMPONENT32F;
+                break;
             default:
                 printf("Depth texture type %d failed for depth component!\n", type);
+                break;
         }
     } else if(internalformat == GL_DEPTH_STENCIL) {
         switch (type) {
             case GL_UNSIGNED_INT:
                 internalformat = GL_DEPTH24_STENCIL8;
+                break;
             case GL_FLOAT:
                 internalformat = GL_DEPTH32F_STENCIL8;
+                break;
             default:
                 printf("Depth texture type %d failed for depth stencil!\n", type);
+                break;
         }
     }
 

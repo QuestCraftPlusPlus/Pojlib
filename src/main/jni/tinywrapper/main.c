@@ -30,7 +30,7 @@ void(*gles_glDrawElementsBaseVertex)(GLenum mode,
 void (*gles_glGetBufferParameteriv) (GLenum target, GLenum pname, GLint *params);
 void * (*gles_glMapBufferRange) (GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
 const GLubyte * (*gles_glGetString) (GLenum name);
-
+void (*gles_glTexParameterf) (GLenum target, GLenum pname, GLfloat param);
 
 void *glMapBuffer(GLenum target, GLenum access) {
     // Use: GL_EXT_map_buffer_range
@@ -194,8 +194,45 @@ void glGetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *p
     }
 }
 
+void glTexParameterf(GLenum target, GLenum pname, GLfloat param) {
+    LOOKUP_FUNC(glTexParameterf);
+
+    // Not supported, crashes some mods that check
+    // for OpenGL errors
+    if(pname == GL_TEXTURE_LOD_BIAS_EXT) {
+        return;
+    }
+
+    gles_glTexParameterf(target, pname, param);
+}
+
 void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data) {
     LOOKUP_FUNC(glTexImage2D)
+
+    // Regal doesn't handle Depth textures well
+    // Convert it to sized GLES formats
+    if(internalformat == GL_DEPTH_COMPONENT) {
+        switch (type) {
+            case GL_UNSIGNED_SHORT:
+                internalformat = GL_DEPTH_COMPONENT16;
+            case GL_UNSIGNED_INT:
+                internalformat = GL_DEPTH_COMPONENT24;
+            case GL_FLOAT:
+                internalformat = GL_DEPTH_COMPONENT32F;
+            default:
+                printf("Depth texture type %d failed for depth component!\n", type);
+        }
+    } else if(internalformat == GL_DEPTH_STENCIL) {
+        switch (type) {
+            case GL_UNSIGNED_INT:
+                internalformat = GL_DEPTH24_STENCIL8;
+            case GL_FLOAT:
+                internalformat = GL_DEPTH32F_STENCIL8;
+            default:
+                printf("Depth texture type %d failed for depth stencil!\n", type);
+        }
+    }
+
     if (isProxyTexture(target)) {
         if (!maxTextureSize) {
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -212,7 +249,7 @@ void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei widt
 }
 
 // Sodium
-GLAPI void GLAPIENTRY glMultiDrawElementsBaseVertex(	GLenum mode,
+void glMultiDrawElementsBaseVertex(	GLenum mode,
                                        const GLsizei *count,
                                        GLenum type,
                                        const void * const *indices,

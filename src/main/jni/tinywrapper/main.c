@@ -196,6 +196,31 @@ void glGetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *p
 
 void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data) {
     LOOKUP_FUNC(glTexImage2D)
+
+    // Regal doesn't handle Depth textures well
+    // Convert it to sized GLES formats
+    if(internalformat == GL_DEPTH_COMPONENT) {
+        switch (type) {
+            case GL_UNSIGNED_SHORT:
+                internalformat = GL_DEPTH_COMPONENT16;
+            case GL_UNSIGNED_INT:
+                internalformat = GL_DEPTH_COMPONENT24;
+            case GL_FLOAT:
+                internalformat = GL_DEPTH_COMPONENT32F;
+            default:
+                printf("Depth texture type %d failed for depth component!\n", type);
+        }
+    } else if(internalformat == GL_DEPTH_STENCIL) {
+        switch (type) {
+            case GL_UNSIGNED_INT:
+                internalformat = GL_DEPTH24_STENCIL8;
+            case GL_FLOAT:
+                internalformat = GL_DEPTH32F_STENCIL8;
+            default:
+                printf("Depth texture type %d failed for depth stencil!\n", type);
+        }
+    }
+
     if (isProxyTexture(target)) {
         if (!maxTextureSize) {
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);

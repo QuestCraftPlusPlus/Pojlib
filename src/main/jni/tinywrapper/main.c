@@ -30,7 +30,7 @@ void(*gles_glDrawElementsBaseVertex)(GLenum mode,
 void (*gles_glGetBufferParameteriv) (GLenum target, GLenum pname, GLint *params);
 void * (*gles_glMapBufferRange) (GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
 const GLubyte * (*gles_glGetString) (GLenum name);
-
+void (*gles_glTexParameterf) (GLenum target, GLenum pname, GLfloat param);
 
 void *glMapBuffer(GLenum target, GLenum access) {
     // Use: GL_EXT_map_buffer_range
@@ -194,6 +194,18 @@ void glGetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *p
     }
 }
 
+void glTexParameterf(GLenum target, GLenum pname, GLfloat param) {
+    LOOKUP_FUNC(glTexParameterf);
+
+    // Not supported, crashes some mods that check
+    // for OpenGL errors
+    if(pname == GL_TEXTURE_LOD_BIAS_EXT) {
+        return;
+    }
+
+    gles_glTexParameterf(target, pname, param);
+}
+
 void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data) {
     LOOKUP_FUNC(glTexImage2D)
 
@@ -237,7 +249,7 @@ void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei widt
 }
 
 // Sodium
-GLAPI void GLAPIENTRY glMultiDrawElementsBaseVertex(	GLenum mode,
+void glMultiDrawElementsBaseVertex(	GLenum mode,
                                        const GLsizei *count,
                                        GLenum type,
                                        const void * const *indices,

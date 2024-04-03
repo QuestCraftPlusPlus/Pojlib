@@ -32,6 +32,7 @@ public class DownloadUtils {
         while (true) {
             try {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("User-Agent", "QuestCraft");
                 conn.setConnectTimeout(10000);
                 conn.setDoInput(true);
                 conn.connect();

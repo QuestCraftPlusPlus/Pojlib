@@ -1,13 +1,11 @@
 package pojlib.util;
 
 import android.app.Activity;
-import android.os.Environment;
 
-import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
 import com.microsoft.aad.msal4j.DeviceCode;
 import com.microsoft.aad.msal4j.DeviceCodeFlowParameters;
+import com.microsoft.aad.msal4j.IAccount;
 import com.microsoft.aad.msal4j.IAuthenticationResult;
-import com.microsoft.aad.msal4j.ITokenCacheAccessAspect;
 import com.microsoft.aad.msal4j.PublicClientApplication;
 import com.microsoft.aad.msal4j.SilentParameters;
 
@@ -18,7 +16,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -59,15 +56,23 @@ public class LoginHelper {
     public static MinecraftAccount getNewToken(Activity activity) {
         CompletableFuture<IAuthenticationResult> future;
         try {
-            future = pca.acquireTokenSilently(SilentParameters.builder(Set.of("XboxLive.SignIn", "XboxLive.offline_access"), pca.getAccounts().join().iterator().next()).build());
+            Set<IAccount> accounts = pca.getAccounts().join();
+            if (accounts.isEmpty()) {
+                System.out.println("Error!: QuestCraft account not set!");
+                beginLogin(activity);
+                return null;
+            }
+            IAccount account = accounts.iterator().next();
+            future = pca.acquireTokenSilently(SilentParameters.builder(Set.of("XboxLive.SignIn", "XboxLive.offline_access"), account).build());
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+
         try {
             IAuthenticationResult res = future.get();
-            while (res.account() == null) ;
             return MinecraftAccount.load(activity.getFilesDir() + "/accounts", res.accessToken(), String.valueOf(res.expiresOnDate().getTime()));
         } catch (ExecutionException | InterruptedException e) {
+            Thread.currentThread().interrupt();
             return null;
         }
     }

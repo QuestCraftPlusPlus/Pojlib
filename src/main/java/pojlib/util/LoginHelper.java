@@ -58,13 +58,14 @@ public class LoginHelper {
         try {
             Set<IAccount> accounts = pca.getAccounts().join();
             if (accounts.isEmpty()) {
-                System.out.println("Error!: QuestCraft account not set!");
+                Logger.getInstance().appendToLog("Error!: QuestCraft account not set!");
                 beginLogin(activity);
-                return null;
+                throw new RuntimeException("Error!: QuestCraft account not set!");
             }
             IAccount account = accounts.iterator().next();
             future = pca.acquireTokenSilently(SilentParameters.builder(Set.of("XboxLive.SignIn", "XboxLive.offline_access"), account).build());
         } catch (MalformedURLException e) {
+            Logger.getInstance().appendToLog(e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -72,8 +73,8 @@ public class LoginHelper {
             IAuthenticationResult res = future.get();
             return MinecraftAccount.load(activity.getFilesDir() + "/accounts", res.accessToken(), String.valueOf(res.expiresOnDate().getTime()));
         } catch (ExecutionException | InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return null;
+            Logger.getInstance().appendToLog(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

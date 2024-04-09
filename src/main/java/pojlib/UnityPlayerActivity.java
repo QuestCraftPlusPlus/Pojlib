@@ -147,18 +147,12 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     {
         super.onStop();
 
-        if (!MultiWindowSupport.getAllowResizableWindow(this))
-            return;
-
         mUnityPlayer.pause();
     }
 
     @Override protected void onStart()
     {
         super.onStart();
-
-        if (!MultiWindowSupport.getAllowResizableWindow(this))
-            return;
 
         mUnityPlayer.resume();
     }
@@ -168,11 +162,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     {
         super.onPause();
 
-        MultiWindowSupport.saveMultiWindowMode(this);
-
-        if (MultiWindowSupport.getAllowResizableWindow(this))
-            return;
-
         mUnityPlayer.pause();
     }
 
@@ -180,9 +169,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     @Override protected void onResume()
     {
         super.onResume();
-
-        if (MultiWindowSupport.getAllowResizableWindow(this) && !MultiWindowSupport.isMultiWindowModeChangedToTrue(this))
-            return;
 
         mUnityPlayer.resume();
     }

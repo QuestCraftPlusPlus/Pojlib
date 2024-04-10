@@ -2,6 +2,8 @@ package pojlib.account;
 
 import static pojlib.account.Msa.checkMcProfile;
 
+import android.app.Activity;
+
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -33,8 +35,8 @@ public class MinecraftAccount {
         return account;
     }
 
-    public static boolean logout(String path) {
-        File accountFile = new File(path + "/account.json");
+    public static boolean logout(Activity activity) {
+        File accountFile = new File(activity.getFilesDir() + "/account.json");
         return accountFile.delete();
     }
 

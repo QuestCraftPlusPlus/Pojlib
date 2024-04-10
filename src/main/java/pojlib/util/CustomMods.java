@@ -4,7 +4,7 @@ public class CustomMods {
     public InstanceMods[] instances;
 
     public static class InstanceMods {
-        public String version;
+        public String name;
         public ModInfo[] mods;
     }
 

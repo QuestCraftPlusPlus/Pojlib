@@ -36,7 +36,7 @@ public class MinecraftAccount {
     }
 
     public static boolean logout(Activity activity) {
-        File accountFile = new File(activity.getFilesDir() + "/account.json");
+        File accountFile = new File(activity.getFilesDir() + "/accounts/account.json");
         return accountFile.delete();
     }
 

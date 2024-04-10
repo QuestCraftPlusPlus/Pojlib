@@ -1,7 +1,5 @@
 package pojlib.util;
 
-import java.util.List;
-
 public class CoreMods {
     public Version[] versions;
 

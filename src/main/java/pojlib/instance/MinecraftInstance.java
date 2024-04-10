@@ -191,7 +191,7 @@ public class MinecraftInstance {
                 if(customMods.exists()) {
                     assert customModsObj != null;
                     for(CustomMods.InstanceMods instMods : customModsObj.instances) {
-                        if(!instMods.version.equals(this.versionName)) {
+                        if(!instMods.name.equals(this.versionName)) {
                             continue;
                         }
                         for(CustomMods.ModInfo info : instMods.mods) {
@@ -249,7 +249,7 @@ public class MinecraftInstance {
             CustomMods mods = new CustomMods();
             mods.instances = new CustomMods.InstanceMods[1];
             mods.instances[0] = new CustomMods.InstanceMods();
-            mods.instances[0].version = this.versionName;
+            mods.instances[0].name = this.versionName;
             mods.instances[0].mods = new CustomMods.ModInfo[1];
             mods.instances[0].mods[0] = new CustomMods.ModInfo();
             mods.instances[0].mods[0].name = name;
@@ -262,7 +262,7 @@ public class MinecraftInstance {
 
         CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
         for(CustomMods.InstanceMods instance : mods.instances) {
-            if(instance.version.equals(this.versionName)) {
+            if(instance.name.equals(this.versionName)) {
                 ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
                 CustomMods.ModInfo info = new CustomMods.ModInfo();
                 info.name = name;
@@ -282,7 +282,7 @@ public class MinecraftInstance {
         // If instance does not exist in file, create it
         ArrayList<CustomMods.InstanceMods> instanceInfo = new ArrayList<>(Arrays.asList(mods.instances));
         CustomMods.InstanceMods instMods = new CustomMods.InstanceMods();
-        instMods.version = this.versionName;
+        instMods.name = this.versionName;
         instMods.mods = new CustomMods.ModInfo[1];
         instMods.mods[0] = new CustomMods.ModInfo();
         instMods.mods[0].name = name;
@@ -304,7 +304,7 @@ public class MinecraftInstance {
         CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
         assert mods != null;
         for(CustomMods.InstanceMods instance : mods.instances) {
-            if(instance.version.equals(this.versionName)) {
+            if(instance.name.equals(this.versionName)) {
                 for (CustomMods.ModInfo info : instance.mods) {
                     // Check if core mod is already included
                     File modsOld = new File(Constants.USER_HOME + "/mods.json");
@@ -355,7 +355,7 @@ public class MinecraftInstance {
         CustomMods mods = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomMods.class);
         assert mods != null;
         for(CustomMods.InstanceMods instance : mods.instances) {
-            if(instance.version.equals(this.versionName)) {
+            if(instance.name.equals(this.versionName)) {
                 for (CustomMods.ModInfo info : instance.mods) {
                     if(info.name.equals(name)) {
                         ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));

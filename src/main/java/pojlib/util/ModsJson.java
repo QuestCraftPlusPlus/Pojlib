@@ -1,13 +1,12 @@
 package pojlib.util;
 
-import java.util.List;
-
-public class CoreMods {
+public class ModsJson {
     public Version[] versions;
 
     public static class Version {
         public String name;
-        public Mod[] mods;
+        public Mod[] coreMods;
+        public Mod[] defaultMods;
     }
 
     public static class Mod {

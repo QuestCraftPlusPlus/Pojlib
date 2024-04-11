@@ -22,8 +22,8 @@ import pojlib.install.MinecraftMeta;
 import pojlib.install.QuiltMeta;
 import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
-import pojlib.util.CoreMods;
-import pojlib.util.CustomMods;
+import pojlib.util.ModsJson;
+import pojlib.util.InstanceJson;
 import pojlib.util.DownloadUtils;
 import pojlib.util.FileUtil;
 import pojlib.util.GsonUtils;
@@ -135,6 +135,7 @@ public class MinecraftInstance {
             instancesJson.addProperty("instanceVersion", instance.versionName);
             instancesJson.addProperty("gameDir", instance.gameDir);
 
+
             instancesArray.add(instancesJson);
 
             GsonUtils.objectToJsonFile(instancesFilePath, instancesArray);
@@ -172,72 +173,20 @@ public class MinecraftInstance {
         return allArgs;
     }
 
-    public void updateOrDownloadMods() {
+    public void updateOrDownloadMods() throws Exception{
         API_V1.finishedDownloading = false;
         new Thread(() -> {
-            try {
-                File mods = new File(Constants.USER_HOME + "/mods-new.json");
-                File modsOld = new File(Constants.USER_HOME + "/mods.json");
-                File customMods = new File(Constants.USER_HOME + "/custom_mods.json");
+             File coreMods = new File(Constants.USER_HOME + "/coreMods.json");
+            File instances = new File(Constants.USER_HOME + "/instances.json");
 
-                if (API_V1.developerMods) {
-                    DownloadUtils.downloadFile(DEV_MODS, mods);
-                } else { DownloadUtils.downloadFile(MODS, mods); }
-
-                CustomMods customModsObj = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomMods.class);
-                CoreMods obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), CoreMods.class);
-                CoreMods objOld = GsonUtils.jsonFileToObject(modsOld.getAbsolutePath(), CoreMods.class);
-
-                if(customMods.exists()) {
-                    assert customModsObj != null;
-                    for(CustomMods.InstanceMods instMods : customModsObj.instances) {
-                        if(!instMods.version.equals(this.versionName)) {
-                            continue;
-                        }
-                        for(CustomMods.ModInfo info : instMods.mods) {
-                            API_V1.currentDownload = info.name;
-                            DownloadUtils.downloadFile(info.url, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + info.name + ".jar"));
-                        }
-                    }
-                }
-                boolean downloadAll = !(new File(Constants.MC_DIR + "/mods/" + this.versionName).exists());
-
-                if(modsOld.exists()) {
-                    for(CoreMods.Version version : objOld.versions) {
-                        if(!version.name.equals(this.versionName)) {
-                            continue;
-                        }
-                        for(CoreMods.Mod mod : version.mods) {
-                            for(CoreMods.Version newVer : obj.versions) {
-                                if (!newVer.name.equals(this.versionName)) {
-                                    continue;
-                                }
-                                for(CoreMods.Mod newMod : newVer.mods) {
-                                    if((!newMod.version.equals(mod.version) || downloadAll) && newMod.slug.equals(mod.slug)) {
-                                        API_V1.currentDownload = newMod.slug;
-                                        DownloadUtils.downloadFile(newMod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + newMod.slug + ".jar"));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    for(CoreMods.Version version : obj.versions) {
-                        if (!version.name.equals(this.versionName)) {
-                            continue;
-                        }
-                        for(CoreMods.Mod mod : version.mods) {
-                            API_V1.currentDownload = mod.slug;
-                            DownloadUtils.downloadFile(mod.download_link, new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + mod.slug + ".jar"));
-                        }
-                    }
-                }
-
-                FileUtils.copyFile(mods, modsOld);
-                mods.delete();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (API_V1.developerMods) {
+                DownloadUtils.downloadFile(DEV_MODS, coreMods);
+            } else {
+                DownloadUtils.downloadFile(MODS, coreMods);
             }
+
+            CustomModsJson customModsObj = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomModsJson.class);
+            ModsJson obj = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), ModsJson.class);
 
             API_V1.finishedDownloading = true;
         }).start();
@@ -246,12 +195,12 @@ public class MinecraftInstance {
     public void addCustomMod(String name, String version, String url) {
         File customMods = new File(Constants.MC_DIR, CUSTOM_MODS);
         if(!customMods.exists()) {
-            CustomMods mods = new CustomMods();
-            mods.instances = new CustomMods.InstanceMods[1];
-            mods.instances[0] = new CustomMods.InstanceMods();
+            CustomModsJson mods = new CustomModsJson();
+            mods.instances = new CustomModsJson.InstanceMods[1];
+            mods.instances[0] = new CustomModsJson.InstanceMods();
             mods.instances[0].version = this.versionName;
-            mods.instances[0].mods = new CustomMods.ModInfo[1];
-            mods.instances[0].mods[0] = new CustomMods.ModInfo();
+            mods.instances[0].mods = new CustomModsJson.ModInfo[1];
+            mods.instances[0].mods[0] = new CustomModsJson.ModInfo();
             mods.instances[0].mods[0].name = name;
             mods.instances[0].mods[0].version = version;
             mods.instances[0].mods[0].url = url;
@@ -260,17 +209,17 @@ public class MinecraftInstance {
             return;
         }
 
-        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
-        for(CustomMods.InstanceMods instance : mods.instances) {
+        CustomModsJson mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomModsJson.class);
+        for(CustomModsJson.InstanceMods instance : mods.instances) {
             if(instance.version.equals(this.versionName)) {
-                ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
-                CustomMods.ModInfo info = new CustomMods.ModInfo();
+                ArrayList<CustomModsJson.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
+                CustomModsJson.ModInfo info = new CustomModsJson.ModInfo();
                 info.name = name;
                 info.version = version;
                 info.url = url;
                 modInfoArray.add(info);
 
-                CustomMods.ModInfo[] infos = new CustomMods.ModInfo[modInfoArray.size()];
+                CustomModsJson.ModInfo[] infos = new CustomModsJson.ModInfo[modInfoArray.size()];
                 infos = modInfoArray.toArray(infos);
 
                 instance.mods = infos;
@@ -280,18 +229,18 @@ public class MinecraftInstance {
         }
 
         // If instance does not exist in file, create it
-        ArrayList<CustomMods.InstanceMods> instanceInfo = new ArrayList<>(Arrays.asList(mods.instances));
-        CustomMods.InstanceMods instMods = new CustomMods.InstanceMods();
+        ArrayList<CustomModsJson.InstanceMods> instanceInfo = new ArrayList<>(Arrays.asList(mods.instances));
+        CustomModsJson.InstanceMods instMods = new CustomModsJson.InstanceMods();
         instMods.version = this.versionName;
-        instMods.mods = new CustomMods.ModInfo[1];
-        instMods.mods[0] = new CustomMods.ModInfo();
+        instMods.mods = new CustomModsJson.ModInfo[1];
+        instMods.mods[0] = new CustomModsJson.ModInfo();
         instMods.mods[0].name = name;
         instMods.mods[0].version = version;
         instMods.mods[0].url = url;
         instanceInfo.add(instanceInfo.size(), instMods);
 
         // Set the array
-        mods.instances = instanceInfo.toArray(new CustomMods.InstanceMods[0]);
+        mods.instances = instanceInfo.toArray(new CustomModsJson.InstanceMods[0]);
         GsonUtils.objectToJsonFile(customMods.getAbsolutePath(), mods);
     }
 
@@ -301,11 +250,11 @@ public class MinecraftInstance {
             return false;
         }
 
-        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomMods.class);
+        CustomModsJson mods = GsonUtils.jsonFileToObject(customMods.getPath(), CustomModsJson.class);
         assert mods != null;
-        for(CustomMods.InstanceMods instance : mods.instances) {
+        for(CustomModsJson.InstanceMods instance : mods.instances) {
             if(instance.version.equals(this.versionName)) {
-                for (CustomMods.ModInfo info : instance.mods) {
+                for (CustomModsJson.ModInfo info : instance.mods) {
                     // Check if core mod is already included
                     File modsOld = new File(Constants.USER_HOME + "/mods.json");
                     if(!modsOld.exists()) {
@@ -352,17 +301,17 @@ public class MinecraftInstance {
             }
         }
 
-        CustomMods mods = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomMods.class);
+        CustomModsJson mods = GsonUtils.jsonFileToObject(customMods.getAbsolutePath(), CustomModsJson.class);
         assert mods != null;
-        for(CustomMods.InstanceMods instance : mods.instances) {
+        for(CustomModsJson.InstanceMods instance : mods.instances) {
             if(instance.version.equals(this.versionName)) {
-                for (CustomMods.ModInfo info : instance.mods) {
+                for (CustomModsJson.ModInfo info : instance.mods) {
                     if(info.name.equals(name)) {
-                        ArrayList<CustomMods.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
+                        ArrayList<CustomModsJson.ModInfo> modInfoArray = new ArrayList<>(Arrays.asList(instance.mods));
                         File mod = new File(Constants.MC_DIR + "/mods/" + this.versionName + "/" + info.name + ".jar");
                         mod.delete();
                         modInfoArray.remove(info);
-                        instance.mods = modInfoArray.toArray(new CustomMods.ModInfo[0]);
+                        instance.mods = modInfoArray.toArray(new CustomModsJson.ModInfo[0]);
                         GsonUtils.objectToJsonFile(customMods.getAbsolutePath(), mods);
                         return true;
                     }

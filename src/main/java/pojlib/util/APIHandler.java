@@ -4,7 +4,6 @@ import static pojlib.instance.MinecraftInstance.DEV_MODS;
 import static pojlib.instance.MinecraftInstance.MODS;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 
 import pojlib.api.API_V1;
 import pojlib.install.MinecraftMeta;
-import pojlib.instance.MinecraftInstance;
 
 public class APIHandler {
     public final String baseUrl;
@@ -113,8 +111,8 @@ public class APIHandler {
             DownloadUtils.downloadFile(DEV_MODS, mods);
         } else { DownloadUtils.downloadFile(MODS, mods); }
 
-        CoreMods modsJson = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), CoreMods.class);
-        for(CoreMods.Version version : modsJson.versions) {
+        ModsJson modsJson = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), ModsJson.class);
+        for(ModsJson.Version version : modsJson.versions) {
             MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
             for(MinecraftMeta.MinecraftVersion mcVer : versions) {
                 if(mcVer.id.equals(version.name)) {

@@ -54,6 +54,7 @@ public class API_V1 {
     public static String memoryValue = "1800";
     public static boolean developerMods;
     public static MinecraftAccount currentAcc;
+
     public static boolean advancedDebugger;
 
 
@@ -126,11 +127,11 @@ public class API_V1 {
     /**
      * Logs the user out
      *
-     * @param home  The base directory where minecraft should be setup
+     * @param activity  The base directory where minecraft should be setup
      * @return      True if logout was successful
      */
-    public static boolean logout(String home) {
-        return MinecraftAccount.logout(home);
+    public static boolean logout(Activity activity) {
+        return MinecraftAccount.logout(activity);
     }
 
     public static void login(Activity activity)
@@ -159,6 +160,7 @@ public class API_V1 {
                 API_V1.profileName = API_V1.currentAcc.username;
             }
         }
+
         LoginHelper.beginLogin(activity);
     }
 }

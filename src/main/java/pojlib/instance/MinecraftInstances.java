@@ -100,7 +100,7 @@ public class MinecraftInstances {
                                 continue;
                             }
 
-                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.name);
+                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.name + ".jar");
                             DownloadUtils.downloadFile(info.url, mod);
                         }
                     }

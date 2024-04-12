@@ -49,21 +49,47 @@ public class API_V1 {
         return MinecraftMeta.getVersions();
     }
 
+    /**
+     * Add a mod to an instance
+     *
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     * @param gameDir .minecraft directory
+     * @param name Mod name
+     * @param version Mod version
+     * @param url Mod download URL
+     */
     public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
-                              String home, String name, String version, String url) {
-        InstanceHandler.addMod(instances, instance, home, name, version, url);
+                              String gameDir, String name, String version, String url) {
+        InstanceHandler.addMod(instances, instance, gameDir, name, version, url);
     }
 
+    /**
+     * Check if an instance has a mod
+     *
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     * @param name Mod name
+     * @return True if the mod is already in the instance
+     */
     public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
         return InstanceHandler.hasMod(instance, name);
     }
 
     /**
-     * @return if the operation succeeds
+     * Remove a mod from an instance
+     *
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     * @param gameDir .minecraft directory
+     * @param name Mod name
+     * @return True if the mod was deleted
      */
     public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
-                                    String home, String name) {
-        return InstanceHandler.removeMod(instances, instance, home, name);
+                                    String gameDir, String name) {
+        return InstanceHandler.removeMod(instances, instance, gameDir, name);
     }
 
     public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() throws IOException {
@@ -84,10 +110,26 @@ public class API_V1 {
         return InstanceHandler.load(gameDir);
     }
 
+    /**
+     * Load a specific instance by name
+     *
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
+     * @param name Name of the instance
+     * @return The instance, or null if an instance with name does not exist
+     */
     public static MinecraftInstances.Instance load(MinecraftInstances instances, String name) {
         return instances.load(name);
     }
 
+    /**
+     * Delete an instance
+     * NOTE: Only deletes the instance, not the correlated mods for said instance
+     *
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
+     * @param instance Instance object
+     * @param gameDir .minecraft directory.
+     * @return True if it deletes successfully, false otherwise.
+     */
     public static boolean deleteInstance(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir) {
         return InstanceHandler.delete(instances, instance, gameDir);
     }
@@ -98,6 +140,7 @@ public class API_V1 {
      * @param activity          The active android activity
      * @param instanceName      The name of the instance being created - can be anything, used for identification
      * @param home              The base directory where minecraft should be setup
+     * @param useDefaultMods    Use QC's default mods for the version (Core mods are automatically included)
      * @param minecraftVersion  The version of minecraft to install
      * @param modLoader         The mod loader to install
      * @return                  A minecraft instance object
@@ -115,6 +158,14 @@ public class API_V1 {
         }
     }
 
+    /**
+     * Launch an instance
+     *
+     * @param activity Android activity object
+     * @param account Account object
+     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
         InstanceHandler.launchInstance(activity, account, instance);
     }
@@ -122,13 +173,18 @@ public class API_V1 {
     /**
      * Logs the user out
      *
-     * @param activity  The base directory where minecraft should be setup
-     * @return      True if logout was successful
+     * @param activity The base directory where minecraft should be setup
+     * @return True if logout was successful
      */
     public static boolean logout(Activity activity) {
         return MinecraftAccount.logout(activity);
     }
 
+    /**
+     * Start the login process
+     *
+     * @param activity Android activity object
+     */
     public static void login(Activity activity)
     {
         ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);

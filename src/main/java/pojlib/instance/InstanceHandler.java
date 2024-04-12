@@ -156,6 +156,10 @@ public class InstanceHandler {
         }
 
         if(oldInfo != null) {
+            // Delete the mod
+            File modFile = new File(gameDir + "/mods/" + instance.modsDirName + "/" + name + ".jar");
+            modFile.delete();
+
             instance.mods.remove(oldInfo);
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
         }

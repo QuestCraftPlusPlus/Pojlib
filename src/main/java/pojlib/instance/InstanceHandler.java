@@ -27,8 +27,8 @@ import pojlib.util.Logger;
 import pojlib.util.VLoader;
 
 public class InstanceHandler {
-    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
-    public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
+    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/instance-refactor/mods.json";
+    public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/instance-refactor/devmods.json";
 
     public enum ModLoader {
         Fabric(0),
@@ -121,7 +121,15 @@ public class InstanceHandler {
 
     // Load an instance from json
     public static MinecraftInstances load(String gameDir) {
-        return GsonUtils.jsonFileToObject(gameDir + "/instances.json", MinecraftInstances.class);
+        MinecraftInstances instances;
+        try {
+            instances = GsonUtils.jsonFileToObject(gameDir + "/instances.json", MinecraftInstances.class);
+        } catch (Exception e) {
+            instances = new MinecraftInstances();
+        }
+        assert instances != null;
+
+        return instances;
     }
 
     public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance,

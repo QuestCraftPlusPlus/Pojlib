@@ -106,7 +106,7 @@ public class API_V1 {
      * @param gameDir           .minecraft directory.
      * @return                  A minecraft instance object
      */
-    public static MinecraftInstances loadAll(String gameDir) {
+    public static MinecraftInstances loadAll(String gameDir) throws IOException {
         return InstanceHandler.load(gameDir);
     }
 

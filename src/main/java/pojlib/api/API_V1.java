@@ -4,33 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import org.json.JSONException;
-
-import pojlib.UnityPlayerActivity;
 import pojlib.account.MinecraftAccount;
 import pojlib.install.*;
-import pojlib.instance.MinecraftInstance;
+import pojlib.instance.InstanceHandler;
+import pojlib.instance.MinecraftInstances;
 import pojlib.util.APIHandler;
-import pojlib.util.Constants;
 import pojlib.util.LoginHelper;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -65,20 +49,23 @@ public class API_V1 {
         return MinecraftMeta.getVersions();
     }
 
-    public static void addCustomMod(MinecraftInstance instance, String name, String version, String url) {
-        instance.addCustomMod(name, version, url);
+    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
+                              String home, String name, String version, String url) {
+        InstanceHandler.addMod(instances, instance, home, name, version, url);
     }
 
-    public static boolean hasMod(MinecraftInstance instance, String name) throws IOException {
-        return instance.hasCustomMod(name);
+    public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
+        return InstanceHandler.hasMod(instance, name);
     }
 
     /**
      * @return if the operation succeeds
      */
-    public static boolean removeMod(MinecraftInstance instance, String name) {
-        return instance.removeMod(name);
+    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
+                                    String home, String name) {
+        return InstanceHandler.removeMod(instances, instance, home, name);
     }
+
     public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() throws IOException {
         return APIHandler.getQCSupportedVersions();
     }
@@ -88,14 +75,17 @@ public class API_V1 {
     }
 
     /**
-     * Loads an instance from the filesystem.
+     * Loads all instances from the filesystem.
      *
-     * @param instanceName      The instance being loaded
      * @param gameDir           .minecraft directory.
      * @return                  A minecraft instance object
      */
-    public static MinecraftInstance load(String instanceName, String gameDir) {
-        return MinecraftInstance.load(instanceName, gameDir);
+    public static MinecraftInstances loadAll(String gameDir) {
+        return InstanceHandler.load(gameDir);
+    }
+
+    public static MinecraftInstances.Instance load(MinecraftInstances instances, String name) {
+        return instances.load(name);
     }
 
     /**
@@ -109,19 +99,20 @@ public class API_V1 {
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstance createNewInstance(Activity activity, String instanceName, String home, MinecraftMeta.MinecraftVersion minecraftVersion, MinecraftInstance.ModLoader modLoader) throws IOException {
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, String instanceName, String home,
+                                                                MinecraftMeta.MinecraftVersion minecraftVersion, InstanceHandler.ModLoader modLoader, String modsFolderName) throws IOException {
 
         if(ignoreInstanceName) {
-            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion, modLoader);
+            return InstanceHandler.create(activity, instanceName, home, minecraftVersion, modLoader, modsFolderName);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return MinecraftInstance.create(activity, instanceName, home, minecraftVersion, modLoader);
+            return InstanceHandler.create(activity, instanceName, home, minecraftVersion, modLoader, modsFolderName);
         }
     }
 
-    public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstance instance) {
-        instance.launchInstance(activity, account);
+    public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
+        InstanceHandler.launchInstance(activity, account, instance);
     }
 
     /**

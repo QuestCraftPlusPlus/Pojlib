@@ -1,11 +1,16 @@
 package pojlib.util;
 
-import static pojlib.instance.MinecraftInstance.DEV_MODS;
-import static pojlib.instance.MinecraftInstance.MODS;
+import static pojlib.instance.InstanceHandler.DEV_MODS;
+import static pojlib.instance.InstanceHandler.MODS;
 
 import com.google.gson.Gson;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;

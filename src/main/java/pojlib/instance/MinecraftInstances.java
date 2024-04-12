@@ -37,6 +37,7 @@ public class MinecraftInstances {
         public String assetsDir;
         public String mainClass;
         public ArrayList<ModInfo> mods;
+        public boolean defaultMods;
 
         public List<String> generateLaunchArgs(MinecraftAccount account) {
             String[] mcArgs = {"--username", account.username, "--version", versionName, "--gameDir", gameDir,
@@ -61,6 +62,7 @@ public class MinecraftInstances {
         }
 
         public void updateMods(String gameDir) {
+            API_V1.finishedDownloading = false;
             try {
                 ModsJson modsJson = parseModsJson(gameDir);
 
@@ -88,21 +90,25 @@ public class MinecraftInstances {
                     }
                 }
 
-                for(ModInfo info : version.defaultMods) {
-                    for(ModInfo currInfo : mods) {
-                        if(!currInfo.name.equals(info.name)) {
-                            continue;
-                        }
-                        if(currInfo.version.equals(info.version)) {
-                            continue;
-                        }
+                if(defaultMods) {
+                    for (ModInfo info : version.defaultMods) {
+                        for (ModInfo currInfo : mods) {
+                            if (!currInfo.name.equals(info.name)) {
+                                continue;
+                            }
+                            if (currInfo.version.equals(info.version)) {
+                                continue;
+                            }
 
-                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.name);
-                        DownloadUtils.downloadFile(info.url, mod);
+                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.name);
+                            DownloadUtils.downloadFile(info.url, mod);
+                        }
                     }
                 }
+                API_V1.finishedDownloading = true;
             } catch (Exception e) {
                 Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e.getMessage());
+                API_V1.finishedDownloading = true;
             }
         }
     }

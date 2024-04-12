@@ -44,13 +44,15 @@ public class InstanceHandler {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, String instanceName, String gameDir, MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader, String modsFolderName) {
+    public static MinecraftInstances.Instance create(Activity activity, String instanceName, String gameDir, boolean useDefaultMods,
+                                                     MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader, String modsFolderName) {
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstances.Instance instance = new MinecraftInstances.Instance();
         instance.instanceName = instanceName;
         instance.versionName = minecraftVersion.id;
         instance.gameDir = new File(gameDir).getAbsolutePath();
+        instance.defaultMods = useDefaultMods;
         if(modsFolderName != null) {
             instance.modsDirName = modsFolderName;
         } else {
@@ -173,8 +175,9 @@ public class InstanceHandler {
         try {
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
+            instance.updateMods(Constants.MC_DIR);
             while(!API_V1.finishedDownloading);
-            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance.versionName);
+            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance.modsDirName);
         } catch (Throwable e) {
             e.printStackTrace();
         }

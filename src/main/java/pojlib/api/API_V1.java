@@ -88,6 +88,10 @@ public class API_V1 {
         return instances.load(name);
     }
 
+    public static boolean deleteInstance(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir) {
+        return InstanceHandler.delete(instances, instance, gameDir);
+    }
+
     /**
      * Creates a new game instance with a selected mod loader. The latest version of the mod loader will be installed
      *
@@ -99,15 +103,15 @@ public class API_V1 {
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstances.Instance createNewInstance(Activity activity, String instanceName, String home,
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, String instanceName, String home, boolean useDefaultMods,
                                                                 MinecraftMeta.MinecraftVersion minecraftVersion, InstanceHandler.ModLoader modLoader, String modsFolderName) throws IOException {
 
         if(ignoreInstanceName) {
-            return InstanceHandler.create(activity, instanceName, home, minecraftVersion, modLoader, modsFolderName);
+            return InstanceHandler.create(activity, instanceName, home, useDefaultMods, minecraftVersion, modLoader, modsFolderName);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return InstanceHandler.create(activity, instanceName, home, minecraftVersion, modLoader, modsFolderName);
+            return InstanceHandler.create(activity, instanceName, home, useDefaultMods, minecraftVersion, modLoader, modsFolderName);
         }
     }
 

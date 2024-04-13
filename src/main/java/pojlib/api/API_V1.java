@@ -151,8 +151,8 @@ public class API_V1 {
      *
      * @param instance The instance to update
      */
-    public static void updateMods(MinecraftInstances.Instance instance) {
-        instance.updateMods(Constants.MC_DIR);
+    public static void updateMods(MinecraftInstances instances, MinecraftInstances.Instance instance) {
+        instance.updateMods(Constants.MC_DIR, instances);
     }
 
     /**

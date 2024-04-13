@@ -65,7 +65,7 @@ public class LoginHelper {
             IAccount account = accounts.iterator().next();
             future = pca.acquireTokenSilently(SilentParameters.builder(Set.of("XboxLive.SignIn", "XboxLive.offline_access"), account).build());
         } catch (MalformedURLException e) {
-            Logger.getInstance().appendToLog(e.getMessage());
+            Logger.getInstance().appendToLog(e.toString());
             throw new RuntimeException(e);
         }
 
@@ -73,7 +73,7 @@ public class LoginHelper {
             IAuthenticationResult res = future.get();
             return MinecraftAccount.load(activity.getFilesDir() + "/accounts", res.accessToken(), String.valueOf(res.expiresOnDate().getTime()));
         } catch (ExecutionException | InterruptedException e) {
-            Logger.getInstance().appendToLog(e.getMessage());
+            Logger.getInstance().appendToLog(e.toString());
             throw new RuntimeException(e);
         }
     }
@@ -96,7 +96,7 @@ public class LoginHelper {
                 API_V1.profileName = API_V1.currentAcc.username;
             } catch (ExecutionException | InterruptedException e) {
                 API_V1.msaMessage = "Something went wrong! Couldn't reach the Microsoft Auth servers.\n"
-                        + e.getMessage();
+                        + e;
             }
         });
 

@@ -65,7 +65,7 @@ public class MinecraftInstances {
         }
 
         private ModsJson parseModsJson(String gameDir) throws Exception {
-            File mods = new File(gameDir + "mods.json");
+            File mods = new File(gameDir + "/mods.json");
             if(API_V1.developerMods) {
                 DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods);
             } else {
@@ -75,53 +75,78 @@ public class MinecraftInstances {
             return GsonUtils.jsonFileToObject(mods.getAbsolutePath(), ModsJson.class);
         }
 
-        public void updateMods(String gameDir) {
+        public void updateMods(String gameDir, MinecraftInstances instances) {
             API_V1.finishedDownloading = false;
+            if(mods == null) {
+                mods = new ModInfo[0];
+            }
             try {
                 ModsJson modsJson = parseModsJson(gameDir);
 
                 ModsJson.Version version = null;
                 for(ModsJson.Version info : modsJson.versions) {
-                    if(!info.name.equals(versionName)) {
-                        continue;
+                    if(info.name.equals(versionName)) {
+                        version = info;
+                        break;
                     }
-                    version = info;
-                    break;
                 }
 
                 assert version != null;
+
+                File modsDir = new File(gameDir + "/mods/" + modsDirName);
+                if(!modsDir.exists()) {
+                    ArrayList<ModInfo> modInfos = new ArrayList<>();
+                    for(ModInfo info : version.coreMods) {
+                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                        DownloadUtils.downloadFile(info.download_link, mod);
+                        modInfos.add(info);
+                    }
+                    for(ModInfo info : version.defaultMods) {
+                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                        DownloadUtils.downloadFile(info.download_link, mod);
+                        modInfos.add(info);
+                    }
+                    mods = modInfos.toArray(modInfos.toArray(new ModInfo[0]));
+                    GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+                    API_V1.finishedDownloading = true;
+                    return;
+                }
+
                 for(ModInfo info : version.coreMods) {
                     for(ModInfo currInfo : mods) {
-                        if(!currInfo.name.equals(info.name)) {
+                        if(!currInfo.slug.equals(info.slug)) {
                             continue;
                         }
                         if(currInfo.version.equals(info.version)) {
                             continue;
                         }
 
-                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.name);
-                        DownloadUtils.downloadFile(info.url, mod);
+                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                        DownloadUtils.downloadFile(info.download_link, mod);
+                        info = currInfo;
                     }
                 }
 
                 if(defaultMods) {
                     for (ModInfo info : version.defaultMods) {
                         for (ModInfo currInfo : mods) {
-                            if (!currInfo.name.equals(info.name)) {
+                            if (!currInfo.slug.equals(info.slug)) {
                                 continue;
                             }
                             if (currInfo.version.equals(info.version)) {
                                 continue;
                             }
 
-                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.name + ".jar");
-                            DownloadUtils.downloadFile(info.url, mod);
+                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                            DownloadUtils.downloadFile(info.download_link, mod);
+                            info = currInfo;
                         }
                     }
                 }
+                GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
                 API_V1.finishedDownloading = true;
             } catch (Exception e) {
-                Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e.getMessage());
+                Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e);
                 API_V1.finishedDownloading = true;
             }
         }

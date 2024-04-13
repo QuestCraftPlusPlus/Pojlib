@@ -133,7 +133,7 @@ public class InstanceHandler {
 
             // Write instance to json file
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
-            instance.updateMods(Constants.MC_DIR);
+            instance.updateMods(Constants.MC_DIR, instances);
 
             API_V1.finishedDownloading = true;
             Logger.getInstance().appendToLog("Finished Downloading!");
@@ -163,8 +163,8 @@ public class InstanceHandler {
     public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
                               String gameDir, String name, String version, String url) {
         ModInfo info = new ModInfo();
-        info.name = name;
-        info.url = url;
+        info.slug = name;
+        info.download_link = url;
         info.version = version;
 
         ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
@@ -176,7 +176,7 @@ public class InstanceHandler {
 
     public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
         for(ModInfo info : instance.mods) {
-            if(info.name.equals(name)) {
+            if(info.slug.equals(name)) {
                 return true;
             }
         }
@@ -187,7 +187,7 @@ public class InstanceHandler {
     public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir, String name) {
         ModInfo oldInfo = null;
         for(ModInfo info : instance.mods) {
-            if(info.name.equals(name)) {
+            if(info.slug.equals(name)) {
                 oldInfo = info;
                 break;
             }

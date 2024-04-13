@@ -109,7 +109,7 @@ public class APIHandler {
         try {
             DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson);
         } catch (IOException e) {
-            Logger.getInstance().appendToLog("Error while grabbing supported versions!\n" + e.getMessage());
+            Logger.getInstance().appendToLog("Error while grabbing supported versions!\n" + e);
         }
 
         return GsonUtils.jsonFileToObject(versionsJson.getAbsolutePath(), SupportedVersions.class).supportedVersions;

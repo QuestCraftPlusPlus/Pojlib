@@ -133,7 +133,10 @@ public class InstanceHandler {
 
             // Write instance to json file
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+            instance.updateMods(Constants.MC_DIR);
+
             API_V1.finishedDownloading = true;
+            Logger.getInstance().appendToLog("Finished Downloading!");
         }).start();
 
         return instance;
@@ -218,8 +221,6 @@ public class InstanceHandler {
         try {
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
-            instance.updateMods(Constants.MC_DIR);
-            while(!API_V1.finishedDownloading);
             JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance.modsDirName);
         } catch (Throwable e) {
             e.printStackTrace();

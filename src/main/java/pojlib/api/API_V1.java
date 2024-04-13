@@ -12,6 +12,7 @@ import pojlib.install.*;
 import pojlib.instance.InstanceHandler;
 import pojlib.instance.MinecraftInstances;
 import pojlib.util.APIHandler;
+import pojlib.util.Constants;
 import pojlib.util.LoginHelper;
 
 import java.io.IOException;
@@ -143,6 +144,15 @@ public class API_V1 {
         } else {
             return InstanceHandler.create(activity, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
         }
+    }
+
+    /**
+     * Update the mods for the selected instance
+     *
+     * @param instance The instance to update
+     */
+    public static void updateMods(MinecraftInstances.Instance instance) {
+        instance.updateMods(Constants.MC_DIR);
     }
 
     /**

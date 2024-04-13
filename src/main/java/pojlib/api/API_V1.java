@@ -92,12 +92,8 @@ public class API_V1 {
         return InstanceHandler.removeMod(instances, instance, gameDir, name);
     }
 
-    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() throws IOException {
+    public static String[] getQCSupportedVersions() {
         return APIHandler.getQCSupportedVersions();
-    }
-
-    public static String getQCSupportedVersionName(MinecraftMeta.MinecraftVersion version) {
-        return APIHandler.getQCSupportedVersionName(version);
     }
 
     /**

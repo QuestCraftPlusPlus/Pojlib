@@ -118,10 +118,12 @@ public class InstanceHandler {
                 instances = GsonUtils.jsonFileToObject(gameDir + "/instances.json", MinecraftInstances.class);
             } catch (Exception e) {
                 instances = new MinecraftInstances();
+                instances.instances = new MinecraftInstances.Instance[0];
             }
 
             if(instances == null) {
                 instances = new MinecraftInstances();
+                instances.instances = new MinecraftInstances.Instance[0];
                 GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
             }
 
@@ -144,9 +146,11 @@ public class InstanceHandler {
             instances = GsonUtils.jsonFileToObject(gameDir + "/instances.json", MinecraftInstances.class);
         } catch (Exception e) {
             instances = new MinecraftInstances();
+            instances.instances = new MinecraftInstances.Instance[0];
         }
         if(instances == null) {
             instances = new MinecraftInstances();
+            instances.instances = new MinecraftInstances.Instance[0];
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
         }
 

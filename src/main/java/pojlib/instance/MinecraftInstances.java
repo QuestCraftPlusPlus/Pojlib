@@ -27,6 +27,9 @@ public class MinecraftInstances {
     }
 
     public Instance[] toArray() {
+        if(instances == null) {
+            return new Instance[0];
+        }
         return instances;
     }
 
@@ -55,6 +58,9 @@ public class MinecraftInstances {
         }
 
         public ModInfo[] toArray() {
+            if(mods == null) {
+                return new ModInfo[0];
+            }
             return mods;
         }
 

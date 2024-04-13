@@ -119,7 +119,12 @@ public class InstanceHandler {
             } catch (Exception e) {
                 instances = new MinecraftInstances();
             }
-            assert instances != null;
+
+            if(instances == null) {
+                instances = new MinecraftInstances();
+                GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+            }
+
             ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
             instances1.add(instance);
             instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
@@ -142,6 +147,7 @@ public class InstanceHandler {
         }
         if(instances == null) {
             instances = new MinecraftInstances();
+            GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
         }
 
         return instances;

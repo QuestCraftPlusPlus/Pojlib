@@ -14,7 +14,7 @@ import pojlib.util.ModInfo;
 import pojlib.util.ModsJson;
 
 public class MinecraftInstances {
-    public ArrayList<Instance> instances;
+    public Instance[] instances;
 
     public Instance load(String name) {
         for(Instance instance : instances) {
@@ -27,10 +27,7 @@ public class MinecraftInstances {
     }
 
     public Instance[] toArray() {
-        if(instances == null) {
-            return new Instance[0];
-        }
-        return instances.toArray(new Instance[0]);
+        return instances;
     }
 
     public static class Instance {
@@ -43,7 +40,7 @@ public class MinecraftInstances {
         public String assetIndex;
         public String assetsDir;
         public String mainClass;
-        public ArrayList<ModInfo> mods;
+        public ModInfo[] mods;
         public boolean defaultMods;
 
         public List<String> generateLaunchArgs(MinecraftAccount account) {
@@ -58,7 +55,7 @@ public class MinecraftInstances {
         }
 
         public ModInfo[] toArray() {
-            return mods.toArray(new ModInfo[0]);
+            return mods;
         }
 
         private ModsJson parseModsJson(String gameDir) throws Exception {

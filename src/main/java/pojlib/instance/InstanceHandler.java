@@ -2,6 +2,7 @@ package pojlib.instance;
 
 import android.app.Activity;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -119,7 +120,9 @@ public class InstanceHandler {
                 instances = new MinecraftInstances();
             }
             assert instances != null;
-            instances.instances.add(instance);
+            ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
+            instances1.add(instance);
+            instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
 
             // Write instance to json file
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
@@ -149,7 +152,9 @@ public class InstanceHandler {
         info.url = url;
         info.version = version;
 
-        instance.mods.add(info);
+        ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
+        mods.add(info);
+        instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
 
         GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
     }
@@ -178,7 +183,9 @@ public class InstanceHandler {
             File modFile = new File(gameDir + "/mods/" + instance.modsDirName + "/" + name + ".jar");
             modFile.delete();
 
-            instance.mods.remove(oldInfo);
+            ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
+            mods.remove(oldInfo);
+            instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
         }
 
@@ -187,7 +194,9 @@ public class InstanceHandler {
 
     // Return true if instance was deleted
     public static boolean delete(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir) {
-        instances.instances.remove(instance);
+        ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
+        instances1.remove(instance);
+        instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
         GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
 
         return true;

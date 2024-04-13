@@ -140,7 +140,9 @@ public class InstanceHandler {
         } catch (Exception e) {
             instances = new MinecraftInstances();
         }
-        assert instances != null;
+        if(instances == null) {
+            instances = new MinecraftInstances();
+        }
 
         return instances;
     }

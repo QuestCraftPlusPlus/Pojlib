@@ -43,17 +43,10 @@ public class API_V1 {
 
 
     /**
-     * @return A list of every minecraft version
-     */
-    public static MinecraftMeta.MinecraftVersion[] getMinecraftVersions() {
-        return MinecraftMeta.getVersions();
-    }
-
-    /**
      * Add a mod to an instance
      *
      * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, InstanceHandler.ModLoader, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      * @param gameDir .minecraft directory
      * @param name Mod name
@@ -68,7 +61,7 @@ public class API_V1 {
     /**
      * Check if an instance has a mod
      *
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, InstanceHandler.ModLoader, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      * @param name Mod name
      * @return True if the mod is already in the instance
@@ -81,7 +74,7 @@ public class API_V1 {
      * Remove a mod from an instance
      *
      * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, InstanceHandler.ModLoader, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      * @param gameDir .minecraft directory
      * @param name Mod name
@@ -142,8 +135,7 @@ public class API_V1 {
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstances.Instance createNewInstance(Activity activity, String instanceName, String home, boolean useDefaultMods,
-                                                                MinecraftMeta.MinecraftVersion minecraftVersion, InstanceHandler.ModLoader modLoader, String modsFolderName) throws IOException {
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, InstanceHandler.ModLoader modLoader, String modsFolderName) throws IOException {
 
         if(ignoreInstanceName) {
             return InstanceHandler.create(activity, instanceName, home, useDefaultMods, minecraftVersion, modLoader, modsFolderName);
@@ -159,7 +151,7 @@ public class API_V1 {
      *
      * @param activity Android activity object
      * @param account Account object
-     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, MinecraftMeta.MinecraftVersion, InstanceHandler.ModLoader, String)}
+     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, InstanceHandler.ModLoader, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {

@@ -44,13 +44,23 @@ public class InstanceHandler {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, String instanceName, String gameDir, boolean useDefaultMods,
-                                                     MinecraftMeta.MinecraftVersion minecraftVersion, ModLoader modLoader, String modsFolderName) {
+    public static MinecraftInstances.Instance create(Activity activity, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String modsFolderName) {
+        File instancesFile = new File(gameDir + "/instances.json");
+        if (instancesFile.exists()) {
+            MinecraftInstances instances = GsonUtils.jsonFileToObject(instancesFile.getAbsolutePath(), MinecraftInstances.class);
+            for (MinecraftInstances.Instance instance : instances.instances) {
+                if (instance.instanceName.equals(instanceName)) {
+                    Logger.getInstance().appendToLog("Instance " + instanceName + " already exists! Using original instance.");
+                    return instance;
+                }
+            }
+        }
+
         Logger.getInstance().appendToLog("Creating new instance: " + instanceName);
 
         MinecraftInstances.Instance instance = new MinecraftInstances.Instance();
         instance.instanceName = instanceName;
-        instance.versionName = minecraftVersion.id;
+        instance.versionName = minecraftVersion;
         instance.gameDir = new File(gameDir).getAbsolutePath();
         instance.defaultMods = useDefaultMods;
         if(modsFolderName != null) {

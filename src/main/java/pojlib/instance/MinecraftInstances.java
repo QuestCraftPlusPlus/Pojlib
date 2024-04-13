@@ -26,6 +26,10 @@ public class MinecraftInstances {
         return null;
     }
 
+    public Instance[] toArray() {
+        return instances.toArray(new Instance[0]);
+    }
+
     public static class Instance {
         public String instanceName;
         public String versionName;
@@ -42,12 +46,16 @@ public class MinecraftInstances {
         public List<String> generateLaunchArgs(MinecraftAccount account) {
             String[] mcArgs = {"--username", account.username, "--version", versionName, "--gameDir", gameDir,
                     "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid.replaceAll("-", ""),
-                    "--accessToken", account.accessToken, "--userType", account.userType, "--versionType", versionType};
+                    "--accessToken", account.accessToken, "--userType", account.userType, "--versionType", "release"};
 
             List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
             allArgs.add(mainClass);
             allArgs.addAll(Arrays.asList(mcArgs));
             return allArgs;
+        }
+
+        public ModInfo[] toArray() {
+            return mods.toArray(new ModInfo[0]);
         }
 
         private ModsJson parseModsJson(String gameDir) throws Exception {

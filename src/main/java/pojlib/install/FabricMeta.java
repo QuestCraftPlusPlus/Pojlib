@@ -26,7 +26,7 @@ public class FabricMeta {
         return null;
     }
 
-    public static VersionInfo getVersionInfo(FabricVersion fabricVersion, MinecraftMeta.MinecraftVersion minecraftVersion) {
-        return handler.get(String.format("versions/loader/%s/%s/profile/json", minecraftVersion.id, fabricVersion.version), VersionInfo.class);
+    public static VersionInfo getVersionInfo(FabricVersion fabricVersion, String minecraftVersion) {
+        return handler.get(String.format("versions/loader/%s/%s/profile/json", minecraftVersion, fabricVersion.version), VersionInfo.class);
     }
 }

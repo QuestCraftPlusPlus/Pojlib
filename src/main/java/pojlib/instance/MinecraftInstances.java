@@ -27,6 +27,9 @@ public class MinecraftInstances {
     }
 
     public Instance[] toArray() {
+        if(instances == null) {
+            return new Instance[0];
+        }
         return instances.toArray(new Instance[0]);
     }
 

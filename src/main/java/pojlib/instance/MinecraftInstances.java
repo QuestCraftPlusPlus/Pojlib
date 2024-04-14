@@ -143,6 +143,15 @@ public class MinecraftInstances {
                         }
                     }
                 }
+
+                // Download custom mods
+                for(ModInfo currInfo : mods) {
+                    File mod = new File(gameDir + "/mods/" + modsDirName + "/" + currInfo.slug + ".jar");
+                    if(!mod.exists()) {
+                        DownloadUtils.downloadFile(currInfo.download_link, mod);
+                    }
+                }
+
                 GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
                 API_V1.finishedDownloading = true;
             } catch (Exception e) {

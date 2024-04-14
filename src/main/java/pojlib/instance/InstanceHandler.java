@@ -176,7 +176,7 @@ public class InstanceHandler {
 
     public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
         for(ModInfo info : instance.mods) {
-            if(info.slug.equals(name)) {
+            if(info.slug.equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -187,7 +187,7 @@ public class InstanceHandler {
     public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir, String name) {
         ModInfo oldInfo = null;
         for(ModInfo info : instance.mods) {
-            if(info.slug.equals(name)) {
+            if(info.slug.equalsIgnoreCase(name)) {
                 oldInfo = info;
                 break;
             }

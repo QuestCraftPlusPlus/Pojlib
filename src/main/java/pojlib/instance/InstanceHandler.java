@@ -100,7 +100,6 @@ public class InstanceHandler {
 
         if(instances.instances == null) {
             instances.instances = new MinecraftInstances.Instance[0];
-            GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
         }
 
         ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);

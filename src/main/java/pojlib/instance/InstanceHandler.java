@@ -45,10 +45,9 @@ public class InstanceHandler {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String modsFolderName) {
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String modsFolderName) {
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
-            MinecraftInstances instances = GsonUtils.jsonFileToObject(instancesFile.getAbsolutePath(), MinecraftInstances.class);
             for (MinecraftInstances.Instance instance : instances.instances) {
                 if (instance.instanceName.equals(instanceName)) {
                     Logger.getInstance().appendToLog("Instance " + instanceName + " already exists! Using original instance.");
@@ -98,6 +97,16 @@ public class InstanceHandler {
 
         // Install minecraft
         VersionInfo finalModLoaderVersionInfo = modLoaderVersionInfo;
+
+        if(instances.instances == null) {
+            instances.instances = new MinecraftInstances.Instance[0];
+            GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+        }
+
+        ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
+        instances1.add(instance);
+        instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
+
         new Thread(() -> {
             try {
                 String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
@@ -112,24 +121,6 @@ public class InstanceHandler {
                 e.printStackTrace();
             }
             instance.assetIndex = minecraftVersionInfo.assetIndex.id;
-
-            MinecraftInstances instances;
-            try {
-                instances = GsonUtils.jsonFileToObject(gameDir + "/instances.json", MinecraftInstances.class);
-            } catch (Exception e) {
-                instances = new MinecraftInstances();
-                instances.instances = new MinecraftInstances.Instance[0];
-            }
-
-            if(instances == null) {
-                instances = new MinecraftInstances();
-                instances.instances = new MinecraftInstances.Instance[0];
-                GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
-            }
-
-            ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
-            instances1.add(instance);
-            instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
 
             // Write instance to json file
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);

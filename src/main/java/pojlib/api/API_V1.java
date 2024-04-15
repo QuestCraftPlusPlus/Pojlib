@@ -135,14 +135,14 @@ public class API_V1 {
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstances.Instance createNewInstance(Activity activity, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, String modsFolderName) throws IOException {
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, String modsFolderName) throws IOException {
 
         if(ignoreInstanceName) {
-            return InstanceHandler.create(activity, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
+            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return InstanceHandler.create(activity, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
+            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
         }
     }
 

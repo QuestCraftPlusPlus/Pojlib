@@ -3,13 +3,10 @@ package pojlib.instance;
 import android.app.Activity;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
@@ -20,8 +17,6 @@ import pojlib.install.QuiltMeta;
 import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
 import pojlib.util.ModInfo;
-import pojlib.util.ModsJson;
-import pojlib.util.DownloadUtils;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
@@ -45,7 +40,7 @@ public class InstanceHandler {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String modsFolderName) {
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String modsFolderName, String imageURL) {
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
             for (MinecraftInstances.Instance instance : instances.instances) {
@@ -60,6 +55,7 @@ public class InstanceHandler {
 
         MinecraftInstances.Instance instance = new MinecraftInstances.Instance();
         instance.instanceName = instanceName;
+        instance.instanceImageURL = imageURL;
         instance.versionName = minecraftVersion;
         instance.gameDir = new File(gameDir).getAbsolutePath();
         instance.defaultMods = useDefaultMods;

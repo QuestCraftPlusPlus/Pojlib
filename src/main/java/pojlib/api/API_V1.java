@@ -132,17 +132,18 @@ public class API_V1 {
      * @param home              The base directory where minecraft should be setup
      * @param useDefaultMods    Use QC's default mods for the version (Core mods are automatically included)
      * @param minecraftVersion  The version of minecraft to install
+     * @param imageURL          Modpack image url, nullable
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, String modsFolderName) throws IOException {
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, String modsFolderName, String imageURL) throws IOException {
 
         if(ignoreInstanceName) {
-            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
+            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName, imageURL);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
+            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName, imageURL);
         }
     }
 

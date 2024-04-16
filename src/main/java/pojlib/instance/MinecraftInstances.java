@@ -35,6 +35,7 @@ public class MinecraftInstances {
 
     public static class Instance {
         public String instanceName;
+        public String instanceImageURL;
         public String versionName;
         public String modsDirName;
         public String versionType;

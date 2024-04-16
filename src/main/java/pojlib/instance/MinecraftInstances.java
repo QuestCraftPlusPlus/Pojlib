@@ -101,10 +101,12 @@ public class MinecraftInstances {
                         DownloadUtils.downloadFile(info.download_link, mod);
                         modInfos.add(info);
                     }
-                    for(ModInfo info : version.defaultMods) {
-                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
-                        DownloadUtils.downloadFile(info.download_link, mod);
-                        modInfos.add(info);
+                    if(defaultMods) {
+                        for (ModInfo info : version.defaultMods) {
+                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                            DownloadUtils.downloadFile(info.download_link, mod);
+                            modInfos.add(info);
+                        }
                     }
                     mods = modInfos.toArray(modInfos.toArray(new ModInfo[0]));
                     GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);

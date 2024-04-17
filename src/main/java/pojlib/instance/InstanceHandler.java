@@ -79,12 +79,6 @@ public class InstanceHandler {
                 modLoaderVersionInfo = QuiltMeta.getVersionInfo(quiltVersion, minecraftVersion);
                 break;
             }
-            case Forge:
-            case NeoForge:
-            {
-                System.out.println("Error!: You cannot use Forge or NeoForge with QuestCraft!");
-                break;
-            }
         }
 
         VersionInfo minecraftVersionInfo = MinecraftMeta.getVersionInfo(minecraftVersion);

@@ -102,7 +102,7 @@ public class APIHandler {
         return new Gson().fromJson(postRaw(url + parseQueries(query), body.toString()), tClass);
     }
 
-    public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/instance-refactor/supportedVersions.json";
+    public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/supportedVersions.json";
 
     public static String[] getQCSupportedVersions() {
         File versionsJson = new File(Constants.MC_DIR + "/supportedVersions.json");

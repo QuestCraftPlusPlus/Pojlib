@@ -1,9 +1,5 @@
 package pojlib.util;
 
-import android.content.res.AssetManager;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
@@ -14,16 +10,9 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Objects;
 
-import static pojlib.util.FileUtil.read;
-import static pojlib.util.GsonUtils.GLOBAL_GSON;
-
 public class DownloadUtils {
-
-    public static AssetManager assetManager;
-
 
     private static void download(URL url, OutputStream os) throws IOException {
         final int MAX_RETRIES = 3;
@@ -96,23 +85,8 @@ public class DownloadUtils {
             else return true; // fake match
 
         }catch (IOException e) {
-            System.out.println("Fake-matching a hash due to a read error: " + e);
+            Logger.getInstance().appendToLog("Fake-matching a hash due to a read error: " + e);
             return true;
         }
-    }
-
-    public static ArrayList<String> getCompatibleVersions(String tag) {
-        ArrayList<String> versions = new ArrayList<>();
-        try {
-            InputStream stream = assetManager.open("jsons/modmanager.json");
-            JsonObject versionsJson = GLOBAL_GSON.fromJson(read(stream), JsonObject.class);
-
-            for (JsonElement version : versionsJson.get("compatible_versions").getAsJsonObject().getAsJsonArray(tag)) {
-                versions.add(version.getAsString());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return versions;
     }
 }

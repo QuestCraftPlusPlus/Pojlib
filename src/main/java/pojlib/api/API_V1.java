@@ -47,7 +47,7 @@ public class API_V1 {
      * Add a mod to an instance
      *
      * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      * @param gameDir .minecraft directory
      * @param name Mod name
@@ -62,7 +62,7 @@ public class API_V1 {
     /**
      * Check if an instance has a mod
      *
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      * @param name Mod name
      * @return True if the mod is already in the instance
@@ -75,7 +75,7 @@ public class API_V1 {
      * Remove a mod from an instance
      *
      * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      * @param gameDir .minecraft directory
      * @param name Mod name
@@ -132,17 +132,18 @@ public class API_V1 {
      * @param home              The base directory where minecraft should be setup
      * @param useDefaultMods    Use QC's default mods for the version (Core mods are automatically included)
      * @param minecraftVersion  The version of minecraft to install
+     * @param imageURL          Modpack image url, nullable
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, String modsFolderName) throws IOException {
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, String modsFolderName, String imageURL) throws IOException {
 
         if(ignoreInstanceName) {
-            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
+            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName, imageURL);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName);
+            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName, imageURL);
         }
     }
 
@@ -160,7 +161,7 @@ public class API_V1 {
      *
      * @param activity Android activity object
      * @param account Account object
-     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, String, String, boolean, String, String)}
+     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {

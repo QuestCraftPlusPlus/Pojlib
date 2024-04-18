@@ -24,7 +24,12 @@ public class MinecraftMeta {
         return handler.get("mc/game/version_manifest_v2.json", MinecraftVersions.class).versions;
     }
 
-    public static VersionInfo getVersionInfo(MinecraftVersion minecraftVersion) {
-        return handler.get(String.format("v1/packages/%s/%s.json", minecraftVersion.sha1, minecraftVersion.id), VersionInfo.class);
+    public static VersionInfo getVersionInfo(String versionName) {
+        for (MinecraftVersion minecraftVersion : getVersions()) {
+            if (minecraftVersion.id.equals(versionName)) {
+                return handler.get(String.format("v1/packages/%s/%s.json", minecraftVersion.sha1, minecraftVersion.id), VersionInfo.class);
+            }
+        }
+        return null;
     }
 }

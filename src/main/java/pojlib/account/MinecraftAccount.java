@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 
 import pojlib.util.Constants;
 import pojlib.util.GsonUtils;
+import pojlib.util.Logger;
 
 public class MinecraftAccount {
 
@@ -37,7 +38,9 @@ public class MinecraftAccount {
 
     public static boolean logout(Activity activity) {
         File accountFile = new File(activity.getFilesDir() + "/accounts/account.json");
-        return accountFile.delete();
+        File accountCache = new File(Constants.USER_HOME + "/cache_data");
+
+        return accountFile.delete() && accountCache.delete();
     }
 
     //Try this before using login - the account will have been saved to disk if previously logged in
@@ -54,16 +57,16 @@ public class MinecraftAccount {
             GsonUtils.objectToJsonFile(path + "/account.json", acc);
             return acc;
         } catch (IOException | JSONException e) {
+            Logger.getInstance().appendToLog("Unable to load account! | " + e);
             return null;
         }
     }
 
     public static String getSkinFaceUrl(MinecraftAccount account) {
-        //TODO: Log this to latestlog.txt for Support staff
         try {
             return Constants.MINOTAR_URL + "/helm/" + account.uuid;
         } catch (NullPointerException e) {
-            System.out.println("Username not set! Please set your username at Minecraft.net and try again.");
+            Logger.getInstance().appendToLog("Username likely not set! Please set your username at Minecraft.net and try again. | " + e);
             return null;
         }
     }

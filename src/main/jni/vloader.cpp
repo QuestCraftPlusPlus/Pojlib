@@ -76,7 +76,7 @@ Java_pojlib_util_VLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz, jobject c
                                 (PFN_xrVoidFunction *) (&initializeLoader));
 
     if(!XR_SUCCEEDED(res)) {
-        printf("Error!");
+        printf("xrGetInstanceProcAddr returned %d.\n", res);
     }
 
     XrLoaderInitInfoAndroidKHR loaderInitInfoAndroidKhr = {
@@ -86,7 +86,10 @@ Java_pojlib_util_VLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz, jobject c
             ctx
     };
 
-    initializeLoader((const XrLoaderInitInfoBaseHeaderKHR *) &loaderInitInfoAndroidKhr);
+    res = initializeLoader((const XrLoaderInitInfoBaseHeaderKHR *) &loaderInitInfoAndroidKhr);
+    if(!XR_SUCCEEDED(res)) {
+        printf("xrInitializeLoaderKHR returned %d.\n", res);
+    }
 }
 
 extern "C"

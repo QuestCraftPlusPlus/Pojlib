@@ -1,22 +1,18 @@
 package pojlib.util;
 
-import static pojlib.instance.MinecraftInstance.DEV_MODS;
-import static pojlib.instance.MinecraftInstance.MODS;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
-
-import pojlib.api.API_V1;
-import pojlib.install.MinecraftMeta;
-import pojlib.instance.MinecraftInstance;
 
 public class APIHandler {
     public final String baseUrl;
@@ -106,29 +102,20 @@ public class APIHandler {
         return new Gson().fromJson(postRaw(url + parseQueries(query), body.toString()), tClass);
     }
 
-    public static MinecraftMeta.MinecraftVersion[] getQCSupportedVersions() throws IOException {
-        ArrayList<MinecraftMeta.MinecraftVersion> versionsList = new ArrayList<>();
-        File mods = new File(Constants.USER_HOME + "/mods-new.json");
-        if (API_V1.developerMods) {
-            DownloadUtils.downloadFile(DEV_MODS, mods);
-        } else { DownloadUtils.downloadFile(MODS, mods); }
+    public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/supportedVersions.json";
 
-        CoreMods modsJson = GsonUtils.jsonFileToObject(mods.getAbsolutePath(), CoreMods.class);
-        for(CoreMods.Version version : modsJson.versions) {
-            MinecraftMeta.MinecraftVersion[] versions = MinecraftMeta.getVersions();
-            for(MinecraftMeta.MinecraftVersion mcVer : versions) {
-                if(mcVer.id.equals(version.name)) {
-                    versionsList.add(mcVer);
-                }
-            }
+    public static String[] getQCSupportedVersions() {
+        File versionsJson = new File(Constants.MC_DIR + "/supportedVersions.json");
+        try {
+            DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson);
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("Error while grabbing supported versions!\n" + e);
         }
 
-        mods.delete();
-
-        return versionsList.toArray(new MinecraftMeta.MinecraftVersion[0]);
+        return GsonUtils.jsonFileToObject(versionsJson.getAbsolutePath(), SupportedVersions.class).supportedVersions;
     }
 
-    public static String getQCSupportedVersionName(MinecraftMeta.MinecraftVersion version) {
-        return version.id;
+    public static class SupportedVersions {
+        public String[] supportedVersions;
     }
 }

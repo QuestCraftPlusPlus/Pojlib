@@ -2,7 +2,7 @@
     "versions": [
         {
             "name": "1.20.4",
-            "mods": [
+            "coreMods": [
                 {
                     "slug": "Vivecraft",
                     "version": "1.0",
@@ -10,9 +10,11 @@
                 },
                 {
                     "slug": "Fabric-API",
-                    "version": "0.96.11",
-                    "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/htRy7kbI/fabric-api-0.96.11%2B1.20.4.jar"
-                },
+                    "version": "0.91.2",
+                    "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/yGY1P8Yr/fabric-api-0.91.2%2B1.20.4.jar"
+                }
+            ],
+            "defaultMods": [
                 {
                     "slug": "Sodium",
                     "version": "0.5.8",
@@ -45,8 +47,8 @@
                 },
                 {
                     "slug": "Simple-Voice-Chat",
-                    "version": "2.5.1",
-                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/lobOF2Co/voicechat-fabric-1.20.4-2.5.1.jar"
+                    "version": "2.4.30",
+                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/kp8RtRlH/voicechat-fabric-1.20.4-2.4.30.jar"
                 },
                 {
                     "slug": "Modern-Fix",
@@ -57,7 +59,7 @@
         },
         {
             "name": "1.20.2",
-            "mods": [
+            "coreMods": [
                 {
                     "slug": "Vivecraft",
                     "version": "1.1.1",
@@ -67,7 +69,9 @@
                     "slug": "Fabric-API",
                     "version": "0.91.1",
                     "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/qg6wQgub/fabric-api-0.91.1%2B1.20.2.jar"
-                },
+                }
+            ],
+            "defaultMods": [
                 {
                     "slug": "Lithium",
                     "version": "0.12.0",
@@ -85,7 +89,7 @@
                 },
                 {
                     "slug": "Sodium",
-                    "version": "0.5.5.1",
+                    "version": "0.5.5",
                     "download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.2-0.5.5/sodium-fabric-mc1.20.2-0.5.5.jar"
                 },
                 {
@@ -126,23 +130,18 @@
                 {
                     "slug": "Simple-Voice-Chat",
                     "version": "2.4.28",
-                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/Pq4BryXi/voicechat-fabric-1.20.2-2.5.1.jar"
+                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/5XcFdUYz/voicechat-fabric-1.20.2-2.4.28.jar"
                 },
                 {
                     "slug": "Modern-Fix",
                     "version": "5.9.0",
                     "download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
-                },
-                {
-                    "slug": "EBE",
-                    "version": "0.9.1",
-                    "download_link": "https://cdn.modrinth.com/data/OVuFYfre/versions/eIFo7wvq/enhancedblockentities-0.9.1%2B1.20.2.jar"
                 }
             ]
         },
         {
             "name": "1.20.1",
-            "mods": [
+            "coreMods": [
                 {
                     "slug": "Vivecraft",
                     "version": "1.1.1",
@@ -152,7 +151,9 @@
                     "slug": "Fabric-API",
                     "version": "0.91.0",
                     "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/YblXfKtI/fabric-api-0.91.0%2B1.20.1.jar"
-                },
+                }
+            ],
+            "defaultMods": [
                 {
                     "slug": "Lithium",
                     "version": "0.11.2",
@@ -185,8 +186,8 @@
                 },
                 {
                     "slug": "Fabric-Language-Kotlin",
-                    "version": "1.10.19+kotlin.1.9.23",
-                    "download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/ZMokinzs/fabric-language-kotlin-1.10.19%2Bkotlin.1.9.23.jar"
+                    "version": "1.9.5+kotlin.1.8.22",
+                    "download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/ADg3gvlr/fabric-language-kotlin-1.9.5%2Bkotlin.1.8.22.jar"
                 },
                 {
                     "slug": "Krypton",
@@ -215,8 +216,8 @@
                 },
                 {
                     "slug": "Simple-Voice-Chat",
-                    "version": "2.5.1",
-                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/ot113WbU/voicechat-fabric-1.20.1-2.5.1.jar"
+                    "version": "2.4.12",
+                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/NkZguN8n/voicechat-fabric-1.20.1-2.4.12.jar"
                 },
                 {
                     "slug": "Modern-Fix",
@@ -227,7 +228,7 @@
         },
         {
             "name": "1.19.4",
-            "mods": [
+            "coreMods": [
                 {
                     "slug": "Vivecraft",
                     "version": "1.1.1",
@@ -237,11 +238,13 @@
                     "slug": "Fabric-API",
                     "version": "0.87.2",
                     "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/nyAmoHlr/fabric-api-0.87.2%2B1.19.4.jar"
-                },
+                }
+            ],
+            "defaultMods": [
                 {
                     "slug": "Simple-Voice-Chat",
-                    "version": "2.5.1",
-                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/u7rKquVn/voicechat-fabric-1.19.4-2.5.1.jar"
+                    "version": "2.4.10",
+                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/cgPK1BnP/voicechat-fabric-1.19.4-2.4.10.jar"
                 },
                 {
                     "slug": "Lithium",
@@ -262,6 +265,11 @@
                     "slug": "Entity-Culling",
                     "version": "1.6.2",
                     "download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/UvJN5Cy4/entityculling-fabric-1.6.2-mc1.19.4.jar"
+                },
+                {
+                    "slug": "Sodium",
+                    "version": "0.4.10",
+                    "download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/b4hTi3mo/sodium-fabric-mc1.19.4-0.4.10%2Bbuild.24.jar"
                 },
                 {
                     "slug": "Cloth-Config",
@@ -327,7 +335,7 @@
         },
         {
             "name": "1.19.2",
-            "mods": [
+            "coreMods": [
                 {
                     "slug": "Vivecraft",
                     "version": "1.1.3",
@@ -337,7 +345,9 @@
                     "slug": "Fabric-API",
                     "version": "0.77.0",
                     "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/6g95K303/fabric-api-0.77.0%2B1.19.2.jar"
-                },
+                }
+            ],
+            "defaultMods": [
                 {
                     "slug": "LazyDFU",
                     "version": "1.3",
@@ -345,8 +355,8 @@
                 },
                 {
                     "slug": "Simple-Voice-Chat",
-                    "version": "2.5.1",
-                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/KfPEtgDQ/voicechat-fabric-1.19.2-2.5.1.jar"
+                    "version": "2.4.10",
+                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/onVH7UO9/voicechat-fabric-1.19.2-2.4.10.jar"
                 },
                 {
                     "slug": "Lithium",
@@ -367,6 +377,11 @@
                     "slug": "Entity-Culling",
                     "version": "1.6.1",
                     "download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/twdGLDHv/entityculling-fabric-1.6.1-mc1.19.2.jar"
+                },
+                {
+                    "slug": "Sodium",
+                    "version": "0.4.4",
+                    "download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/rAfhHfow/sodium-fabric-mc1.19.2-0.4.4%2Bbuild.18.jar"
                 },
                 {
                     "slug": "Cloth-Config",
@@ -417,7 +432,7 @@
         },
         {
             "name": "1.18.2",
-            "mods": [
+            "coreMods": [
                 {
                     "slug": "Vivecraft",
                     "version": "1.1.3",
@@ -427,7 +442,9 @@
                     "slug": "Fabric-API",
                     "version": "0.77.0",
                     "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/qk28POfr/fabric-api-0.77.0%2B1.18.2.jar"
-                },
+                }
+            ],
+            "defaultMods": [
                 {
                     "slug": "LazyDFU",
                     "version": "1.2",
@@ -435,8 +452,8 @@
                 },
                 {
                     "slug": "Simple-Voice-Chat",
-                    "version": "2.5.1",
-                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/oz82VCKL/voicechat-fabric-1.18.2-2.5.1.jar"
+                    "version": "2.4.10",
+                    "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/QKFGOJUD/voicechat-fabric-1.18.2-2.4.10.jar"
                 },
                 {
                     "slug": "Lithium",
@@ -457,6 +474,11 @@
                     "slug": "Entity-Culling",
                     "version": "1.5.1",
                     "download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/1.5.1-fabric-1.18/entityculling-fabric-mc1.18-1.5.1.jar"
+                },
+                {
+                    "slug": "Sodium",
+                    "version": "0.4.1",
+                    "download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
                 },
                 {
                     "slug": "Better-Biome-Blend",

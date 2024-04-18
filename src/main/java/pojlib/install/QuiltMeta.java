@@ -23,7 +23,7 @@ public class QuiltMeta {
         return null;
     }
 
-    public static VersionInfo getVersionInfo(QuiltVersion quiltVersion, MinecraftMeta.MinecraftVersion minecraftVersion) {
-        return handler.get(String.format("versions/loader/%s/%s/profile/json", minecraftVersion.id, quiltVersion.version), VersionInfo.class);
+    public static VersionInfo getVersionInfo(QuiltVersion quiltVersion, String minecraftVersion) {
+        return handler.get(String.format("versions/loader/%s/%s/profile/json", minecraftVersion, quiltVersion.version), VersionInfo.class);
     }
 }

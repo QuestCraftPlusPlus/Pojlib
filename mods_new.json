@@ -31,11 +31,6 @@
 					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/H1fXXdNC/servercore-fabric-1.4.0%2B1.20.3.jar"
 				},
 				{
-					"slug": "C2me",
-					"version": "0.2.0+alpha.11.38",
-					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/o0DcaA0L/c2me-fabric-mc1.20.4-0.2.0%2Balpha.11.38.jar"
-				},
-				{
 					"slug": "ImmediatelyFast",
 					"version": "1.2.8",
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/3EgIBnht/ImmediatelyFast-Fabric-1.2.8%2B1.20.4.jar"
@@ -106,11 +101,6 @@
 					"slug": "Mod-Menu",
 					"version": "8.0.0",
 					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/TwfjidT5/modmenu-8.0.0.jar"
-				},
-				{
-					"slug": "C2me",
-					"version": "0.2.0+alpha.10.126",
-					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/ilKwGRiJ/c2me-fabric-mc1.20.2-0.2.0%2Balpha.10.126.jar"
 				},
 				{
 					"slug": "ImmediatelyFast",
@@ -188,11 +178,6 @@
 					"slug": "Mod-Menu",
 					"version": "7.0.1",
 					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/RTFDnTKf/modmenu-7.0.1.jar"
-				},
-				{
-					"slug": "C2me",
-					"version": "0.2.0+alpha.10.91",
-					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/t4juSkze/c2me-fabric-mc1.20.1-0.2.0%2Balpha.10.91.jar"
 				},
 				{
 					"slug": "ImmediatelyFast",
@@ -292,11 +277,6 @@
 					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/yjjsLqbS/modmenu-6.2.1.jar"
 				},
 				{
-					"slug": "C2me",
-					"version": "0.2.0+alpha.10.51",
-					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/2LxKBERD/c2me-fabric-mc1.19.4-0.2.0%2Balpha.10.51.jar"
-				},
-				{
 					"slug": "ImmediatelyFast",
 					"version": "1.1.12",
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/8IFFeKYy/ImmediatelyFast-1.1.12%2B1.19.4.jar"
@@ -379,11 +359,6 @@
 					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/gSoPJyVn/modmenu-4.2.0-beta.2.jar"
 				},
 				{
-					"slug": "C2me",
-					"version": "0.2.0+alpha.9.9",
-					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/8rUarScX/c2me-fabric-mc1.19.2-0.2.0%2Balpha.9.9.jar"
-				},
-				{
 					"slug": "Better-Biome-Blend",
 					"version": "1.3.6",
 					"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.19.0-1.3.6/betterbiomeblend-1.19.0-1.3.6-fabric.jar"
@@ -454,11 +429,6 @@
 					"slug": "Better-Biome-Blend",
 					"version": "1.3.5",
 					"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.18.2-1.3.5-fabric/betterbiomeblend-1.18.2-1.3.5-fabric.jar"
-				},
-				{
-					"slug": "C2me",
-					"version": "0.2.0",
-					"download_link": "https://cdn.modrinth.com/data/VSNURh3q/versions/U5BK0DTf/c2me-fabric-mc1.18.2-0.2.0%2Balpha.7.35.jar"
 				},
 				{
 					"slug": "Cloth-Config",

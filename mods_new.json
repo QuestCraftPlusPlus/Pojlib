@@ -16,11 +16,6 @@
 			],
 			"defaultMods": [
 				{
-					"slug": "Sodium",
-					"version": "0.5.5",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/InGKdfel/sodium-fabric-mc1.20.3-0.5.5.jar"
-				},
-				{
 					"slug": "Cloth-Config",
 					"version": "13.0.114",
 					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/YFpDLLdu/cloth-config-13.0.114-fabric.jar"
@@ -86,11 +81,6 @@
 					"slug": "Entity-Culling",
 					"version": "1.6.2",
 					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/BDwHAdWc/entityculling-fabric-1.6.2-mc1.20.1.jar"
-				},
-				{
-					"slug": "Sodium",
-					"version": "0.5.5",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/pmgeU5yX/sodium-fabric-mc1.20.2-0.5.5.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -168,11 +158,6 @@
 					"slug": "Entity-Culling",
 					"version": "1.6.2",
 					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/d20sUcYn/entityculling-fabric-1.6.2-mc1.20.jar"
-				},
-				{
-					"slug": "Sodium",
-					"version": "0.5.2",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/6SSPmLc9/sodium-fabric-mc1.20.1-0.5.2.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -265,11 +250,6 @@
 					"slug": "Entity-Culling",
 					"version": "1.6.2",
 					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/UvJN5Cy4/entityculling-fabric-1.6.2-mc1.19.4.jar"
-				},
-				{
-					"slug": "Sodium",
-					"version": "0.4.10",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/b4hTi3mo/sodium-fabric-mc1.19.4-0.4.10%2Bbuild.24.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -379,11 +359,6 @@
 					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/twdGLDHv/entityculling-fabric-1.6.1-mc1.19.2.jar"
 				},
 				{
-					"slug": "Sodium",
-					"version": "0.4.4",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/rAfhHfow/sodium-fabric-mc1.19.2-0.4.4%2Bbuild.18.jar"
-				},
-				{
 					"slug": "Cloth-Config",
 					"version": "8.2.88",
 					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/EXrxCjl6/cloth-config-8.2.88-fabric.jar"
@@ -474,11 +449,6 @@
 					"slug": "Entity-Culling",
 					"version": "1.5.1",
 					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/1.5.1-fabric-1.18/entityculling-fabric-mc1.18-1.5.1.jar"
-				},
-				{
-					"slug": "Sodium",
-					"version": "0.4.1",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
 				},
 				{
 					"slug": "Better-Biome-Blend",

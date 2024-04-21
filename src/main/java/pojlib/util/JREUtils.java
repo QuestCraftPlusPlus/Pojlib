@@ -185,8 +185,8 @@ public class JREUtils {
             userArgs.add("-Xmx" + API_V1.memoryValue + "M");
         } else {
             if (API_V1.model.equals("Meta Quest Pro") || API_V1.model.equals("Oculus Headset1")) {
-                userArgs.add("-Xms" + 4096 + "M");
-                userArgs.add("-Xmx" + 4096 + "M");
+                userArgs.add("-Xms" + 2048 + "M");
+                userArgs.add("-Xmx" + 3072 + "M");
             } else {
                 userArgs.add("-Xms" + 2048 + "M");
                 userArgs.add("-Xmx" + 2048 + "M");

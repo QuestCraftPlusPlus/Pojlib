@@ -195,7 +195,6 @@ public class JREUtils {
 
         userArgs.add("-XX:+UseZGC");
         userArgs.add("-XX:+ZGenerational");
-        userArgs.add("-XX:TieredStopAtLevel=1");
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");

@@ -40,7 +40,7 @@ public class InstanceHandler {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String modsFolderName, String imageURL) {
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String gamePath, String modsFolderName, String imageURL) {
         API_V1.finishedDownloading = false;
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
@@ -58,7 +58,7 @@ public class InstanceHandler {
         instance.instanceName = instanceName;
         instance.instanceImageURL = imageURL;
         instance.versionName = minecraftVersion;
-        instance.gameDir = new File(gameDir).getAbsolutePath();
+        instance.gameDir = gamePath;
         instance.defaultMods = useDefaultMods;
         if(modsFolderName != null) {
             instance.modsDirName = modsFolderName;
@@ -114,7 +114,7 @@ public class InstanceHandler {
 
             // Write instance to json file
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
-            instance.updateMods(Constants.MC_DIR, instances);
+            instance.updateMods(instances);
 
             API_V1.finishedDownloading = true;
             Logger.getInstance().appendToLog("Finished Downloading!");
@@ -202,7 +202,7 @@ public class InstanceHandler {
         try {
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
-            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance.modsDirName);
+            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance);
         } catch (Throwable e) {
             e.printStackTrace();
         }

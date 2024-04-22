@@ -7,6 +7,7 @@ import java.util.List;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
+import pojlib.util.Constants;
 import pojlib.util.DownloadUtils;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
@@ -76,13 +77,13 @@ public class MinecraftInstances {
             return GsonUtils.jsonFileToObject(mods.getAbsolutePath(), ModsJson.class);
         }
 
-        public void updateMods(String gameDir, MinecraftInstances instances) {
+        public void updateMods(MinecraftInstances instances) {
             API_V1.finishedDownloading = false;
             if(mods == null) {
                 mods = new ModInfo[0];
             }
             try {
-                ModsJson modsJson = parseModsJson(gameDir);
+                ModsJson modsJson = parseModsJson(Constants.USER_HOME);
 
                 ModsJson.Version version = null;
                 for(ModsJson.Version info : modsJson.versions) {
@@ -110,7 +111,7 @@ public class MinecraftInstances {
                         }
                     }
                     mods = modInfos.toArray(modInfos.toArray(new ModInfo[0]));
-                    GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+                    GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
                     API_V1.finishedDownloading = true;
                     return;
                 }
@@ -155,7 +156,7 @@ public class MinecraftInstances {
                     }
                 }
 
-                GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+                GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
                 API_V1.finishedDownloading = true;
             } catch (Exception e) {
                 Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e);

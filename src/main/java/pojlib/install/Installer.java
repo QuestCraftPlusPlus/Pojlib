@@ -106,17 +106,16 @@ public class Installer {
 
         DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"));
 
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/sodium-options.json"), FileUtil.loadFromAssetToByte(activity, "sodium-options.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/vivecraft-config.properties"), FileUtil.loadFromAssetToByte(activity, "vivecraft-config.properties"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/tweakeroo.json"), FileUtil.loadFromAssetToByte(activity, "tweakeroo.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/smoothboot.json"), FileUtil.loadFromAssetToByte(activity, "smoothboot.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/malilib.json"), FileUtil.loadFromAssetToByte(activity, "malilib.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/immediatelyfast.json"), FileUtil.loadFromAssetToByte(activity, "immediatelyfast.json"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/c2me.toml"), FileUtil.loadFromAssetToByte(activity, "c2me.toml"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/moreculling.toml"), FileUtil.loadFromAssetToByte(activity,"moreculling.toml"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/config/modernfix-mixins.properties"), FileUtil.loadFromAssetToByte(activity,"modernfix-mixins.properties"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/options.txt"), FileUtil.loadFromAssetToByte(activity, "options.txt"));
-        FileUtils.writeByteArrayToFile(new File(Constants.MC_DIR + "/optionsviveprofiles.txt"), FileUtil.loadFromAssetToByte(activity, "optionsviveprofiles.txt"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/sodium-options.json"), FileUtil.loadFromAssetToByte(activity, "sodium-options.json"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/vivecraft-config.properties"), FileUtil.loadFromAssetToByte(activity, "vivecraft-config.properties"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/tweakeroo.json"), FileUtil.loadFromAssetToByte(activity, "tweakeroo.json"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/smoothboot.json"), FileUtil.loadFromAssetToByte(activity, "smoothboot.json"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/malilib.json"), FileUtil.loadFromAssetToByte(activity, "malilib.json"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/immediatelyfast.json"), FileUtil.loadFromAssetToByte(activity, "immediatelyfast.json"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/moreculling.toml"), FileUtil.loadFromAssetToByte(activity,"moreculling.toml"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/config/modernfix-mixins.properties"), FileUtil.loadFromAssetToByte(activity,"modernfix-mixins.properties"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/options.txt"), FileUtil.loadFromAssetToByte(activity, "options.txt"));
+        FileUtils.writeByteArrayToFile(new File(gameDir + "/optionsviveprofiles.txt"), FileUtil.loadFromAssetToByte(activity, "optionsviveprofiles.txt"));
 
         return new File(gameDir + "/assets").getAbsolutePath();
     }

@@ -32,8 +32,8 @@
 				},
 				{
 					"slug": "Server-Core",
-					"version": "1.4.0",
-					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/H1fXXdNC/servercore-fabric-1.4.0%2B1.20.3.jar"
+					"version": "1.5.0",
+					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/1mKL7nLt/servercore-fabric-1.5.0%2B1.20.4.jar"
 				},
 				{
 					"slug": "ImmediatelyFast",
@@ -104,8 +104,8 @@
 				},
 				{
 					"slug": "Server-Core",
-					"version": "1.3.9",
-					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/sicenHyA/servercore-fabric-1.3.9%2B1.20.2.jar"
+					"version": "1.5.0",
+					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/wgjsjWPu/servercore-fabric-1.5.0%2B1.20.2.jar"
 				},
 				{
 					"slug": "Mod-Menu",
@@ -186,8 +186,8 @@
 				},
 				{
 					"slug": "Server-Core",
-					"version": "1.3.7-1.20.1",
-					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/exA4UxFq/servercore-fabric-1.3.7%2B1.20.1.jar"
+					"version": "1.5.0",
+					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/dXmFuxyH/servercore-fabric-1.5.0%2B1.20.1.jar"
 				},
 				{
 					"slug": "Mod-Menu",

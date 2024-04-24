@@ -200,7 +200,6 @@ public class JREUtils {
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL_dri.so");
-        userArgs.add("-Dfabric.addMods=" + instance.gameDir + "/mods/" + instance.modsDirName);
 
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);

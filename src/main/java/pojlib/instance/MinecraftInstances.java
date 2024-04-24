@@ -38,7 +38,6 @@ public class MinecraftInstances {
         public String instanceName;
         public String instanceImageURL;
         public String versionName;
-        public String modsDirName;
         public String versionType;
         public String classpath;
         public String gameDir;
@@ -95,17 +94,17 @@ public class MinecraftInstances {
 
                 assert version != null;
 
-                File modsDir = new File(gameDir + "/mods/" + modsDirName);
+                File modsDir = new File(gameDir + "/mods");
                 if(!modsDir.exists()) {
                     ArrayList<ModInfo> modInfos = new ArrayList<>();
                     for(ModInfo info : version.coreMods) {
-                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                        File mod = new File(modsDir + "/" + info.slug + ".jar");
                         DownloadUtils.downloadFile(info.download_link, mod);
                         modInfos.add(info);
                     }
                     if(defaultMods) {
                         for (ModInfo info : version.defaultMods) {
-                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                            File mod = new File(modsDir + "/" + info.slug + ".jar");
                             DownloadUtils.downloadFile(info.download_link, mod);
                             modInfos.add(info);
                         }
@@ -125,7 +124,7 @@ public class MinecraftInstances {
                             continue;
                         }
 
-                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                        File mod = new File(modsDir + "/" + info.slug + ".jar");
                         DownloadUtils.downloadFile(info.download_link, mod);
                         info = currInfo;
                     }
@@ -141,7 +140,7 @@ public class MinecraftInstances {
                                 continue;
                             }
 
-                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                            File mod = new File(modsDir + "/" + info.slug + ".jar");
                             DownloadUtils.downloadFile(info.download_link, mod);
                             info = currInfo;
                         }
@@ -150,7 +149,7 @@ public class MinecraftInstances {
 
                 // Download custom mods
                 for(ModInfo currInfo : mods) {
-                    File mod = new File(gameDir + "/mods/" + modsDirName + "/" + currInfo.slug + ".jar");
+                    File mod = new File(modsDir + "/" + currInfo.slug + ".jar");
                     if(!mod.exists()) {
                         DownloadUtils.downloadFile(currInfo.download_link, mod);
                     }

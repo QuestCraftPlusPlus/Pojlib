@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
@@ -40,7 +41,7 @@ public class InstanceHandler {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String gamePath, String modsFolderName, String imageURL) {
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String imageURL) {
         API_V1.finishedDownloading = false;
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
@@ -58,12 +59,12 @@ public class InstanceHandler {
         instance.instanceName = instanceName;
         instance.instanceImageURL = imageURL;
         instance.versionName = minecraftVersion;
-        instance.gameDir = gamePath;
+        instance.gameDir = Constants.USER_HOME + "/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_");
         instance.defaultMods = useDefaultMods;
-        if(modsFolderName != null) {
-            instance.modsDirName = modsFolderName;
-        } else {
-            instance.modsDirName = instance.versionName;
+
+        File gameDirFile = new File(instance.gameDir);
+        if(!gameDirFile.exists()) {
+            gameDirFile.mkdirs();
         }
 
         VersionInfo modLoaderVersionInfo = null;
@@ -176,7 +177,7 @@ public class InstanceHandler {
 
         if(oldInfo != null) {
             // Delete the mod
-            File modFile = new File(gameDir + "/mods/" + instance.modsDirName + "/" + name + ".jar");
+            File modFile = new File(gameDir + "/mods/" + name + ".jar");
             modFile.delete();
 
             ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);

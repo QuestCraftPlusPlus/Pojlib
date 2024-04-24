@@ -142,8 +142,7 @@ public class InstanceHandler {
         return instances;
     }
 
-    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
-                              String gameDir, String name, String version, String url) {
+    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url) {
         ModInfo info = new ModInfo();
         info.slug = name;
         info.download_link = url;
@@ -153,7 +152,7 @@ public class InstanceHandler {
         mods.add(info);
         instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
 
-        GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+        GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
     }
 
     public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
@@ -166,7 +165,7 @@ public class InstanceHandler {
         return false;
     }
 
-    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir, String name) {
+    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
         ModInfo oldInfo = null;
         for(ModInfo info : instance.mods) {
             if(info.slug.equalsIgnoreCase(name)) {
@@ -177,13 +176,13 @@ public class InstanceHandler {
 
         if(oldInfo != null) {
             // Delete the mod
-            File modFile = new File(gameDir + "/mods/" + name + ".jar");
+            File modFile = new File(instance.gameDir + "/mods/" + name + ".jar");
             modFile.delete();
 
             ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
             mods.remove(oldInfo);
             instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
-            GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+            GsonUtils.objectToJsonFile(instance.gameDir + "/instances.json", instances);
         }
 
         return oldInfo != null;

@@ -107,7 +107,7 @@ public class InstanceHandler {
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
-                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir, activity);
+                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir, activity, instance);
             } catch (IOException e) {
                 e.printStackTrace();
             }

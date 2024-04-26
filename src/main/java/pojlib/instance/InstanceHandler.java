@@ -59,7 +59,7 @@ public class InstanceHandler {
         instance.instanceName = instanceName;
         instance.instanceImageURL = imageURL;
         instance.versionName = minecraftVersion;
-        instance.gameDir = Constants.USER_HOME + "/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_");
+        instance.gameDir = Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_");
         instance.defaultMods = useDefaultMods;
 
         File gameDirFile = new File(instance.gameDir);

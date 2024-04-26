@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import pojlib.api.API_V1;
-import pojlib.instance.MinecraftInstances;
+import pojlib.util.json.MinecraftInstances;
 
 public class JREUtils {
     private JREUtils() {}

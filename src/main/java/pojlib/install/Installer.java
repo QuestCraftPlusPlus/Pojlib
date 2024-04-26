@@ -8,7 +8,8 @@ import com.google.gson.JsonObject;
 
 import org.apache.commons.io.FileUtils;
 
-import pojlib.instance.MinecraftInstances;
+import pojlib.APIHandler;
+import pojlib.util.json.MinecraftInstances;
 import pojlib.util.*;
 
 import java.io.File;

@@ -8,13 +8,13 @@ import android.net.NetworkCapabilities;
 import com.google.gson.JsonObject;
 
 import pojlib.account.MinecraftAccount;
-import pojlib.install.*;
-import pojlib.instance.InstanceHandler;
-import pojlib.instance.MinecraftInstances;
-import pojlib.util.APIHandler;
+import pojlib.InstanceHandler;
+import pojlib.util.json.MinecraftInstances;
+import pojlib.APIHandler;
 import pojlib.util.Constants;
-import pojlib.util.LoginHelper;
+import pojlib.account.LoginHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -137,6 +137,28 @@ public class API_V1 {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
             return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, imageURL);
+        }
+    }
+
+    /**
+     * Creates a new game instance from a mrpack file.
+     *
+     * @param activity          The active android activity
+     * @param instanceName      The name of the instance being created - can be anything, used for identification
+     * @param useDefaultMods    Use QC's default mods for the version (Core mods are automatically included)
+     * @param minecraftVersion  The version of minecraft to install
+     * @param imageURL          Modpack image url, nullable
+     * @return                  A minecraft instance object
+     * @throws                  IOException Throws if download of library or asset fails
+     */
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String imageURL, File mrpackFile) throws IOException {
+
+        if(ignoreInstanceName) {
+            return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, InstanceHandler.ModLoader.Fabric, mrpackFile, imageURL);
+        } else if (instanceName.contains("/") || instanceName.contains("!")) {
+            throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
+        } else {
+            return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, InstanceHandler.ModLoader.Fabric, mrpackFile, imageURL);
         }
     }
 

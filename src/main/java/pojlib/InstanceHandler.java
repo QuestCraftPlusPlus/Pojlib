@@ -1,4 +1,4 @@
-package pojlib.instance;
+package pojlib;
 
 import android.app.Activity;
 
@@ -17,15 +17,55 @@ import pojlib.install.MinecraftMeta;
 import pojlib.install.QuiltMeta;
 import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
-import pojlib.util.ModInfo;
+import pojlib.util.DownloadUtils;
+import pojlib.util.json.MinecraftInstances;
+import pojlib.util.json.ModInfo;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.VLoader;
+import pojlib.util.json.ModrinthIndexJson;
 
 public class InstanceHandler {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
+
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, File mrpackFile, String imageURL) {
+        ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackFile.getAbsolutePath(), ModrinthIndexJson.class);
+        if(index == null) {
+            Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackFile.getAbsolutePath());
+            return null;
+        }
+
+        MinecraftInstances.Instance instance = create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL);
+        new Thread(() -> {
+            API_V1.finishedDownloading = false;
+            for (ModrinthIndexJson.ModpackFile file : index.files) {
+                if (file.path.contains("mods")) {
+                    ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
+                    ModInfo info = new ModInfo();
+                    info.slug = file.path
+                            .replaceAll(".*\\/", "")
+                            .replaceAll("\\..*", "");
+                    info.version = "1.0.0";
+                    info.download_link = file.downloads[0];
+                    mods.add(info);
+                    instance.mods = mods.toArray(new ModInfo[0]);
+                }
+                try {
+                    API_V1.currentDownload = file.path;
+                    DownloadUtils.downloadFile(file.downloads[0], new File(instance.gameDir, file.path));
+                } catch (IOException e) {
+                    Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackFile.getAbsolutePath());
+                    Logger.getInstance().appendToLog(e.toString());
+                }
+            }
+            API_V1.finishedDownloading = false;
+            GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);
+        }).start();
+
+        return instance;
+    }
 
     public enum ModLoader {
         Fabric(0),

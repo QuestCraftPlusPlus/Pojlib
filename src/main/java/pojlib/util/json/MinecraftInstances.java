@@ -1,4 +1,4 @@
-package pojlib.instance;
+package pojlib.util.json;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,12 +7,11 @@ import java.util.List;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
+import pojlib.InstanceHandler;
 import pojlib.util.Constants;
 import pojlib.util.DownloadUtils;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
-import pojlib.util.ModInfo;
-import pojlib.util.ModsJson;
 
 public class MinecraftInstances {
     public Instance[] instances;

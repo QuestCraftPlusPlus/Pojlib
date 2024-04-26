@@ -1,4 +1,4 @@
-package pojlib.util;
+package pojlib;
 
 import com.google.gson.Gson;
 
@@ -13,6 +13,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+
+import pojlib.util.Constants;
+import pojlib.util.DownloadUtils;
+import pojlib.util.GsonUtils;
+import pojlib.util.Logger;
 
 public class APIHandler {
     public final String baseUrl;

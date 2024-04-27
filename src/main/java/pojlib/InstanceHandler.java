@@ -30,7 +30,10 @@ public class InstanceHandler {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
 
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, File mrpackFile, String imageURL) {
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFileURL, String imageURL) throws IOException {
+        File mrpackFile = new File(Constants.USER_HOME + "/" + instanceName + ".mrpack");
+        DownloadUtils.downloadFile(mrpackFileURL, mrpackFile);
+
         ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackFile.getAbsolutePath(), ModrinthIndexJson.class);
         if(index == null) {
             Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackFile.getAbsolutePath());

@@ -5,9 +5,14 @@ import android.app.Activity;
 import com.google.common.collect.Lists;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
@@ -30,13 +35,33 @@ public class InstanceHandler {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
 
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFileURL, String imageURL) throws IOException {
-        File mrpackFile = new File(Constants.USER_HOME + "/" + instanceName + ".mrpack");
-        DownloadUtils.downloadFile(mrpackFileURL, mrpackFile);
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFilePath, String imageURL) throws IOException {
+        File mrpackFile = new File(mrpackFilePath);
+        File mrpackJson = new File(Constants.USER_HOME + "/" + instanceName + "/setup/modrinth.index.json");
 
-        ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackFile.getAbsolutePath(), ModrinthIndexJson.class);
+        mrpackJson.getParentFile().mkdirs();
+        try(ZipFile mrpack = new ZipFile(mrpackFile)) {
+            while (mrpack.entries().hasMoreElements()) {
+                ZipEntry entry = mrpack.entries().nextElement();
+                File file = new File(mrpackJson.getParentFile(), entry.getName());
+                if (!entry.isDirectory()) {
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                    try(FileOutputStream writer = new FileOutputStream(file)) {
+                        InputStream stream = mrpack.getInputStream(entry);
+                        byte[] data = new byte[(int) entry.getSize()];
+                        stream.read(data);
+                        writer.write(data);
+                        writer.flush();
+                        stream.close();
+                    }
+                }
+            }
+        }
+
+        ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackJson.getAbsolutePath(), ModrinthIndexJson.class);
         if(index == null) {
-            Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackFile.getAbsolutePath());
+            Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackJson.getAbsolutePath());
             return null;
         }
 
@@ -59,7 +84,7 @@ public class InstanceHandler {
                     API_V1.currentDownload = file.path;
                     DownloadUtils.downloadFile(file.downloads[0], new File(instance.gameDir, file.path));
                 } catch (IOException e) {
-                    Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackFile.getAbsolutePath());
+                    Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackJson.getAbsolutePath());
                     Logger.getInstance().appendToLog(e.toString());
                 }
             }

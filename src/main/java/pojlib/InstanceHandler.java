@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
@@ -23,6 +25,7 @@ import pojlib.install.QuiltMeta;
 import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
 import pojlib.util.DownloadUtils;
+import pojlib.util.FileUtil;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.json.ModInfo;
 import pojlib.util.GsonUtils;
@@ -36,28 +39,10 @@ public class InstanceHandler {
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
 
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFilePath, String imageURL) throws IOException {
-        File mrpackFile = new File(mrpackFilePath);
-        File mrpackJson = new File(Constants.USER_HOME + "/" + instanceName + "/setup/modrinth.index.json");
+        File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName + "/setup/modrinth.index.json");
 
         mrpackJson.getParentFile().mkdirs();
-        try(ZipFile mrpack = new ZipFile(mrpackFile)) {
-            while (mrpack.entries().hasMoreElements()) {
-                ZipEntry entry = mrpack.entries().nextElement();
-                File file = new File(mrpackJson.getParentFile(), entry.getName());
-                if (!entry.isDirectory()) {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                    try(FileOutputStream writer = new FileOutputStream(file)) {
-                        InputStream stream = mrpack.getInputStream(entry);
-                        byte[] data = new byte[(int) entry.getSize()];
-                        stream.read(data);
-                        writer.write(data);
-                        writer.flush();
-                        stream.close();
-                    }
-                }
-            }
-        }
+        FileUtil.UnzipArchive(activity, mrpackFilePath, instanceName, Constants.USER_HOME + "/instances/" + instanceName);
 
         ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackJson.getAbsolutePath(), ModrinthIndexJson.class);
         if(index == null) {

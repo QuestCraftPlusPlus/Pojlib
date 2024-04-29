@@ -42,7 +42,7 @@ public class InstanceHandler {
         File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName + "/setup/modrinth.index.json");
 
         mrpackJson.getParentFile().mkdirs();
-        FileUtil.UnzipArchive(activity, mrpackFilePath, instanceName, Constants.USER_HOME + "/instances/" + instanceName);
+        FileUtil.UnzipArchive(activity, mrpackFilePath, instanceName + ".mrpack", Constants.USER_HOME + "/instances/" + instanceName);
 
         ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackJson.getAbsolutePath(), ModrinthIndexJson.class);
         if(index == null) {

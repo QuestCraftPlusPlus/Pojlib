@@ -235,18 +235,21 @@ public class InstanceHandler {
             ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
             mods.remove(oldInfo);
             instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
-            GsonUtils.objectToJsonFile(instance.gameDir + "/instances.json", instances);
+            GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
         }
 
         return oldInfo != null;
     }
 
     // Return true if instance was deleted
-    public static boolean delete(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir) {
+    public static boolean delete(MinecraftInstances instances, MinecraftInstances.Instance instance) {
+        File instanceDir = new File(instance.gameDir);
+        instanceDir.delete();
+
         ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
         instances1.remove(instance);
         instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
-        GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+        GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
 
         return true;
     }

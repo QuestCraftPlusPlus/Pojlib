@@ -115,7 +115,7 @@ public class API_V1 {
      * @return True if it deletes successfully, false otherwise.
      */
     public static boolean deleteInstance(MinecraftInstances instances, MinecraftInstances.Instance instance) {
-        return InstanceHandler.delete(instances, instance, Constants.USER_HOME);
+        return InstanceHandler.delete(instances, instance);
     }
 
     /**

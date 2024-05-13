@@ -51,9 +51,14 @@
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/CV2Vtn5m/modernfix-fabric-5.17.0%2Bmc1.20.4.jar"
 				},
 				{
-					"slug": "Better-Biome-Reblend",
+					"slug": "BBRB",
 					"version": "1.4.2-fabric",
 					"download_link": "https://cdn.modrinth.com/data/Xh8hkQmD/versions/qAIsaWTg/betterbiomereblend-1.4.2.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.1.1",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/zZYSuJ5b/BadOptimizations-2.1.1.jar"
 				}
 			]
 		},
@@ -133,9 +138,14 @@
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/fh7tdNlS/modernfix-fabric-5.17.0%2Bmc1.20.1.jar"
 				},
 				{
-					"slug": "Better-Biome-Reblend",
+					"slug": "BBRB",
 					"version": "1.4.2-fabric",
 					"download_link": "https://cdn.modrinth.com/data/Xh8hkQmD/versions/qAIsaWTg/betterbiomereblend-1.4.2.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.1.1",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/eT6Jsaq5/BadOptimizations-2.1.1.jar"
 				}
 			]
 		},
@@ -225,9 +235,14 @@
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/8IFFeKYy/ImmediatelyFast-1.1.12%2B1.19.4.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.7.2",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.1.1",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/ydYsXrGL/BadOptimizations-2.1.1.jar"
 				}
 			]
 		},
@@ -307,9 +322,14 @@
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4yVqQKQO/ImmediatelyFast-1.1.12%2B1.19.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.17.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/kGQbFg0p/modernfix-fabric-5.17.0%2Bmc1.19.2.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.1.1",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/zLWPzGCh/BadOptimizations-2.1.1.jar"
 				}
 			]
 		},
@@ -394,9 +414,14 @@
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.17.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/KNI1HSwE/modernfix-fabric-5.17.0%2Bmc1.18.2.jar"
+				},
+				{
+					"slug": "Better-Biome-Blend",
+					"version": "1.3.5",
+					"download_link": "https://cdn.modrinth.com/data/Rs6c7WyL/versions/1.18.2-1.3.5-fabric/betterbiomeblend-1.18.2-1.3.5-fabric.jar"
 				}
 			]
 		}

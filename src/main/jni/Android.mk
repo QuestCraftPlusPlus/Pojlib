@@ -8,28 +8,9 @@ HERE_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(HERE_PATH)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := regal
-LOCAL_SRC_FILES := GL/libRegal.so
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := spirv-cross
-LOCAL_SRC_FILES := tinywrapper/SPIRVCross/libspirv-cross-c-shared.so
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := shaderc
-LOCAL_SRC_FILES := tinywrapper/shaderc/libshaderc_shared.so
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE := tinywrapper
-LOCAL_SHARED_LIBRARIES := regal spirv-cross shaderc
-LOCAL_LDLIBS := -lGLESv3
-LOCAL_SRC_FILES := tinywrapper/main.c tinywrapper/string_utils.c
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/tinywrapper
-include $(BUILD_SHARED_LIBRARY)
-
+LOCAL_SRC_FILES := GL/libtinywrapper.so
+include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := openxr_loader
@@ -69,7 +50,7 @@ LOCAL_LDLIBS := -ldl -llog -landroid -lGLESv3 -lEGL
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG
-LOCAL_SHARED_LIBRARIES := openvr_api regal
+LOCAL_SHARED_LIBRARIES := openvr_api tinywrapper
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
     egl_bridge.c \

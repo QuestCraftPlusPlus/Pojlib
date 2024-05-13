@@ -1,4 +1,4 @@
-package pojlib.util;
+package pojlib.account;
 
 import com.microsoft.aad.msal4j.ITokenCacheAccessAspect;
 import com.microsoft.aad.msal4j.ITokenCacheAccessContext;

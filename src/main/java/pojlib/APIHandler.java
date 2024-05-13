@@ -1,4 +1,4 @@
-package pojlib.util;
+package pojlib;
 
 import com.google.gson.Gson;
 
@@ -13,6 +13,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+
+import pojlib.util.Constants;
+import pojlib.util.DownloadUtils;
+import pojlib.util.GsonUtils;
+import pojlib.util.Logger;
 
 public class APIHandler {
     public final String baseUrl;
@@ -105,7 +110,7 @@ public class APIHandler {
     public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/supportedVersions.json";
 
     public static String[] getQCSupportedVersions() {
-        File versionsJson = new File(Constants.MC_DIR + "/supportedVersions.json");
+        File versionsJson = new File(Constants.USER_HOME + "/supportedVersions.json");
         try {
             DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson);
         } catch (IOException e) {

@@ -90,9 +90,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
                 e.printStackTrace();
             }
         }
-        if(new File(Constants.MC_DIR + "/assets").exists()) {
-            API_V1.finishedDownloading = true;
-        }
     }
 
     public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {

@@ -20,6 +20,7 @@
 #include <android/rect.h>
 #include <string.h>
 #include <pthread.h>
+#include <EGL/egl.h>
 #include "utils.h"
 #include "GL/gl.h"
 
@@ -42,11 +43,38 @@ void* pojavGetCurrentContext() {
     return xrEglContext;
 }
 
+EGLSurface (*eglCreatePbufferSurface_p) (EGLDisplay dpy, EGLConfig config, const EGLint *attrib_list);
+EGLDisplay (*eglGetDisplay_p) (EGLNativeDisplayType display_id);
+EGLint (*eglGetError_p) (void);
+EGLBoolean (*eglChooseConfig_p) (EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config);
+EGLBoolean (*eglInitialize_p) (EGLDisplay dpy, EGLint *major, EGLint *minor);
+EGLBoolean (*eglBindAPI_p) (EGLenum api);
+EGLBoolean (*eglGetConfigAttrib_p) (EGLDisplay dpy, EGLConfig config, EGLint attribute, EGLint *value);
+EGLBoolean (*eglSwapBuffers_p) (EGLDisplay dpy, EGLSurface surface);
+EGLBoolean (*eglSwapInterval_p) (EGLDisplay dpy, EGLint interval);
+
 int xrEglInit() {
+    eglGetDisplay_p = (EGLDisplay (*)(EGLNativeDisplayType)) eglGetProcAddress("eglGetDisplay");
+    eglGetError_p = (EGLint (*)(void)) eglGetProcAddress("eglGetError");
+    eglChooseConfig_p = (EGLBoolean (*)(EGLDisplay, const EGLint *, EGLConfig *, EGLint,
+                                        EGLint *)) eglGetProcAddress("eglChooseConfig");
+    eglCreatePbufferSurface_p = (EGLSurface (*)(EGLDisplay, EGLConfig,
+                                                const EGLint *)) eglGetProcAddress(
+            "eglCreatePbufferSurface");
+    eglInitialize_p = (EGLBoolean (*)(EGLDisplay, EGLint *, EGLint *)) eglGetProcAddress(
+            "eglInitialize");
+    eglBindAPI_p = (EGLBoolean (*)(EGLenum)) eglGetProcAddress("eglBindAPI");
+    eglGetConfigAttrib_p = (EGLBoolean (*)(EGLDisplay, EGLConfig, EGLint,
+                                           EGLint *)) eglGetProcAddress("eglGetConfigAttrib");
+    eglSwapBuffers_p = (EGLBoolean (*)(EGLDisplay, EGLSurface)) eglGetProcAddress(
+            "eglSwapBuffers");
+    eglSwapInterval_p = (EGLBoolean (*)(EGLDisplay, EGLint)) eglGetProcAddress(
+            "eglSwapInterval");
+
     if (xrEglDisplay == NULL || xrEglDisplay == EGL_NO_DISPLAY) {
-        xrEglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+        xrEglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
         if (xrEglDisplay == EGL_NO_DISPLAY) {
-            printf("EGLBridge: Error eglGetDefaultDisplay() failed: %p\n", eglGetError());
+            printf("EGLBridge: Error eglGetDefaultDisplay() failed: %p\n", eglGetError_p());
             return 0;
         }
     }
@@ -54,8 +82,8 @@ int xrEglInit() {
     printf("EGLBridge: Initializing\n");
     // printf("EGLBridge: ANativeWindow pointer = %p\n", androidWindow);
     //(*env)->ThrowNew(env,(*env)->FindClass(env,"java/lang/Exception"),"Trace exception");
-    if (!eglInitialize(xrEglDisplay, NULL, NULL)) {
-        printf("EGLBridge: Error eglInitialize() failed: %s\n", eglGetError());
+    if (!eglInitialize_p(xrEglDisplay, NULL, NULL)) {
+        printf("EGLBridge: Error eglInitialize() failed: %s\n", eglGetError_p());
         return 0;
     }
 
@@ -74,25 +102,25 @@ int xrEglInit() {
     EGLint num_configs;
     EGLint vid;
 
-    if (!eglChooseConfig(xrEglDisplay, attribs, &xrConfig, 1, &num_configs)) {
-        printf("EGLBridge: Error couldn't get an EGL visual config: %s\n", eglGetError());
+    if (!eglChooseConfig_p(xrEglDisplay, attribs, &xrConfig, 1, &num_configs)) {
+        printf("EGLBridge: Error couldn't get an EGL visual config: %s\n", eglGetError_p());
         return 0;
     }
 
     assert(xrConfig);
     assert(num_configs > 0);
 
-    if (!eglGetConfigAttrib(xrEglDisplay, xrConfig, EGL_NATIVE_VISUAL_ID, &vid)) {
-        printf("EGLBridge: Error eglGetConfigAttrib() failed: %s\n", eglGetError());
+    if (!eglGetConfigAttrib_p(xrEglDisplay, xrConfig, EGL_NATIVE_VISUAL_ID, &vid)) {
+        printf("EGLBridge: Error eglGetConfigAttrib() failed: %s\n", eglGetError_p());
         return 0;
     }
 
-    eglBindAPI(EGL_OPENGL_ES_API);
+    eglBindAPI_p(EGL_OPENGL_ES_API);
 
-    xrEglSurface = eglCreatePbufferSurface(xrEglDisplay, xrConfig,
+    xrEglSurface = eglCreatePbufferSurface_p(xrEglDisplay, xrConfig,
                                            NULL);
     if (!xrEglSurface) {
-        printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError());
+        printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError_p());
         return 0;
     }
 
@@ -114,7 +142,6 @@ int pojavInit() {
     savedHeight = 1;
 
     xrEglInit();
-    return 0;
 }
 
 void pojavSetWindowHint(int hint, int value) {
@@ -127,7 +154,7 @@ void pojavPumpEvents(void* window) {
 
 int32_t stride;
 void pojavSwapBuffers() {
-    eglSwapBuffers(xrEglDisplay, xrEglSurface);
+    eglSwapBuffers_p(xrEglDisplay, xrEglSurface);
 }
 
 bool locked = false;
@@ -142,7 +169,7 @@ void pojavMakeCurrent(void* window) {
     xrEglContext = window;
 
     if (success == EGL_FALSE) {
-        printf("EGLBridge: Error: eglMakeCurrent() failed: %p\n", eglGetError());
+        printf("EGLBridge: Error: eglMakeCurrent() failed: %p\n", eglGetError_p());
     } else {
         printf("EGLBridge: eglMakeCurrent() succeed!\n");
     }
@@ -189,5 +216,5 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
     return ret;
 }
 void pojavSwapInterval(int interval) {
-    eglSwapInterval(xrEglDisplay, interval);
+    eglSwapInterval_p(xrEglDisplay, interval);
 }

@@ -28,7 +28,5 @@ public class Constants {
 
     public static String MINOTAR_URL = "https://minotar.net";
 
-    public static String MC_DIR = new File(Environment.getExternalStorageDirectory(),"Android/data/com.qcxr.qcxr/files/.minecraft").getAbsolutePath();
-
     public static String USER_HOME = new File(Environment.getExternalStorageDirectory(),"Android/data/com.qcxr.qcxr/files").getAbsolutePath();
 }

@@ -1,4 +1,4 @@
-package pojlib.util;
+package pojlib.util.json;
 
 public class ModsJson {
     public Version[] versions;

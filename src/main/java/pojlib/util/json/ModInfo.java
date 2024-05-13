@@ -1,4 +1,4 @@
-package pojlib.util;
+package pojlib.util.json;
 
 public class ModInfo {
     public String slug;

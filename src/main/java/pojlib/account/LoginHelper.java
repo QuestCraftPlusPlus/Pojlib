@@ -1,4 +1,4 @@
-package pojlib.util;
+package pojlib.account;
 
 import android.app.Activity;
 
@@ -21,8 +21,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
-import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
+import pojlib.util.Constants;
+import pojlib.util.Logger;
 
 public class LoginHelper {
     public static Thread loginThread;

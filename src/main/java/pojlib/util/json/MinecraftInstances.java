@@ -1,4 +1,4 @@
-package pojlib.instance;
+package pojlib.util.json;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,11 +7,11 @@ import java.util.List;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
+import pojlib.InstanceHandler;
+import pojlib.util.Constants;
 import pojlib.util.DownloadUtils;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
-import pojlib.util.ModInfo;
-import pojlib.util.ModsJson;
 
 public class MinecraftInstances {
     public Instance[] instances;
@@ -37,7 +37,6 @@ public class MinecraftInstances {
         public String instanceName;
         public String instanceImageURL;
         public String versionName;
-        public String modsDirName;
         public String versionType;
         public String classpath;
         public String gameDir;
@@ -76,13 +75,13 @@ public class MinecraftInstances {
             return GsonUtils.jsonFileToObject(mods.getAbsolutePath(), ModsJson.class);
         }
 
-        public void updateMods(String gameDir, MinecraftInstances instances) {
+        public void updateMods(MinecraftInstances instances) {
             API_V1.finishedDownloading = false;
             if(mods == null) {
                 mods = new ModInfo[0];
             }
             try {
-                ModsJson modsJson = parseModsJson(gameDir);
+                ModsJson modsJson = parseModsJson(Constants.USER_HOME);
 
                 ModsJson.Version version = null;
                 for(ModsJson.Version info : modsJson.versions) {
@@ -94,23 +93,23 @@ public class MinecraftInstances {
 
                 assert version != null;
 
-                File modsDir = new File(gameDir + "/mods/" + modsDirName);
+                File modsDir = new File(gameDir + "/mods");
                 if(!modsDir.exists()) {
                     ArrayList<ModInfo> modInfos = new ArrayList<>();
                     for(ModInfo info : version.coreMods) {
-                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                        File mod = new File(modsDir + "/" + info.slug + ".jar");
                         DownloadUtils.downloadFile(info.download_link, mod);
                         modInfos.add(info);
                     }
                     if(defaultMods) {
                         for (ModInfo info : version.defaultMods) {
-                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                            File mod = new File(modsDir + "/" + info.slug + ".jar");
                             DownloadUtils.downloadFile(info.download_link, mod);
                             modInfos.add(info);
                         }
                     }
                     mods = modInfos.toArray(modInfos.toArray(new ModInfo[0]));
-                    GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+                    GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
                     API_V1.finishedDownloading = true;
                     return;
                 }
@@ -124,7 +123,7 @@ public class MinecraftInstances {
                             continue;
                         }
 
-                        File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                        File mod = new File(modsDir + "/" + info.slug + ".jar");
                         DownloadUtils.downloadFile(info.download_link, mod);
                         info = currInfo;
                     }
@@ -140,7 +139,7 @@ public class MinecraftInstances {
                                 continue;
                             }
 
-                            File mod = new File(gameDir + "/mods/" + modsDirName + "/" + info.slug + ".jar");
+                            File mod = new File(modsDir + "/" + info.slug + ".jar");
                             DownloadUtils.downloadFile(info.download_link, mod);
                             info = currInfo;
                         }
@@ -149,13 +148,13 @@ public class MinecraftInstances {
 
                 // Download custom mods
                 for(ModInfo currInfo : mods) {
-                    File mod = new File(gameDir + "/mods/" + modsDirName + "/" + currInfo.slug + ".jar");
+                    File mod = new File(modsDir + "/" + currInfo.slug + ".jar");
                     if(!mod.exists()) {
                         DownloadUtils.downloadFile(currInfo.download_link, mod);
                     }
                 }
 
-                GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+                GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
                 API_V1.finishedDownloading = true;
             } catch (Exception e) {
                 Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e);

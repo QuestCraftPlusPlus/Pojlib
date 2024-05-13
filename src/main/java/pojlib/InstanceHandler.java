@@ -1,12 +1,20 @@
-package pojlib.instance;
+package pojlib;
 
 import android.app.Activity;
 
 import com.google.common.collect.Lists;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
@@ -16,15 +24,61 @@ import pojlib.install.MinecraftMeta;
 import pojlib.install.QuiltMeta;
 import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
-import pojlib.util.ModInfo;
+import pojlib.util.DownloadUtils;
+import pojlib.util.FileUtil;
+import pojlib.util.json.MinecraftInstances;
+import pojlib.util.json.ModInfo;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.VLoader;
+import pojlib.util.json.ModrinthIndexJson;
 
 public class InstanceHandler {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
+
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFilePath, String imageURL) throws IOException {
+        File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName + "/setup/modrinth.index.json");
+
+        mrpackJson.getParentFile().mkdirs();
+        FileUtil.UnzipArchive(activity, mrpackFilePath, instanceName + ".mrpack", Constants.USER_HOME + "/instances/" + instanceName);
+
+        ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackJson.getAbsolutePath(), ModrinthIndexJson.class);
+        if(index == null) {
+            Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackJson.getAbsolutePath());
+            return null;
+        }
+
+        MinecraftInstances.Instance instance = create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL);
+        new Thread(() -> {
+            API_V1.finishedDownloading = false;
+            for (ModrinthIndexJson.ModpackFile file : index.files) {
+                if (file.path.contains("mods")) {
+                    ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
+                    ModInfo info = new ModInfo();
+                    info.slug = file.path
+                            .replaceAll(".*\\/", "")
+                            .replaceAll("\\..*", "");
+                    info.version = "1.0.0";
+                    info.download_link = file.downloads[0];
+                    mods.add(info);
+                    instance.mods = mods.toArray(new ModInfo[0]);
+                }
+                try {
+                    API_V1.currentDownload = file.path;
+                    DownloadUtils.downloadFile(file.downloads[0], new File(instance.gameDir, file.path));
+                } catch (IOException e) {
+                    Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackJson.getAbsolutePath());
+                    Logger.getInstance().appendToLog(e.toString());
+                }
+            }
+            API_V1.finishedDownloading = false;
+            GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);
+        }).start();
+
+        return instance;
+    }
 
     public enum ModLoader {
         Fabric(0),
@@ -40,7 +94,7 @@ public class InstanceHandler {
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String modsFolderName, String imageURL) {
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String imageURL) {
         API_V1.finishedDownloading = false;
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
@@ -58,12 +112,12 @@ public class InstanceHandler {
         instance.instanceName = instanceName;
         instance.instanceImageURL = imageURL;
         instance.versionName = minecraftVersion;
-        instance.gameDir = new File(gameDir).getAbsolutePath();
+        instance.gameDir = Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_");
         instance.defaultMods = useDefaultMods;
-        if(modsFolderName != null) {
-            instance.modsDirName = modsFolderName;
-        } else {
-            instance.modsDirName = instance.versionName;
+
+        File gameDirFile = new File(instance.gameDir);
+        if(!gameDirFile.exists()) {
+            gameDirFile.mkdirs();
         }
 
         VersionInfo modLoaderVersionInfo = null;
@@ -106,7 +160,7 @@ public class InstanceHandler {
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
-                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir, activity);
+                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir, activity, instance);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -114,7 +168,7 @@ public class InstanceHandler {
 
             // Write instance to json file
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
-            instance.updateMods(Constants.MC_DIR, instances);
+            instance.updateMods(instances);
 
             API_V1.finishedDownloading = true;
             Logger.getInstance().appendToLog("Finished Downloading!");
@@ -141,8 +195,7 @@ public class InstanceHandler {
         return instances;
     }
 
-    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
-                              String gameDir, String name, String version, String url) {
+    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url) {
         ModInfo info = new ModInfo();
         info.slug = name;
         info.download_link = url;
@@ -152,7 +205,7 @@ public class InstanceHandler {
         mods.add(info);
         instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
 
-        GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+        GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
     }
 
     public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
@@ -165,7 +218,7 @@ public class InstanceHandler {
         return false;
     }
 
-    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir, String name) {
+    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
         ModInfo oldInfo = null;
         for(ModInfo info : instance.mods) {
             if(info.slug.equalsIgnoreCase(name)) {
@@ -176,24 +229,27 @@ public class InstanceHandler {
 
         if(oldInfo != null) {
             // Delete the mod
-            File modFile = new File(gameDir + "/mods/" + instance.modsDirName + "/" + name + ".jar");
+            File modFile = new File(instance.gameDir + "/mods/" + name + ".jar");
             modFile.delete();
 
             ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
             mods.remove(oldInfo);
             instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
-            GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+            GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
         }
 
         return oldInfo != null;
     }
 
     // Return true if instance was deleted
-    public static boolean delete(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir) {
+    public static boolean delete(MinecraftInstances instances, MinecraftInstances.Instance instance) {
+        File instanceDir = new File(instance.gameDir);
+        instanceDir.delete();
+
         ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
         instances1.remove(instance);
         instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
-        GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+        GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
 
         return true;
     }
@@ -202,7 +258,7 @@ public class InstanceHandler {
         try {
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
-            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance.modsDirName);
+            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance);
         } catch (Throwable e) {
             e.printStackTrace();
         }

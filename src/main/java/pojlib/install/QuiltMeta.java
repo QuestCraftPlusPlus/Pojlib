@@ -1,7 +1,7 @@
 package pojlib.install;
 
 import com.google.gson.annotations.SerializedName;
-import pojlib.util.APIHandler;
+import pojlib.APIHandler;
 import pojlib.util.Constants;
 
 public class QuiltMeta {

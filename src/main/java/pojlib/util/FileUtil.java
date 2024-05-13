@@ -14,8 +14,6 @@ import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import pojlib.api.API_V1;
-
 public class FileUtil {
 
     public static String DIR_GAME_NEW;
@@ -63,7 +61,7 @@ public class FileUtil {
         fos.close();
     }
 
-    public static void UnzipArchive(String archivePath, String archiveName, Activity activity) {
+    public static void UnzipArchive(Activity activity, String archivePath, String archiveName, String extractPath) {
         try {
             File archive = new File(archivePath);
             FileUtils.writeByteArrayToFile(archive, FileUtil.loadFromAssetToByte(activity, archiveName));
@@ -71,7 +69,7 @@ public class FileUtil {
             ZipInputStream zis = new ZipInputStream(Files.newInputStream(archive.toPath()));
             ZipEntry zipEntry = zis.getNextEntry();
             while (zipEntry != null) {
-                File newFile = newFile(new File(Constants.USER_HOME + "/" + archiveName), zipEntry);
+                File newFile = newFile(new File(extractPath), zipEntry);
                 if (zipEntry.isDirectory()) {
                     if (!newFile.isDirectory() && !newFile.mkdirs()) {
                         throw new IOException("Failed to create directory " + newFile);

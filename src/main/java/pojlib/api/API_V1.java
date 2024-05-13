@@ -8,13 +8,13 @@ import android.net.NetworkCapabilities;
 import com.google.gson.JsonObject;
 
 import pojlib.account.MinecraftAccount;
-import pojlib.install.*;
-import pojlib.instance.InstanceHandler;
-import pojlib.instance.MinecraftInstances;
-import pojlib.util.APIHandler;
+import pojlib.InstanceHandler;
+import pojlib.util.json.MinecraftInstances;
+import pojlib.APIHandler;
 import pojlib.util.Constants;
-import pojlib.util.LoginHelper;
+import pojlib.account.LoginHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -46,23 +46,21 @@ public class API_V1 {
     /**
      * Add a mod to an instance
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
+     * @param instance Acquired from {@link pojlib.api.API_V1#(Activity, MinecraftInstances, String, String, boolean, String, String, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
-     * @param gameDir .minecraft directory
      * @param name Mod name
      * @param version Mod version
      * @param url Mod download URL
      */
-    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
-                              String gameDir, String name, String version, String url) {
-        InstanceHandler.addMod(instances, instance, gameDir, name, version, url);
+    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url) {
+        InstanceHandler.addMod(instances, instance, name, version, url);
     }
 
     /**
      * Check if an instance has a mod
      *
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      * @param name Mod name
      * @return True if the mod is already in the instance
@@ -74,16 +72,14 @@ public class API_V1 {
     /**
      * Remove a mod from an instance
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
+     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
-     * @param gameDir .minecraft directory
      * @param name Mod name
      * @return True if the mod was deleted
      */
-    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance,
-                                    String gameDir, String name) {
-        return InstanceHandler.removeMod(instances, instance, gameDir, name);
+    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
+        return InstanceHandler.removeMod(instances, instance, name);
     }
 
     public static String[] getQCSupportedVersions() {
@@ -93,17 +89,16 @@ public class API_V1 {
     /**
      * Loads all instances from the filesystem.
      *
-     * @param gameDir           .minecraft directory.
      * @return                  A minecraft instance object
      */
-    public static MinecraftInstances loadAll(String gameDir) throws IOException {
-        return InstanceHandler.load(gameDir);
+    public static MinecraftInstances loadAll() throws IOException {
+        return InstanceHandler.load(Constants.USER_HOME);
     }
 
     /**
      * Load a specific instance by name
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
      * @param name Name of the instance
      * @return The instance, or null if an instance with name does not exist
      */
@@ -115,13 +110,12 @@ public class API_V1 {
      * Delete an instance
      * NOTE: Only deletes the instance, not the correlated mods for said instance
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll(String)}
+     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
      * @param instance Instance object
-     * @param gameDir .minecraft directory.
      * @return True if it deletes successfully, false otherwise.
      */
-    public static boolean deleteInstance(MinecraftInstances instances, MinecraftInstances.Instance instance, String gameDir) {
-        return InstanceHandler.delete(instances, instance, gameDir);
+    public static boolean deleteInstance(MinecraftInstances instances, MinecraftInstances.Instance instance) {
+        return InstanceHandler.delete(instances, instance);
     }
 
     /**
@@ -129,21 +123,40 @@ public class API_V1 {
      *
      * @param activity          The active android activity
      * @param instanceName      The name of the instance being created - can be anything, used for identification
-     * @param home              The base directory where minecraft should be setup
      * @param useDefaultMods    Use QC's default mods for the version (Core mods are automatically included)
      * @param minecraftVersion  The version of minecraft to install
      * @param imageURL          Modpack image url, nullable
      * @return                  A minecraft instance object
      * @throws                  IOException Throws if download of library or asset fails
      */
-    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String home, boolean useDefaultMods, String minecraftVersion, String modsFolderName, String imageURL) throws IOException {
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, boolean useDefaultMods, String minecraftVersion, String imageURL) throws IOException {
 
         if(ignoreInstanceName) {
-            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName, imageURL);
+            return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, imageURL);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
             throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
         } else {
-            return InstanceHandler.create(activity, instances, instanceName, home, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, modsFolderName, imageURL);
+            return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, useDefaultMods, minecraftVersion, InstanceHandler.ModLoader.Fabric, imageURL);
+        }
+    }
+
+    /**
+     * Creates a new game instance from a mrpack file.
+     *
+     * @param activity          The active android activity
+     * @param instanceName      The name of the instance being created - can be anything, used for identification
+     * @param imageURL          Modpack image url, nullable
+     * @return                  A minecraft instance object
+     * @throws                  IOException Throws if download of library or asset fails
+     */
+    public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String imageURL, String mrpackFile) throws IOException {
+
+        if(ignoreInstanceName) {
+            return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, InstanceHandler.ModLoader.Fabric, mrpackFile, imageURL);
+        } else if (instanceName.contains("/") || instanceName.contains("!")) {
+            throw new IOException("You cannot use special characters (!, /, ., etc) when creating instances.");
+        } else {
+            return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, InstanceHandler.ModLoader.Fabric, mrpackFile, imageURL);
         }
     }
 
@@ -153,7 +166,7 @@ public class API_V1 {
      * @param instance The instance to update
      */
     public static void updateMods(MinecraftInstances instances, MinecraftInstances.Instance instance) {
-        instance.updateMods(Constants.MC_DIR, instances);
+        instance.updateMods(instances);
     }
 
     /**
@@ -161,7 +174,7 @@ public class API_V1 {
      *
      * @param activity Android activity object
      * @param account Account object
-     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, String, boolean, String, String, String)}
+     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {

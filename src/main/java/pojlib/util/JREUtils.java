@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import pojlib.api.API_V1;
+import pojlib.util.json.MinecraftInstances;
 
 public class JREUtils {
     private JREUtils() {}
@@ -136,11 +137,11 @@ public class JREUtils {
                 sNativeLibDir;
     }
 
-    public static void setJavaEnvironment(Activity activity) throws Throwable {
+    public static void setJavaEnvironment(Activity activity, MinecraftInstances.Instance instance) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("POJLIB_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
         envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE-21");
-        envMap.put("HOME", Constants.MC_DIR);
+        envMap.put("HOME", instance.gameDir);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("VR_MODEL", API_V1.model);
         envMap.put("POJLIB_RENDERER", "regal");
@@ -172,12 +173,12 @@ public class JREUtils {
         setLdLibraryPath(jvmLibraryPath+":"+LD_LIBRARY_PATH);
     }
 
-    public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, String modsDirName) throws Throwable {
+    public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, MinecraftInstances.Instance instance) throws Throwable {
         JREUtils.relocateLibPath(activity);
-        setJavaEnvironment(activity);
+        setJavaEnvironment(activity, instance);
 
         final String graphicsLib = loadGraphicsLibrary();
-        List<String> userArgs = getJavaArgs(activity);
+        List<String> userArgs = getJavaArgs(activity, instance);
 
         //Add automatically generated args
 
@@ -200,7 +201,6 @@ public class JREUtils {
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL_dri.so");
-        userArgs.add("-Dfabric.addMods=" + Constants.MC_DIR + "/mods/" + modsDirName);
 
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);
@@ -208,7 +208,7 @@ public class JREUtils {
         runtimeDir = activity.getFilesDir() + "/runtimes/JRE-21";
 
         initJavaRuntime();
-        chdir(Constants.MC_DIR);
+        chdir(instance.gameDir);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 
         final int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
@@ -222,11 +222,11 @@ public class JREUtils {
      * @param ctx The application context
      * @return A list filled with args.
      */
-    public static List<String> getJavaArgs(Context ctx) {
+    public static List<String> getJavaArgs(Context ctx, MinecraftInstances.Instance instance) {
         return new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + new File(ctx.getFilesDir(), "runtimes/JRE-21"),
                 "-Djava.io.tmpdir=" + ctx.getCacheDir().getAbsolutePath(),
-                "-Duser.home=" + Constants.MC_DIR,
+                "-Duser.home=" + instance.gameDir,
                 "-Duser.language=" + System.getProperty("user.language"),
                 "-Dos.name=Linux",
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,

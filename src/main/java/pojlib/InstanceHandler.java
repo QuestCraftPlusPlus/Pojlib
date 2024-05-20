@@ -9,8 +9,13 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
@@ -38,11 +43,12 @@ public class InstanceHandler {
     public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
 
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFilePath, String imageURL) throws IOException {
-        File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName + "/setup/modrinth.index.json");
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFilePath, String imageURL) {
+        File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_") + "/setup/modrinth.index.json");
 
         mrpackJson.getParentFile().mkdirs();
-        FileUtil.UnzipArchive(activity, mrpackFilePath, instanceName + ".mrpack", Constants.USER_HOME + "/instances/" + instanceName);
+        File setupFile = new File(Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_") + "/setup");
+        FileUtil.unzipArchive(mrpackFilePath, setupFile.getPath());
 
         ModrinthIndexJson index = GsonUtils.jsonFileToObject(mrpackJson.getAbsolutePath(), ModrinthIndexJson.class);
         if(index == null) {
@@ -52,6 +58,8 @@ public class InstanceHandler {
 
         MinecraftInstances.Instance instance = create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL);
         new Thread(() -> {
+            while(!API_V1.finishedDownloading);
+
             API_V1.finishedDownloading = false;
             for (ModrinthIndexJson.ModpackFile file : index.files) {
                 if (file.path.contains("mods")) {
@@ -65,13 +73,36 @@ public class InstanceHandler {
                     mods.add(info);
                     instance.mods = mods.toArray(new ModInfo[0]);
                 }
-                try {
-                    API_V1.currentDownload = file.path;
-                    DownloadUtils.downloadFile(file.downloads[0], new File(instance.gameDir, file.path));
-                } catch (IOException e) {
-                    Logger.getInstance().appendToLog("Couldn't install the modpack with path " + mrpackJson.getAbsolutePath());
-                    Logger.getInstance().appendToLog(e.toString());
-                }
+            }
+            try {
+                Files.walkFileTree(Paths.get(setupFile + "/overrides"), new FileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        String filtered = file.toString().replaceAll(setupFile.getAbsolutePath() + "/overrides/", "");
+                        File newFile = new File(setupFile.getParentFile().getAbsolutePath() + "/" + filtered);
+                        newFile.getParentFile().mkdirs();
+
+                        Files.copy(file, newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
             API_V1.finishedDownloading = false;
             GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);

@@ -1,7 +1,5 @@
 package pojlib.util;
 
-import static pojlib.UnityPlayerActivity.newFile;
-
 import android.app.Activity;
 import android.content.Context;
 
@@ -10,8 +8,10 @@ import org.apache.commons.io.FileUtils;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class FileUtil {
@@ -61,41 +61,76 @@ public class FileUtil {
         fos.close();
     }
 
-    public static void UnzipArchive(Activity activity, String archivePath, String archiveName, String extractPath) {
+    public static void unzipArchive(String archivePath, String extractPath) {
         try {
-            File archive = new File(archivePath);
-            FileUtils.writeByteArrayToFile(archive, FileUtil.loadFromAssetToByte(activity, archiveName));
-            byte[] buffer = new byte[1024];
-            ZipInputStream zis = new ZipInputStream(Files.newInputStream(archive.toPath()));
-            ZipEntry zipEntry = zis.getNextEntry();
-            while (zipEntry != null) {
-                File newFile = newFile(new File(extractPath), zipEntry);
-                if (zipEntry.isDirectory()) {
-                    if (!newFile.isDirectory() && !newFile.mkdirs()) {
-                        throw new IOException("Failed to create directory " + newFile);
-                    }
-                } else {
-                    // fix for Windows-created archives
-                    File parent = newFile.getParentFile();
-                    if (!parent.isDirectory() && !parent.mkdirs()) {
-                        throw new IOException("Failed to create directory " + parent);
+            try(ZipFile zipFile = new ZipFile(archivePath)) {
+                byte[] buf = new byte[1024];
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                while(entries.hasMoreElements()) {
+                    ZipEntry entry = entries.nextElement();
+                    if(entry.isDirectory()) {
+                        continue;
                     }
 
-                    // write file content
+                    File newFile = newFile(new File(extractPath), entry);
+                    newFile.getParentFile().mkdirs();
+
                     FileOutputStream fos = new FileOutputStream(newFile);
+                    InputStream input = zipFile.getInputStream(entry);
                     int len;
-                    while ((len = zis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, len);
+                    while ((len = input.read(buf)) > 0) {
+                        fos.write(buf, 0, len);
+                        fos.flush();
                     }
                     fos.close();
                 }
-                zipEntry = zis.getNextEntry();
             }
-
-            zis.closeEntry();
-            zis.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getInstance().appendToLog(e.getMessage());
         }
+    }
+
+    public static void unzipArchiveFromAsset(Activity activity, String archiveName, String extractPath) {
+        try {
+            File zip = new File(extractPath, archiveName);
+            FileUtils.writeByteArrayToFile(zip, FileUtil.loadFromAssetToByte(activity, archiveName));
+            try(ZipFile zipFile = new ZipFile(zip)) {
+                byte[] buf = new byte[1024];
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                while(entries.hasMoreElements()) {
+                    ZipEntry entry = entries.nextElement();
+                    if(entry.isDirectory()) {
+                        continue;
+                    }
+
+                    File newFile = newFile(new File(extractPath), entry);
+                    newFile.getParentFile().mkdirs();
+
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    InputStream input = zipFile.getInputStream(entry);
+                    int len;
+                    while ((len = input.read(buf)) > 0) {
+                        fos.write(buf, 0, len);
+                        fos.flush();
+                    }
+                    fos.close();
+                }
+            }
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog(e.getMessage());
+        }
+    }
+
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
     }
 }

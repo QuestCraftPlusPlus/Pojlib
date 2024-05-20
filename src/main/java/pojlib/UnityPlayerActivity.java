@@ -1,5 +1,7 @@
 package pojlib;
 
+import static pojlib.util.FileUtil.newFile;
+
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -42,8 +44,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     }
 
     // Setup activity layout
-    @Override protected void onCreate(Bundle savedInstanceState)
-    {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
@@ -53,56 +54,10 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
-        File zip = new File(this.getFilesDir() + "/runtimes/JRE-21.zip");
-        if(!zip.exists()) {
-            try {
-                FileUtils.writeByteArrayToFile(zip, FileUtil.loadFromAssetToByte(this, "JRE-21.zip"));
-                byte[] buffer = new byte[1024];
-                ZipInputStream zis = new ZipInputStream(Files.newInputStream(zip.toPath()));
-                ZipEntry zipEntry = zis.getNextEntry();
-                while (zipEntry != null) {
-                    File newFile = newFile(new File(this.getFilesDir() + "/runtimes/JRE-21"), zipEntry);
-                    if (zipEntry.isDirectory()) {
-                        if (!newFile.isDirectory() && !newFile.mkdirs()) {
-                            throw new IOException("Failed to create directory " + newFile);
-                        }
-                    } else {
-                        // fix for Windows-created archives
-                        File parent = newFile.getParentFile();
-                        if (!parent.isDirectory() && !parent.mkdirs()) {
-                            throw new IOException("Failed to create directory " + parent);
-                        }
-
-                        // write file content
-                        FileOutputStream fos = new FileOutputStream(newFile);
-                        int len;
-                        while ((len = zis.read(buffer)) > 0) {
-                            fos.write(buffer, 0, len);
-                        }
-                        fos.close();
-                    }
-                    zipEntry = zis.getNextEntry();
-                }
-
-                zis.closeEntry();
-                zis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        File zip = new File(this.getFilesDir() + "/runtimes/JRE-21");
+        if (!zip.exists()) {
+            FileUtil.unzipArchiveFromAsset(this, "JRE-21", this.getFilesDir() + "/runtimes");
         }
-    }
-
-    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
-        File destFile = new File(destinationDir, zipEntry.getName());
-
-        String destDirPath = destinationDir.getCanonicalPath();
-        String destFilePath = destFile.getCanonicalPath();
-
-        if (!destFilePath.startsWith(destDirPath + File.separator)) {
-            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
-        }
-
-        return destFile;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class API_V1 {
     public static String model = "Quest";
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
-    public static boolean finishedDownloading = false;
+    public static boolean finishedDownloading = true;
     public static boolean ignoreInstanceName;
     public static boolean customRAMValue = false;
     public static double downloadStatus;

@@ -5,10 +5,7 @@ import android.app.Activity;
 import com.google.common.collect.Lists;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -18,8 +15,6 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.api.API_V1;
@@ -29,10 +24,9 @@ import pojlib.install.MinecraftMeta;
 import pojlib.install.QuiltMeta;
 import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
-import pojlib.util.DownloadUtils;
 import pojlib.util.FileUtil;
 import pojlib.util.json.MinecraftInstances;
-import pojlib.util.json.ModInfo;
+import pojlib.util.json.ProjectInfo;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
@@ -63,15 +57,15 @@ public class InstanceHandler {
             API_V1.finishedDownloading = false;
             for (ModrinthIndexJson.ModpackFile file : index.files) {
                 if (file.path.contains("mods")) {
-                    ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
-                    ModInfo info = new ModInfo();
+                    ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
+                    ProjectInfo info = new ProjectInfo();
                     info.slug = file.path
                             .replaceAll(".*\\/", "")
                             .replaceAll("\\..*", "");
                     info.version = "1.0.0";
                     info.download_link = file.downloads[0];
                     mods.add(info);
-                    instance.mods = mods.toArray(new ModInfo[0]);
+                    instance.extProjects = mods.toArray(new ProjectInfo[0]);
                 }
             }
             try {
@@ -226,21 +220,22 @@ public class InstanceHandler {
         return instances;
     }
 
-    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url) {
-        ModInfo info = new ModInfo();
+    public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url, String type) {
+        ProjectInfo info = new ProjectInfo();
         info.slug = name;
         info.download_link = url;
         info.version = version;
+        info.type = type;
 
-        ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
+        ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
         mods.add(info);
-        instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
+        instance.extProjects = mods.toArray(mods.toArray(new ProjectInfo[0]));
 
         GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
     }
 
-    public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
-        for(ModInfo info : instance.mods) {
+    public static boolean hasExtraProject(MinecraftInstances.Instance instance, String name) {
+        for(ProjectInfo info : instance.extProjects) {
             if(info.slug.equalsIgnoreCase(name)) {
                 return true;
             }
@@ -249,9 +244,9 @@ public class InstanceHandler {
         return false;
     }
 
-    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
-        ModInfo oldInfo = null;
-        for(ModInfo info : instance.mods) {
+    public static boolean removeExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
+        ProjectInfo oldInfo = null;
+        for(ProjectInfo info : instance.extProjects) {
             if(info.slug.equalsIgnoreCase(name)) {
                 oldInfo = info;
                 break;
@@ -259,13 +254,15 @@ public class InstanceHandler {
         }
 
         if(oldInfo != null) {
+            boolean isMod = oldInfo.type.equals("mods");
+
             // Delete the mod
-            File modFile = new File(instance.gameDir + "/mods/" + name + ".jar");
+            File modFile = new File(instance.gameDir + (isMod ? "/mods/" : "/resourcepacks/") + name + (isMod ? ".jar" : ".zip"));
             modFile.delete();
 
-            ArrayList<ModInfo> mods = Lists.newArrayList(instance.mods);
+            ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
             mods.remove(oldInfo);
-            instance.mods = mods.toArray(mods.toArray(new ModInfo[0]));
+            instance.extProjects = mods.toArray(mods.toArray(new ProjectInfo[0]));
             GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
         }
 

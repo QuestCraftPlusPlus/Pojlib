@@ -452,8 +452,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.4.1",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
+					"version": "0.5.0",
+					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.18.2-0.4.1/Sodium.jar"
 				},
 				{
 					"slug": "Better-Biome-Blend",

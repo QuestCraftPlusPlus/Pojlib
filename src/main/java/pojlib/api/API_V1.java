@@ -14,7 +14,6 @@ import pojlib.APIHandler;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -49,12 +48,12 @@ public class API_V1 {
      * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
      * @param instance Acquired from {@link pojlib.api.API_V1#(Activity, MinecraftInstances, String, String, boolean, String, String, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
-     * @param name Mod name
-     * @param version Mod version
+     * @param name Project name
+     * @param version Project version
      * @param url Mod download URL
      */
-    public static void addMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url) {
-        InstanceHandler.addMod(instances, instance, name, version, url);
+    public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url, String type) {
+        InstanceHandler.addExtraProject(instances, instance, name, version, url, type);
     }
 
     /**
@@ -62,11 +61,11 @@ public class API_V1 {
      *
      * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
-     * @param name Mod name
-     * @return True if the mod is already in the instance
+     * @param name Project name
+     * @return True if the project is already in the instance
      */
-    public static boolean hasMod(MinecraftInstances.Instance instance, String name) {
-        return InstanceHandler.hasMod(instance, name);
+    public static boolean hasExtraProject(MinecraftInstances.Instance instance, String name) {
+        return InstanceHandler.hasExtraProject(instance, name);
     }
 
     /**
@@ -75,11 +74,11 @@ public class API_V1 {
      * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
      * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
      *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
-     * @param name Mod name
-     * @return True if the mod was deleted
+     * @param name project name
+     * @return True if the project was deleted
      */
-    public static boolean removeMod(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
-        return InstanceHandler.removeMod(instances, instance, name);
+    public static boolean removeExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
+        return InstanceHandler.removeExtraProject(instances, instance, name);
     }
 
     public static String[] getQCSupportedVersions() {

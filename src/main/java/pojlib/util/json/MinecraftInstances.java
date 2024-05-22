@@ -150,7 +150,8 @@ public class MinecraftInstances {
 
                 // Download custom mods
                 for(ProjectInfo currInfo : extProjects) {
-                    File mod = new File((currInfo.type.equals("mod") ? modsDir : gameDir + "/resourcepacks") + "/" + currInfo.slug + ".jar");
+                    boolean isMod = currInfo.type.equals("mod");
+                    File mod = new File((isMod ? modsDir : gameDir + "/resourcepacks") + "/" + currInfo.slug + (isMod ? ".jar" : ".zip"));
                     if(!mod.exists()) {
                         DownloadUtils.downloadFile(currInfo.download_link, mod);
                     }

@@ -64,6 +64,7 @@ public class InstanceHandler {
                             .replaceAll("\\..*", "");
                     info.version = "1.0.0";
                     info.download_link = file.downloads[0];
+                    info.type = "mod";
                     mods.add(info);
                     instance.extProjects = mods.toArray(new ProjectInfo[0]);
                 }

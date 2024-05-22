@@ -43,7 +43,7 @@ public class MinecraftInstances {
         public String assetIndex;
         public String assetsDir;
         public String mainClass;
-        public ModInfo[] mods;
+        public ProjectInfo[] extProjects;
         public boolean defaultMods;
 
         public List<String> generateLaunchArgs(MinecraftAccount account) {
@@ -57,11 +57,11 @@ public class MinecraftInstances {
             return allArgs;
         }
 
-        public ModInfo[] toArray() {
-            if(mods == null) {
-                return new ModInfo[0];
+        public ProjectInfo[] toArray() {
+            if(extProjects == null) {
+                return new ProjectInfo[0];
             }
-            return mods;
+            return extProjects;
         }
 
         private ModsJson parseModsJson(String gameDir) throws Exception {
@@ -77,8 +77,8 @@ public class MinecraftInstances {
 
         public void updateMods(MinecraftInstances instances) {
             API_V1.finishedDownloading = false;
-            if(mods == null) {
-                mods = new ModInfo[0];
+            if(extProjects == null) {
+                extProjects = new ProjectInfo[0];
             }
             try {
                 ModsJson modsJson = parseModsJson(Constants.USER_HOME);
@@ -95,27 +95,29 @@ public class MinecraftInstances {
 
                 File modsDir = new File(gameDir + "/mods");
                 if(!modsDir.exists()) {
-                    ArrayList<ModInfo> modInfos = new ArrayList<>();
-                    for(ModInfo info : version.coreMods) {
+                    ArrayList<ProjectInfo> modInfos = new ArrayList<>();
+                    for(ProjectInfo info : version.coreMods) {
                         File mod = new File(modsDir + "/" + info.slug + ".jar");
                         DownloadUtils.downloadFile(info.download_link, mod);
+                        info.type = "mod";
                         modInfos.add(info);
                     }
                     if(defaultMods) {
-                        for (ModInfo info : version.defaultMods) {
+                        for (ProjectInfo info : version.defaultMods) {
                             File mod = new File(modsDir + "/" + info.slug + ".jar");
                             DownloadUtils.downloadFile(info.download_link, mod);
+                            info.type = "mod";
                             modInfos.add(info);
                         }
                     }
-                    mods = modInfos.toArray(modInfos.toArray(new ModInfo[0]));
+                    extProjects = modInfos.toArray(modInfos.toArray(new ProjectInfo[0]));
                     GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
                     API_V1.finishedDownloading = true;
                     return;
                 }
 
-                for(ModInfo info : version.coreMods) {
-                    for(ModInfo currInfo : mods) {
+                for(ProjectInfo info : version.coreMods) {
+                    for(ProjectInfo currInfo : extProjects) {
                         if(!currInfo.slug.equals(info.slug)) {
                             continue;
                         }
@@ -130,8 +132,8 @@ public class MinecraftInstances {
                 }
 
                 if(defaultMods) {
-                    for (ModInfo info : version.defaultMods) {
-                        for (ModInfo currInfo : mods) {
+                    for (ProjectInfo info : version.defaultMods) {
+                        for (ProjectInfo currInfo : extProjects) {
                             if (!currInfo.slug.equals(info.slug)) {
                                 continue;
                             }
@@ -147,8 +149,8 @@ public class MinecraftInstances {
                 }
 
                 // Download custom mods
-                for(ModInfo currInfo : mods) {
-                    File mod = new File(modsDir + "/" + currInfo.slug + ".jar");
+                for(ProjectInfo currInfo : extProjects) {
+                    File mod = new File((currInfo.type.equals("mod") ? modsDir : gameDir + "/resourcepacks") + "/" + currInfo.slug + ".jar");
                     if(!mod.exists()) {
                         DownloadUtils.downloadFile(currInfo.download_link, mod);
                     }

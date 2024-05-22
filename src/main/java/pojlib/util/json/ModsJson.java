@@ -5,7 +5,7 @@ public class ModsJson {
 
     public static class Version {
         public String name;
-        public ModInfo[] coreMods;
-        public ModInfo[] defaultMods;
+        public ProjectInfo[] coreMods;
+        public ProjectInfo[] defaultMods;
     }
 }

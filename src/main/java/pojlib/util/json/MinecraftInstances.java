@@ -92,7 +92,7 @@ public class MinecraftInstances {
                 }
 
                 if(version == null) {
-                    Logger.getInstance().appendToLog("Mods could not be downloaded because version was null. Open a ticket.")
+                    Logger.getInstance().appendToLog("Mods could not be downloaded because version was null. Open a ticket.");
                     return;
                 }
 

@@ -228,6 +228,10 @@ public class InstanceHandler {
         info.version = version;
         info.type = type;
 
+        if(instance.extProjects == null) {
+            instance.extProjects = new ProjectInfo[0];
+        }
+
         ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
         mods.add(info);
         instance.extProjects = mods.toArray(mods.toArray(new ProjectInfo[0]));

@@ -91,7 +91,10 @@ public class MinecraftInstances {
                     }
                 }
 
-                assert version != null;
+                if(version == null) {
+                    Logger.getInstance().appendToLog("Mods could not be downloaded because version was null. Open a ticket.")
+                    return;
+                }
 
                 File modsDir = new File(gameDir + "/mods");
                 if(!modsDir.exists()) {

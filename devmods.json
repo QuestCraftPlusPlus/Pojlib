@@ -254,7 +254,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.4.10",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/b4hTi3mo/sodium-fabric-mc1.19.4-0.4.10%2Bbuild.24.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.19.4-0.4.11/sodium-fabric-mc1.19.4-0.4.11+build.1.jar"
 				},
 				{
 					"slug": "Cloth-Config",

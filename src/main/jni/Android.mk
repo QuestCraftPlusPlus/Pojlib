@@ -7,6 +7,24 @@ HERE_PATH := $(LOCAL_PATH)
 
 LOCAL_PATH := $(HERE_PATH)
 
+# libcURL stuff
+include $(CLEAR_VARS)
+LOCAL_MODULE := ssl
+LOCAL_SRC_FILES := openssl/libssl.a
+LOCAL_EXPORT_CFLAGS := -I$(LOCAL_PATH)/openssl
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := crypto
+LOCAL_SRC_FILES := openssl/libcrypto.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := curl
+LOCAL_SRC_FILES := curl/libcurl.a
+LOCAL_EXPORT_CFLAGS := -I$(LOCAL_PATH)/curl
+include $(PREBUILT_STATIC_LIBRARY)
+
 include $(CLEAR_VARS)
 LOCAL_MODULE := regal
 LOCAL_SRC_FILES := GL/libRegal.so
@@ -29,7 +47,6 @@ LOCAL_LDLIBS := -lGLESv3
 LOCAL_SRC_FILES := tinywrapper/main.c tinywrapper/string_utils.c
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/tinywrapper
 include $(BUILD_SHARED_LIBRARY)
-
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := openxr_loader
@@ -65,11 +82,12 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 # Link GLESv2 for test
-LOCAL_LDLIBS := -ldl -llog -landroid -lGLESv3 -lEGL
+LOCAL_LDLIBS := -ldl -llog -landroid -lGLESv3 -lEGL -lz
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG
 LOCAL_SHARED_LIBRARIES := openvr_api regal
+LOCAL_STATIC_LIBRARIES := curl ssl crypto
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
     egl_bridge.c \

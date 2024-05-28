@@ -8,6 +8,8 @@
 
 #include "utils.h"
 
+#include <curl/curl.h>
+
 typedef int (*Main_Function_t)(int, char**);
 typedef void (*android_update_LD_LIBRARY_PATH_t)(char*);
 
@@ -131,3 +133,53 @@ JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_executeBinary(JNIEnv *env, jcla
 	return result;
 }
 
+size_t curlCallback(char* contents, size_t size, size_t nmemb, void* user) {
+	const char* path = user; // C allows that lol
+	FILE* f = fopen(path, "wb");
+	size_t result = fwrite(contents, size, nmemb, f);
+	fclose(f);
+	return result;
+}
+
+int downloadFile(const char* url, const char* filepath) {
+	CURL* curl = curl_easy_init();
+
+	curl_easy_setopt(curl, CURLOPT_URL, url);
+	curl_easy_setopt(curl, CURLOPT_USERAGENT, "QuestCraft");
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0); // allows https lmfao
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlCallback);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, filepath);
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 10000);
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, 10000);
+	curl_easy_setopt(curl, CURLOPT_ACCEPTTIMEOUT_MS, 10000);
+
+	CURLcode response = curl_easy_perform(curl);
+
+	const int MAX_RETRIES = 4;
+	int retry = 0;
+
+	while(response != CURLE_OK && retry++ < MAX_RETRIES)
+		response = curl_easy_perform(curl);
+
+	curl_easy_cleanup(curl);
+
+	LOGI("utils.c:\n downloadFile\n (\n\t%s,\n\t%s\n ): response code: %d\n", url, filepath, (int)response);
+
+	return (int)response;
+}
+
+JNIEXPORT jint JNICALL Java_pojlib_util_DownloadUtils_cDownloadFile(JNIEnv *env, jclass clazz, jstring url, jstring filepath) {
+	const char* c_url = (*env)->GetStringUTFChars(env, url, NULL);
+	const char* c_filepath = (*env)->GetStringUTFChars(env, filepath, NULL);
+
+	int result = downloadFile(c_url, c_filepath);
+
+	(*env)->ReleaseStringUTFChars(env, url, c_url);
+	(*env)->ReleaseStringUTFChars(env, filepath, c_filepath);
+
+	return result;
+}
+
+JNIEXPORT jstring JNICALL Java_pojlib_util_DownloadUtils_cResponseCodeString(JNIEnv *env, jclass clazz, jint code) {
+	return (*env)->NewStringUTF(env, curl_easy_strerror((CURLcode)code));
+}

@@ -22,5 +22,5 @@ jobjectArray convert_from_char_array(JNIEnv *env, char **charArray, int num_rows
 void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray);
 jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr);
 
-size_t curlCallback(char* contents, size_t size, size_t nmemb, void* user);
+size_t curlCallback(void* data, size_t size, size_t nmemb, FILE* file);
 int downloadFile(const char* url, const char* filepath);

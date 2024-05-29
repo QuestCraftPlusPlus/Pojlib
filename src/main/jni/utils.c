@@ -133,25 +133,22 @@ JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_executeBinary(JNIEnv *env, jcla
 	return result;
 }
 
-size_t curlCallback(char* contents, size_t size, size_t nmemb, void* user) {
-	const char* path = user; // C allows that lol
-	FILE* f = fopen(path, "wb");
-	size_t result = fwrite(contents, size, nmemb, f);
-	fclose(f);
-	return result;
+size_t curlCallback(void* data, size_t size, size_t nmemb, FILE* file) {
+	return fwrite(data, size, nmemb, file);
 }
 
 int downloadFile(const char* url, const char* filepath) {
 	CURL* curl = curl_easy_init();
 
+	FILE* file = fopen(filepath, "wb");
+
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "QuestCraft");
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0); // allows https lmfao
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlCallback);
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, filepath);
-	curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 10000);
-	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, 10000);
-	curl_easy_setopt(curl, CURLOPT_ACCEPTTIMEOUT_MS, 10000);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 120); // 2 minutes operation timeout
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 30); // 30 seconds connection timeout
 
 	CURLcode response = curl_easy_perform(curl);
 
@@ -164,6 +161,8 @@ int downloadFile(const char* url, const char* filepath) {
 	curl_easy_cleanup(curl);
 
 	LOGI("utils.c:\n downloadFile\n (\n\t%s,\n\t%s\n ): response code: %d\n", url, filepath, (int)response);
+
+	fclose(file);
 
 	return (int)response;
 }

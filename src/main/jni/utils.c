@@ -140,15 +140,13 @@ size_t curlCallback(void* data, size_t size, size_t nmemb, FILE* file) {
 int downloadFile(const char* url, const char* filepath) {
 	CURL* curl = curl_easy_init();
 
-	FILE* file = fopen(filepath, "wb");
+	FILE* f = fopen(filepath, "wb");
 
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "QuestCraft");
 	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0); // allows https lmfao
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlCallback);
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
-	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 120); // 2 minutes operation timeout
-	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 30); // 30 seconds connection timeout
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
 
 	CURLcode response = curl_easy_perform(curl);
 
@@ -162,7 +160,7 @@ int downloadFile(const char* url, const char* filepath) {
 
 	LOGI("utils.c:\n downloadFile\n (\n\t%s,\n\t%s\n ): response code: %d\n", url, filepath, (int)response);
 
-	fclose(file);
+	fclose(f);
 
 	return (int)response;
 }

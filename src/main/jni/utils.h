@@ -10,6 +10,9 @@ static JavaVM* dalvikJavaVMPtr;
 static JNIEnv* dalvikJNIEnvPtr_ANDROID;
 static JNIEnv* dalvikJNIEnvPtr_JRE;
 
+static jclass api_v1Cl;
+static jfieldID api_v1_downloadStatus;
+
 static long showingWindow;
 
 static bool isInputReady, isCursorEntered, isPrepareGrabPos, isUseStackQueueCall;
@@ -22,5 +25,6 @@ jobjectArray convert_from_char_array(JNIEnv *env, char **charArray, int num_rows
 void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charArray);
 jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr);
 
-size_t curlCallback(void* data, size_t size, size_t nmemb, FILE* file);
+size_t curlWriteCallback(void* data, size_t size, size_t nmemb, FILE* file);
+size_t curlProgressCallback(void *clientp, long dltotal, long dlnow, long ultotal, long ulnow);
 int downloadFile(const char* url, const char* filepath);

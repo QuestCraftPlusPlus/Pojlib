@@ -20,9 +20,11 @@ public class DownloadUtils {
         Objects.requireNonNull(out.getParentFile()).mkdirs();
         File tempOut = File.createTempFile(out.getName(), ".part", out.getParentFile());
 
-        try 
+        try
         {
             int response = JREUtils.curlDownloadFile(url, tempOut.getAbsolutePath());
+            API_V1.currentDownload = out.getName();
+            API_V1.downloadStatus = 0;
             if(response == 0) // CURLE_OK 
             {
                 Logger.getInstance().appendToLog("Successfully downloaded a file from \"" + url + "\" to \"" + out.getName() + "\".");
@@ -38,10 +40,15 @@ public class DownloadUtils {
         }
         catch(Exception e)
         {
+            API_V1.currentDownload = null;
+            API_V1.downloadStatus = 0;
             if (tempOut.exists()) tempOut.delete();
             Logger.getInstance().appendToLog(e.toString());
             throw e;
         }
+
+        API_V1.currentDownload = null;
+        API_V1.downloadStatus = 0;
     }
     public static boolean compareSHA1(File f, String sourceSHA) {
         try {

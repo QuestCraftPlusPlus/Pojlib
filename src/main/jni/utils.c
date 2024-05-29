@@ -133,8 +133,32 @@ JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_executeBinary(JNIEnv *env, jcla
 	return result;
 }
 
-size_t curlCallback(void* data, size_t size, size_t nmemb, FILE* file) {
+size_t curlWriteCallback(void* data, size_t size, size_t nmemb, FILE* file) {
 	return fwrite(data, size, nmemb, file);
+}
+
+size_t curlProgressCallback(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow) {
+	JNIEnv* env = runtimeJNIEnvPtr_ANDROID;
+
+	if(api_v1Cl == NULL)
+	{
+		api_v1Cl = (*env)->FindClass(env, "pojlib/api/API_V1");
+
+		if(api_v1Cl == NULL) return 0; // return if its still null for some reason
+	}
+
+	if(api_v1_downloadStatus == NULL)
+	{
+		api_v1_downloadStatus = (*env)->GetStaticFieldID(env, api_v1Cl, "downloadStatus", "D");
+		
+		if(api_v1_downloadStatus == NULL) return 0;
+	}
+
+	double v = dlnow * 0.000001;
+
+	(*env)->SetStaticDoubleField(env, api_v1Cl, api_v1_downloadStatus, v);
+
+	return 0;
 }
 
 int downloadFile(const char* url, const char* filepath) {
@@ -144,9 +168,16 @@ int downloadFile(const char* url, const char* filepath) {
 
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "QuestCraft");
-	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0); // allows https lmfao
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlCallback);
+
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0); // do not verify ssl. gets https working without any stupid ass cacert.pem shit
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L); // follow http redirects (i hate github)
+
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
+
+	curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, curlProgressCallback);
+
+	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
 
 	CURLcode response = curl_easy_perform(curl);
 

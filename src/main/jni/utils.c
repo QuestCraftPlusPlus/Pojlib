@@ -175,6 +175,7 @@ int downloadFile(const char* url, const char* filepath) {
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
 
+	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 	curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, curlProgressCallback);
 
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);

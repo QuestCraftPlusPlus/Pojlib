@@ -33,7 +33,7 @@ public class DownloadUtils {
             {
                 if (tempOut.exists()) tempOut.delete();
                 String curlError = JREUtils.curlResponseCodeString(response);
-                throw new IOException("Failed to download file from \"" + url + "\" to \"" + out.getName() + "\". cURL Error: " + curlError);
+                throw new IOException("Failed to download a file from \"" + url + "\" to \"" + out.getName() + "\". cURL Error: " + curlError);
             }
         }
         catch(Exception e)

@@ -302,6 +302,9 @@ public class JREUtils {
     public static native void logToLogger(final Logger logger);
     public static native boolean dlopen(String libPath);
     public static native void setLdLibraryPath(String ldLibraryPath);
+    
+    public native static int curlDownloadFile(String url, String filepath);
+    public native static String curlResponseCodeString(int code);
 
     static {
         System.loadLibrary("pojavexec");

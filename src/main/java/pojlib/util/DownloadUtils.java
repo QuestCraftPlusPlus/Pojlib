@@ -15,9 +15,6 @@ import java.nio.file.Files;
 import java.util.Objects;
 
 public class DownloadUtils {
-    public native static int cDownloadFile(String url, String filepath);
-    public native static String cResponseCodeString(int code);
-
     public static void downloadFile(String url, File out) throws IOException, RuntimeException 
     {
         Objects.requireNonNull(out.getParentFile()).mkdirs();
@@ -25,7 +22,7 @@ public class DownloadUtils {
 
         try 
         {
-            int response = cDownloadFile(url, tempOut.getAbsolutePath());
+            int response = JREUtils.curlDownloadFile(url, tempOut.getAbsolutePath());
             if(response == 0) // CURLE_OK 
             {
                 Logger.getInstance().appendToLog("Successfully downloaded a file from \"" + url + "\" to \"" + out.getName() + "\".");
@@ -35,7 +32,7 @@ public class DownloadUtils {
             else
             {
                 if (tempOut.exists()) tempOut.delete();
-                String curlError = cResponseCodeString(response);
+                String curlError = JREUtils.curlResponseCodeString(response);
                 throw new IOException("Failed to download file from \"" + url + "\" to \"" + out.getName() + "\". cURL Error: " + curlError);
             }
         }

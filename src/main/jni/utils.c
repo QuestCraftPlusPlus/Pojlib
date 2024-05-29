@@ -168,7 +168,7 @@ int downloadFile(const char* url, const char* filepath) {
 	return (int)response;
 }
 
-JNIEXPORT jint JNICALL Java_pojlib_util_DownloadUtils_cDownloadFile(JNIEnv *env, jclass clazz, jstring url, jstring filepath) {
+JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_curlDownloadFile(JNIEnv *env, jclass clazz, jstring url, jstring filepath) {
 	const char* c_url = (*env)->GetStringUTFChars(env, url, NULL);
 	const char* c_filepath = (*env)->GetStringUTFChars(env, filepath, NULL);
 
@@ -180,6 +180,6 @@ JNIEXPORT jint JNICALL Java_pojlib_util_DownloadUtils_cDownloadFile(JNIEnv *env,
 	return result;
 }
 
-JNIEXPORT jstring JNICALL Java_pojlib_util_DownloadUtils_cResponseCodeString(JNIEnv *env, jclass clazz, jint code) {
+JNIEXPORT jstring JNICALL Java_pojlib_util_JREUtils_curlResponseCodeString(JNIEnv *env, jclass clazz, jint code) {
 	return (*env)->NewStringUTF(env, curl_easy_strerror((CURLcode)code));
 }

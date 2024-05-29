@@ -22,9 +22,9 @@ public class DownloadUtils {
 
         try
         {
-            int response = JREUtils.curlDownloadFile(url, tempOut.getAbsolutePath());
             API_V1.currentDownload = out.getName();
             API_V1.downloadStatus = 0;
+            int response = JREUtils.curlDownloadFile(url, tempOut.getAbsolutePath());
             if(response == 0) // CURLE_OK 
             {
                 Logger.getInstance().appendToLog("Successfully downloaded a file from \"" + url + "\" to \"" + out.getName() + "\".");

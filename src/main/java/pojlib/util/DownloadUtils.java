@@ -24,7 +24,9 @@ public class DownloadUtils {
         {
             API_V1.currentDownload = out.getName();
             API_V1.downloadStatus = 0;
-            int response = JREUtils.curlDownloadFile(url, tempOut.getAbsolutePath());
+            String filepath = tempOut.getAbsolutePath();
+            Logger.getInstance().appendToLog("Downloading \"" + filepath + "\" from \"" + url + "\"");
+            int response = JREUtils.curlDownloadFile(url, filepath);
             if(response == 0) // CURLE_OK 
             {
                 Logger.getInstance().appendToLog("Successfully downloaded a file from \"" + url + "\" to \"" + out.getName() + "\".");

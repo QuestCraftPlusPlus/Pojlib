@@ -26,5 +26,5 @@ void free_char_array(JNIEnv *env, jobjectArray jstringArray, const char **charAr
 jstring convertStringJVM(JNIEnv* srcEnv, JNIEnv* dstEnv, jstring srcStr);
 
 size_t curlWriteCallback(void* data, size_t size, size_t nmemb, FILE* file);
-size_t curlProgressCallback(void *clientp, long dltotal, long dlnow, long ultotal, long ulnow);
-int downloadFile(const char* url, const char* filepath);
+size_t curlProgressCallback(JNIEnv* env, long dltotal, long dlnow, long ultotal, long ulnow);
+int downloadFile(const char* url, const char* filepath, JNIEnv* env);

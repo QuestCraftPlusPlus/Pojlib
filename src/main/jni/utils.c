@@ -9,6 +9,8 @@
 #include "utils.h"
 
 #include <curl/curl.h>
+#include <string.h>
+#include <errno.h>
 
 typedef int (*Main_Function_t)(int, char**);
 typedef void (*android_update_LD_LIBRARY_PATH_t)(char*);
@@ -137,9 +139,7 @@ size_t curlWriteCallback(void* data, size_t size, size_t nmemb, FILE* file) {
 	return fwrite(data, size, nmemb, file);
 }
 
-size_t curlProgressCallback(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow) {
-	JNIEnv* env = runtimeJNIEnvPtr_ANDROID;
-
+size_t curlProgressCallback(JNIEnv* env, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow) {
 	if(api_v1Cl == NULL)
 	{
 		api_v1Cl = (*env)->FindClass(env, "pojlib/api/API_V1");
@@ -151,7 +151,7 @@ size_t curlProgressCallback(void *clientp, curl_off_t dltotal, curl_off_t dlnow,
 	{
 		api_v1_downloadStatus = (*env)->GetStaticFieldID(env, api_v1Cl, "downloadStatus", "D");
 		
-		if(api_v1_downloadStatus == NULL) return 0;
+		if(api_v1_downloadStatus == NULL) return 0; // return if its still null for some reason
 	}
 
 	double v = dlnow * 0.000001;
@@ -161,7 +161,7 @@ size_t curlProgressCallback(void *clientp, curl_off_t dltotal, curl_off_t dlnow,
 	return 0;
 }
 
-int downloadFile(const char* url, const char* filepath) {
+int downloadFile(const char* url, const char* filepath, JNIEnv* env) {
 	CURL* curl = curl_easy_init();
 	if(curl == NULL)
 	{
@@ -172,7 +172,9 @@ int downloadFile(const char* url, const char* filepath) {
 	FILE* f = fopen(filepath, "wb");
 	if(f == NULL)
 	{
-		LOGI("utils.c::downloadFile(): Failed to fopen file at path %s\n", filepath);
+		int er = errno;
+		const char* erStr = strerror(er);
+		LOGI("utils.c::downloadFile(): Failed to fopen file at path %s\n\tErrno:%d (%s)\n", filepath, er, erStr);
 		curl_easy_cleanup(curl);
 		return (int)CURLE_READ_ERROR;
 	}
@@ -188,7 +190,7 @@ int downloadFile(const char* url, const char* filepath) {
 
 	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 	curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, curlProgressCallback);
-	curl_easy_setopt(curl, CURLOPT_XFERINFODATA, NULL);
+	curl_easy_setopt(curl, CURLOPT_XFERINFODATA, env);
 
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
 
@@ -213,7 +215,16 @@ JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_curlDownloadFile(JNIEnv *env, j
 	const char* c_url = (*env)->GetStringUTFChars(env, url, NULL);
 	const char* c_filepath = (*env)->GetStringUTFChars(env, filepath, NULL);
 
-	int result = downloadFile(c_url, c_filepath);
+	if(c_url == NULL || c_filepath == NULL)
+	{
+		jthrowable exc = (*env)->ExceptionOccurred(env);
+		if (exc == NULL) { LOGI("Strings url or filepath are for some reason NULL and we don't know why\n"); return CURLE_FAILED_INIT; }
+
+		(*env)->ExceptionDescribe(env);
+		(*env)->ExceptionClear(env);
+	}
+
+	int result = downloadFile(c_url, c_filepath, env);
 
 	(*env)->ReleaseStringUTFChars(env, url, c_url);
 	(*env)->ReleaseStringUTFChars(env, filepath, c_filepath);

@@ -163,8 +163,19 @@ size_t curlProgressCallback(void *clientp, curl_off_t dltotal, curl_off_t dlnow,
 
 int downloadFile(const char* url, const char* filepath) {
 	CURL* curl = curl_easy_init();
+	if(curl == NULL)
+	{
+		LOGI("utils.c::downloadFile(): Failed to initialize CURL\n");
+		return (int)CURLE_FAILED_INIT;
+	}
 
 	FILE* f = fopen(filepath, "wb");
+	if(f == NULL)
+	{
+		LOGI("utils.c::downloadFile(): Failed to fopen file at path %s\n", filepath);
+		curl_easy_cleanup(curl);
+		return (int)CURLE_READ_ERROR;
+	}
 
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "QuestCraft");
@@ -177,6 +188,7 @@ int downloadFile(const char* url, const char* filepath) {
 
 	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 	curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, curlProgressCallback);
+	curl_easy_setopt(curl, CURLOPT_XFERINFODATA, NULL);
 
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
 
@@ -190,7 +202,7 @@ int downloadFile(const char* url, const char* filepath) {
 
 	curl_easy_cleanup(curl);
 
-	//LOGI("utils.c:\n downloadFile\n (\n\t%s,\n\t%s\n ): response code: %d\n", url, filepath, (int)response);
+	LOGI("utils.c:\n downloadFile\n (\n\t%s,\n\t%s\n ): response code: %d\n", url, filepath, (int)response);
 
 	fclose(f);
 

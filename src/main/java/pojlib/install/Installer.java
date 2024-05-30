@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import pojlib.APIHandler;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.*;
+import pojlib.api.API_V1;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,6 +78,7 @@ public class Installer {
 
                 if(DownloadUtils.compareSHA1(libraryFile, sha1)) {
                     classpath.add(libraryFile.getAbsolutePath());
+                    API_V1.hasDownloaded++;
                     break;
                 }
             }

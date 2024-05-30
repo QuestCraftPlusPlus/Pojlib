@@ -190,7 +190,7 @@ int downloadFile(const char* url, const char* filepath) {
 
 	curl_easy_cleanup(curl);
 
-	LOGI("utils.c:\n downloadFile\n (\n\t%s,\n\t%s\n ): response code: %d\n", url, filepath, (int)response);
+	//LOGI("utils.c:\n downloadFile\n (\n\t%s,\n\t%s\n ): response code: %d\n", url, filepath, (int)response);
 
 	fclose(f);
 

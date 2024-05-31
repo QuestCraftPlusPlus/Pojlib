@@ -158,6 +158,17 @@ size_t curlProgressCallback(JNIEnv* env, curl_off_t dltotal, curl_off_t dlnow, c
 
 	(*env)->SetStaticDoubleField(env, api_v1Cl, api_v1_downloadStatus, v);
 
+	if(api_v1_downloadStatusTotal == NULL)
+	{
+		api_v1_downloadStatusTotal = (*env)->GetStaticFieldID(env, api_v1Cl, "downloadStatusTotal", "D");
+		
+		if(api_v1_downloadStatusTotal == NULL) return 0; // return if its still null for some reason
+	}
+
+	double v2 = dltotal * 0.000001;
+
+	(*env)->SetStaticDoubleField(env, api_v1Cl, api_v1_downloadStatusTotal, v2);
+
 	return 0;
 }
 

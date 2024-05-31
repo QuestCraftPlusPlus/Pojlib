@@ -32,6 +32,7 @@ public class API_V1 {
     public static boolean ignoreInstanceName;
     public static boolean customRAMValue = false;
     public static double downloadStatus;
+    public static double downloadStatusTotal;
     public static String currentDownload;
     public static String profileImage;
     public static String profileName;
@@ -44,6 +45,7 @@ public class API_V1 {
     // for the funny progress bar
     public static int hasDownloaded = 0;
     public static int isDownloading = 0;
+    public static String downloadStep = "";
 
     /**
      * Add a mod to an instance

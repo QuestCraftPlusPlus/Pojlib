@@ -179,13 +179,17 @@ public class InstanceHandler {
 
         new Thread(() -> {
             API_V1.hasDownloaded = 0;
-            // client + minecraft libs + modloader libs + assets (all together as one) + mods (all together as one) (yes i just dont want to do counting)
+            // client + minecraft libs + modloader libs + assets (all together as one) + mods (all together as one)
             API_V1.isDownloading = 1 + minecraftVersionInfo.libraries.length + finalModLoaderVersionInfo.libraries.length + 1 + 1;
+
             try {
+                API_V1.downloadStep = "Client";
                 String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
                 API_V1.hasDownloaded++;
+                API_V1.downloadStep = "Minecraft Libs";
                 String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
                 API_V1.hasDownloaded = 1 + minecraftVersionInfo.libraries.length;
+                API_V1.downloadStep = "Modloader Libs";
                 String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
                 API_V1.hasDownloaded = 1 + minecraftVersionInfo.libraries.length + finalModLoaderVersionInfo.libraries.length;
                 String lwjgl = Installer.installLwjgl(activity);
@@ -202,11 +206,13 @@ public class InstanceHandler {
 
             // Write instance to json file
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+            API_V1.downloadStep = "Mods";
             instance.updateMods(instances);
 
             API_V1.hasDownloaded = API_V1.isDownloading;
             API_V1.finishedDownloading = true;
             API_V1.isDownloading = 0;
+            API_V1.downloadStep = "";
             Logger.getInstance().appendToLog("Finished Downloading!");
         }).start();
 

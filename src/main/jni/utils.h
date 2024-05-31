@@ -12,6 +12,7 @@ static JNIEnv* dalvikJNIEnvPtr_JRE;
 
 static jclass api_v1Cl;
 static jfieldID api_v1_downloadStatus;
+static jfieldID api_v1_downloadStatusTotal;
 
 static long showingWindow;
 

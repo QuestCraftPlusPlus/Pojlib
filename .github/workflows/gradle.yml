@@ -30,6 +30,10 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r21d
+        local-cache: true
     - name: Make Gradle wrapper executable
       run: git lfs pull | chmod +x ./gradlew
     - name: Build with Gradle

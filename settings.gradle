@@ -24,8 +24,11 @@ dependencyResolutionManagement {
         }
         flatDir {
             dirs("libs")
+            dirs("wrapper/unityLibrary/libs")
         }
     }
 }
 
 rootProject.name = "Pojlib"
+include 'wrapper'
+

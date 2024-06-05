@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -64,7 +65,10 @@ public class LoginHelper {
                 throw new RuntimeException("Error!: QuestCraft account not set!");
             }
             IAccount account = accounts.iterator().next();
-            future = pca.acquireTokenSilently(SilentParameters.builder(Set.of("XboxLive.SignIn", "XboxLive.offline_access"), account).build());
+            HashSet<String> params = new HashSet<>();
+            params.add("XboxLive.SignIn");
+            params.add("XboxLive.offline_access");
+            future = pca.acquireTokenSilently(SilentParameters.builder(params, account).build());
         } catch (MalformedURLException e) {
             Logger.getInstance().appendToLog(e.toString());
             throw new RuntimeException(e);
@@ -82,8 +86,11 @@ public class LoginHelper {
     public static void beginLogin(Activity activity) {
         loginThread = new Thread(() -> {
             Consumer<DeviceCode> deviceCodeConsumer = (DeviceCode deviceCode) -> API_V1.msaMessage = deviceCode.message();
+            HashSet<String> params = new HashSet<>();
+            params.add("XboxLive.SignIn");
+            params.add("XboxLive.offline_access");
             CompletableFuture<IAuthenticationResult> future = pca.acquireToken(
-                    DeviceCodeFlowParameters.builder(Set.of("XboxLive.SignIn", "XboxLive.offline_access"), deviceCodeConsumer).build());
+                    DeviceCodeFlowParameters.builder(params, deviceCodeConsumer).build());
 
             try {
                 IAuthenticationResult res = future.get();

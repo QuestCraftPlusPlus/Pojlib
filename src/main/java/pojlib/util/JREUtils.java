@@ -197,6 +197,11 @@ public class JREUtils {
 
         userArgs.add("-XX:+UseZGC");
         userArgs.add("-XX:+ZGenerational");
+        userArgs.add("-XX:+UnlockExperimentalVMOptions");
+        userArgs.add("-XX:-UseJVMCICompiler");
+        userArgs.add("-XX:+UnlockDiagnosticVMOptions");
+        userArgs.add("-XX:+DisableExplicitGC");
+        userArgs.add("-XX:+UseCriticalJavaThreadPriority");
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");

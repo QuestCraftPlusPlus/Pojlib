@@ -198,7 +198,6 @@ public class JREUtils {
 
         userArgs.add("-XX:+UseZGC");
         userArgs.add("-XX:+ZGenerational");
-        userArgs.add("-Xrs");
         userArgs.add("-XX:+UnlockExperimentalVMOptions");
         userArgs.add("-XX:+AllowUserSignalHandlers");
         userArgs.add("-XX:+DisableExplicitGC");

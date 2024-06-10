@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import pojlib.account.MinecraftAccount;
-import pojlib.api.API_V1;
 import pojlib.install.FabricMeta;
 import pojlib.install.Installer;
 import pojlib.install.MinecraftMeta;
@@ -52,9 +51,9 @@ public class InstanceHandler {
 
         MinecraftInstances.Instance instance = create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL);
         new Thread(() -> {
-            while(!API_V1.finishedDownloading);
+            while(!API.finishedDownloading);
 
-            API_V1.finishedDownloading = false;
+            API.finishedDownloading = false;
             for (ModrinthIndexJson.ModpackFile file : index.files) {
                 if (file.path.contains("mods")) {
                     ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
@@ -99,7 +98,7 @@ public class InstanceHandler {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            API_V1.finishedDownloading = false;
+            API.finishedDownloading = false;
             GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);
         }).start();
 
@@ -121,7 +120,7 @@ public class InstanceHandler {
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, ModLoader modLoader, String imageURL) {
-        API_V1.finishedDownloading = false;
+        API.finishedDownloading = false;
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
             for (MinecraftInstances.Instance instance : instances.instances) {
@@ -196,7 +195,7 @@ public class InstanceHandler {
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
             instance.updateMods(instances);
 
-            API_V1.finishedDownloading = true;
+            API.finishedDownloading = true;
             Logger.getInstance().appendToLog("Finished Downloading!");
         }).start();
 

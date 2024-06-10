@@ -36,7 +36,7 @@
 #include "utils.h"
 
 // Uncomment to try redirect signal handling to JVM
-// #define TRY_SIG2JVM
+#define TRY_SIG2JVM
 
 #define FULL_VERSION "1.8.0-internal"
 #define DOT_VERSION "1.8"
@@ -54,7 +54,6 @@ void (*__old_sa)(int signal, siginfo_t *info, void *reserved);
 int (*JVM_handle_linux_signal)(int signo, siginfo_t* siginfo, void* ucontext, int abort_if_unrecognized);
 
 void android_sigaction(int signal, siginfo_t *info, void *reserved) {
-  printf("process killed with signal %d code %p addr %p\n", signal,info->si_code,info->si_addr);
   if (JVM_handle_linux_signal == NULL) { // should not happen, but still
       __old_sa = old_sa[signal].sa_sigaction;
       __old_sa(signal,info,reserved);

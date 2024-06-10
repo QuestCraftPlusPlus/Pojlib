@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import pojlib.api.API_V1;
+import pojlib.API;
 import pojlib.util.json.MinecraftInstances;
 
 public class JREUtils {
@@ -143,7 +143,7 @@ public class JREUtils {
         envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE-21");
         envMap.put("HOME", instance.gameDir);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
-        envMap.put("VR_MODEL", API_V1.model);
+        envMap.put("VR_MODEL", API.model);
         envMap.put("POJLIB_RENDERER", "regal");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
@@ -182,11 +182,11 @@ public class JREUtils {
 
         //Add automatically generated args
 
-        if (API_V1.customRAMValue) {
-            userArgs.add("-Xms" + API_V1.memoryValue + "M");
-            userArgs.add("-Xmx" + API_V1.memoryValue + "M");
+        if (API.customRAMValue) {
+            userArgs.add("-Xms" + API.memoryValue + "M");
+            userArgs.add("-Xmx" + API.memoryValue + "M");
         } else {
-            if (API_V1.model.equals("Meta Quest Pro") || API_V1.model.equals("Oculus Headset1")) {
+            if (API.model.equals("Meta Quest Pro") || API.model.equals("Oculus Headset1")) {
                 userArgs.add("-Xms" + 2048 + "M");
                 userArgs.add("-Xmx" + 3072 + "M");
             } else {

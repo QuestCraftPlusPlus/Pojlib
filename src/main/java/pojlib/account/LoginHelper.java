@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
-import pojlib.api.API_V1;
+import pojlib.API;
 import pojlib.util.Constants;
 import pojlib.util.Logger;
 
@@ -85,7 +85,7 @@ public class LoginHelper {
 
     public static void beginLogin(Activity activity) {
         loginThread = new Thread(() -> {
-            Consumer<DeviceCode> deviceCodeConsumer = (DeviceCode deviceCode) -> API_V1.msaMessage = deviceCode.message();
+            Consumer<DeviceCode> deviceCodeConsumer = (DeviceCode deviceCode) -> API.msaMessage = deviceCode.message();
             HashSet<String> params = new HashSet<>();
             params.add("XboxLive.SignIn");
             params.add("XboxLive.offline_access");
@@ -96,14 +96,14 @@ public class LoginHelper {
                 IAuthenticationResult res = future.get();
                 while(res.account() == null);
                 try {
-                    API_V1.currentAcc = MinecraftAccount.login(activity.getFilesDir() + "/accounts", new String[]{res.accessToken(), String.valueOf(res.expiresOnDate().getTime())});
+                    API.currentAcc = MinecraftAccount.login(activity.getFilesDir() + "/accounts", new String[]{res.accessToken(), String.valueOf(res.expiresOnDate().getTime())});
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
-                API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
-                API_V1.profileName = API_V1.currentAcc.username;
+                API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
+                API.profileName = API.currentAcc.username;
             } catch (ExecutionException | InterruptedException e) {
-                API_V1.msaMessage = "Something went wrong! Couldn't reach the Microsoft Auth servers.\n"
+                API.msaMessage = "Something went wrong! Couldn't reach the Microsoft Auth servers.\n"
                         + e;
             }
         });

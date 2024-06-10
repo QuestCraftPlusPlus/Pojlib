@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import pojlib.account.MinecraftAccount;
-import pojlib.api.API_V1;
+import pojlib.API;
 import pojlib.InstanceHandler;
 import pojlib.util.Constants;
 import pojlib.util.DownloadUtils;
@@ -66,7 +66,7 @@ public class MinecraftInstances {
 
         private ModsJson parseModsJson(String gameDir) throws Exception {
             File mods = new File(gameDir + "/mods.json");
-            if(API_V1.developerMods) {
+            if(API.developerMods) {
                 DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods);
             } else {
                 DownloadUtils.downloadFile(InstanceHandler.MODS, mods);
@@ -76,7 +76,7 @@ public class MinecraftInstances {
         }
 
         public void updateMods(MinecraftInstances instances) {
-            API_V1.finishedDownloading = false;
+            API.finishedDownloading = false;
             if(extProjects == null) {
                 extProjects = new ProjectInfo[0];
             }
@@ -115,7 +115,7 @@ public class MinecraftInstances {
                     }
                     extProjects = modInfos.toArray(modInfos.toArray(new ProjectInfo[0]));
                     GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
-                    API_V1.finishedDownloading = true;
+                    API.finishedDownloading = true;
                     return;
                 }
 
@@ -161,10 +161,10 @@ public class MinecraftInstances {
                 }
 
                 GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
-                API_V1.finishedDownloading = true;
+                API.finishedDownloading = true;
             } catch (Exception e) {
                 Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e);
-                API_V1.finishedDownloading = true;
+                API.finishedDownloading = true;
             }
         }
     }

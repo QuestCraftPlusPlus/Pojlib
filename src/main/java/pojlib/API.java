@@ -1,4 +1,4 @@
-package pojlib.api;
+package pojlib;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,9 +8,7 @@ import android.net.NetworkCapabilities;
 import com.google.gson.JsonObject;
 
 import pojlib.account.MinecraftAccount;
-import pojlib.InstanceHandler;
 import pojlib.util.json.MinecraftInstances;
-import pojlib.APIHandler;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
 
@@ -22,7 +20,7 @@ import java.util.Date;
  * If we ever make breaking change to either project, we can make a new api class to accommodate for those changes without
  * having to make changes to either project deeply.
  */
-public class API_V1 {
+public class API {
 
     public static String msaMessage = "";
     public static String model = "Quest";
@@ -45,9 +43,9 @@ public class API_V1 {
     /**
      * Add a mod to an instance
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
-     * @param instance Acquired from {@link pojlib.api.API_V1#(Activity, MinecraftInstances, String, String, boolean, String, String, String, String)}
-     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     * @param instances Acquired from {@link API#loadAll()}
+     * @param instance Acquired from {@link API#(Activity, MinecraftInstances, String, String, boolean, String, String, String, String)}
+     *                 or {@link API#load(MinecraftInstances, String)}
      * @param name Project name
      * @param version Project version
      * @param url Mod download URL
@@ -59,8 +57,8 @@ public class API_V1 {
     /**
      * Check if an instance has a mod
      *
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
-     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     * @param instance Acquired from {@link API#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
+     *                 or {@link API#load(MinecraftInstances, String)}
      * @param name Project name
      * @return True if the project is already in the instance
      */
@@ -71,9 +69,9 @@ public class API_V1 {
     /**
      * Remove a mod from an instance
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
-     * @param instance Acquired from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
-     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     * @param instances Acquired from {@link API#loadAll()}
+     * @param instance Acquired from {@link API#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
+     *                 or {@link API#load(MinecraftInstances, String)}
      * @param name project name
      * @return True if the project was deleted
      */
@@ -97,7 +95,7 @@ public class API_V1 {
     /**
      * Load a specific instance by name
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
+     * @param instances Acquired from {@link API#loadAll()}
      * @param name Name of the instance
      * @return The instance, or null if an instance with name does not exist
      */
@@ -109,7 +107,7 @@ public class API_V1 {
      * Delete an instance
      * NOTE: Only deletes the instance, not the correlated mods for said instance
      *
-     * @param instances Acquired from {@link pojlib.api.API_V1#loadAll()}
+     * @param instances Acquired from {@link API#loadAll()}
      * @param instance Instance object
      * @return True if it deletes successfully, false otherwise.
      */
@@ -173,8 +171,8 @@ public class API_V1 {
      *
      * @param activity Android activity object
      * @param account Account object
-     * @param instance Instance object from {@link pojlib.api.API_V1#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
-     *                 or {@link pojlib.api.API_V1#load(MinecraftInstances, String)}
+     * @param instance Instance object from {@link API#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String)}
+     *                 or {@link API#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
         InstanceHandler.launchInstance(activity, account, instance);
@@ -209,16 +207,16 @@ public class API_V1 {
         MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
         if(acc != null && (acc.expiresIn > new Date().getTime() || !hasWifi)) {
             currentAcc = acc;
-            API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
-            API_V1.profileName = API_V1.currentAcc.username;
+            API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
+            API.profileName = API.currentAcc.username;
             return;
         } else if(acc != null && acc.expiresIn <= new Date().getTime()) {
             currentAcc = LoginHelper.getNewToken(activity);
             if(currentAcc == null) {
                 LoginHelper.beginLogin(activity);
             } else {
-                API_V1.profileImage = MinecraftAccount.getSkinFaceUrl(API_V1.currentAcc);
-                API_V1.profileName = API_V1.currentAcc.username;
+                API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
+                API.profileName = API.currentAcc.username;
             }
         }
 

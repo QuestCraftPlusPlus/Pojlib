@@ -110,9 +110,7 @@ public class Installer {
 
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/sodium-options.json"), FileUtil.loadFromAssetToByte(activity, "sodium-options.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/vivecraft-config.properties"), FileUtil.loadFromAssetToByte(activity, "vivecraft-config.properties"));
-        FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/tweakeroo.json"), FileUtil.loadFromAssetToByte(activity, "tweakeroo.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/smoothboot.json"), FileUtil.loadFromAssetToByte(activity, "smoothboot.json"));
-        FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/malilib.json"), FileUtil.loadFromAssetToByte(activity, "malilib.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/immediatelyfast.json"), FileUtil.loadFromAssetToByte(activity, "immediatelyfast.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/moreculling.toml"), FileUtil.loadFromAssetToByte(activity,"moreculling.toml"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/modernfix-mixins.properties"), FileUtil.loadFromAssetToByte(activity,"modernfix-mixins.properties"));

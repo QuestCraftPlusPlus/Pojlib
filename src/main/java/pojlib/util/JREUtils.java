@@ -145,7 +145,12 @@ public class JREUtils {
         envMap.put("HOME", instance.gameDir);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("VR_MODEL", API.model);
-        envMap.put("POJLIB_RENDERER", "regal");
+        envMap.put("GALLIUM_DRIVER", "zink");
+        envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
+        envMap.put("MESA_LOG_FILE", instance.gameDir + "/mesa.log");
+        envMap.put("LIBGL_DRIVERS_PATH", activity.getApplicationInfo().nativeLibraryDir);
+        envMap.put("EGL_PLATFORM", "surfaceless");
+        envMap.put("POJLIB_RENDERER", "zink");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE-22/bin:" + Os.getenv("PATH"));

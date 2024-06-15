@@ -3,7 +3,7 @@ package pojlib.util;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
-import pojlib.api.API_V1;
+import pojlib.API;
 
 import javax.net.ssl.SSLException;
 import java.io.*;
@@ -28,15 +28,15 @@ public class DownloadUtils {
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     try (InputStream is = new StreamDL(conn.getInputStream())) {
                         String[] segments = url.getPath().split("/");
-                        API_V1.currentDownload = segments[segments.length - 1];
+                        API.currentDownload = segments[segments.length - 1];
 
                         ((StreamDL)is).addListener((b, count) -> {
 
                             if (b == -1) {
-                                API_V1.downloadStatus = 0;
-                                API_V1.currentDownload = null;
+                                API.downloadStatus = 0;
+                                API.currentDownload = null;
                             } else {
-                                API_V1.downloadStatus = count * 0.000001;
+                                API.downloadStatus = count * 0.000001;
                             }
 
                         });

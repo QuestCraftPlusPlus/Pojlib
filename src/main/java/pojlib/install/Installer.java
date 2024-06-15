@@ -84,6 +84,8 @@ public class Installer {
 
         // Add our GLFW
         classpath.add(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
+        // DNS SRV Resolver fix
+        classpath.add(Constants.USER_HOME + "/hacks/ResConfHack.jar");
 
         return classpath.toString();
     }
@@ -118,6 +120,7 @@ public class Installer {
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/modernfix-mixins.properties"), FileUtil.loadFromAssetToByte(activity,"modernfix-mixins.properties"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/options.txt"), FileUtil.loadFromAssetToByte(activity, "options.txt"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/optionsviveprofiles.txt"), FileUtil.loadFromAssetToByte(activity, "optionsviveprofiles.txt"));
+        FileUtils.writeByteArrayToFile(new File(Constants.USER_HOME + "/hacks/ResConfHack.jar"), FileUtil.loadFromAssetToByte(activity, "hacks/ResConfHack.jar"));
 
         return new File(gameDir + "/assets").getAbsolutePath();
     }

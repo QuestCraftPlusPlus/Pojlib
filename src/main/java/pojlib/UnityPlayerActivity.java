@@ -1,7 +1,5 @@
 package pojlib;
 
-import static pojlib.util.FileUtil.newFile;
-
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -11,20 +9,10 @@ import android.view.MotionEvent;
 import android.view.Window;
 
 import com.unity3d.player.IUnityPlayerLifecycleEvents;
-import com.unity3d.player.MultiWindowSupport;
 import com.unity3d.player.UnityPlayer;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
-import pojlib.api.API_V1;
-import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents
@@ -54,9 +42,9 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
-        File zip = new File(this.getFilesDir() + "/runtimes/JRE-21");
+        File zip = new File(this.getFilesDir() + "/runtimes/JRE-22");
         if (!zip.exists()) {
-            FileUtil.unzipArchiveFromAsset(this, "JRE-21.zip", this.getFilesDir() + "/runtimes/JRE-21");
+            FileUtil.unzipArchiveFromAsset(this, "JRE-22.zip", this.getFilesDir() + "/runtimes/JRE-22");
         }
     }
 

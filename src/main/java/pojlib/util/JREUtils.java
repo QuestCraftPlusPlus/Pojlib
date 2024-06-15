@@ -191,7 +191,7 @@ public class JREUtils {
                 userArgs.add("-Xms" + 2048 + "M");
                 userArgs.add("-Xmx" + 3072 + "M");
             }
-             else if (API_V1.model.equals("Oculus Quest")) {
+             else if (API.model.equals("Oculus Quest")) {
                 userArgs.add("-Xms" + 1800 + "M");
                 userArgs.add("-Xmx" + 1800 + "M");
             } else {

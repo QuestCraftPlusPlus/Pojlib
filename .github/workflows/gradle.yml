@@ -35,7 +35,7 @@ jobs:
         ndk-version: r21d
         local-cache: true
     - name: Make Gradle wrapper executable
-      run: git lfs pull | chmod +x ./gradlew
+      run: git lfs pull
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:

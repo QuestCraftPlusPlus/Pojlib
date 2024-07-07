@@ -199,7 +199,6 @@ public class JREUtils {
         userArgs.add("-XX:+UseZGC");
         userArgs.add("-XX:+ZGenerational");
         userArgs.add("-XX:+UnlockExperimentalVMOptions");
-        userArgs.add("-XX:+AllowUserSignalHandlers");
         userArgs.add("-XX:+DisableExplicitGC");
         userArgs.add("-XX:+UseCriticalJavaThreadPriority");
 
@@ -230,7 +229,7 @@ public class JREUtils {
     public static List<String> getJavaArgs(Context ctx, MinecraftInstances.Instance instance) {
         return new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + new File(ctx.getFilesDir(), "runtimes/JRE-22"),
-                "-Djava.io.tmpdir=" + ctx.getCacheDir().getAbsolutePath(),
+                "-Djava.io.tmpdir=" + ctx.getApplicationInfo().nativeLibraryDir + "/.cache",
                 "-Duser.home=" + instance.gameDir,
                 "-Duser.language=" + System.getProperty("user.language"),
                 "-Dos.name=Linux",

@@ -189,7 +189,6 @@ void initDriver() {
     void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, gpuStuff,
                                                  gpuStuff, nativeDir,
                                                  "libvulkan_freedreno.so", NULL, NULL);
-    dlopen("libvulkan.so", RTLD_NOW);
     printf("Driver Loader: libvulkan handle: %p\n", libvulkan);
     char *vulkanPtrString;
     asprintf(&vulkanPtrString, "%p", libvulkan);

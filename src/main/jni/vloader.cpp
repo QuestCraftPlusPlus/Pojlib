@@ -4,7 +4,6 @@
 #include <thread>
 #include <string>
 #include <errno.h>
-#include <android/hardware_buffer.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <OpenOVR/openxr_platform.h>
@@ -24,25 +23,6 @@ XrInstanceCreateInfoAndroidKHR* OpenComposite_Android_Create_Info;
 XrGraphicsBindingOpenGLESAndroidKHR* OpenComposite_Android_GLES_Binding_Info;
 
 std::string (*OpenComposite_Android_Load_Input_File)(const char *path);
-
-typedef struct native_handle
-{
-    int version;        /* sizeof(native_handle_t) */
-    int numFds;         /* number of file-descriptors at &data[0] */
-    int numInts;        /* number of ints at &data[numFds] */
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wzero-length-array"
-#endif
-    int data[0];        /* numFds + numInts ints */
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#endif
-} native_handle_t;
-
-extern "C"
-const native_handle_t* _Nullable AHardwareBuffer_getNativeHandle(
-        const AHardwareBuffer* _Nonnull buffer);
 
 extern "C"
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -129,7 +109,6 @@ typedef EGLBoolean eglBindAPI_t (EGLenum api);
 typedef EGLSurface eglCreatePbufferSurface_t (EGLDisplay dpy, EGLConfig config, const EGLint *attrib_list);
 typedef EGLContext eglCreateContext_t (EGLDisplay dpy, EGLConfig config, EGLContext share_context, const EGLint *attrib_list);
 typedef EGLBoolean eglMakeCurrent_t (EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx);
-typedef EGLImage eglCreateImage_t (EGLDisplay dpy, EGLContext ctx, EGLenum target, EGLClientBuffer buffer, const EGLAttrib *attrib_list);
 typedef EGLint eglGetError_t (void);
 typedef __eglMustCastToProperFunctionPointerType eglGetProcAddress_t (const char *procname);
 
@@ -141,10 +120,11 @@ static eglBindAPI_t* eglBindAPI_p;
 static eglCreatePbufferSurface_t* eglCreatePbufferSurface_p;
 static eglCreateContext_t* eglCreateContext_p;
 static eglMakeCurrent_t* eglMakeCurrent_p;
-static eglCreateImage_t* eglCreateImage_p;
 static eglGetProcAddress_t* eglGetProcAddress_p;
 static eglGetError_t* eglGetError_p;
-static PFNEGLGETNATIVECLIENTBUFFERANDROIDPROC eglGetNativeClientBufferANDROID_p;
+static PFNGLCREATEMEMORYOBJECTSEXTPROC glCreateMemoryObjectsEXT_p;
+static PFNGLIMPORTMEMORYFDEXTPROC glImportMemoryFdEXT_p;
+static PFNGLTEXSTORAGEMEM2DEXTPROC glTexStorageMem2DEXT_p;
 
 void dlsym_egl() {
     void* handle = dlopen("libEGL.so", RTLD_NOW);
@@ -156,10 +136,12 @@ void dlsym_egl() {
     eglCreatePbufferSurface_p = (eglCreatePbufferSurface_t*) dlsym(handle, "eglCreatePbufferSurface");
     eglCreateContext_p = (eglCreateContext_t*) dlsym(handle, "eglCreateContext");
     eglMakeCurrent_p = (eglMakeCurrent_t*) dlsym(handle, "eglMakeCurrent");
-    eglCreateImage_p = (eglCreateImage_t*) dlsym(handle, "eglCreateImage");
     eglGetError_p = (eglGetError_t*) dlsym(handle, "eglGetError");
     eglGetProcAddress_p = (eglGetProcAddress_t*) dlsym(handle, "eglGetProcAddress");
-    eglGetNativeClientBufferANDROID_p = (PFNEGLGETNATIVECLIENTBUFFERANDROIDPROC) eglGetProcAddress_p("eglGetNativeClientBufferANDROID");
+
+    glCreateMemoryObjectsEXT_p = (PFNGLCREATEMEMORYOBJECTSEXTPROC) eglGetProcAddress_p("glCreateMemoryObjectsEXT");
+    glImportMemoryFdEXT_p = (PFNGLIMPORTMEMORYFDEXTPROC) eglGetProcAddress_p("glImportMemoryFdEXT");
+    glTexStorageMem2DEXT_p = (PFNGLTEXSTORAGEMEM2DEXTPROC) eglGetProcAddress_p("glTexStorageMem2DEXT");
 }
 
 EGLAPI __eglMustCastToProperFunctionPointerType EGLAPIENTRY eglGetProcAddress(const char *procname) {
@@ -263,42 +245,26 @@ Java_org_vivecraft_util_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz) {
     };
 }
 
-int getDMABuf(AHardwareBuffer* buf) {
-    const native_handle_t* handle = AHardwareBuffer_getNativeHandle(buf);
-    int dma_buf = (handle && handle->numFds) ? handle->data[0] : -1;
-    return dma_buf;
-}
-
 extern "C"
-JNIEXPORT jintArray JNICALL
-Java_org_vivecraft_util_VLoader_getImage(JNIEnv* env, jclass clazz, jint width, jint height) {
+JNIEXPORT jint JNICALL
+Java_org_vivecraft_util_VLoader_getImage(JNIEnv* env, jclass clazz, jint fd, jint width, jint height) {
     if(eglGetDisplay_p == nullptr) {
         dlsym_egl();
     }
 
-    AHardwareBuffer * buf;
-    AHardwareBuffer_Desc* desc = new AHardwareBuffer_Desc {
-            static_cast<uint32_t>(width),
-            static_cast<uint32_t>(height),
-            1,
-            AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
-            AHARDWAREBUFFER_USAGE_GPU_FRAMEBUFFER
-    };
-    AHardwareBuffer_allocate(desc, &buf);
-
-    EGLImage img = eglCreateImage_p(xrEglDisplay,
-                                  EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, eglGetNativeClientBufferANDROID_p(buf),
-                                  nullptr);
     GLuint tex;
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
-    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, img);
+    GLuint memory;
+    glCreateMemoryObjectsEXT_p(1, &memory);
+    glImportMemoryFdEXT_p(memory, width * height * 4, GL_HANDLE_TYPE_OPAQUE_FD_EXT, fd);
+    glTexStorageMem2DEXT_p(GL_TEXTURE_2D, 1, GL_RGBA8, width, height, memory,  0);
 
-    jintArray data = env->NewIntArray(2);
-    jint intBuf[2] = {
-            static_cast<jint>(tex),
-            reinterpret_cast<jint>(getDMABuf(buf))
-    };
-    env->SetIntArrayRegion(data, 0, 2, intBuf);
-    return data;
+    GLint error = eglGetError_p();
+    while(error != EGL_SUCCESS) {
+        printf("Failed to bind texture! %d\n", error);
+        error = eglGetError_p();
+    }
+
+    return tex;
 }

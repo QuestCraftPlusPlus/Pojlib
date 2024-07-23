@@ -57,6 +57,8 @@ eglGetError_t* eglGetError_p;
 eglSwapBuffers_t* eglSwapBuffers_p;
 eglSwapInterval_t* eglSwapInterval_p;
 eglGetProcAddress_t* eglGetProcAddress_p;
+PFNEGLEXPORTDMABUFIMAGEMESAPROC eglExportDMABUFImageMESA_p;
+PFNEGLEXPORTDMABUFIMAGEQUERYMESAPROC eglExportDMABUFImageQueryMESA_p;
 
 void* gbuffer;
 
@@ -75,6 +77,8 @@ void dlsym_egl() {
     eglSwapBuffers_p = (eglSwapBuffers_t*) dlsym(handle, "eglSwapBuffers");
     eglSwapInterval_p = (eglSwapInterval_t*) dlsym(handle, "eglSwapInterval");
     eglGetProcAddress_p = (eglGetProcAddress_t*) dlsym(handle, "eglGetProcAddress");
+    eglExportDMABUFImageMESA_p = (PFNEGLEXPORTDMABUFIMAGEMESAPROC) eglGetProcAddress_p("eglExportDMABUFImageMESA");
+    eglExportDMABUFImageQueryMESA_p = (PFNEGLEXPORTDMABUFIMAGEQUERYMESAPROC) eglGetProcAddress_p("eglExportDMABUFImageQueryMESA");
 }
 
 void pojav_openGLOnLoad() {
@@ -186,9 +190,10 @@ void initDriver() {
     char *nativeDir;
     asprintf(&nativeDir, "%s/", getenv("POJLIB_NATIVEDIR"));
     asprintf(&gpuStuff, "%s/gpustuff", getenv("HOME"));
-    void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, gpuStuff,
+    void *libvulkan = /*adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, gpuStuff,
                                                  gpuStuff, nativeDir,
-                                                 "libvulkan_freedreno.so", NULL, NULL);
+                                                 "libvulkan_freedreno.so", NULL, NULL);*/
+    dlopen("libvulkan.so", RTLD_NOW);
     printf("Driver Loader: libvulkan handle: %p\n", libvulkan);
     char *vulkanPtrString;
     asprintf(&vulkanPtrString, "%p", libvulkan);
@@ -276,6 +281,39 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
     (*env)->SetIntArrayRegion(env,ret,0,2,arr);
     return ret;
 }
+
 void pojavSwapInterval(int interval) {
     eglSwapInterval_p(gameEglDisplay, interval);
+}
+
+int pojavExportDMABuf(int mesaTex) {
+    const EGLAttrib attribs[] = {
+            EGL_IMAGE_PRESERVED, EGL_TRUE,
+            EGL_NONE
+    };
+    EGLImage image = eglCreateImage_p(gameEglDisplay, gameEglContext, EGL_GL_TEXTURE_2D, (EGLClientBuffer) mesaTex, attribs);
+    if(image == NULL) {
+        printf("Image is not valid!\n");
+        return -1;
+    }
+
+    int num_planes;
+    if(!eglExportDMABUFImageQueryMESA_p(gameEglDisplay, image, NULL, &num_planes, NULL)) {
+        printf("Failed to query image! %d\n", eglGetError_p());
+    }
+
+    if(num_planes <= 0) {
+        printf("num_planes is not valid!\n");
+    }
+
+    int fds[num_planes];
+    if(!eglExportDMABUFImageMESA_p(gameEglDisplay, image, fds, NULL, NULL)) {
+        printf("Failed to export dmabuf! %d\n", eglGetError_p());
+    }
+
+    for(int i = 0; i < num_planes; i++) {
+        printf("Plane %d, FD %d\n", i, fds[i]);
+    }
+
+    return fds[0];
 }

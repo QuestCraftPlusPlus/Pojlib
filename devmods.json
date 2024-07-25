@@ -20,7 +20,7 @@
 					"version": "0.5.8",
 					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.4-0.5.8/sodium-fabric-0.5.8+mc1.20.4.jar"
 				},
-					{
+				{
 					"slug": "Cloth-Config",
 					"version": "13.0.114",
 					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/YFpDLLdu/cloth-config-13.0.114-fabric.jar"

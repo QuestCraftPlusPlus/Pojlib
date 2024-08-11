@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pojlib.API;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 import pojlib.util.Logger;
@@ -58,40 +57,48 @@ public class Msa {
     }
 
     /** Performs a full login, calling back listeners appropriately  */
-    public MinecraftAccount performLogin() {
-        try {
-            String accessToken = acquireAccessToken(mIsRefresh, mAuthCode);
-            String xboxLiveToken = acquireXBLToken(accessToken);
-            String[] xsts = acquireXsts(xboxLiveToken);
-            if(xsts == null) {
-                return null;
-            }
-            String mcToken = acquireMinecraftToken(xsts[0], xsts[1]);
-            fetchOwnedItems(mcToken);
-            if(!checkMcProfile(mcToken)) {
-                Logger.getInstance().appendToLog("MicrosoftLogin | checkMcProfile failed.");
-                return null;
-            }
+    public void performLogin(@Nullable final FileUtils.ProgressListener progressListener,
+                             @Nullable final DoneListener doneListener,
+                             @Nullable final ErrorListener errorListener,
+                             Activity activity) {
+        sExecutorService.execute(() -> {
+            try {
+                notifyProgress(progressListener, 1, activity);
+                String accessToken = acquireAccessToken(mIsRefresh, mAuthCode);
+                notifyProgress(progressListener, 2, activity);
+                String xboxLiveToken = acquireXBLToken(accessToken);
+                notifyProgress(progressListener, 3, activity);
+                String[] xsts = acquireXsts(xboxLiveToken);
+                notifyProgress(progressListener, 4, activity);
+                String mcToken = acquireMinecraftToken(xsts[0], xsts[1]);
+                notifyProgress(progressListener, 5, activity);
+                fetchOwnedItems(mcToken);
+                checkMcProfile(mcToken);
 
-            MinecraftAccount acc = MinecraftAccount.load(mcName, null, null);
-            if (acc == null) acc = new MinecraftAccount();
-            if (doesOwnGame) {
-                /*acc.xuid = xsts[0];*/
-                /*acc.clientToken = "0"; *//* FIXME */
-                acc.accessToken = mcToken;
-                acc.username = mcName;
-                acc.uuid = mcUuid;
-                acc.expiresIn = expiresAt;
-            } else {
-                Logger.getInstance().appendToLog("MicrosoftLogin | Unknown Error occurred.");
-                return null;
-            }
+                MinecraftAccount acc = MinecraftAccount.load(mcName);
+                if(acc == null) acc = new MinecraftAccount();
+                if (doesOwnGame) {
+                    /*acc.xuid = xsts[0];*/
+                    /*acc.clientToken = "0"; *//* FIXME */
+                    acc.accessToken = mcToken;
+                    acc.username = mcName;
+                    acc.uuid = mcUuid;
+                    acc.expiresIn = expiresAt;
+                }
+                acc.save();
 
-            return acc;
-        } catch (Exception e) {
-            Logger.getInstance().appendToLog("MicrosoftLogin | Exception thrown during authentication" + e);
-            return null;
-        }
+                if(doneListener != null) {
+                    MinecraftAccount finalAcc = acc;
+                    activity.runOnUiThread(() -> doneListener.onLoginDone(finalAcc));
+                }
+
+            }catch (Exception e){
+                Logger.getInstance().appendToLog("MicroAuth | Exception thrown during authentication" + e);
+                if(errorListener != null);
+                activity.runOnUiThread(() -> errorListener.onLoginError(e));
+            }
+            ProgressLayout.clearProgress(ProgressLayout.AUTHENTICATE_MICROSOFT);
+        });
     }
 
     public String acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
@@ -138,7 +145,7 @@ public class Msa {
         properties.put("AuthMethod", "RPS");
         properties.put("SiteName", "user.auth.xboxlive.com");
         properties.put("RpsTicket", accessToken);
-        data.put("Properties", properties);
+        data.put("Properties",properties);
         data.put("RelyingParty", "http://auth.xboxlive.com");
         data.put("TokenType", "JWT");
 
@@ -160,7 +167,7 @@ public class Msa {
     }
 
     /** @return [uhs, token]*/
-    private String[] acquireXsts(String xblToken) throws IOException, JSONException {
+    private @NonNull String[] acquireXsts(String xblToken) throws IOException, JSONException {
         URL url = new URL(Constants.XSTS_AUTH_URL);
 
         JSONObject data = new JSONObject();
@@ -172,10 +179,10 @@ public class Msa {
         data.put("TokenType", "JWT");
 
         String req = data.toString();
-        Logger.getInstance().appendToLog("MicrosoftLogin | " + req);
+        Logger.getInstance().appendToLog("MicroAuth | " + req);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         setCommonProperties(conn, req);
-        Logger.getInstance().appendToLog("MicrosoftLogin | " + conn.getRequestMethod());
+        Logger.getInstance().appendToLog("MicroAuth | " + conn.getRequestMethod());
         conn.connect();
 
         try(OutputStream wr = conn.getOutputStream()) {
@@ -188,17 +195,15 @@ public class Msa {
             String token = jo.getString("Token");
             conn.disconnect();
             return new String[]{uhs, token};
-        } else if(conn.getResponseCode() == 401) {
+        }else if(conn.getResponseCode() == 401) {
             String responseContents = FileUtil.read(conn.getErrorStream());
             JSONObject jo = new JSONObject(responseContents);
             long xerr = jo.optLong("XErr", -1);
             String locale_id = XSTS_ERRORS.get(xerr);
             if(locale_id != null) {
-                Logger.getInstance().appendToLog(responseContents);
-                return null;
+                throw new PresentedException(new RuntimeException(responseContents), locale_id);
             }
-            Logger.getInstance().appendToLog("Unknown error returned from Xbox Live\n" + responseContents);
-            return null;
+            throw new PresentedException(new RuntimeException(responseContents), "Unknown Xbox Live API error ", xerr);
         }else{
             throw getResponseThrowable(conn);
         }
@@ -245,8 +250,7 @@ public class Msa {
         // as it does not indicate whether the user owns the game through Game Pass.
     }
 
-    // Returns false for failure //
-    public static boolean checkMcProfile(String mcAccessToken) throws IOException, JSONException {
+    public static void checkMcProfile(String mcAccessToken) throws IOException, JSONException {
         URL url = new URL(Constants.MC_PROFILE_URL);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -267,16 +271,23 @@ public class Msa {
             doesOwnGame = true;
             Logger.getInstance().appendToLog("MicrosoftLogin | UserName = " + name);
             Logger.getInstance().appendToLog("MicrosoftLogin | Uuid Minecraft = " + uuidDashes);
-            mcName = name;
-            mcUuid = uuidDashes;
-            return true;
-        } else {
+            mcName=name;
+            mcUuid=uuidDashes;
+        }else{
             Logger.getInstance().appendToLog("MicrosoftLogin | It seems that this Microsoft Account does not own the game.");
             doesOwnGame = false;
-            API.msaMessage = "It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.";
-            return false;
+            throw new PresentedException(new RuntimeException(conn.getResponseMessage()), "It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.");
         }
     }
+
+    /** Wrapper to ease notifying the listener */
+    private void notifyProgress(@Nullable FileUtils.ProgressListener listener, int step, Activity activity){
+        if(listener != null){
+            activity.runOnUiThread(() -> listener.onLoginProgress(step));
+        }
+        ProgressLayout.setProgress(ProgressLayout.AUTHENTICATE_MICROSOFT, step*20);
+    }
+
 
     /** Set common properties for the connection. Given that all requests are POST, interactivity is always enabled */
     private static void setCommonProperties(HttpURLConnection conn, String formData) {
@@ -312,7 +323,7 @@ public class Msa {
     private static RuntimeException getResponseThrowable(HttpURLConnection conn) throws IOException {
         Logger.getInstance().appendToLog("MicrosoftLogin | Error code: " + conn.getResponseCode() + ": " + conn.getResponseMessage());
         if(conn.getResponseCode() == 429) {
-            return new RuntimeException("Too many requests, please try again later.");
+            return new PresentedException("Too many requests, please try again later.");
         }
         return new RuntimeException(conn.getResponseMessage());
     }

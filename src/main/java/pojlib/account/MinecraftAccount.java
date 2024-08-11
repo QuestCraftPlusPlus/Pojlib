@@ -1,5 +1,7 @@
 package pojlib.account;
 
+import static pojlib.account.Msa.checkMcProfile;
+
 import android.app.Activity;
 
 import com.google.gson.Gson;
@@ -25,11 +27,9 @@ public class MinecraftAccount {
 
     public final String userType = "msa";
 
-
     public static MinecraftAccount login(String gameDir, String[] response) throws IOException, JSONException {
         String mcToken = Msa.acquireXBLToken(response[0]);
-        Msa instance = new Msa(false, mcToken);
-        MinecraftAccount account = instance.performLogin();
+        MinecraftAccount account = checkMcProfile(mcToken);
         account.expiresIn = Long.parseLong(response[1]);
 
         GsonUtils.objectToJsonFile(gameDir + "/account.json", account);

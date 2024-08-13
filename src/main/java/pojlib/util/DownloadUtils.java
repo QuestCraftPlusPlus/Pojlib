@@ -82,11 +82,11 @@ public class DownloadUtils {
                 sha1_dst = new String(Hex.encodeHex(DigestUtils.sha1(is)));
             }
             if (sourceSHA != null) return sha1_dst.equalsIgnoreCase(sourceSHA);
-            else return true; // fake match
+            else return false;
 
-        }catch (IOException e) {
-            Logger.getInstance().appendToLog("Fake-matching a hash due to a read error: " + e);
-            return true;
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("Issue while comparing SHA1: " + e);
+            return false;
         }
     }
 }

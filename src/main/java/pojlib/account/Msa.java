@@ -15,6 +15,7 @@ import pojlib.API;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 import pojlib.util.Logger;
+import pojlib.util.MSAException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -68,10 +69,7 @@ public class Msa {
             }
             String mcToken = acquireMinecraftToken(xsts[0], xsts[1]);
             fetchOwnedItems(mcToken);
-            if(!checkMcProfile(mcToken)) {
-                Logger.getInstance().appendToLog("MicrosoftLogin | checkMcProfile failed.");
-                return null;
-            }
+            checkMcProfile(mcToken);
 
             MinecraftAccount acc = MinecraftAccount.load(mcName, null, null);
             if (acc == null) acc = new MinecraftAccount();
@@ -84,13 +82,13 @@ public class Msa {
                 acc.expiresIn = expiresAt;
             } else {
                 Logger.getInstance().appendToLog("MicrosoftLogin | Unknown Error occurred.");
-                return null;
+                throw new MSAException("MicrosoftLogin | Unknown Error occurred.", null);
             }
 
             return acc;
         } catch (Exception e) {
             Logger.getInstance().appendToLog("MicrosoftLogin | Exception thrown during authentication" + e);
-            return null;
+            throw new MSAException("MicrosoftLogin | Exception thrown during authentication", e);
         }
     }
 
@@ -195,11 +193,11 @@ public class Msa {
             String locale_id = XSTS_ERRORS.get(xerr);
             if(locale_id != null) {
                 Logger.getInstance().appendToLog(responseContents);
-                return null;
+                throw new MSAException(responseContents, null);
             }
             Logger.getInstance().appendToLog("Unknown error returned from Xbox Live\n" + responseContents);
-            return null;
-        }else{
+            throw new MSAException("Unknown error returned from Xbox Live", null);
+        } else{
             throw getResponseThrowable(conn);
         }
     }
@@ -273,8 +271,7 @@ public class Msa {
         } else {
             Logger.getInstance().appendToLog("MicrosoftLogin | It seems that this Microsoft Account does not own the game.");
             doesOwnGame = false;
-            API.msaMessage = "It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.";
-            return false;
+            throw new MSAException("It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.", null);
         }
     }
 
@@ -312,8 +309,8 @@ public class Msa {
     private static RuntimeException getResponseThrowable(HttpURLConnection conn) throws IOException {
         Logger.getInstance().appendToLog("MicrosoftLogin | Error code: " + conn.getResponseCode() + ": " + conn.getResponseMessage());
         if(conn.getResponseCode() == 429) {
-            return new RuntimeException("Too many requests, please try again later.");
+            throw new MSAException("Too many requests, please try again later.", null);
         }
-        return new RuntimeException(conn.getResponseMessage());
+        throw new MSAException(conn.getResponseMessage(), null);
     }
 }

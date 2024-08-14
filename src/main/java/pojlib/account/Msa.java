@@ -135,7 +135,7 @@ public class Msa {
         JSONObject properties = new JSONObject();
         properties.put("AuthMethod", "RPS");
         properties.put("SiteName", "user.auth.xboxlive.com");
-        properties.put("RpsTicket", accessToken);
+        properties.put("RpsTicket", "d=" + accessToken);
         data.put("Properties", properties);
         data.put("RelyingParty", "http://auth.xboxlive.com");
         data.put("TokenType", "JWT");

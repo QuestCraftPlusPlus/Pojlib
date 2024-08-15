@@ -143,7 +143,6 @@ public class JREUtils {
         envMap.put("POJLIB_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
         envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE-22");
         envMap.put("HOME", instance.gameDir);
-        envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("VR_MODEL", API.model);
         envMap.put("GALLIUM_DRIVER", "zink");
         envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
@@ -151,6 +150,9 @@ public class JREUtils {
         envMap.put("LIBGL_DRIVERS_PATH", activity.getApplicationInfo().nativeLibraryDir);
         envMap.put("EGL_PLATFORM", "surfaceless");
         envMap.put("POJLIB_RENDERER", "zink");
+        envMap.put("ZINK_DEBUG", "compact,gpl");
+        envMap.put("ZINK_DESCRIPTORS", "lazy");
+        envMap.put("FD_DEV_FEATURES", "enable_tp_ubwc_flag_hint=1");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE-22/bin:" + Os.getenv("PATH"));
@@ -166,7 +168,6 @@ public class JREUtils {
             }
             reader.close();
         }
-        envMap.put("LIBGL_ES", "2");
         for (Map.Entry<String, String> env : envMap.entrySet()) {
             Logger.getInstance().appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
             Os.setenv(env.getKey(), env.getValue(), true);

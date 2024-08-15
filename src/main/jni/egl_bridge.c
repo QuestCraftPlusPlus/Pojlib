@@ -286,7 +286,7 @@ void pojavSwapInterval(int interval) {
     eglSwapInterval_p(gameEglDisplay, interval);
 }
 
-int pojavExportDMABuf(int mesaTex) {
+int* pojavExportDMABuf(int mesaTex) {
     const EGLAttrib attribs[] = {
             EGL_IMAGE_PRESERVED, EGL_TRUE,
             EGL_NONE
@@ -294,10 +294,9 @@ int pojavExportDMABuf(int mesaTex) {
     EGLImage image = eglCreateImage_p(gameEglDisplay, gameEglContext, EGL_GL_TEXTURE_2D, (EGLClientBuffer) mesaTex, attribs);
     if(image == NULL) {
         printf("Image is not valid!\n");
-        return -1;
     }
 
-    int num_planes;
+    int num_planes = 0;
     if(!eglExportDMABUFImageQueryMESA_p(gameEglDisplay, image, NULL, &num_planes, NULL)) {
         printf("Failed to query image! %d\n", eglGetError_p());
     }
@@ -307,13 +306,20 @@ int pojavExportDMABuf(int mesaTex) {
     }
 
     int fds[num_planes];
-    if(!eglExportDMABUFImageMESA_p(gameEglDisplay, image, fds, NULL, NULL)) {
+    EGLint offsets[num_planes];
+    if(!eglExportDMABUFImageMESA_p(gameEglDisplay, image, fds, NULL, offsets)) {
         printf("Failed to export dmabuf! %d\n", eglGetError_p());
+    }
+
+    int data[] = {fds[0], offsets[0]};
+
+    if(fds[0] == -1) {
+        printf("Fd is not valid!\n");
     }
 
     for(int i = 0; i < num_planes; i++) {
         printf("Plane %d, FD %d\n", i, fds[i]);
     }
 
-    return fds[0];
+    return data;
 }

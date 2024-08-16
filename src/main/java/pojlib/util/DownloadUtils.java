@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Objects;
+import javax.annotation.Nullable;
 
 public class DownloadUtils {
 
@@ -75,18 +76,18 @@ public class DownloadUtils {
             throw th3;
         }
     }
-    public static boolean compareSHA1(File f, String sourceSHA) {
+    public static boolean compareSHA1(File f, @Nullable String sourceSHA) {
         try {
             String sha1_dst;
             try (InputStream is = Files.newInputStream(f.toPath())) {
                 sha1_dst = new String(Hex.encodeHex(DigestUtils.sha1(is)));
             }
             if (sourceSHA != null) return sha1_dst.equalsIgnoreCase(sourceSHA);
-            else return true; // fake match
+            else return true; // No hash provided
 
-        }catch (IOException e) {
-            Logger.getInstance().appendToLog("Fake-matching a hash due to a read error: " + e);
-            return true;
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("Issue while comparing SHA1: " + e);
+            return false;
         }
     }
 }

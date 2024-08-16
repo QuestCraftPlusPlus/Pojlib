@@ -135,12 +135,22 @@ public class Installer {
             String path = asset.hash.substring(0, 2) + "/" + asset.hash;
             File assetFile = new File(gameDir + "/assets/objects/", path);
 
-            if (!assetFile.exists()) {
+            for (int i = 0; i < 5; i++) {
+                if (i == 4) throw new RuntimeException(String.format("Asset download of %s failed after 5 retries", entry.getKey()));
+
+                if (!assetFile.exists()) {
                     Logger.getInstance().appendToLog("Downloading: " + entry.getKey());
-                try {
-                    DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    try {
+                        DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                if (DownloadUtils.compareSHA1(assetFile, asset.hash)) {
+                    break;
+                } else {
+                    assetFile.delete();
                 }
             }
         }

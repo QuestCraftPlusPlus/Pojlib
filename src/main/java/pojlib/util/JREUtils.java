@@ -85,7 +85,6 @@ public class JREUtils {
             dlopen(f.getAbsolutePath());
         }
         dlopen(sNativeLibDir + "/libopenal.so");
-        dlopen(sNativeLibDir + "/libopuscodec.so");
     }
 
     public static void redirectAndPrintJRELog() {
@@ -223,7 +222,7 @@ public class JREUtils {
 
         int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
         Logger.getInstance().appendToLog("Java Exit code: " + exitCode);
-        return exitCode;
+        while (true);
     }
 
     /**

@@ -33,10 +33,12 @@ jobs:
       with:
         ndk-version: r21d
         local-cache: true
+        link-to-sdk: true
     - uses: nttld/setup-ndk@v1
       with:
         ndk-version: r26b
         local-cache: true
+        link-to-sdk: true
     - name: Make Gradle wrapper executable and pull LFS
       run: git lfs pull | chmod +x ./gradlew
     - name: Build with Gradle

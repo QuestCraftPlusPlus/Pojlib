@@ -49,83 +49,31 @@
 					"slug": "Modern-Fix",
 					"version": "5.10.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/vxDb5tOq/modernfix-fabric-5.10.0%2Bmc1.20.3.jar"
-				}
-			]
-		},
-		{
-			"name": "1.20.2",
-			"coreMods": [
-				{
-					"slug": "Vivecraft",
-					"version": "1.1.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.2/vivecraft.jar"
 				},
 				{
-					"slug": "Fabric-API",
-					"version": "0.91.6",
-					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/8GVp7wDk/fabric-api-0.91.6%2B1.20.2.jar"
-				}
-			],
-			"defaultMods": [
+					"slug": "Noisium",
+					"version": "2.0.3",
+					"download_link": "https://cdn.modrinth.com/data/KuNKN7d2/versions/Eie3f6ki/noisium-fabric-2.0.3%2Bmc1.20.2-1.20.4.jar"
+				},
 				{
 					"slug": "Lithium",
-					"version": "0.12.0",
-					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/qdzL5Hkg/lithium-fabric-mc1.20.2-0.12.0.jar"
+					"version": "0.12.1",
+					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/nMhjKWVE/lithium-fabric-mc1.20.4-0.12.1.jar"
+				},
+				{
+					"slug": "EntityCulling",
+					"version": "1.6.5",
+					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/hyejM5za/entityculling-fabric-1.6.5-mc1.20.4.jar"
 				},
 				{
 					"slug": "Ferrite-Core",
-					"version": "6.0.1",
-					"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/unerR5MN/ferritecore-6.0.1-fabric.jar"
-				},
-				{
-					"slug": "Entity-Culling",
-					"version": "1.6.2",
-					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/BDwHAdWc/entityculling-fabric-1.6.2-mc1.20.1.jar"
-				},
-				{
-					"slug": "Sodium",
-					"version": "0.5.5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.2-0.5.5/sodium-fabric-mc1.20.2-0.5.5.jar"
-				},
-				{
-					"slug": "Cloth-Config",
-					"version": "12.0.109",
-					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/LnfolBYb/cloth-config-12.0.109-fabric.jar"
-				},
-				{
-					"slug": "Fabric-Language-Kotlin",
-					"version": "1.10.13+kotlin.1.9.20",
-					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/atZwzPrT/fabric-language-kotlin-1.10.13%2Bkotlin.1.9.20.jar"
+					"version": "6.0.3",
+					"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/pguEMpy9/ferritecore-6.0.3-fabric.jar"
 				},
 				{
 					"slug": "Krypton",
-					"version": "0.2.4",
-					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/cQ60Ouax/krypton-0.2.4.jar"
-				},
-				{
-					"slug": "Server-Core",
-					"version": "1.5.0",
-					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/wgjsjWPu/servercore-fabric-1.5.0%2B1.20.2.jar"
-				},
-				{
-					"slug": "Mod-Menu",
-					"version": "8.0.0",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/TwfjidT5/modmenu-8.0.0.jar"
-				},
-				{
-					"slug": "ImmediatelyFast",
-					"version": "1.2.6",
-					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/mbeaDZtb/ImmediatelyFast-1.2.6%2B1.20.2.jar"
-				},
-				{
-					"slug": "Simple-Voice-Chat",
-					"version": "2.5.12",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/zwnfweMB/voicechat-fabric-1.20.2-2.5.12.jar"
-				},
-				{
-					"slug": "Modern-Fix",
-					"version": "5.9.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
+					"version": "0.2.6",
+					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/bRcuOnao/krypton-0.2.6.jar"
 				}
 			]
 		},
@@ -190,11 +138,6 @@
 					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/dXmFuxyH/servercore-fabric-1.5.0%2B1.20.1.jar"
 				},
 				{
-					"slug": "Mod-Menu",
-					"version": "7.0.1",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/RTFDnTKf/modmenu-7.0.1.jar"
-				},
-				{
 					"slug": "ImmediatelyFast",
 					"version": "1.1.15",
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4IDo27OL/ImmediatelyFast-1.1.15%2B1.20.1.jar"
@@ -254,7 +197,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.4.10",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/b4hTi3mo/sodium-fabric-mc1.19.4-0.4.10%2Bbuild.24.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.19.4-0.4.11/sodium-fabric-mc1.19.4-0.4.11+build.1.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -290,11 +233,6 @@
 					"slug": "Server-Core",
 					"version": "1.3.5-1.19.4",
 					"download_link": "https://cdn.modrinth.com/data/4WWQxlQP/versions/aq6o4qRe/servercore-1.3.5-1.19.4.jar"
-				},
-				{
-					"slug": "Mod-Menu",
-					"version": "6.2.1",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/yjjsLqbS/modmenu-6.2.1.jar"
 				},
 				{
 					"slug": "ImmediatelyFast",
@@ -377,11 +315,6 @@
 					"slug": "Krypton",
 					"version": "0.2.1",
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.2.1/krypton-0.2.1.jar"
-				},
-				{
-					"slug": "Mod_Menu",
-					"version": "4.2.0-beta.2",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/gSoPJyVn/modmenu-4.2.0-beta.2.jar"
 				},
 				{
 					"slug": "Better-Biome-Blend",
@@ -489,11 +422,6 @@
 					"slug": "Krypton",
 					"version": "0.1.9",
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar"
-				},
-				{
-					"slug": "Mod-Menu",
-					"version": "3.2.5",
-					"download_link": "https://cdn.modrinth.com/data/mOgUt4GM/versions/nVxObSbX/modmenu-3.2.5.jar"
 				},
 				{
 					"slug": "Modern-Fix",

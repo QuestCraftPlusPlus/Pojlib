@@ -18,7 +18,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: windows-2022
 
     steps:
@@ -34,7 +33,11 @@ jobs:
       with:
         ndk-version: r21d
         local-cache: true
-    - name: Make Gradle wrapper executable
+    - uses: nttld/setup-ndk@v1
+      with:
+        ndk-version: r26b
+        local-cache: true
+    - name: Make Gradle wrapper executable and pull LFS
       run: git lfs pull | chmod +x ./gradlew
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2

@@ -94,7 +94,7 @@ public class Msa {
 
     public String acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
         URL url = new URL(Constants.OAUTH_TOKEN_URL);
-        Logger.getInstance().appendToLog("MicrosoftLogin | isRefresh=" + isRefresh + ", authCode= "+authcode);
+        // Logger.getInstance().appendToLog("MicrosoftLogin | isRefresh=" + isRefresh + ", authCode= "+authcode);
 
         String formData = convertToFormData(
                 "client_id", "00000000402b5328",
@@ -104,7 +104,7 @@ public class Msa {
                 "scope", "service::user.auth.xboxlive.com::MBI_SSL"
         );
 
-        Logger.getInstance().appendToLog("MicroAuth | " + formData);
+        // Logger.getInstance().appendToLog("MicroAuth | " + formData);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -170,10 +170,10 @@ public class Msa {
         data.put("TokenType", "JWT");
 
         String req = data.toString();
-        Logger.getInstance().appendToLog("MicrosoftLogin | " + req);
+        // Logger.getInstance().appendToLog("MicrosoftLogin | " + req);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         setCommonProperties(conn, req);
-        Logger.getInstance().appendToLog("MicrosoftLogin | " + conn.getRequestMethod());
+        // Logger.getInstance().appendToLog("MicrosoftLogin | " + conn.getRequestMethod());
         conn.connect();
 
         try(OutputStream wr = conn.getOutputStream()) {
@@ -195,7 +195,7 @@ public class Msa {
                 Logger.getInstance().appendToLog(responseContents);
                 throw new MSAException(responseContents, null);
             }
-            Logger.getInstance().appendToLog("Unknown error returned from Xbox Live\n" + responseContents);
+            // Logger.getInstance().appendToLog("Unknown error returned from Xbox Live\n" + responseContents);
             throw new MSAException("Unknown error returned from Xbox Live", null);
         } else{
             throw getResponseThrowable(conn);

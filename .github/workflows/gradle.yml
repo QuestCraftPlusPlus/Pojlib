@@ -43,7 +43,7 @@ jobs:
       run: git lfs pull | chmod +x ./gradlew
     - name: Decode keystore
       run: |
-        echo -n $QCXR_KEYSTORE_BASE64 | base64 --decode > qcxr.keystore
+        bash -c 'base64 --decode <<< "$QCXR_KEYSTORE_BASE64" > config'
       env:
         QCXR_KEYSTORE_BASE64: ${{ secrets.QCXR_KEYSTORE_BASE64 }}
     - name: Build with Gradle

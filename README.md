@@ -1,6 +1,6 @@
 # Pojlib | Minecraft Launcher Core
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![Lines of code](https://img.shields.io/tokei/lines/github/questcraftplusplus/pojlib?style=flat)
+[![Pojlib Build](https://github.com/QuestCraftPlusPlus/Pojlib/actions/workflows/gradle.yml/badge.svg)](https://github.com/QuestCraftPlusPlus/Pojlib/actions/workflows/gradle.yml)
 
 A Minecraft: Java Edition launcher library partially made with elements from PojavLauncher.
 

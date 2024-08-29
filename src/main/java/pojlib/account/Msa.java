@@ -59,11 +59,9 @@ public class Msa {
     }
 
     /** Performs a full login, calling back listeners appropriately  */
-    public MinecraftAccount performLogin() {
+    public MinecraftAccount performLogin(String xblToken) {
         try {
-            String accessToken = acquireAccessToken(mIsRefresh, mAuthCode);
-            String xboxLiveToken = acquireXBLToken(accessToken);
-            String[] xsts = acquireXsts(xboxLiveToken);
+            String[] xsts = acquireXsts(xblToken);
             if(xsts == null) {
                 return null;
             }
@@ -74,8 +72,6 @@ public class Msa {
             MinecraftAccount acc = MinecraftAccount.load(mcName, null, null);
             if (acc == null) acc = new MinecraftAccount();
             if (doesOwnGame) {
-                /*acc.xuid = xsts[0];*/
-                /*acc.clientToken = "0"; *//* FIXME */
                 acc.accessToken = mcToken;
                 acc.username = mcName;
                 acc.uuid = mcUuid;
@@ -87,44 +83,8 @@ public class Msa {
 
             return acc;
         } catch (Exception e) {
-            Logger.getInstance().appendToLog("MicrosoftLogin | Exception thrown during authentication" + e);
-            throw new MSAException("MicrosoftLogin | Exception thrown during authentication", e);
-        }
-    }
-
-    public String acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
-        URL url = new URL(Constants.OAUTH_TOKEN_URL);
-        // Logger.getInstance().appendToLog("MicrosoftLogin | isRefresh=" + isRefresh + ", authCode= "+authcode);
-
-        String formData = convertToFormData(
-                "client_id", "00000000402b5328",
-                isRefresh ? "refresh_token" : "code", authcode,
-                "grant_type", isRefresh ? "refresh_token" : "authorization_code",
-                "redirect_url", "https://login.live.com/oauth20_desktop.srf",
-                "scope", "service::user.auth.xboxlive.com::MBI_SSL"
-        );
-
-        // Logger.getInstance().appendToLog("MicroAuth | " + formData);
-
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(formData.getBytes(StandardCharsets.UTF_8).length));
-        conn.setRequestMethod("POST");
-        conn.setUseCaches(false);
-        conn.setDoInput(true);
-        conn.setDoOutput(true);
-        conn.connect();
-        try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(formData.getBytes(StandardCharsets.UTF_8));
-        }
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
-            JSONObject jo = new JSONObject(FileUtil.read(conn.getInputStream()));
-            msRefreshToken = jo.getString("refresh_token");
-            conn.disconnect();
-            return jo.getString("access_token");
-        }else{
-            throw getResponseThrowable(conn);
+            Logger.getInstance().appendToLog("MicrosoftLogin | Exception thrown during authentication " + e);
+            throw new MSAException("MicrosoftLogin | Exception thrown during authentication ", e);
         }
     }
 

@@ -17,12 +17,10 @@ import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 
 public class MinecraftAccount {
-
     public String accessToken;
     public String uuid;
     public String username;
     public long expiresIn;
-
     public final String userType = "msa";
 
 

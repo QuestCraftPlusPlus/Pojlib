@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 import pojlib.API;
 import pojlib.util.Constants;
 import pojlib.util.Logger;
+import pojlib.util.MSAException;
 
 public class LoginHelper {
     public static Thread loginThread;
@@ -103,8 +104,7 @@ public class LoginHelper {
                 API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
                 API.profileName = API.currentAcc.username;
             } catch (ExecutionException | InterruptedException e) {
-                API.msaMessage = "Something went wrong! Couldn't reach the Microsoft Auth servers.\n"
-                        + e;
+                throw new MSAException("MicrosoftLogin | Something went wrong! Couldn't reach the Microsoft Auth servers.", e);
             }
         });
 

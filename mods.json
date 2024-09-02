@@ -103,11 +103,6 @@
 					"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/FCnCG6PS/ferritecore-6.0.0-fabric.jar"
 				},
 				{
-					"slug": "Entity-Culling",
-					"version": "1.6.2",
-					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/d20sUcYn/entityculling-fabric-1.6.2-mc1.20.jar"
-				},
-				{
 					"slug": "Sodium",
 					"version": "0.5.8",
 					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.1-0.5.8/sodium-fabric-0.5.8+mc1.20.1.jar"
@@ -188,11 +183,6 @@
 					"slug": "Smooth-Boot",
 					"version": "1.7.0",
 					"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/I9TkHxLI/smoothboot-fabric-1.19.4-1.7.0.jar"
-				},
-				{
-					"slug": "Entity-Culling",
-					"version": "1.6.2",
-					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/UvJN5Cy4/entityculling-fabric-1.6.2-mc1.19.4.jar"
 				},
 				{
 					"slug": "Sodium",
@@ -292,11 +282,6 @@
 					"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/1.19-1.7.1/smoothboot-fabric-1.19-1.7.1.jar"
 				},
 				{
-					"slug": "Entity-Culling",
-					"version": "1.6.1",
-					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/twdGLDHv/entityculling-fabric-1.6.1-mc1.19.2.jar"
-				},
-				{
 					"slug": "Sodium",
 					"version": "0.4.4",
 					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.19.2-0.4.4/Sodium.jar"
@@ -377,11 +362,6 @@
 					"slug": "Smooth-Boot",
 					"version": "1.7.0",
 					"download_link": "https://cdn.modrinth.com/data/FWumhS4T/versions/iy4eaYy2/smoothboot-fabric-1.18.2-1.7.0.jar"
-				},
-				{
-					"slug": "Entity-Culling",
-					"version": "1.5.1",
-					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/1.5.1-fabric-1.18/entityculling-fabric-mc1.18-1.5.1.jar"
 				},
 				{
 					"slug": "Sodium",

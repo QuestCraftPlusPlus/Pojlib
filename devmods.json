@@ -37,8 +37,8 @@
 				},
 				{
 					"slug": "ImmediatelyFast",
-					"version": "1.2.8",
-					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/3EgIBnht/ImmediatelyFast-Fabric-1.2.8%2B1.20.4.jar"
+					"version": "1.2.21",
+					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/tF2vt38m/ImmediatelyFast-Fabric-1.2.21%2B1.20.4.jar"
 				},
 				{
 					"slug": "Simple-Voice-Chat",
@@ -52,8 +52,8 @@
 				},
 				{
 					"slug": "Noisium",
-					"version": "2.0.3",
-					"download_link": "https://cdn.modrinth.com/data/KuNKN7d2/versions/Eie3f6ki/noisium-fabric-2.0.3%2Bmc1.20.2-1.20.4.jar"
+					"version": "2.2.2",
+					"download_link": "https://cdn.modrinth.com/data/KuNKN7d2/versions/yYC221hL/noisium-fabric-2.2.2%2Bmc1.20.2-1.20.4.jar"
 				},
 				{
 					"slug": "Lithium",
@@ -74,6 +74,11 @@
 					"slug": "Krypton",
 					"version": "0.2.6",
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/bRcuOnao/krypton-0.2.6.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.14", 
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/iXgx6zFq/BadOptimizations-2.1.4-1.20.2-20.4.jar"
 				}
 			]
 		},
@@ -134,8 +139,8 @@
 				},
 				{
 					"slug": "ImmediatelyFast",
-					"version": "1.1.15",
-					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4IDo27OL/ImmediatelyFast-1.1.15%2B1.20.1.jar"
+					"version": "1.2.21",
+					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/tF2vt38m/ImmediatelyFast-Fabric-1.2.21%2B1.20.4.jar"
 				},
 				{
 					"slug": "Simple-Voice-Chat",
@@ -146,6 +151,16 @@
 					"slug": "Modern-Fix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.1.4",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/GydKiUd0/BadOptimizations-2.1.4-1.20.1.jar"
+				},
+				{
+					"slug": "Noisium",
+					"version": "2.3.0",
+					"download_link": "https://cdn.modrinth.com/data/KuNKN7d2/versions/erSJnRcq/noisium-fabric-2.3.0%2Bmc1.20-1.20.1.jar"
 				}
 			]
 		},
@@ -238,6 +253,11 @@
 					"slug": "Modern-Fix",
 					"version": "5.7.2",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.1.4",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/xhGlhCut/BadOptimizations-2.1.4-1.19.4.jar"
 				}
 			]
 		},
@@ -312,14 +332,14 @@
 					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/4yVqQKQO/ImmediatelyFast-1.1.12%2B1.19.jar"
 				},
 				{
-					"slug": "Noxesium",
-					"version": "0.1.4",
-					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
-				},
-				{
 					"slug": "Modern-Fix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/b1FKKAz8/modernfix-fabric-5.9.0%2Bmc1.19.2.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.1.4",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/iULB5JCQ/BadOptimizations-2.1.4-1.19.1-19.2.jar"
 				}
 			]
 		},

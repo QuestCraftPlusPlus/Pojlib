@@ -53,3 +53,9 @@ jobs:
       env:
         QCXR_KEYSTORE_ALIAS: ${{ secrets.QCXR_KEYSTORE_ALIAS }}
         QCXR_KEYSTORE_PASS: ${{ secrets.QCXR_KEYSTORE_PASS }}
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+          name: app-debug
+          path: build/outputs/aar/*

@@ -40,22 +40,14 @@ jobs:
         local-cache: true
         link-to-sdk: true
     - name: Make Gradle wrapper executable and pull LFS
-      run: git lfs pull | chmod +x ./gradlew
-    - name: Decode keystore
-      run: |
-        bash -c 'base64 --decode <<< "$QCXR_KEYSTORE_BASE64" > qcxr.keystore'
-      env:
-        QCXR_KEYSTORE_BASE64: ${{ secrets.QCXR_KEYSTORE_BASE64 }}
+      run: git lfs pull
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
-      env:
-        QCXR_KEYSTORE_ALIAS: ${{ secrets.QCXR_KEYSTORE_ALIAS }}
-        QCXR_KEYSTORE_PASS: ${{ secrets.QCXR_KEYSTORE_PASS }}
 
     - name: Upload APK
       uses: actions/upload-artifact@v3
       with:
           name: app-debug
-          path: build/outputs/aar/*
+          path: wrapper/launcher/build/outputs/apk/*

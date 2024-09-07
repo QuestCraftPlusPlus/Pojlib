@@ -26,9 +26,18 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     // See https://docs.unity3d.com/Manual/CommandLineArguments.html
     // @param cmdLine the current command line arguments, may be null
     // @return the modified command line string or null
+    private String appendCommandLineArgument(String cmdLine, String arg) {
+        if (arg == null || arg.isEmpty())
+            return cmdLine;
+        else if (cmdLine == null || cmdLine.isEmpty())
+            return arg;
+        else
+            return cmdLine + " " + arg;
+    }
+
     protected String updateUnityCommandLineArguments(String cmdLine)
     {
-        return cmdLine;
+        return appendCommandLineArgument(cmdLine, "-androidChainedSignalHandlerBehavior=disabled");
     }
 
     // Setup activity layout

@@ -33,8 +33,8 @@ import pojlib.util.VLoader;
 import pojlib.util.json.ModrinthIndexJson;
 
 public class InstanceHandler {
-    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
-    public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
+    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Testing/mods.json";
+    public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Testing/devmods.json";
 
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFilePath, String imageURL) {
         File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_") + "/setup/modrinth.index.json");

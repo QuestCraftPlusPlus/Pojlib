@@ -50,4 +50,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
           name: app-debug
-          path: wrapper/launcher/build/outputs/apk/*
+          path: wrapper/launcher/build/outputs/apk/debug/*
+          name: app-release
+          path: wrapper/launcher/build/outputs/apk/release/*

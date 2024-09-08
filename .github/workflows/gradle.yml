@@ -53,5 +53,6 @@ jobs:
           path: wrapper/launcher/build/outputs/apk/debug/*
     - name: Upload Release
       uses: actions/upload-artifact@v3
+      with:
           name: app-release
           path: wrapper/launcher/build/outputs/apk/release/*

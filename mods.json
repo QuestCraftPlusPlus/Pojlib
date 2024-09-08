@@ -38,9 +38,9 @@
 			],
 			"defaultMods": [
 				{
-					"slug": "Embeddium",
-					"version": "0.3.20",
-					"download_link": "https://cdn.modrinth.com/data/sk9rgfiA/versions/b7VDEGTG/embeddium-fabric-0.3.20%2Bmc1.20.6.jar"
+					"slug": "Sodium",
+					"version": "0.5.11",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/OwLQelEI/sodium-fabric-0.5.11%2Bmc1.20.6.jar"
 				}
 			]
 		},
@@ -62,7 +62,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.5.8",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.4-0.5.8/sodium-fabric-0.5.8+mc1.20.4.jar"
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/4GyXKCLd/sodium-fabric-0.5.8%2Bmc1.20.4.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -148,8 +148,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.8",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.1-0.5.8/sodium-fabric-0.5.8+mc1.20.1.jar"
+					"version": "0.5.11",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/ygf8cVZg/sodium-fabric-0.5.11%2Bmc1.20.1.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -231,7 +231,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.4.10",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.19.4-0.4.11/sodium-fabric-mc1.19.4-0.4.11+build.1.jar"
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/b4hTi3mo/sodium-fabric-mc1.19.4-0.4.10%2Bbuild.24.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -328,7 +328,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.4.4",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.19.2-0.4.4/Sodium.jar"
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/rAfhHfow/sodium-fabric-mc1.19.2-0.4.4%2Bbuild.18.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -409,8 +409,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.0",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.18.2-0.4.1/Sodium.jar"
+					"version": "0.4.1",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
 				},
 				{
 					"slug": "Better-Biome-Blend",

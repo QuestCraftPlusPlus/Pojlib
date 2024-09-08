@@ -46,10 +46,12 @@ jobs:
       with:
         arguments: build
 
-    - name: Upload APK
+    - name: Upload Debug
       uses: actions/upload-artifact@v3
       with:
           name: app-debug
           path: wrapper/launcher/build/outputs/apk/debug/*
+    - name: Upload Release
+      uses: actions/upload-artifact@v3
           name: app-release
           path: wrapper/launcher/build/outputs/apk/release/*

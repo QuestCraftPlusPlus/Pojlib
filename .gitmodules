@@ -1,3 +1,4 @@
 [submodule "wrapper"]
 	path = wrapper
 	url = https://github.com/thewiilover/Wrapper-IL2CPP.git
+	branch = main

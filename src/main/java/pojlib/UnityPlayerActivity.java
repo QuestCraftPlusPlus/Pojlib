@@ -2,6 +2,8 @@ package pojlib;
 
 import android.app.Activity;
 import android.app.ActivityGroup;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -18,12 +20,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import pojlib.input.AWTInputBridge;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
+    public static volatile ClipboardManager GLOBAL_CLIPBOARD;
     private PowerManager.WakeLock wakeLock;
 
     // Override this in your custom UnityPlayerActivity to tweak the command line arguments passed to the Unity Android Player
@@ -70,6 +74,9 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
     }
 
     public static String installLWJGL(Activity activity) throws IOException {
@@ -85,6 +92,34 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         }
 
         return lwjgl.getAbsolutePath();
+    }
+
+    public static void querySystemClipboard() {
+        ClipData clipData = GLOBAL_CLIPBOARD.getPrimaryClip();
+        if(clipData == null) {
+            AWTInputBridge.nativeClipboardReceived(null, null);
+            return;
+        }
+        ClipData.Item firstClipItem = clipData.getItemAt(0);
+        //TODO: coerce to HTML if the clip item is styled
+        CharSequence clipItemText = firstClipItem.getText();
+        if(clipItemText == null) {
+            AWTInputBridge.nativeClipboardReceived(null, null);
+            return;
+        }
+        AWTInputBridge.nativeClipboardReceived(clipItemText.toString(), "plain");
+    }
+
+    public static void putClipboardData(String data, String mimeType) {
+        ClipData clipData = null;
+        switch(mimeType) {
+            case "text/plain":
+                clipData = ClipData.newPlainText("AWT Paste", data);
+                break;
+            case "text/html":
+                clipData = ClipData.newHtmlText("AWT Paste", data, data);
+        }
+        if(clipData != null) GLOBAL_CLIPBOARD.setPrimaryClip(clipData);
     }
 
     @Override

@@ -28,7 +28,7 @@
 				{
 					"slug": "Vivecraft",
 					"version": "1.0",
-					"download_link": "https://github.com/Cart-shit/VivecraftModQC/releases/download/20.5/vivecraft.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.20.6/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -50,7 +50,7 @@
 				{
 					"slug": "Vivecraft",
 					"version": "1.0",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.4/vivecraft.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.20.4/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -127,7 +127,7 @@
 				{
 					"slug": "Vivecraft",
 					"version": "1.1.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.1/vivecraft.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.20/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -199,7 +199,7 @@
 				{
 					"slug": "Vivecraft",
 					"version": "1.1.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.4/vivecraft.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.19.4/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -291,7 +291,7 @@
 				{
 					"slug": "Vivecraft",
 					"version": "1.1.3",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.2/vivecraft.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.19/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -373,7 +373,7 @@
 				{
 					"slug": "Vivecraft",
 					"version": "1.1.3",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.18.2/vivecraft.jar"
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.18/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",

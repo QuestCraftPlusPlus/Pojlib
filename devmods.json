@@ -19,6 +19,11 @@
 					"slug": "Sodium",
 					"version": "0.6.0-beta.1",
 					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/oZOSEhyy/sodium-fabric-0.6.0-beta.1%2Bmc1.21.jar"
+				},
+				{
+					"slug": "ModernFix",
+					"version": "5.19.1+mc1.21",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/i8GSONFm/modernfix-fabric-5.19.1%2Bmc1.21.jar"
 				}
 			]
 		},
@@ -41,6 +46,11 @@
 					"slug": "Sodium",
 					"version": "0.5.11",
 					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/OwLQelEI/sodium-fabric-0.5.11%2Bmc1.20.6.jar"
+				},
+				{
+					"slug": "ModernFix",
+					"version": "5.18.0+mc1.20.6",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/dUdr6D7I/modernfix-fabric-5.18.0%2Bmc1.20.6.jar"
 				}
 			]
 		},
@@ -90,7 +100,7 @@
 					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/B23zGLmw/voicechat-fabric-1.20.4-2.5.12.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.10.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/vxDb5tOq/modernfix-fabric-5.10.0%2Bmc1.20.3.jar"
 				},
@@ -187,7 +197,7 @@
 					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/gEYXa8hg/voicechat-fabric-1.20.1-2.5.12.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
 				}
@@ -279,7 +289,7 @@
 					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.7.2",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
 				}
@@ -361,7 +371,7 @@
 					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/b1FKKAz8/modernfix-fabric-5.9.0%2Bmc1.19.2.jar"
 				}
@@ -448,7 +458,7 @@
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/qNrVNwfw/modernfix-fabric-5.9.0%2Bmc1.18.2.jar"
 				}

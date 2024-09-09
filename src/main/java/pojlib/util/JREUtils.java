@@ -246,7 +246,8 @@ public class JREUtils {
                 "-Dglfwstub.initEgl=false",
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
                 "-Dnet.minecraft.clientmodname=" + "QuestCraft",
-                "-Dext.net.resolvPath=" + Constants.USER_HOME + "/hacks/ResConfHack.jar"
+                "-Dext.net.resolvPath=" + Constants.USER_HOME + "/hacks/ResConfHack.jar",
+                "-Dsodium.checks.issue2561=false"
         ));
     }
 

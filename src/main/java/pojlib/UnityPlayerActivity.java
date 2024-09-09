@@ -1,13 +1,18 @@
 package pojlib;
 
+import static android.os.Build.VERSION.SDK_INT;
+
+import android.app.Activity;
 import android.app.Activity;
 import android.app.ActivityGroup;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -15,6 +20,8 @@ import android.view.WindowManager;
 
 import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.UnityPlayer;
+
+import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +82,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
             throw new RuntimeException(e);
         }
 
+        updateWindowSize(this);
         GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
     }
@@ -92,6 +100,42 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         }
 
         return lwjgl.getAbsolutePath();
+    }
+
+    public static DisplayMetrics getDisplayMetrics(Activity activity) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        if(activity.isInMultiWindowMode() || activity.isInPictureInPictureMode()){
+            //For devices with free form/split screen, we need window size, not screen size.
+            displayMetrics = activity.getResources().getDisplayMetrics();
+        }else{
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                activity.getDisplay().getRealMetrics(displayMetrics);
+            } else { // Removed the clause for devices with unofficial notch support, since it also ruins all devices with virtual nav bars before P
+                activity.getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+            }
+        }
+        currentDisplayMetrics = displayMetrics;
+        return displayMetrics;
+    }
+
+    public static DisplayMetrics currentDisplayMetrics;
+
+    public static void updateWindowSize(Activity activity) {
+        currentDisplayMetrics = getDisplayMetrics(activity);
+
+        CallbackBridge.physicalWidth = currentDisplayMetrics.widthPixels;
+        CallbackBridge.physicalHeight = currentDisplayMetrics.heightPixels;
+    }
+
+    public static float dpToPx(float dp) {
+        //Better hope for the currentDisplayMetrics to be good
+        return dp * currentDisplayMetrics.density;
+    }
+
+    public static float pxToDp(float px){
+        //Better hope for the currentDisplayMetrics to be good
+        return px / currentDisplayMetrics.density;
     }
 
     public static void querySystemClipboard() {

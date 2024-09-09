@@ -166,9 +166,6 @@ void pojavSetWindowHint(int hint, int value) {
     // Stub
 }
 
-void pojavPumpEvents(void* window) {
-    // Stub
-}
 
 int32_t stride;
 void pojavSwapBuffers() {

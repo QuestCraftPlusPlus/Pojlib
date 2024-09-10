@@ -7,7 +7,7 @@ android {
     compileSdkVersion = "android-32"
     defaultConfig {
         minSdk 32
-
+        multiDexEnabled true
         ndk.stl = "c++_shared"
     }
 

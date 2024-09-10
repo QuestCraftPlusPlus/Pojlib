@@ -109,7 +109,6 @@ void pojavPumpEvents(void* window) {
 
     while (targetIndex != index) {
         GLFWInputEvent event = pojav_environ->events[index];
-        printf("event type: %i\n", event.type);
         switch (event.type) {
             case EVENT_TYPE_CHAR:
                 if(pojav_environ->GLFW_invoke_Char) pojav_environ->GLFW_invoke_Char(window, event.i1);

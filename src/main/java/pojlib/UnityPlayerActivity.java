@@ -103,6 +103,8 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
                 .remapLeftTrigger(true)
                 .remapRightTrigger(true)
                 .remapDpad(true));
+
+        CallbackBridge.nativeSetUseInputStackQueue(true);
     }
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {

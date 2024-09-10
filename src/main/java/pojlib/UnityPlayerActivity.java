@@ -118,6 +118,8 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
                 .remapLeftTrigger(true)
                 .remapRightTrigger(true)
                 .remapDpad(true));
+
+        CallbackBridge.nativeSetUseInputStackQueue(true);
     }
 
     public static String installLWJGL(Activity activity) throws IOException {

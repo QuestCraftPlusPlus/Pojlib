@@ -20,8 +20,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 
-import androidx.annotation.RequiresApi;
-
 import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.UnityPlayer;
 
@@ -45,21 +43,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
     private Gamepad mGamepad = null;
 
-    private final RemapperManager mInputManager = new RemapperManager(this, new RemapperView.Builder(null)
-            .remapA(true)
-            .remapB(true)
-            .remapX(true)
-            .remapY(true)
-
-            .remapLeftJoystick(true)
-            .remapRightJoystick(true)
-            .remapStart(true)
-            .remapSelect(true)
-            .remapLeftShoulder(true)
-            .remapRightShoulder(true)
-            .remapLeftTrigger(true)
-            .remapRightTrigger(true)
-            .remapDpad(true));
+    private RemapperManager mInputManager;
 
     private boolean mLastGrabState = false;
 
@@ -102,6 +86,22 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
         updateWindowSize(this);
         GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+        mInputManager = new RemapperManager(this, new RemapperView.Builder(null)
+                .remapA(true)
+                .remapB(true)
+                .remapX(true)
+                .remapY(true)
+
+                .remapLeftJoystick(true)
+                .remapRightJoystick(true)
+                .remapStart(true)
+                .remapSelect(true)
+                .remapLeftShoulder(true)
+                .remapRightShoulder(true)
+                .remapLeftTrigger(true)
+                .remapRightTrigger(true)
+                .remapDpad(true));
     }
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {

@@ -44,7 +44,7 @@ import pojlib.util.MCOptionUtils;
 public class Gamepad implements GrabListener, GamepadHandler {
 
     /* Resolution scaler option, allow downsizing a window */
-    private final float mScaleFactor = 0; // LauncherPreferences.DEFAULT_PREF.getInt("resolutionRatio",100)/100f;
+    private final float mScaleFactor = 1; // LauncherPreferences.DEFAULT_PREF.getInt("resolutionRatio",100)/100f;
 
     /* Sensitivity, adjusted according to screen size */
     private final double mSensitivityFactor = (1.4 * (1080f/ currentDisplayMetrics.heightPixels));
@@ -79,7 +79,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
     private final GamepadDataProvider mMapProvider;
 
     public Gamepad(InputDevice inputDevice, GamepadDataProvider mapProvider){
-        Settings.setDeadzoneScale(100f);
+        Settings.setDeadzoneScale(1f);
 
         mScreenChoreographer = Choreographer.getInstance();
         Choreographer.FrameCallback frameCallback = new Choreographer.FrameCallback() {

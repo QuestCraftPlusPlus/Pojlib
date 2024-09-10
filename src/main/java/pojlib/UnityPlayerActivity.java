@@ -42,6 +42,7 @@ import pojlib.input.gamepad.DefaultDataProvider;
 import pojlib.input.gamepad.Gamepad;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
+import pojlib.util.Logger;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents, GrabListener
 {
@@ -258,7 +259,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
     /** The event for keyboard/ gamepad button inputs */
     public boolean processKeyEvent(KeyEvent event) {
-        //Log.i("KeyEvent", event.toString());
+        // Logger.getInstance().appendToLog("KeyEvent " + event.toString());
 
         //Filtering useless events by order of probability
         int eventKeycode = event.getKeyCode();

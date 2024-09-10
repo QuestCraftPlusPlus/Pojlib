@@ -100,7 +100,7 @@
         "chatNotificationSound": "block.note_block.bell",
         "jumpThreshold": "0.05",
         "movementSpeedMultiplier": "1.0",
-        "seated": "false",
+        "seated": "true",
         "doubleGUIResolution": "false",
         "physicalKeyboardTheme": "DEFAULT",
         "rightclickDelay": "VANILLA",

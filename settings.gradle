@@ -30,5 +30,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Pojlib"
-include ":jre_lwjgl3glfw"//, ':wrapper', ':wrapper:launcher', "wrapper:unityLibrary", "wrapper:unityLibrary:xrmanifest.androidlib"
+include ":jre_lwjgl3glfw", ':wrapper', ':wrapper:launcher', "wrapper:unityLibrary", "wrapper:unityLibrary:xrmanifest.androidlib"
 

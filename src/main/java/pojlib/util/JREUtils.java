@@ -85,7 +85,6 @@ public class JREUtils {
             dlopen(f.getAbsolutePath());
         }
         dlopen(sNativeLibDir + "/libopenal.so");
-        dlopen(sNativeLibDir + "/libopuscodec.so");
     }
 
     public static void redirectAndPrintJRELog() {
@@ -191,8 +190,8 @@ public class JREUtils {
                 userArgs.add("-Xms" + 2048 + "M");
                 userArgs.add("-Xmx" + 3072 + "M");
             } else {
-                userArgs.add("-Xms" + 2048 + "M");
-                userArgs.add("-Xmx" + 2048 + "M");
+                userArgs.add("-Xms" + 512 + "M");
+                userArgs.add("-Xmx" + 4860 + "M");
             }
         }
 

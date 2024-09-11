@@ -20,8 +20,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 
-import androidx.annotation.RequiresApi;
-
 import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.UnityPlayer;
 
@@ -38,6 +36,7 @@ import pojlib.input.LwjglGlfwKeycode;
 import pojlib.input.gamepad.DefaultDataProvider;
 import pojlib.input.gamepad.Gamepad;
 import pojlib.util.FileUtil;
+import pojlib.util.Logger;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents, GrabListener
 {
@@ -45,21 +44,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
     private Gamepad mGamepad = null;
 
-    private final RemapperManager mInputManager = new RemapperManager(this, new RemapperView.Builder(null)
-            .remapA(true)
-            .remapB(true)
-            .remapX(true)
-            .remapY(true)
-
-            .remapLeftJoystick(true)
-            .remapRightJoystick(true)
-            .remapStart(true)
-            .remapSelect(true)
-            .remapLeftShoulder(true)
-            .remapRightShoulder(true)
-            .remapLeftTrigger(true)
-            .remapRightTrigger(true)
-            .remapDpad(true));
+    private RemapperManager mInputManager;
 
     private boolean mLastGrabState = false;
 
@@ -102,6 +87,24 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
         updateWindowSize(this);
         GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+        mInputManager = new RemapperManager(this, new RemapperView.Builder(null)
+                .remapA(true)
+                .remapB(true)
+                .remapX(true)
+                .remapY(true)
+
+                .remapLeftJoystick(true)
+                .remapRightJoystick(true)
+                .remapStart(true)
+                .remapSelect(true)
+                .remapLeftShoulder(true)
+                .remapRightShoulder(true)
+                .remapLeftTrigger(true)
+                .remapRightTrigger(true)
+                .remapDpad(true));
+
+        CallbackBridge.nativeSetUseInputStackQueue(true);
     }
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {
@@ -228,7 +231,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
     /** The event for keyboard/ gamepad button inputs */
     public boolean processKeyEvent(KeyEvent event) {
-        //Log.i("KeyEvent", event.toString());
+        // Logger.getInstance().appendToLog("KeyEvent " + event.toString());
 
         //Filtering useless events by order of probability
         int eventKeycode = event.getKeyCode();

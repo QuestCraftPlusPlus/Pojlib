@@ -10,7 +10,7 @@ android {
 					abiFilters 'arm64-v8a'
 					}
         minSdk 32
-
+        multiDexEnabled true
         ndk.stl = "c++_shared"
     }
 

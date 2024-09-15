@@ -624,9 +624,7 @@ public class GLFW
         SetWindowHint = apiGetFunctionAddress(GLFW, "pojavSetWindowHint"),
         SwapBuffers = apiGetFunctionAddress(GLFW, "pojavSwapBuffers"),
         SwapInterval = apiGetFunctionAddress(GLFW, "pojavSwapInterval"),
-        PumpEvents = apiGetFunctionAddress(GLFW, "pojavPumpEvents"),
-        StopPumping = apiGetFunctionAddress(GLFW, "pojavStopPumping"),
-        StartPumping = apiGetFunctionAddress(GLFW, "pojavStartPumping");
+        PumpEvents = apiGetFunctionAddress(GLFW, "pojavPumpEvents");
     }
 
     public static SharedLibrary getLibrary() {
@@ -1083,9 +1081,7 @@ public class GLFW
         // Prevent these with this code.
         if(mGLFWInputPumping) return;
         mGLFWInputPumping = true;
-        callV(Functions.StartPumping);
         for (Long ptr : mGLFWWindowMap.keySet()) callJV(ptr, Functions.PumpEvents);
-        callV(Functions.StopPumping);
         mGLFWInputPumping = false;
     }
 

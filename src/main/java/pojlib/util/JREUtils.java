@@ -81,6 +81,7 @@ public class JREUtils {
         dlopen(findInLdLibPath("libawt_headless.so"));
         dlopen(findInLdLibPath("libfreetype.so"));
         dlopen(findInLdLibPath("libfontmanager.so"));
+        dlopen(findInLdLibPath("libsqlitejdbc.so"));
         for(File f : locateLibs(new File(runtimeDir + "/lib"))) {
             dlopen(f.getAbsolutePath());
         }

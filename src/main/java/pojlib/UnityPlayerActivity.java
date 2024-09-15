@@ -5,6 +5,7 @@ import android.app.ActivityGroup;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -22,6 +23,7 @@ import pojlib.util.FileUtil;
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
+    private PowerManager.WakeLock wakeLock;
 
     // Override this in your custom UnityPlayerActivity to tweak the command line arguments passed to the Unity Android Player
     // The command line arguments are passed as a string, separated by spaces
@@ -48,6 +50,11 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     @Override protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "QCXR::DownloadFailPrevention");
+        wakeLock.acquire();
 
         String cmdLine = updateUnityCommandLineArguments(getIntent().getStringExtra("unity"));
         getIntent().putExtra("unity", cmdLine);
@@ -111,6 +118,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     @Override protected void onDestroy ()
     {
         mUnityPlayer.destroy();
+        wakeLock.release();
         super.onDestroy();
     }
 

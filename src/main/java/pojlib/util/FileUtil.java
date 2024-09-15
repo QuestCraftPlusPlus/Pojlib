@@ -37,6 +37,11 @@ public class FileUtil {
         return buffer;
     }
 
+    public static boolean matchingAssetFile(File sourceFile, byte[] assetFile) throws IOException {
+        byte[] sf = Files.readAllBytes(sourceFile.toPath());
+        return sf == assetFile;
+    }
+
     public static String read(String path) throws IOException {
         return read(Files.newInputStream(Paths.get(path)));
     }

@@ -1,5 +1,6 @@
 package pojlib;
 
+import android.app.Activity;
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,7 +13,10 @@ import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.UnityPlayer;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
+import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents
@@ -51,10 +55,32 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
         mUnityPlayer.requestFocus();
-        File zip = new File(this.getFilesDir() + "/runtimes/JRE-22");
-        if (!zip.exists()) {
+
+        File jre = new File(this.getFilesDir() + "/runtimes/JRE-22");
+        if (!jre.exists()) {
             FileUtil.unzipArchiveFromAsset(this, "JRE-22.zip", this.getFilesDir() + "/runtimes/JRE-22");
         }
+
+        try {
+            installLWJGL(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String installLWJGL(Activity activity) throws IOException {
+        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
+        byte[] lwjglAsset = FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar");
+
+        if (!lwjgl.exists()) {
+            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
+            FileUtil.write(lwjgl.getAbsolutePath(), lwjglAsset);
+        } else if (!FileUtil.matchingAssetFile(lwjgl, lwjglAsset)) {
+            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
+            FileUtil.write(lwjgl.getAbsolutePath(), lwjglAsset);
+        }
+
+        return lwjgl.getAbsolutePath();
     }
 
     @Override

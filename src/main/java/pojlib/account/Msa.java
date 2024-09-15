@@ -32,9 +32,6 @@ import javax.xml.transform.ErrorListener;
 
 
 public class Msa {
-
-    private final boolean mIsRefresh;
-    private final String mAuthCode;
     private static final Map<Long, String> XSTS_ERRORS;
     static {
         XSTS_ERRORS = new ArrayMap<>();
@@ -46,17 +43,11 @@ public class Msa {
     }
 
     /* Fields used to fill the account  */
-    public String msRefreshToken;
     public static String mcName;
     public String mcToken;
     public static String mcUuid;
     public static boolean doesOwnGame;
     public long expiresAt;
-
-    public Msa(boolean isRefresh, String authCode){
-        mIsRefresh = isRefresh;
-        mAuthCode = authCode;
-    }
 
     /** Performs a full login, calling back listeners appropriately  */
     public MinecraftAccount performLogin(String xblToken) {
@@ -178,9 +169,9 @@ public class Msa {
         }
 
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
-            expiresAt = System.currentTimeMillis() + 86400000;
             JSONObject jo = new JSONObject(FileUtil.read(conn.getInputStream()));
             conn.disconnect();
+            expiresAt = System.currentTimeMillis() + (jo.getInt("expires_in") * 1000L);
             mcToken = jo.getString("access_token");
             return jo.getString("access_token");
         }else{

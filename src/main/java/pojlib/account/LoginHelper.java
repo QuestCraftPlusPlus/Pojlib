@@ -98,13 +98,14 @@ public class LoginHelper {
                 while(res.account() == null);
                 try {
                     API.currentAcc = MinecraftAccount.login(activity.getFilesDir() + "/accounts", new String[]{res.accessToken(), String.valueOf(res.expiresOnDate().getTime())});
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                } catch (IOException | JSONException | MSAException e) {
+                    Logger.getInstance().appendToLog("Unable to load account! | " + e);
                 }
                 API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
                 API.profileName = API.currentAcc.username;
             } catch (ExecutionException | InterruptedException e) {
-                throw new MSAException("MicrosoftLogin | Something went wrong! Couldn't reach the Microsoft Auth servers.", e);
+                Logger.getInstance().appendToLog("MicrosoftLogin | Something went wrong! Couldn't reach the Microsoft Auth servers.");
+                API.msaMessage = "MicrosoftLogin | Something went wrong! Couldn't reach the Microsoft Auth servers.";
             }
         });
 

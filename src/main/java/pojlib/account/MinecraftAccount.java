@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import pojlib.util.Constants;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
+import pojlib.util.MSAException;
 
 public class MinecraftAccount {
     public String accessToken;
@@ -24,7 +25,7 @@ public class MinecraftAccount {
     public final String userType = "msa";
 
 
-    public static MinecraftAccount login(String gameDir, String[] response) throws IOException, JSONException {
+    public static MinecraftAccount login(String gameDir, String[] response) throws MSAException, IOException, JSONException {
         String mcToken = Msa.acquireXBLToken(response[0]);
         Msa instance = new Msa();
         MinecraftAccount account = instance.performLogin(mcToken);
@@ -54,7 +55,7 @@ public class MinecraftAccount {
             }
             GsonUtils.objectToJsonFile(path + "/account.json", acc);
             return acc;
-        } catch (IOException | JSONException e) {
+        } catch (IOException | JSONException | MSAException e) {
             Logger.getInstance().appendToLog("Unable to load account! | " + e);
             return null;
         }

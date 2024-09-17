@@ -1,12 +1,10 @@
 package pojlib;
 
 import static android.os.Build.VERSION.SDK_INT;
-
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
 import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Activity;
 import android.app.ActivityGroup;
 import android.content.ClipData;
@@ -41,11 +39,16 @@ import pojlib.input.gamepad.DefaultDataProvider;
 import pojlib.input.gamepad.Gamepad;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
-import pojlib.util.Logger;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents, GrabListener
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
+    public static volatile ClipboardManager GLOBAL_CLIPBOARD;
+    private Gamepad mGamepad = null;
+
+    private RemapperManager mInputManager;
+
+    private boolean mLastGrabState = false;
 
     // Override this in your custom UnityPlayerActivity to tweak the command line arguments passed to the Unity Android Player
     // The command line arguments are passed as a string, separated by spaces
@@ -364,7 +367,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     @Override protected void onDestroy ()
     {
         mUnityPlayer.destroy();
-        wakeLock.release();
         super.onDestroy();
     }
 

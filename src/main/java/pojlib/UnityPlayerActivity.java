@@ -1,7 +1,6 @@
 package pojlib;
 
 import static android.os.Build.VERSION.SDK_INT;
-
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
 import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 
@@ -19,6 +18,7 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.UnityPlayer;
@@ -26,6 +26,8 @@ import com.unity3d.player.UnityPlayer;
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 import fr.spse.gamepad_remapper.RemapperManager;
 import fr.spse.gamepad_remapper.RemapperView;
@@ -35,8 +37,8 @@ import pojlib.input.GrabListener;
 import pojlib.input.LwjglGlfwKeycode;
 import pojlib.input.gamepad.DefaultDataProvider;
 import pojlib.input.gamepad.Gamepad;
+import pojlib.util.Constants;
 import pojlib.util.FileUtil;
-import pojlib.util.Logger;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents, GrabListener
 {
@@ -79,9 +81,11 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mUnityPlayer.requestFocus();
-        File zip = new File(this.getFilesDir() + "/runtimes/JRE-22");
-        if (!zip.exists()) {
+
+        File jre = new File(this.getFilesDir() + "/runtimes/JRE-22");
+        if (!jre.exists()) {
             FileUtil.unzipArchiveFromAsset(this, "JRE-22.zip", this.getFilesDir() + "/runtimes/JRE-22");
         }
 
@@ -105,6 +109,21 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
                 .remapDpad(true));
 
         CallbackBridge.nativeSetUseInputStackQueue(true);
+    }
+
+    public static String installLWJGL(Activity activity) throws IOException {
+        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
+        byte[] lwjglAsset = FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar");
+
+        if (!lwjgl.exists()) {
+            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
+            FileUtil.write(lwjgl.getAbsolutePath(), lwjglAsset);
+        } else if (!FileUtil.matchingAssetFile(lwjgl, lwjglAsset)) {
+            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
+            FileUtil.write(lwjgl.getAbsolutePath(), lwjglAsset);
+        }
+
+        return lwjgl.getAbsolutePath();
     }
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {

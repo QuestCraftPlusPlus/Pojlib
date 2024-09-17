@@ -161,15 +161,6 @@ public class Installer {
         }
     }
 
-    public static String installLwjgl(Activity activity) throws IOException {
-        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
-        if (!lwjgl.exists()) {
-            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
-            FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar"));
-        }
-        return lwjgl.getAbsolutePath();
-    }
-
     //Used for mod libraries, vanilla is handled a different (tbh better) way
     private static String parseLibraryNameToPath(String libraryName) {
         String[] parts = libraryName.split(":");

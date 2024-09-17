@@ -60,7 +60,7 @@ public class MinecraftInstances {
         public List<String> generateDemoLaunchArgs() {
             String[] mcArgs = {"--username", "Demo", "--version", versionName, "--gameDir", gameDir,
                     "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", "2437c2f918114fb9a96f99232c7dd25b",
-                    "--accessToken", "", "--userType", "mojang", "--versionType", "release"};
+                    "--accessToken", "", "--userType", "mojang", "--versionType", "release", "--demo"};
 
             List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
             allArgs.add(mainClass);

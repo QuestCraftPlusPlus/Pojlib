@@ -27,6 +27,8 @@ import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 import fr.spse.gamepad_remapper.RemapperManager;
@@ -39,6 +41,7 @@ import pojlib.input.gamepad.DefaultDataProvider;
 import pojlib.input.gamepad.Gamepad;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
+import pojlib.util.Logger;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents, GrabListener
 {
@@ -87,6 +90,11 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         File jre = new File(this.getFilesDir() + "/runtimes/JRE-22");
         if (!jre.exists()) {
             FileUtil.unzipArchiveFromAsset(this, "JRE-22.zip", this.getFilesDir() + "/runtimes/JRE-22");
+            try {
+                Files.copy(Paths.get(this.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get(this.getFilesDir() + "/runtimes/JRE-22/lib/libawt_xawt.so"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         updateWindowSize(this);

@@ -9,6 +9,7 @@ import android.os.PowerManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.unity3d.player.IUnityPlayerLifecycleEvents;
 import com.unity3d.player.UnityPlayer;
@@ -51,16 +52,12 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "QCXR::DownloadFailPrevention");
-        wakeLock.acquire();
-
         String cmdLine = updateUnityCommandLineArguments(getIntent().getStringExtra("unity"));
         getIntent().putExtra("unity", cmdLine);
 
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mUnityPlayer.requestFocus();
 
         File jre = new File(this.getFilesDir() + "/runtimes/JRE-22");

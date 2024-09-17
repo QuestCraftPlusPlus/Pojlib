@@ -60,6 +60,9 @@ public class FileUtil {
     {
         File outPath = new File(path);
         Objects.requireNonNull(outPath.getParentFile()).mkdirs();
+        if(!outPath.exists()) {
+            outPath.createNewFile();
+        }
 
         BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(outPath.toPath()));
         fos.write(content, 0, content.length);

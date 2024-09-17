@@ -37,6 +37,11 @@ public class FileUtil {
         return buffer;
     }
 
+    public static boolean matchingAssetFile(File sourceFile, byte[] assetFile) throws IOException {
+        byte[] sf = Files.readAllBytes(sourceFile.toPath());
+        return sf == assetFile;
+    }
+
     public static String read(String path) throws IOException {
         return read(Files.newInputStream(Paths.get(path)));
     }
@@ -55,6 +60,9 @@ public class FileUtil {
     {
         File outPath = new File(path);
         Objects.requireNonNull(outPath.getParentFile()).mkdirs();
+        if(!outPath.exists()) {
+            outPath.createNewFile();
+        }
 
         BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(outPath.toPath()));
         fos.write(content, 0, content.length);

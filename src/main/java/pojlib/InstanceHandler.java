@@ -181,7 +181,7 @@ public class InstanceHandler {
                 String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
                 String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
                 String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
-                String lwjgl = Installer.installLwjgl(activity);
+                String lwjgl = UnityPlayerActivity.installLWJGL(activity);
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 

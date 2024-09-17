@@ -199,7 +199,7 @@ public class API {
         ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkCapabilities capabilities = connManager.getNetworkCapabilities(connManager.getActiveNetwork());
 
-        boolean hasWifi = false;
+        boolean hasWifi = true;
 
         if(capabilities != null) {
             hasWifi = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);

@@ -25,9 +25,9 @@ public class MinecraftAccount {
     public final String userType = "msa";
 
 
-    public static MinecraftAccount login(String gameDir, String[] response) throws MSAException, IOException, JSONException {
+    public static MinecraftAccount login(Activity activity, String gameDir, String[] response) throws MSAException, IOException, JSONException {
         String mcToken = Msa.acquireXBLToken(response[0]);
-        Msa instance = new Msa();
+        Msa instance = new Msa(activity);
         MinecraftAccount account = instance.performLogin(mcToken);
         account.expiresIn = Long.parseLong(response[1]);
 

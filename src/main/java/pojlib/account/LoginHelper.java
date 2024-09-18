@@ -97,7 +97,7 @@ public class LoginHelper {
                 IAuthenticationResult res = future.get();
                 while(res.account() == null);
                 try {
-                    API.currentAcc = MinecraftAccount.login(activity.getFilesDir() + "/accounts", new String[]{res.accessToken(), String.valueOf(res.expiresOnDate().getTime())});
+                    API.currentAcc = MinecraftAccount.login(activity, activity.getFilesDir() + "/accounts", new String[]{res.accessToken(), String.valueOf(res.expiresOnDate().getTime())});
                 } catch (IOException | JSONException | MSAException e) {
                     Logger.getInstance().appendToLog("Unable to load account! | " + e);
                 }

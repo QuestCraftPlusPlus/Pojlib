@@ -50,7 +50,7 @@ public class Msa {
     public long expiresAt;
     private Activity activity;
 
-    public MinecraftAccount(Activity currentActivity) {
+    public Msa(Activity currentActivity) {
         this.activity = activity;
     }
 

@@ -48,6 +48,11 @@ public class Msa {
     public static String mcUuid;
     public static boolean doesOwnGame;
     public long expiresAt;
+    private Activity activity;
+
+    public Msa(Activity currentActivity) {
+        this.activity = activity;
+    }
 
     /** Performs a full login, calling back listeners appropriately  */
     public MinecraftAccount performLogin(String xblToken) throws MSAException {
@@ -60,7 +65,7 @@ public class Msa {
             fetchOwnedItems(mcToken);
             checkMcProfile(mcToken);
 
-            MinecraftAccount acc = MinecraftAccount.load(mcName, null, null);
+            MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
             if (acc == null) acc = new MinecraftAccount();
             if (doesOwnGame) {
                 acc.accessToken = mcToken;

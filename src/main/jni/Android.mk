@@ -8,11 +8,6 @@ HERE_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(HERE_PATH)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := libadrenotools
-LOCAL_SRC_FILES := adrenotools/libadrenotools.so
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE := openxr_loader
 LOCAL_SRC_FILES := libopenxr_loader.so
 include $(PREBUILT_SHARED_LIBRARY)
@@ -35,9 +30,25 @@ LOCAL_SRC_FILES := ./OpenOVR/OCOVR.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -landroid -lGLESv3 -lvulkan
-LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES -DGL_GLEXT_PROTOTYPES
-LOCAL_SHARED_LIBRARIES := openxr_loader
+# Link GLESv2 for test
+LOCAL_LDLIBS := -ldl -llog -landroid -lGLESv3 -lEGL
+LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES
+# -lGLESv2
+LOCAL_MODULE := pojavexec
+# LOCAL_CFLAGS += -DDEBUG
+LOCAL_SHARED_LIBRARIES := openvr_api
+# -DGLES_TEST
+LOCAL_SRC_FILES := \
+    egl_bridge.c \
+    utils.c \
+    environ/environ.c \
+    input_bridge_v3.c
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_LDLIBS := -llog -landroid -lGLESv3 -lvulkan -lEGL
+LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES
+LOCAL_SHARED_LIBRARIES := openxr_loader pojavexec
 LOCAL_WHOLE_STATIC_LIBRARIES := ocovr
 LOCAL_MODULE := openvr_api
 LOCAL_SRC_FILES := \
@@ -45,29 +56,15 @@ LOCAL_SRC_FILES := \
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := tinywrapper
-LOCAL_SRC_FILES := \
-            tinywrapper/main.c
-include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-# Link GLESv2 for test
-LOCAL_LDLIBS := -ldl -llog -landroid
-# -lGLESv2
-LOCAL_MODULE := pojavexec
-# LOCAL_CFLAGS += -DDEBUG
-LOCAL_SHARED_LIBRARIES := libadrenotools
-# -DGLES_TEST
-LOCAL_SRC_FILES := \
-    egl_bridge.c \
-    utils.c \
-    input_bridge_v3.c
-include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE := istdio
 LOCAL_SRC_FILES := \
     stdio_is.c
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := pojavexec_awt
+LOCAL_SRC_FILES := \
+    awt_bridge.c
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)

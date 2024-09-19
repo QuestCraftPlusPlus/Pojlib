@@ -37,6 +37,11 @@ public class FileUtil {
         return buffer;
     }
 
+    public static boolean matchingAssetFile(File sourceFile, byte[] assetFile) throws IOException {
+        byte[] sf = Files.readAllBytes(sourceFile.toPath());
+        return sf == assetFile;
+    }
+
     public static String read(String path) throws IOException {
         return read(Files.newInputStream(Paths.get(path)));
     }
@@ -55,6 +60,9 @@ public class FileUtil {
     {
         File outPath = new File(path);
         Objects.requireNonNull(outPath.getParentFile()).mkdirs();
+        if(!outPath.exists()) {
+            outPath.createNewFile();
+        }
 
         BufferedOutputStream fos = new BufferedOutputStream(Files.newOutputStream(outPath.toPath()));
         fos.write(content, 0, content.length);
@@ -132,5 +140,30 @@ public class FileUtil {
         }
 
         return destFile;
+    }
+
+    /**
+     * @author PojavLauncherTeam
+     * Same as ensureDirectorySilently(), but throws an IOException telling why the check failed.
+     * @param targetFile the directory to check
+     * @throws IOException when the checks fail
+     */
+    public static void ensureDirectory(File targetFile) throws IOException{
+        if(targetFile.isFile()) throw new IOException("Target directory is a file");
+        if(targetFile.exists()) {
+            if(!targetFile.canWrite()) throw new IOException("Target directory is not writable");
+        }else if(!targetFile.mkdirs()) throw new IOException("Unable to create target directory");
+    }
+
+    /**
+     * @author PojavLauncherTeam
+     * Same as ensureParentDirectorySilently(), but throws an IOException telling why the check failed.
+     * @param targetFile the File whose parent should be checked
+     * @throws IOException when the checks fail
+     */
+    public static void ensureParentDirectory(File targetFile) throws IOException{
+        File parentFile = targetFile.getParentFile();
+        if(parentFile == null) throw new IOException("targetFile does not have a parent");
+        ensureDirectory(parentFile);
     }
 }

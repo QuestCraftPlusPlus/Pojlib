@@ -33,8 +33,8 @@ import pojlib.util.VLoader;
 import pojlib.util.json.ModrinthIndexJson;
 
 public class InstanceHandler {
-    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/mods.json";
-    public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/QuestCraft/devmods.json";
+    public static final String MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Testing/mods.json";
+    public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Testing/devmods.json";
 
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, ModLoader modLoader, String mrpackFilePath, String imageURL) {
         File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_") + "/setup/modrinth.index.json");
@@ -181,7 +181,7 @@ public class InstanceHandler {
                 String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
                 String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
                 String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
-                String lwjgl = Installer.installLwjgl(activity);
+                String lwjgl = UnityPlayerActivity.installLWJGL(activity);
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
@@ -288,6 +288,7 @@ public class InstanceHandler {
 
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
         try {
+            API.currentInstance = instance;
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
             JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance);

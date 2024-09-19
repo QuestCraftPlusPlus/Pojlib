@@ -32,9 +32,6 @@ import javax.xml.transform.ErrorListener;
 
 
 public class Msa {
-
-    private final boolean mIsRefresh;
-    private final String mAuthCode;
     private static final Map<Long, String> XSTS_ERRORS;
     static {
         XSTS_ERRORS = new ArrayMap<>();
@@ -46,89 +43,48 @@ public class Msa {
     }
 
     /* Fields used to fill the account  */
-    public String msRefreshToken;
     public static String mcName;
     public String mcToken;
     public static String mcUuid;
     public static boolean doesOwnGame;
     public long expiresAt;
+    private Activity activity;
 
-    public Msa(boolean isRefresh, String authCode){
-        mIsRefresh = isRefresh;
-        mAuthCode = authCode;
+    public Msa(Activity currentActivity) {
+        this.activity = activity;
     }
 
     /** Performs a full login, calling back listeners appropriately  */
-    public MinecraftAccount performLogin() {
+    public MinecraftAccount performLogin(String xblToken) throws MSAException {
         try {
-            String accessToken = acquireAccessToken(mIsRefresh, mAuthCode);
-            String xboxLiveToken = acquireXBLToken(accessToken);
-            String[] xsts = acquireXsts(xboxLiveToken);
+            String[] xsts = acquireXsts(xblToken);
             if(xsts == null) {
                 return null;
             }
-            String mcToken = acquireMinecraftToken(xsts[0], xsts[1]);
+            acquireMinecraftToken(xsts[0], xsts[1]);
             fetchOwnedItems(mcToken);
             checkMcProfile(mcToken);
 
-            MinecraftAccount acc = MinecraftAccount.load(mcName, null, null);
+            MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
             if (acc == null) acc = new MinecraftAccount();
             if (doesOwnGame) {
-                /*acc.xuid = xsts[0];*/
-                /*acc.clientToken = "0"; *//* FIXME */
                 acc.accessToken = mcToken;
                 acc.username = mcName;
                 acc.uuid = mcUuid;
                 acc.expiresIn = expiresAt;
             } else {
                 Logger.getInstance().appendToLog("MicrosoftLogin | Unknown Error occurred.");
-                throw new MSAException("MicrosoftLogin | Unknown Error occurred.", null);
+                throw new MSAException("MicrosoftLogin | Unknown Error occurred.");
             }
 
             return acc;
         } catch (Exception e) {
-            Logger.getInstance().appendToLog("MicrosoftLogin | Exception thrown during authentication" + e);
-            throw new MSAException("MicrosoftLogin | Exception thrown during authentication", e);
+            Logger.getInstance().appendToLog("MicrosoftLogin | Exception thrown during authentication " + e);
+            throw new MSAException("MicrosoftLogin | Exception thrown during authentication ");
         }
     }
 
-    public String acquireAccessToken(boolean isRefresh, String authcode) throws IOException, JSONException {
-        URL url = new URL(Constants.OAUTH_TOKEN_URL);
-        Logger.getInstance().appendToLog("MicrosoftLogin | isRefresh=" + isRefresh + ", authCode= "+authcode);
-
-        String formData = convertToFormData(
-                "client_id", "00000000402b5328",
-                isRefresh ? "refresh_token" : "code", authcode,
-                "grant_type", isRefresh ? "refresh_token" : "authorization_code",
-                "redirect_url", "https://login.live.com/oauth20_desktop.srf",
-                "scope", "service::user.auth.xboxlive.com::MBI_SSL"
-        );
-
-        Logger.getInstance().appendToLog("MicroAuth | " + formData);
-
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(formData.getBytes(StandardCharsets.UTF_8).length));
-        conn.setRequestMethod("POST");
-        conn.setUseCaches(false);
-        conn.setDoInput(true);
-        conn.setDoOutput(true);
-        conn.connect();
-        try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(formData.getBytes(StandardCharsets.UTF_8));
-        }
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
-            JSONObject jo = new JSONObject(FileUtil.read(conn.getInputStream()));
-            msRefreshToken = jo.getString("refresh_token");
-            conn.disconnect();
-            return jo.getString("access_token");
-        }else{
-            throw getResponseThrowable(conn);
-        }
-    }
-
-    static String acquireXBLToken(String accessToken) throws IOException, JSONException {
+    static String acquireXBLToken(String accessToken) throws IOException, MSAException, JSONException {
         URL url = new URL(Constants.XBL_AUTH_URL);
 
         JSONObject data = new JSONObject();
@@ -158,7 +114,7 @@ public class Msa {
     }
 
     /** @return [uhs, token]*/
-    private String[] acquireXsts(String xblToken) throws IOException, JSONException {
+    private String[] acquireXsts(String xblToken) throws IOException, JSONException, MSAException {
         URL url = new URL(Constants.XSTS_AUTH_URL);
 
         JSONObject data = new JSONObject();
@@ -170,10 +126,10 @@ public class Msa {
         data.put("TokenType", "JWT");
 
         String req = data.toString();
-        Logger.getInstance().appendToLog("MicrosoftLogin | " + req);
+        // Logger.getInstance().appendToLog("MicrosoftLogin | " + req);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         setCommonProperties(conn, req);
-        Logger.getInstance().appendToLog("MicrosoftLogin | " + conn.getRequestMethod());
+        // Logger.getInstance().appendToLog("MicrosoftLogin | " + conn.getRequestMethod());
         conn.connect();
 
         try(OutputStream wr = conn.getOutputStream()) {
@@ -193,16 +149,16 @@ public class Msa {
             String locale_id = XSTS_ERRORS.get(xerr);
             if(locale_id != null) {
                 Logger.getInstance().appendToLog(responseContents);
-                throw new MSAException(responseContents, null);
+                throw new MSAException(responseContents);
             }
-            Logger.getInstance().appendToLog("Unknown error returned from Xbox Live\n" + responseContents);
-            throw new MSAException("Unknown error returned from Xbox Live", null);
+            // Logger.getInstance().appendToLog("Unknown error returned from Xbox Live\n" + responseContents);
+            throw new MSAException("Unknown error returned from Xbox Live");
         } else{
             throw getResponseThrowable(conn);
         }
     }
 
-    private String acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, JSONException {
+    private void acquireMinecraftToken(String xblUhs, String xblXsts) throws IOException, MSAException, JSONException {
         URL url = new URL(Constants.MC_LOGIN_URL);
 
         JSONObject data = new JSONObject();
@@ -218,17 +174,16 @@ public class Msa {
         }
 
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
-            expiresAt = System.currentTimeMillis() + 86400000;
             JSONObject jo = new JSONObject(FileUtil.read(conn.getInputStream()));
             conn.disconnect();
+            expiresAt = System.currentTimeMillis() + (jo.getInt("expires_in") * 1000L);
             mcToken = jo.getString("access_token");
-            return jo.getString("access_token");
         }else{
             throw getResponseThrowable(conn);
         }
     }
 
-    private void fetchOwnedItems(String mcAccessToken) throws IOException {
+    private void fetchOwnedItems(String mcAccessToken) throws MSAException, IOException {
         URL url = new URL(Constants.MC_STORE_URL);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -244,7 +199,7 @@ public class Msa {
     }
 
     // Returns false for failure //
-    public static boolean checkMcProfile(String mcAccessToken) throws IOException, JSONException {
+    public static boolean checkMcProfile(String mcAccessToken) throws IOException, MSAException, JSONException {
         URL url = new URL(Constants.MC_PROFILE_URL);
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -271,7 +226,7 @@ public class Msa {
         } else {
             Logger.getInstance().appendToLog("MicrosoftLogin | It seems that this Microsoft Account does not own the game.");
             doesOwnGame = false;
-            throw new MSAException("It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.", null);
+            throw new MSAException("It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.");
         }
     }
 
@@ -306,11 +261,11 @@ public class Msa {
         return builder.toString();
     }
 
-    private static RuntimeException getResponseThrowable(HttpURLConnection conn) throws IOException {
+    private static MSAException getResponseThrowable(HttpURLConnection conn) throws IOException, MSAException {
         Logger.getInstance().appendToLog("MicrosoftLogin | Error code: " + conn.getResponseCode() + ": " + conn.getResponseMessage());
         if(conn.getResponseCode() == 429) {
-            throw new MSAException("Too many requests, please try again later.", null);
+            throw new MSAException("Too many requests, please try again later.");
         }
-        throw new MSAException(conn.getResponseMessage(), null);
+        throw new MSAException(conn.getResponseMessage());
     }
 }

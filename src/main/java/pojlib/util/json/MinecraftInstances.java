@@ -48,7 +48,7 @@ public class MinecraftInstances {
 
         public List<String> generateLaunchArgs(MinecraftAccount account) {
             String[] mcArgs = {"--username", account.username, "--version", versionName, "--gameDir", gameDir,
-                    "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid.replaceAll("-", ""),
+                    "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid,
                     "--accessToken", account.accessToken, "--userType", account.userType, "--versionType", "release"};
 
             List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));

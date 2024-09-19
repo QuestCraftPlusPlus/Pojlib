@@ -22,13 +22,8 @@
 #include <string.h>
 #include <pthread.h>
 #include "utils.h"
+#include "environ/environ.h"
 #include "GL/gl.h"
-#include "adrenotools/driver.h"
-
-EGLContext gameEglContext;
-EGLDisplay gameEglDisplay;
-EGLSurface gameEglSurface;
-EGLConfig gameConfig;
 
 typedef EGLDisplay eglGetDisplay_t (EGLNativeDisplayType display_id);
 typedef EGLBoolean eglInitialize_t (EGLDisplay dpy, EGLint *major, EGLint *minor);
@@ -38,7 +33,6 @@ typedef EGLBoolean eglBindAPI_t (EGLenum api);
 typedef EGLSurface eglCreatePbufferSurface_t (EGLDisplay dpy, EGLConfig config, const EGLint *attrib_list);
 typedef EGLContext eglCreateContext_t (EGLDisplay dpy, EGLConfig config, EGLContext share_context, const EGLint *attrib_list);
 typedef EGLBoolean eglMakeCurrent_t (EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx);
-typedef EGLImage eglCreateImage_t (EGLDisplay dpy, EGLContext ctx, EGLenum target, EGLClientBuffer buffer, const EGLAttrib *attrib_list);
 typedef EGLint eglGetError_t (void);
 typedef EGLBoolean eglSwapBuffers_t (EGLDisplay dpy, EGLSurface surface);
 typedef EGLBoolean eglSwapInterval_t (EGLDisplay dpy, EGLint interval);
@@ -52,13 +46,15 @@ eglBindAPI_t* eglBindAPI_p;
 eglCreatePbufferSurface_t* eglCreatePbufferSurface_p;
 eglCreateContext_t* eglCreateContext_p;
 eglMakeCurrent_t* eglMakeCurrent_p;
-eglCreateImage_t* eglCreateImage_p;
 eglGetError_t* eglGetError_p;
 eglSwapBuffers_t* eglSwapBuffers_p;
 eglSwapInterval_t* eglSwapInterval_p;
 eglGetProcAddress_t* eglGetProcAddress_p;
-PFNEGLEXPORTDMABUFIMAGEMESAPROC eglExportDMABUFImageMESA_p;
-PFNEGLEXPORTDMABUFIMAGEQUERYMESAPROC eglExportDMABUFImageQueryMESA_p;
+
+EGLContext xrEglContext;
+EGLDisplay xrEglDisplay;
+EGLSurface xrEglSurface;
+EGLConfig xrConfig;
 
 void* gbuffer;
 
@@ -90,6 +86,21 @@ void pojav_openGLOnUnload() {
 void pojavTerminate() {
 }
 
+void dlsym_egl() {
+    void* handle = dlopen("libtinywrapper.so", RTLD_NOW);
+    eglGetProcAddress_p = (eglGetProcAddress_t*) dlsym(handle, "eglGetProcAddress");
+    eglGetDisplay_p = (eglGetDisplay_t*) eglGetProcAddress_p("eglGetDisplay");
+    eglInitialize_p = (eglInitialize_t*) eglGetProcAddress_p("eglInitialize");
+    eglChooseConfig_p = (eglChooseConfig_t*) eglGetProcAddress_p("eglChooseConfig");
+    eglGetConfigAttrib_p = (eglGetConfigAttrib_t*) eglGetProcAddress_p("eglGetConfigAttrib");
+    eglBindAPI_p = (eglBindAPI_t*) eglGetProcAddress_p("eglBindAPI");
+    eglCreatePbufferSurface_p = (eglCreatePbufferSurface_t*) eglGetProcAddress_p("eglCreatePbufferSurface");
+    eglCreateContext_p = (eglCreateContext_t*) eglGetProcAddress_p("eglCreateContext");
+    eglMakeCurrent_p = (eglMakeCurrent_t*) eglGetProcAddress_p("eglMakeCurrent");
+    eglGetError_p = (eglGetError_t*) eglGetProcAddress_p("eglGetError");
+    eglSwapBuffers_p = (eglSwapBuffers_t*) eglGetProcAddress_p("eglSwapBuffers");
+    eglSwapInterval_p = (eglSwapInterval_t*) eglGetProcAddress_p("eglSwapInterval");
+}
 
 void* pojavGetCurrentContext() {
     return gameEglContext;
@@ -212,9 +223,6 @@ void pojavSetWindowHint(int hint, int value) {
     // Stub
 }
 
-void pojavPumpEvents(void* window) {
-    // Stub
-}
 
 int32_t stride;
 void pojavSwapBuffers() {
@@ -284,42 +292,4 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
 
 void pojavSwapInterval(int interval) {
     eglSwapInterval_p(gameEglDisplay, interval);
-}
-
-int* pojavExportDMABuf(int mesaTex) {
-    const EGLAttrib attribs[] = {
-            EGL_IMAGE_PRESERVED, EGL_TRUE,
-            EGL_NONE
-    };
-    EGLImage image = eglCreateImage_p(gameEglDisplay, gameEglContext, EGL_GL_TEXTURE_2D, (EGLClientBuffer) mesaTex, attribs);
-    if(image == NULL) {
-        printf("Image is not valid!\n");
-    }
-
-    int num_planes = 0;
-    if(!eglExportDMABUFImageQueryMESA_p(gameEglDisplay, image, NULL, &num_planes, NULL)) {
-        printf("Failed to query image! %d\n", eglGetError_p());
-    }
-
-    if(num_planes <= 0) {
-        printf("num_planes is not valid!\n");
-    }
-
-    int fds[num_planes];
-    EGLint offsets[num_planes];
-    if(!eglExportDMABUFImageMESA_p(gameEglDisplay, image, fds, NULL, offsets)) {
-        printf("Failed to export dmabuf! %d\n", eglGetError_p());
-    }
-
-    int data[] = {fds[0], offsets[0]};
-
-    if(fds[0] == -1) {
-        printf("Fd is not valid!\n");
-    }
-
-    for(int i = 0; i < num_planes; i++) {
-        printf("Plane %d, FD %d\n", i, fds[i]);
-    }
-
-    return data;
 }

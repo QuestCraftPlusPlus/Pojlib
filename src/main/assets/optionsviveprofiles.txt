@@ -42,7 +42,7 @@
         "thirdPersonItems": "false",
         "worldScale": "1.0",
         "mixedRealityFov": "40.0",
-        "alwaysShowUpdates": "true",
+        "alwaysShowUpdates": "false",
         "hudDistance": "1.25",
         "stencilOn": "true",
         "hudPitchOffset": "-2.0",

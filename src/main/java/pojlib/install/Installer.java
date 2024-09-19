@@ -112,14 +112,13 @@ public class Installer {
 
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/sodium-options.json"), FileUtil.loadFromAssetToByte(activity, "sodium-options.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/vivecraft-config.properties"), FileUtil.loadFromAssetToByte(activity, "vivecraft-config.properties"));
-        FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/tweakeroo.json"), FileUtil.loadFromAssetToByte(activity, "tweakeroo.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/smoothboot.json"), FileUtil.loadFromAssetToByte(activity, "smoothboot.json"));
-        FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/malilib.json"), FileUtil.loadFromAssetToByte(activity, "malilib.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/immediatelyfast.json"), FileUtil.loadFromAssetToByte(activity, "immediatelyfast.json"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/moreculling.toml"), FileUtil.loadFromAssetToByte(activity,"moreculling.toml"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/config/modernfix-mixins.properties"), FileUtil.loadFromAssetToByte(activity,"modernfix-mixins.properties"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/options.txt"), FileUtil.loadFromAssetToByte(activity, "options.txt"));
         FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/optionsviveprofiles.txt"), FileUtil.loadFromAssetToByte(activity, "optionsviveprofiles.txt"));
+        FileUtils.writeByteArrayToFile(new File(instance.gameDir + "/servers.dat"), FileUtil.loadFromAssetToByte(activity, "servers.dat"));
         FileUtils.writeByteArrayToFile(new File(Constants.USER_HOME + "/hacks/ResConfHack.jar"), FileUtil.loadFromAssetToByte(activity, "hacks/ResConfHack.jar"));
 
         return new File(gameDir + "/assets").getAbsolutePath();
@@ -160,15 +159,6 @@ public class Installer {
             this.versionInfo = versionInfo;
             this.gameDir = gameDir;
         }
-    }
-
-    public static String installLwjgl(Activity activity) throws IOException {
-        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
-        if (!lwjgl.exists()) {
-            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
-            FileUtil.write(lwjgl.getAbsolutePath(), FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar"));
-        }
-        return lwjgl.getAbsolutePath();
     }
 
     //Used for mod libraries, vanilla is handled a different (tbh better) way

@@ -62,6 +62,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         hookExec();
         installLinkerBugMitigation();
         installEMUIIteratorMititgation();
+        pojav_environ->set_oc_vars_p();
     }
 
     if(pojav_environ->dalvikJavaVMPtr == vm) {

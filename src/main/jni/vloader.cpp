@@ -7,26 +7,16 @@
 #include <android/hardware_buffer.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <OpenOVR/openxr_platform.h>
 #include <jni.h>
 #include <vulkan/vulkan.h>
 #include <vulkan/vulkan_android.h>
-#include "log.h"
+#include <environ/environ.h>
 #include <GLES3/gl32.h>
+#include "log.h"
 
-static JavaVM* jvm;
 XrInstanceCreateInfoAndroidKHR* OpenComposite_Android_Create_Info;
 XrGraphicsBindingOpenGLESAndroidKHR* OpenComposite_Android_GLES_Binding_Info;
-
 std::string (*OpenComposite_Android_Load_Input_File)(const char *path);
-
-extern "C"
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
-    if(jvm == nullptr) {
-        jvm = vm;
-    }
-    return JNI_VERSION_1_4;
-}
 
 static std::string load_file(const char *path) {
     // Just read the file from the filesystem, we changed the working directory earlier so
@@ -56,17 +46,13 @@ static std::string load_file(const char *path) {
 }
 
 extern "C"
-JNIEXPORT void JNICALL
-Java_pojlib_util_VLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz, jobject ctx) {
+void set_oc_vars() {
     OpenComposite_Android_Load_Input_File = load_file;
-
-    env->GetJavaVM(&jvm);
-    ctx = env->NewGlobalRef(ctx);
     OpenComposite_Android_Create_Info = new XrInstanceCreateInfoAndroidKHR{
             XR_TYPE_INSTANCE_CREATE_INFO_ANDROID_KHR,
             nullptr,
-            jvm,
-            ctx
+            pojav_environ->dalvikJavaVMPtr,
+            pojav_environ->activity
     };
 
     PFN_xrInitializeLoaderKHR initializeLoader = nullptr;
@@ -82,14 +68,26 @@ Java_pojlib_util_VLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz, jobject c
     XrLoaderInitInfoAndroidKHR loaderInitInfoAndroidKhr = {
             XR_TYPE_LOADER_INIT_INFO_ANDROID_KHR,
             nullptr,
-            jvm,
-            ctx
+            pojav_environ->dalvikJavaVMPtr,
+            pojav_environ->activity
     };
 
     res = initializeLoader((const XrLoaderInitInfoBaseHeaderKHR *) &loaderInitInfoAndroidKhr);
     if(!XR_SUCCEEDED(res)) {
         printf("xrInitializeLoaderKHR returned %d.\n", res);
     }
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_pojlib_util_VLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz, jobject ctx) {
+    pojav_environ->activity = env->NewGlobalRef(ctx);
+
+    typedef void set_oc_vars_t (void);
+    set_oc_vars_t* set_oc_vars_p;
+    set_oc_vars_p = set_oc_vars;
+
+    pojav_environ->set_oc_vars_p = set_oc_vars_p;
 }
 
 extern "C"

@@ -14,8 +14,6 @@
 #include <GLES3/gl32.h>
 #include "log.h"
 
-XrInstanceCreateInfoAndroidKHR* OpenComposite_Android_Create_Info;
-XrGraphicsBindingOpenGLESAndroidKHR* OpenComposite_Android_GLES_Binding_Info;
 std::string (*OpenComposite_Android_Load_Input_File)(const char *path);
 
 static std::string load_file(const char *path) {
@@ -46,48 +44,9 @@ static std::string load_file(const char *path) {
 }
 
 extern "C"
-void set_oc_vars() {
-    OpenComposite_Android_Load_Input_File = load_file;
-    OpenComposite_Android_Create_Info = new XrInstanceCreateInfoAndroidKHR{
-            XR_TYPE_INSTANCE_CREATE_INFO_ANDROID_KHR,
-            nullptr,
-            pojav_environ->dalvikJavaVMPtr,
-            pojav_environ->activity
-    };
-
-    PFN_xrInitializeLoaderKHR initializeLoader = nullptr;
-    XrResult res;
-
-    res = xrGetInstanceProcAddr(XR_NULL_HANDLE, "xrInitializeLoaderKHR",
-                                (PFN_xrVoidFunction *) (&initializeLoader));
-
-    if(!XR_SUCCEEDED(res)) {
-        printf("xrGetInstanceProcAddr returned %d.\n", res);
-    }
-
-    XrLoaderInitInfoAndroidKHR loaderInitInfoAndroidKhr = {
-            XR_TYPE_LOADER_INIT_INFO_ANDROID_KHR,
-            nullptr,
-            pojav_environ->dalvikJavaVMPtr,
-            pojav_environ->activity
-    };
-
-    res = initializeLoader((const XrLoaderInitInfoBaseHeaderKHR *) &loaderInitInfoAndroidKhr);
-    if(!XR_SUCCEEDED(res)) {
-        printf("xrInitializeLoaderKHR returned %d.\n", res);
-    }
-}
-
-extern "C"
 JNIEXPORT void JNICALL
 Java_pojlib_util_VLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz, jobject ctx) {
     pojav_environ->activity = env->NewGlobalRef(ctx);
-
-    typedef void set_oc_vars_t (void);
-    set_oc_vars_t* set_oc_vars_p;
-    set_oc_vars_p = set_oc_vars;
-
-    pojav_environ->set_oc_vars_p = set_oc_vars_p;
 }
 
 extern "C"
@@ -109,7 +68,7 @@ Java_org_vivecraft_util_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz) {
     };
 
     eglChooseConfig(eglGetCurrentDisplay(), attribs, &cfg, 1, &num_configs);
-    OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
+    pojav_environ->OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
             XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
             nullptr,
             (void*)eglGetCurrentDisplay(),

@@ -37,7 +37,7 @@ jint (*orig_ProcessImpl_forkAndExec)(JNIEnv *env, jobject process, jint mode, jb
 static void registerFunctions(JNIEnv *env);
 
 jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
-    if (pojav_environ->dalvikJavaVMPtr == NULL) {
+     if (pojav_environ->dalvikJavaVMPtr == NULL) {
         __android_log_print(ANDROID_LOG_INFO, "Native", "Saving DVM environ...");
         //Save dalvik global JavaVM pointer
         pojav_environ->dalvikJavaVMPtr = vm;
@@ -62,7 +62,11 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         hookExec();
         installLinkerBugMitigation();
         installEMUIIteratorMititgation();
-        pojav_environ->set_oc_vars_p();
+
+        pojav_environ->OpenComposite_Android_Create_Info = malloc(sizeof(XrInstanceCreateInfoAndroidKHR));
+        pojav_environ->OpenComposite_Android_Create_Info->type = XR_TYPE_INSTANCE_CREATE_INFO_ANDROID_KHR;
+        pojav_environ->OpenComposite_Android_Create_Info->applicationVM = pojav_environ->dalvikJavaVMPtr;
+        pojav_environ->OpenComposite_Android_Create_Info->applicationActivity = pojav_environ->activity;
     }
 
     if(pojav_environ->dalvikJavaVMPtr == vm) {

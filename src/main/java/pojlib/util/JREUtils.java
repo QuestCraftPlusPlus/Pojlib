@@ -145,12 +145,8 @@ public class JREUtils {
         envMap.put("GALLIUM_DRIVER", "zink");
         envMap.put("MESA_LOADER_DRIVER_OVERRIDE", "zink");
         envMap.put("MESA_LOG_FILE", instance.gameDir + "/mesa.log");
-        envMap.put("LIBGL_DRIVERS_PATH", activity.getApplicationInfo().nativeLibraryDir);
         envMap.put("EGL_PLATFORM", "surfaceless");
-        envMap.put("POJLIB_RENDERER", "zink");
-        envMap.put("ZINK_DEBUG", "compact,gpl");
-        envMap.put("ZINK_DESCRIPTORS", "lazy");
-        envMap.put("FD_DEV_FEATURES", "enable_tp_ubwc_flag_hint=1");
+        envMap.put("POJAV_RENDERER", "zink");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE-22/bin:" + Os.getenv("PATH"));
@@ -236,7 +232,6 @@ public class JREUtils {
     public static List<String> getJavaArgs(Context ctx, MinecraftInstances.Instance instance) {
         return new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + new File(ctx.getFilesDir(), "runtimes/JRE-22"),
-                "-Djava.io.tmpdir=" + ctx.getApplicationInfo().nativeLibraryDir + "/.cache",
                 "-Duser.home=" + instance.gameDir,
                 "-Duser.language=" + System.getProperty("user.language"),
                 "-Dos.name=Linux",

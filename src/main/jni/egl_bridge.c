@@ -51,44 +51,21 @@ eglSwapBuffers_t* eglSwapBuffers_p;
 eglSwapInterval_t* eglSwapInterval_p;
 eglGetProcAddress_t* eglGetProcAddress_p;
 
-EGLContext xrEglContext;
-EGLDisplay xrEglDisplay;
-EGLSurface xrEglSurface;
-EGLConfig xrConfig;
+EGLContext gameEglContext;
+EGLDisplay gameEglDisplay;
+EGLSurface gameEglSurface;
+EGLConfig gameConfig;
 
 void* gbuffer;
 
 void dlsym_egl() {
     void* handle = dlopen("libEGL_mesa.so", RTLD_NOW);
-    eglGetDisplay_p = (eglGetDisplay_t*) dlsym(handle, "eglGetDisplay");
-    eglInitialize_p = (eglInitialize_t*) dlsym(handle, "eglInitialize");
-    eglChooseConfig_p = (eglChooseConfig_t*) dlsym(handle, "eglChooseConfig");
-    eglGetConfigAttrib_p = (eglGetConfigAttrib_t*) dlsym(handle, "eglGetConfigAttrib");
-    eglBindAPI_p = (eglBindAPI_t*) dlsym(handle, "eglBindAPI");
-    eglCreatePbufferSurface_p = (eglCreatePbufferSurface_t*) dlsym(handle, "eglCreatePbufferSurface");
-    eglCreateContext_p = (eglCreateContext_t*) dlsym(handle, "eglCreateContext");
-    eglMakeCurrent_p = (eglMakeCurrent_t*) dlsym(handle, "eglMakeCurrent");
-    eglCreateImage_p = (eglCreateImage_t*) dlsym(handle, "eglCreateImage");
-    eglGetError_p = (eglGetError_t*) dlsym(handle, "eglGetError");
-    eglSwapBuffers_p = (eglSwapBuffers_t*) dlsym(handle, "eglSwapBuffers");
-    eglSwapInterval_p = (eglSwapInterval_t*) dlsym(handle, "eglSwapInterval");
+    if(!handle) {
+        printf("Couldn't dlopen mesa! %s\n", dlerror());
+    }
+
     eglGetProcAddress_p = (eglGetProcAddress_t*) dlsym(handle, "eglGetProcAddress");
-    eglExportDMABUFImageMESA_p = (PFNEGLEXPORTDMABUFIMAGEMESAPROC) eglGetProcAddress_p("eglExportDMABUFImageMESA");
-    eglExportDMABUFImageQueryMESA_p = (PFNEGLEXPORTDMABUFIMAGEQUERYMESAPROC) eglGetProcAddress_p("eglExportDMABUFImageQueryMESA");
-}
 
-void pojav_openGLOnLoad() {
-}
-void pojav_openGLOnUnload() {
-
-}
-
-void pojavTerminate() {
-}
-
-void dlsym_egl() {
-    void* handle = dlopen("libtinywrapper.so", RTLD_NOW);
-    eglGetProcAddress_p = (eglGetProcAddress_t*) dlsym(handle, "eglGetProcAddress");
     eglGetDisplay_p = (eglGetDisplay_t*) eglGetProcAddress_p("eglGetDisplay");
     eglInitialize_p = (eglInitialize_t*) eglGetProcAddress_p("eglInitialize");
     eglChooseConfig_p = (eglChooseConfig_t*) eglGetProcAddress_p("eglChooseConfig");
@@ -100,6 +77,15 @@ void dlsym_egl() {
     eglGetError_p = (eglGetError_t*) eglGetProcAddress_p("eglGetError");
     eglSwapBuffers_p = (eglSwapBuffers_t*) eglGetProcAddress_p("eglSwapBuffers");
     eglSwapInterval_p = (eglSwapInterval_t*) eglGetProcAddress_p("eglSwapInterval");
+}
+
+void pojav_openGLOnLoad() {
+}
+void pojav_openGLOnUnload() {
+
+}
+
+void pojavTerminate() {
 }
 
 void* pojavGetCurrentContext() {
@@ -180,7 +166,7 @@ int gameEglInit() {
     };
 
     gameEglSurface = eglCreatePbufferSurface_p(gameEglDisplay, gameConfig,
-                                           surface_attribs);
+                                               surface_attribs);
     if (!gameEglSurface) {
         printf("GameEGL: Error eglCreatePbufferSurface failed: %d\n", eglGetError_p());
     }
@@ -201,10 +187,7 @@ void initDriver() {
     char *nativeDir;
     asprintf(&nativeDir, "%s/", getenv("POJLIB_NATIVEDIR"));
     asprintf(&gpuStuff, "%s/gpustuff", getenv("HOME"));
-    void *libvulkan = adrenotools_open_libvulkan(RTLD_NOW, ADRENOTOOLS_DRIVER_CUSTOM, gpuStuff,
-                                                 gpuStuff, nativeDir,
-                                                 "libvulkan_freedreno.so", NULL, NULL);
-    dlopen("libvulkan.so", RTLD_NOW);
+    void *libvulkan = dlopen("libvulkan.so", RTLD_NOW);
     printf("Driver Loader: libvulkan handle: %p\n", libvulkan);
     char *vulkanPtrString;
     asprintf(&vulkanPtrString, "%p", libvulkan);
@@ -267,6 +250,7 @@ void* pojavCreateContext(void* contextSrc) {
             EGL_CONTEXT_MAJOR_VERSION, 3,
             EGL_CONTEXT_MINOR_VERSION, 2,
             EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
+            EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE, EGL_TRUE,
             EGL_NONE
     };
     EGLContext* ctx = eglCreateContext_p(gameEglDisplay, gameConfig, contextSrc, ctx_attribs);

@@ -31,12 +31,11 @@ include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 # Link GLESv2 for test
-LOCAL_LDLIBS := -ldl -llog -landroid -lGLESv3 -lEGL
+LOCAL_LDLIBS := -ldl -llog -landroid
 LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG
-LOCAL_SHARED_LIBRARIES := openvr_api
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
     egl_bridge.c \
@@ -46,7 +45,13 @@ LOCAL_SRC_FILES := \
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -landroid -lGLESv3 -lvulkan -lEGL
+LOCAL_MODULE := tinywrapper
+LOCAL_SRC_FILES := \
+            tinywrapper/main.c
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_LDLIBS := -llog -landroid -lGLESv3 -lvulkan
 LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES
 LOCAL_SHARED_LIBRARIES := openxr_loader pojavexec
 LOCAL_WHOLE_STATIC_LIBRARIES := ocovr

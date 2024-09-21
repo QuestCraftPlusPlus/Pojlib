@@ -50,29 +50,43 @@ Java_pojlib_util_VLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz, jobject c
 }
 
 extern "C"
-JNIEXPORT void JNICALL
-Java_org_vivecraft_util_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz) {
-    EGLConfig cfg;
-    EGLint num_configs;
+JNIEXPORT jlong JNICALL
+Java_org_vivecraft_util_VLoader_getVKImage1(JNIEnv* env, jclass clazz) {
+    return (jlong) pojav_environ->image;
+}
 
-    static const EGLint attribs[] = {
-            EGL_RED_SIZE, 8,
-            EGL_GREEN_SIZE, 8,
-            EGL_BLUE_SIZE, 8,
-            EGL_ALPHA_SIZE, 8,
-            // Minecraft required on initial 24
-            EGL_DEPTH_SIZE, 24,
-            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
-            EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-            EGL_NONE
-    };
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_org_vivecraft_util_VLoader_getVKImage2(JNIEnv* env, jclass clazz) {
+    return (jlong) pojav_environ->image;
+}
 
-    eglChooseConfig(eglGetCurrentDisplay(), attribs, &cfg, 1, &num_configs);
-    pojav_environ->OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
-            XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
-            nullptr,
-            (void*)eglGetCurrentDisplay(),
-            (void*) cfg,
-            (void*)eglGetCurrentContext()
-    };
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_org_vivecraft_util_VLoader_getVKInstance(JNIEnv* env, jclass clazz) {
+    return (jlong) pojav_environ->instance;
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_org_vivecraft_util_VLoader_getVKPhysicalDevice(JNIEnv* env, jclass clazz) {
+    return (jlong) pojav_environ->pDev;
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_org_vivecraft_util_VLoader_getVKDevice(JNIEnv* env, jclass clazz) {
+    return (jlong) pojav_environ->device;
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_org_vivecraft_util_VLoader_getVKQueue(JNIEnv* env, jclass clazz) {
+    return (jlong) pojav_environ->queue;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_org_vivecraft_util_VLoader_getVKQueueIndex(JNIEnv* env, jclass clazz) {
+    return (jint) pojav_environ->queueIndex;
 }

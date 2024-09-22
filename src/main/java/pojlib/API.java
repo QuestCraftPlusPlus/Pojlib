@@ -205,22 +205,23 @@ public class API {
             hasWifi = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
         }
 
-        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
-        if(acc != null && (acc.expiresIn > System.currentTimeMillis() || !hasWifi)) {
+        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts");
+        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasWifi)) {
             currentAcc = acc;
             API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             API.profileName = API.currentAcc.username;
             return;
-        } else if(acc != null && acc.expiresIn <= System.currentTimeMillis()) {
-            currentAcc = LoginHelper.getNewToken(activity);
+        } else if(acc != null && acc.expiresOn > System.currentTimeMillis()) {
+            currentAcc = LoginHelper.refreshAccount(acc);
             if(currentAcc == null) {
-                LoginHelper.beginLogin(activity);
+                LoginHelper.login(activity);
             } else {
                 API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
                 API.profileName = API.currentAcc.username;
+                return;
             }
         }
 
-        LoginHelper.beginLogin(activity);
+        LoginHelper.login(activity);
     }
 }

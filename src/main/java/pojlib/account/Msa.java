@@ -51,7 +51,7 @@ public class Msa {
     private Activity activity;
 
     public Msa(Activity currentActivity) {
-        this.activity = activity;
+        this.activity = currentActivity;
     }
 
     /** Performs a full login, calling back listeners appropriately  */
@@ -65,13 +65,13 @@ public class Msa {
             fetchOwnedItems(mcToken);
             checkMcProfile(mcToken);
 
-            MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
+            MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts");
             if (acc == null) acc = new MinecraftAccount();
             if (doesOwnGame) {
                 acc.accessToken = mcToken;
                 acc.username = mcName;
                 acc.uuid = mcUuid;
-                acc.expiresIn = expiresAt;
+                acc.expiresOn = expiresAt;
             } else {
                 Logger.getInstance().appendToLog("MicrosoftLogin | Unknown Error occurred.");
                 throw new MSAException("MicrosoftLogin | Unknown Error occurred.");

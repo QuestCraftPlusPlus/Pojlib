@@ -36,6 +36,7 @@ public class API {
     public static String memoryValue = "1800";
     public static boolean developerMods;
     public static MinecraftAccount currentAcc;
+    public static MinecraftInstances.Instance currentInstance;
 
     public static boolean advancedDebugger;
 

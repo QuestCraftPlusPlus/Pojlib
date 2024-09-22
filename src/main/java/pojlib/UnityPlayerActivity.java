@@ -273,7 +273,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         return handleEvent;
     }
 
-    @Override
     /** The event for keyboard/ gamepad button inputs */
     public boolean processKeyEvent(KeyEvent event) {
         // Logger.getInstance().appendToLog("KeyEvent " + event.toString());

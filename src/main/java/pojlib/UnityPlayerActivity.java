@@ -7,12 +7,15 @@ import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityGroup;
+import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 import android.util.DisplayMetrics;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -132,6 +135,16 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         }
 
         return lwjgl.getAbsolutePath();
+    }
+
+    public void reinitUnity() {
+        this.runOnUiThread(() -> {
+            Intent start = this.getPackageManager().getLaunchIntentForPackage(getApplicationInfo().packageName);
+            start.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(start);
+            this.finish();
+            Process.killProcess(Process.myPid());
+        });
     }
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {

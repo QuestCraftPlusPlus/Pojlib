@@ -156,7 +156,7 @@
         "backpackSwitching": "true",
         "vrSettingsButtonEnabled": "true",
         "useFsaa": "false",
-        "renderScaleFactor": "0.7",
+        "renderScaleFactor": "1.0",
         "shaderGUIRender": "AFTER_SHADER",
         "disableFun": "false",
         "displayMirrorLeftEye": "false",

@@ -288,6 +288,7 @@ public class InstanceHandler {
 
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
         try {
+            API.currentInstance = instance;
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
             JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance);

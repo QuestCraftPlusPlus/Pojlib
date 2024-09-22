@@ -7,6 +7,7 @@ android {
     compileSdkVersion = "android-32"
     defaultConfig {
         minSdkVersion(29)
+        multiDexEnabled true
 
         ndk.stl = "c++_shared"
     }
@@ -30,7 +31,7 @@ android {
 }
 
 build {
-    finalizedBy(':wrapper:launcher:build')
+    //finalizedBy(':wrapper:launcher:build')
 }
 
 dependencies {
@@ -48,6 +49,8 @@ dependencies {
     implementation("commons-io:commons-io:2.13.0")
     implementation("commons-codec:commons-codec:1.15")
     implementation("androidx.annotation:annotation:1.7.1")
+    implementation("androidx.core:core:1.13.1")
     implementation("com.microsoft.azure:msal4j:1.14.0")
+    implementation("com.github.Mathias-Boulay:android_gamepad_remapper:2.0.3")
     implementation("blank:unity-classes")
 }

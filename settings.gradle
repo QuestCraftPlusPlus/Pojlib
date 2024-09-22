@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = uri("https://repo.u-team.info")
+            url = uri("https://jitpack.io")
         }
         flatDir {
             dirs("libs")
@@ -30,5 +30,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Pojlib"
-include ':wrapper', ':wrapper:launcher', "wrapper:unityLibrary", "wrapper:unityLibrary:xrmanifest.androidlib", ":jre_lwjgl3glfw"
+include ":jre_lwjgl3glfw", ':wrapper', ':wrapper:launcher', "wrapper:unityLibrary", "wrapper:unityLibrary:xrmanifest.androidlib"
 

@@ -21,6 +21,7 @@
 #include <string.h>
 #include <pthread.h>
 #include "utils.h"
+#include "environ/environ.h"
 #include "GL/gl.h"
 
 typedef EGLDisplay eglGetDisplay_t (EGLNativeDisplayType display_id);
@@ -184,9 +185,9 @@ void pojavMakeCurrent(void* window) {
     xrEglContext = window;
 
     if (success == EGL_FALSE) {
-        printf("EGLBridge: Error: eglMakeCurrent() failed: %p\n", eglGetError());
+        printf("XREGLBridge: Error: eglMakeCurrent() failed: %p\n", eglGetError());
     } else {
-        printf("EGLBridge: eglMakeCurrent() succeed!\n");
+        printf("XREGLBridge: eglMakeCurrent() succeed!\n");
     }
 }
 

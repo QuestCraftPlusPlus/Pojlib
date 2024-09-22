@@ -9,13 +9,17 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Activity;
 import android.app.ActivityGroup;
+import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
+import android.os.Process;
+import android.util.DisplayMetrics;
+import android.view.InputDevice;
 import android.util.DisplayMetrics;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -30,6 +34,8 @@ import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 import fr.spse.gamepad_remapper.RemapperManager;
@@ -48,7 +54,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 {
     protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
-    private PowerManager.WakeLock wakeLock;
     private Gamepad mGamepad = null;
 
     private RemapperManager mInputManager;
@@ -92,12 +97,11 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         File jre = new File(this.getFilesDir() + "/runtimes/JRE-22");
         if (!jre.exists()) {
             FileUtil.unzipArchiveFromAsset(this, "JRE-22.zip", this.getFilesDir() + "/runtimes/JRE-22");
-        }
-
-        try {
-            installLWJGL(this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            try {
+                Files.copy(Paths.get(this.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get(this.getFilesDir() + "/runtimes/JRE-22/lib/libawt_xawt.so"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         updateWindowSize(this);
@@ -135,6 +139,16 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         }
 
         return lwjgl.getAbsolutePath();
+    }
+
+    public void reinitUnity() {
+        this.runOnUiThread(() -> {
+            Intent start = this.getPackageManager().getLaunchIntentForPackage(getApplicationInfo().packageName);
+            start.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            this.startActivity(start);
+            this.finish();
+            Process.killProcess(Process.myPid());
+        });
     }
 
     public static DisplayMetrics getDisplayMetrics(Activity activity) {
@@ -259,6 +273,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
         return handleEvent;
     }
 
+    @Override
     /** The event for keyboard/ gamepad button inputs */
     public boolean processKeyEvent(KeyEvent event) {
         // Logger.getInstance().appendToLog("KeyEvent " + event.toString());
@@ -378,7 +393,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     @Override protected void onDestroy ()
     {
         mUnityPlayer.destroy();
-        wakeLock.release();
         super.onDestroy();
     }
 

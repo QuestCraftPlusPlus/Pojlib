@@ -21,15 +21,12 @@ public class MinecraftAccount {
     public String accessToken;
     public String uuid;
     public String username;
-    public long expiresIn;
+    public long expiresOn;
     public final String userType = "msa";
 
-
-    public static MinecraftAccount login(Activity activity, String gameDir, String[] response) throws MSAException, IOException, JSONException {
-        String mcToken = Msa.acquireXBLToken(response[0]);
+    public static MinecraftAccount login(Activity activity, String gameDir, String msToken) throws MSAException, IOException, JSONException {
         Msa instance = new Msa(activity);
-        MinecraftAccount account = instance.performLogin(mcToken);
-        account.expiresIn = Long.parseLong(response[1]);
+        MinecraftAccount account = instance.performLogin(msToken);
 
         GsonUtils.objectToJsonFile(gameDir + "/account.json", account);
         return account;
@@ -43,22 +40,8 @@ public class MinecraftAccount {
     }
 
     //Try this before using login - the account will have been saved to disk if previously logged in
-    public static MinecraftAccount load(String path, @Nullable String newToken, @Nullable String expire) {
-        MinecraftAccount acc;
-        try {
-            acc = new Gson().fromJson(new FileReader(path + "/account.json"), MinecraftAccount.class);
-            if(newToken != null) {
-                acc.accessToken = Msa.acquireXBLToken(newToken);
-            }
-            if(expire != null) {
-                acc.expiresIn = Long.parseLong(expire);
-            }
-            GsonUtils.objectToJsonFile(path + "/account.json", acc);
-            return acc;
-        } catch (IOException | JSONException | MSAException e) {
-            Logger.getInstance().appendToLog("Unable to load account! | " + e);
-            return null;
-        }
+    public static MinecraftAccount load(String path) {
+        return GsonUtils.jsonFileToObject(path + "/account.json", MinecraftAccount.class);
     }
 
     public static String getSkinFaceUrl(MinecraftAccount account) {

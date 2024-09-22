@@ -217,8 +217,8 @@ public class API {
             API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             API.profileName = API.currentAcc.username;
             return;
-        } else if(acc != null && acc.expiresOn > System.currentTimeMillis()) {
-            currentAcc = LoginHelper.refreshAccount(acc);
+        } else if(acc != null && acc.expiresOn < System.currentTimeMillis()) {
+            currentAcc = LoginHelper.refreshAccount(activity);
             if(currentAcc == null) {
                 LoginHelper.login(activity);
             } else {

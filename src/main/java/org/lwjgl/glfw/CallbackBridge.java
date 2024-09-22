@@ -1,5 +1,6 @@
 package org.lwjgl.glfw;
 
+import android.app.Activity;
 import android.content.*;
 import android.view.Choreographer;
 
@@ -167,7 +168,7 @@ public class CallbackBridge {
         isGrabbing = grabbing;
         sChoreographer.postFrameCallbackDelayed((time) -> {
             // If the grab re-changed, skip notify process
-            if(isGrabbing != grabbing) return;
+            if (isGrabbing != grabbing) return;
 
             System.out.println("Grab changed : " + grabbing);
             synchronized (grabListeners) {
@@ -175,8 +176,13 @@ public class CallbackBridge {
             }
 
         }, 16);
-
     }
+
+    public static void restartUnitySession(Activity activity) {
+        UnityPlayerActivity unity = (UnityPlayerActivity) activity;
+        unity.reinitUnity();
+    }
+
     public static void addGrabListener(GrabListener listener) {
         synchronized (grabListeners) {
             listener.onGrabState(isGrabbing);

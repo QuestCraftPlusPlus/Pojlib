@@ -84,7 +84,6 @@ public class JREUtils {
         for(File f : locateLibs(new File(runtimeDir + "/lib"))) {
             dlopen(f.getAbsolutePath());
         }
-        dlopen(sNativeLibDir + "/libopenal.so");
     }
 
     public static void redirectAndPrintJRELog() {
@@ -246,8 +245,8 @@ public class JREUtils {
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
                 "-Dnet.minecraft.clientmodname=" + "QuestCraft",
                 "-Dext.net.resolvPath=" + Constants.USER_HOME + "/hacks/ResConfHack.jar",
-                "-Dsodium.checks.issue2561=false"
-        ));
+                "-Dsodium.checks.issue2561=false",
+                "-Dorg.sqlite.lib.path=" + ctx.getApplicationInfo().nativeLibraryDir        ));
     }
 
     /**

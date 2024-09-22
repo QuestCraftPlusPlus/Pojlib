@@ -6,10 +6,10 @@ android {
     ndkVersion = "26.1.10909125"
     compileSdkVersion = "android-32"
     defaultConfig {
-        minSdkVersion(29)
+        minSdk 29
         multiDexEnabled true
-
         ndk.stl = "c++_shared"
+        targetSdk 32
     }
 
     buildTypes {

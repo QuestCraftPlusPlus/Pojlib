@@ -1,12 +1,86 @@
 {
 	"versions": [
 		{
+			"name": "1.21",
+			"coreMods": [
+				{
+					"slug": "Vivecraft",
+					"version": "1.1.12-b1",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.21.0/Vivecraft.jar"
+				},
+				{
+					"slug": "Fabric-API",
+					"version": "0.102.0",
+					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/oGwyXeEI/fabric-api-0.102.0%2B1.21.jar"
+				}
+			],
+			"defaultMods": [
+				{
+					"slug": "Sodium",
+					"version": "0.6.0-beta.2",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/CcIWi5Av/sodium-fabric-0.6.0-beta.2%2Bmc1.21.1.jar"
+				},
+				{
+					"slug": "ModernFix",
+					"version": "5.19.1+mc1.21",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/i8GSONFm/modernfix-fabric-5.19.1%2Bmc1.21.jar"
+				},
+				{
+					"slug": "Noisium",
+					"version": "2.3.0+mc1.21-1.21.1",
+					"download_link": "https://cdn.modrinth.com/data/KuNKN7d2/versions/4sGQgiu2/noisium-fabric-2.3.0%2Bmc1.21-1.21.1.jar"
+				},
+				{
+					"slug": "Lithium",
+					"version": "mc1.21-0.13.0",
+					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/NTZCh7rb/lithium-fabric-mc1.21-0.13.0.jar"
+				}
+			]
+		},
+		{
+			"name": "1.20.6",
+			"coreMods": [
+				{
+					"slug": "Vivecraft",
+					"version": "1.1.12-b1",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.20.6/Vivecraft.jar"
+				},
+				{
+					"slug": "Fabric-API",
+					"version": "0.100.4",
+					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/GT0R5Mz7/fabric-api-0.100.4%2B1.20.6.jar"
+				}
+			],
+			"defaultMods": [
+				{
+					"slug": "Sodium",
+					"version": "0.5.11",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/OwLQelEI/sodium-fabric-0.5.11%2Bmc1.20.6.jar"
+				},
+				{
+					"slug": "ModernFix",
+					"version": "5.18.0+mc1.20.6",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/dUdr6D7I/modernfix-fabric-5.18.0%2Bmc1.20.6.jar"
+				},
+				{
+					"slug": "Noisium",
+					"version": "2.3.0 (1.20.5-1.20.6)",
+					"download_link": "https://cdn.modrinth.com/data/KuNKN7d2/versions/5LXPGdF1/noisium-fabric-2.3.0%2Bmc1.20.5-1.20.6.jar"
+				},
+				{
+					"slug": "Lithium",
+					"version": "mc1.20.6-0.12.5",
+					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/5a3sPIH2/lithium-fabric-mc1.20.6-0.12.5.jar"
+				}
+			]
+		},
+		{
 			"name": "1.20.4",
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.0",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.4/vivecraft.jar"
+					"version": "1.1.11",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.20.4/Vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -18,7 +92,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.5.8",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.4-0.5.8/sodium-fabric-0.5.8+mc1.20.4.jar"
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/4GyXKCLd/sodium-fabric-0.5.8%2Bmc1.20.4.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -46,7 +120,7 @@
 					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/B23zGLmw/voicechat-fabric-1.20.4-2.5.12.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.10.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/vxDb5tOq/modernfix-fabric-5.10.0%2Bmc1.20.3.jar"
 				},
@@ -82,8 +156,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.20.1/vivecraft.jar"
+					"version": "1.1.11",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.20/Vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -104,8 +178,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.8",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.20.1-0.5.8/sodium-fabric-0.5.8+mc1.20.1.jar"
+					"version": "0.5.11",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/ygf8cVZg/sodium-fabric-0.5.11%2Bmc1.20.1.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -143,7 +217,7 @@
 					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/gEYXa8hg/voicechat-fabric-1.20.1-2.5.12.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
 				}
@@ -154,8 +228,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.4/vivecraft.jar"
+					"version": "1.1.11",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.19.4/Vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -187,7 +261,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.4.10",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.19.4-0.4.11/sodium-fabric-mc1.19.4-0.4.11+build.1.jar"
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/b4hTi3mo/sodium-fabric-mc1.19.4-0.4.10%2Bbuild.24.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -235,7 +309,7 @@
 					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/5QKzTtlI/noxesium-0.1.8.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.7.2",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LXlsO4Vo/modernfix-fabric-5.7.2%2Bmc1.19.4.jar"
 				}
@@ -246,8 +320,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.3",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.19.2/vivecraft.jar"
+					"version": "1.1.11",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.19/Vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -284,7 +358,7 @@
 				{
 					"slug": "Sodium",
 					"version": "0.4.4",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.19.2-0.4.4/Sodium.jar"
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/rAfhHfow/sodium-fabric-mc1.19.2-0.4.4%2Bbuild.18.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -317,7 +391,7 @@
 					"download_link": "https://cdn.modrinth.com/data/Kw7Sm3Xf/versions/WhRq6Q4n/noxesium-0.1.4.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/b1FKKAz8/modernfix-fabric-5.9.0%2Bmc1.19.2.jar"
 				}
@@ -328,8 +402,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.3",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftBuilder/releases/download/1.18.2/vivecraft.jar"
+					"version": "1.1.11",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.18/Vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -365,8 +439,8 @@
 				},
 				{
 					"slug": "Sodium",
-					"version": "0.5.0",
-					"download_link": "https://github.com/QuestCraftPlusPlus/sodium-fabric/releases/download/mc1.18.2-0.4.1/Sodium.jar"
+					"version": "0.4.1",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar"
 				},
 				{
 					"slug": "Better-Biome-Blend",
@@ -404,7 +478,7 @@
 					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/0.1.9/krypton-0.1.9.jar"
 				},
 				{
-					"slug": "Modern-Fix",
+					"slug": "ModernFix",
 					"version": "5.9.0",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/qNrVNwfw/modernfix-fabric-5.9.0%2Bmc1.18.2.jar"
 				}

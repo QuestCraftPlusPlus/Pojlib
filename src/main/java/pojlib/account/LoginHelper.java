@@ -1,6 +1,7 @@
 package pojlib.account;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.microsoft.aad.msal4j.DeviceCode;
 import com.microsoft.aad.msal4j.DeviceCodeFlowParameters;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -24,12 +26,13 @@ import java.util.function.Consumer;
 
 import pojlib.API;
 import pojlib.util.Constants;
+import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 import pojlib.util.MSAException;
 
 public class LoginHelper {
-    public static Thread loginThread;
-
+    public static final Set<String> SCOPES;
+    private static Thread loginThread;
     private static PublicClientApplication pca;
 
     static {
@@ -54,50 +57,46 @@ public class LoginHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        SCOPES = new HashSet<>();
+        SCOPES.add("XboxLive.SignIn");
+        SCOPES.add("XboxLive.offline_access");
     }
 
-    public static MinecraftAccount getNewToken(Activity activity) {
-        CompletableFuture<IAuthenticationResult> future;
-        try {
-            Set<IAccount> accounts = pca.getAccounts().join();
-            if (accounts.isEmpty()) {
-                Logger.getInstance().appendToLog("Error!: QuestCraft account not set!");
-                beginLogin(activity);
-                throw new RuntimeException("Error!: QuestCraft account not set!");
-            }
-            IAccount account = accounts.iterator().next();
-            HashSet<String> params = new HashSet<>();
-            params.add("XboxLive.SignIn");
-            params.add("XboxLive.offline_access");
-            future = pca.acquireTokenSilently(SilentParameters.builder(params, account).build());
-        } catch (MalformedURLException e) {
-            Logger.getInstance().appendToLog(e.toString());
-            throw new RuntimeException(e);
-        }
+    public static MinecraftAccount refreshAccount(Activity activity) {
+        Set<IAccount> accountsInCache = pca.getAccounts().join();
+        IAccount account = accountsInCache.iterator().next();
 
+        IAuthenticationResult result;
         try {
-            IAuthenticationResult res = future.get();
-            return MinecraftAccount.load(activity.getFilesDir() + "/accounts", res.accessToken(), String.valueOf(res.expiresOnDate().getTime()));
-        } catch (ExecutionException | InterruptedException e) {
-            Logger.getInstance().appendToLog(e.toString());
-            throw new RuntimeException(e);
+            SilentParameters silentParameters =
+                    SilentParameters
+                            .builder(SCOPES, account)
+                            .build();
+
+            result = pca.acquireTokenSilently(silentParameters).join();
+            MinecraftAccount acc = new Msa(activity).performLogin(result.accessToken());
+            GsonUtils.objectToJsonFile(activity.getFilesDir() + "/accounts/account.json", acc);
+            return acc;
+        } catch (Exception ex) {
+            Logger.getInstance().appendToLog("Couldn't refresh token! " + ex);
+            return null;
         }
     }
 
-    public static void beginLogin(Activity activity) {
+    public static void login(Activity activity) {
         loginThread = new Thread(() -> {
             Consumer<DeviceCode> deviceCodeConsumer = (DeviceCode deviceCode) -> API.msaMessage = deviceCode.message();
-            HashSet<String> params = new HashSet<>();
-            params.add("XboxLive.SignIn");
-            params.add("XboxLive.offline_access");
             CompletableFuture<IAuthenticationResult> future = pca.acquireToken(
-                    DeviceCodeFlowParameters.builder(params, deviceCodeConsumer).build());
+                    DeviceCodeFlowParameters.builder(SCOPES, deviceCodeConsumer).build());
 
             try {
                 IAuthenticationResult res = future.get();
-                while(res.account() == null);
+                while(res.account() == null) {
+                    Thread.sleep(20);
+                }
                 try {
-                    API.currentAcc = MinecraftAccount.login(activity, activity.getFilesDir() + "/accounts", new String[]{res.accessToken(), String.valueOf(res.expiresOnDate().getTime())});
+                    API.currentAcc = MinecraftAccount.login(activity, activity.getFilesDir() + "/accounts", res.accessToken());
                 } catch (IOException | JSONException | MSAException e) {
                     Logger.getInstance().appendToLog("Unable to load account! | " + e);
                 }

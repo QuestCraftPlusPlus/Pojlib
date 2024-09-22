@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import com.google.gson.JsonObject;
 
 import pojlib.account.MinecraftAccount;
+import pojlib.util.Logger;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
@@ -176,6 +177,11 @@ public class API {
      *                 or {@link API#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
+        try {
+            UnityPlayerActivity.installLWJGL(activity);
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("WARN! LWJGL install failed, " + e);
+        }
         InstanceHandler.launchInstance(activity, account, instance);
     }
 
@@ -205,22 +211,23 @@ public class API {
             hasWifi = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
         }
 
-        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", null, null);
-        if(acc != null && (acc.expiresIn > System.currentTimeMillis() || !hasWifi)) {
+        MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts");
+        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasWifi)) {
             currentAcc = acc;
             API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             API.profileName = API.currentAcc.username;
             return;
-        } else if(acc != null && acc.expiresIn <= System.currentTimeMillis()) {
-            currentAcc = LoginHelper.getNewToken(activity);
+        } else if(acc != null && acc.expiresOn < System.currentTimeMillis()) {
+            currentAcc = LoginHelper.refreshAccount(activity);
             if(currentAcc == null) {
-                LoginHelper.beginLogin(activity);
+                LoginHelper.login(activity);
             } else {
                 API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
                 API.profileName = API.currentAcc.username;
+                return;
             }
         }
 
-        LoginHelper.beginLogin(activity);
+        LoginHelper.login(activity);
     }
 }

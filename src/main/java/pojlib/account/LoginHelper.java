@@ -1,6 +1,7 @@
 package pojlib.account;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.microsoft.aad.msal4j.DeviceCode;
 import com.microsoft.aad.msal4j.DeviceCodeFlowParameters;
@@ -25,6 +26,7 @@ import java.util.function.Consumer;
 
 import pojlib.API;
 import pojlib.util.Constants;
+import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 import pojlib.util.MSAException;
 
@@ -61,9 +63,9 @@ public class LoginHelper {
         SCOPES.add("XboxLive.offline_access");
     }
 
-    public static MinecraftAccount refreshAccount(MinecraftAccount acc) {
+    public static MinecraftAccount refreshAccount(Activity activity) {
         Set<IAccount> accountsInCache = pca.getAccounts().join();
-            IAccount account = accountsInCache.iterator().next();
+        IAccount account = accountsInCache.iterator().next();
 
         IAuthenticationResult result;
         try {
@@ -73,12 +75,11 @@ public class LoginHelper {
                             .build();
 
             result = pca.acquireTokenSilently(silentParameters).join();
-            result.expiresOnDate().getTime();
-
-            acc.expiresOn = result.expiresOnDate().getTime();
-            acc.accessToken = Msa.acquireXBLToken(result.accessToken());
+            MinecraftAccount acc = new Msa(activity).performLogin(result.accessToken());
+            GsonUtils.objectToJsonFile(activity.getFilesDir() + "/accounts/account.json", acc);
             return acc;
         } catch (Exception ex) {
+            Logger.getInstance().appendToLog("Couldn't refresh token! " + ex);
             return null;
         }
     }
@@ -95,7 +96,7 @@ public class LoginHelper {
                     Thread.sleep(20);
                 }
                 try {
-                    API.currentAcc = MinecraftAccount.login(activity, activity.getFilesDir() + "/accounts", res.accessToken(), res.expiresOnDate().getTime());
+                    API.currentAcc = MinecraftAccount.login(activity, activity.getFilesDir() + "/accounts", res.accessToken());
                 } catch (IOException | JSONException | MSAException e) {
                     Logger.getInstance().appendToLog("Unable to load account! | " + e);
                 }

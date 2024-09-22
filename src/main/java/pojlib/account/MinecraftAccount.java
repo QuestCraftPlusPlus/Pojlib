@@ -24,11 +24,9 @@ public class MinecraftAccount {
     public long expiresOn;
     public final String userType = "msa";
 
-    public static MinecraftAccount login(Activity activity, String gameDir, String msToken, long expiresOn) throws MSAException, IOException, JSONException {
-        String mcToken = Msa.acquireXBLToken(msToken);
+    public static MinecraftAccount login(Activity activity, String gameDir, String msToken) throws MSAException, IOException, JSONException {
         Msa instance = new Msa(activity);
-        MinecraftAccount account = instance.performLogin(mcToken);
-        account.expiresOn = expiresOn;
+        MinecraftAccount account = instance.performLogin(msToken);
 
         GsonUtils.objectToJsonFile(gameDir + "/account.json", account);
         return account;

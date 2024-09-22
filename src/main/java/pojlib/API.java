@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import com.google.gson.JsonObject;
 
 import pojlib.account.MinecraftAccount;
+import pojlib.util.Logger;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
@@ -176,6 +177,11 @@ public class API {
      *                 or {@link API#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
+        try {
+            UnityPlayerActivity.installLWJGL(activity);
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("WARN! LWJGL install failed, " + e);
+        }
         InstanceHandler.launchInstance(activity, account, instance);
     }
 

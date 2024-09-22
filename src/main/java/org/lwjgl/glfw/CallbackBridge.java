@@ -1,5 +1,6 @@
 package org.lwjgl.glfw;
 
+import android.app.Activity;
 import android.content.*;
 import android.view.Choreographer;
 
@@ -187,6 +188,11 @@ public class CallbackBridge {
         synchronized (grabListeners) {
             grabListeners.remove(listener);
         }
+    }
+
+    public static void restartUnitySession(Activity activity) {
+        UnityPlayerActivity unity = (UnityPlayerActivity) activity;
+        unity.reinitUnity();
     }
 
     @CriticalNative

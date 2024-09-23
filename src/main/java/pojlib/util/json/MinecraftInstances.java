@@ -50,7 +50,7 @@ public class MinecraftInstances {
         public ProjectInfo[] extProjects;
         public boolean defaultMods;
 
-        public List<String> generateLaunchArgs(MinecraftAccount account) {
+        public List<String> generateLaunchArgs(MinecraftAccount account, boolean isDemoMode) {
             String[] mcArgs = {"--username", account.username, "--version", versionName, "--gameDir", gameDir,
                     "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid.replace("-", ""),
                     "--accessToken", account.accessToken, "--userType", account.userType, "--versionType", "release"};
@@ -58,6 +58,8 @@ public class MinecraftInstances {
             List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
             allArgs.add(mainClass);
             allArgs.addAll(Arrays.asList(mcArgs));
+            if (isDemoMode) {allArgs.add("--demo");}
+
             return allArgs;
         }
 

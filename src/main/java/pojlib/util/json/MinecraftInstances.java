@@ -92,9 +92,6 @@ public class MinecraftInstances {
                     if(!oldMod.slug.equals(newMod.slug)) {
                         continue;
                     }
-                    if(!oldMod.version.equals(newMod.version)) {
-                        continue;
-                    }
                     exists = true;
                     break;
                 }

@@ -45,11 +45,15 @@ public class MinecraftAccount {
     }
 
     public static String getSkinFaceUrl(MinecraftAccount account) {
-        try {
-            return Constants.MINOTAR_URL + "/helm/" + account.uuid;
-        } catch (NullPointerException e) {
-            Logger.getInstance().appendToLog("Username likely not set! Please set your username at Minecraft.net and try again. | " + e);
-            return null;
+        if (!Msa.doesOwnGame) {
+            return Constants.MINOTAR_URL + "/helm/MHF_Steve";
+        } else {
+            try {
+                return Constants.MINOTAR_URL + "/helm/" + account.uuid;
+            } catch (NullPointerException e) {
+                Logger.getInstance().appendToLog("Username likely not set! Please set your username at Minecraft.net and try again. | " + e);
+                return null;
+            }
         }
     }
 }

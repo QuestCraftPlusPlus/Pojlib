@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import pojlib.account.MinecraftAccount;
+import pojlib.account.Msa;
 import pojlib.install.FabricMeta;
 import pojlib.install.Installer;
 import pojlib.install.MinecraftMeta;
@@ -291,7 +292,7 @@ public class InstanceHandler {
             API.currentInstance = instance;
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
-            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance);
+            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account, !Msa.doesOwnGame), instance);
         } catch (Throwable e) {
             e.printStackTrace();
         }

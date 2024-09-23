@@ -152,27 +152,31 @@ public class MinecraftInstances {
         }
 
         private void updateModByType(List<ProjectInfo> newMods) throws IOException {
-           for(ProjectInfo extMod : extProjects) {
-               boolean manual = true;
-               for(ProjectInfo newMod : newMods) {
-                   if(!extMod.slug.equals(newMod.slug)) {
-                       continue;
-                   }
-                   manual = false;
-                   File mod = new File(gameDir + (newMod.type.equals("mod") ? "/mods" : "/resourcepacks"), newMod.slug + ".jar");
-                   if(!mod.exists() || !extMod.version.equals(newMod.version)) {
-                       DownloadUtils.downloadFile(newMod.download_link, mod);
-                       break;
-                   }
-               }
-               if(manual) {
-                   File mod = new File(gameDir + (extMod.type.equals("mod") ? "/mods" : "/resourcepacks"), extMod.slug + ".jar");
-                   if(!mod.exists()) {
-                       DownloadUtils.downloadFile(extMod.download_link, mod);
-                       break;
-                   }
-               }
-           }
+            ArrayList<ProjectInfo> newExtMods = new ArrayList<>();
+            for(ProjectInfo extMod : extProjects) {
+                boolean manual = true;
+                for(ProjectInfo newMod : newMods) {
+                    if(!extMod.slug.equals(newMod.slug)) {
+                        continue;
+                    }
+                    manual = false;
+                    File mod = new File(gameDir + (newMod.type.equals("mod") ? "/mods" : "/resourcepacks"), newMod.slug + ".jar");
+                    if(!mod.exists() || !extMod.version.equals(newMod.version)) {
+                        DownloadUtils.downloadFile(newMod.download_link, mod);
+                        extMod = newMod;
+                        break;
+                    }
+                }
+                if(manual) {
+                    File mod = new File(gameDir + (extMod.type.equals("mod") ? "/mods" : "/resourcepacks"), extMod.slug + ".jar");
+                    if(!mod.exists()) {
+                        DownloadUtils.downloadFile(extMod.download_link, mod);
+                    }
+                }
+                newExtMods.add(extMod);
+            }
+
+            extProjects = newExtMods.toArray(new ProjectInfo[0]);
         }
 
         private void downloadAllMods(List<ProjectInfo> newMods) throws IOException {

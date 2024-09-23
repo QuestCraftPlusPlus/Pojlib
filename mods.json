@@ -16,11 +16,6 @@
 			],
 			"defaultMods": [
 				{
-					"slug": "Sodium",
-					"version": "0.6.0-beta.2",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/CcIWi5Av/sodium-fabric-0.6.0-beta.2%2Bmc1.21.1.jar"
-				},
-				{
 					"slug": "ModernFix",
 					"version": "5.19.1+mc1.21",
 					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/i8GSONFm/modernfix-fabric-5.19.1%2Bmc1.21.jar"

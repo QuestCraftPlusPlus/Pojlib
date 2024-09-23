@@ -73,15 +73,12 @@ public class Msa {
                 acc.username = mcName;
                 acc.uuid = mcUuid;
                 acc.expiresOn = mcExpiresOn;
-            } else {
-                Logger.getInstance().appendToLog("MicrosoftLogin | Unknown Error occurred.");
-                throw new MSAException("MicrosoftLogin | Unknown Error occurred.");
             }
 
             return acc;
         } catch (Exception e) {
             Logger.getInstance().appendToLog("MicrosoftLogin | Exception thrown during authentication " + e);
-            throw new MSAException("MicrosoftLogin | Exception thrown during authentication ");
+            throw new MSAException("MicrosoftLogin | Exception thrown during authentication " + e);
         }
     }
 

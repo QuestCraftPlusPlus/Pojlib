@@ -292,7 +292,7 @@ public class InstanceHandler {
             API.currentInstance = instance;
             JREUtils.redirectAndPrintJRELog();
             VLoader.setAndroidInitInfo(activity);
-            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account, !Msa.doesOwnGame), instance);
+            JREUtils.launchJavaVM(activity, instance.generateLaunchArgs(account), instance);
         } catch (Throwable e) {
             e.printStackTrace();
         }

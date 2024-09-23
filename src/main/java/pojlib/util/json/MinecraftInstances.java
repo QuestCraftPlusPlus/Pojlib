@@ -1,6 +1,9 @@
 package pojlib.util.json;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +13,7 @@ import pojlib.API;
 import pojlib.InstanceHandler;
 import pojlib.util.Constants;
 import pojlib.util.DownloadUtils;
+import pojlib.util.FileUtil;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 
@@ -64,15 +68,123 @@ public class MinecraftInstances {
             return extProjects;
         }
 
-        private ModsJson parseModsJson(String gameDir) throws Exception {
-            File mods = new File(gameDir + "/mods.json");
+        private ModsJson parseModsJson(String jsonPath) {
+            return GsonUtils.jsonFileToObject(jsonPath, ModsJson.class);
+        }
+
+        private ModsJson downloadCurrentModsJson(String userHome) throws Exception {
+            File mods = new File(userHome + "/new_mods.json");
             if(API.developerMods) {
                 DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods);
             } else {
                 DownloadUtils.downloadFile(InstanceHandler.MODS, mods);
             }
 
-            return GsonUtils.jsonFileToObject(mods.getAbsolutePath(), ModsJson.class);
+            return parseModsJson(mods.getAbsolutePath());
+        }
+
+        private void removeModByType(List<ProjectInfo> oldMods, List<ProjectInfo> newMods) {
+            ArrayList<ProjectInfo> removedMods = new ArrayList<>();
+
+            for(ProjectInfo oldMod : oldMods) {
+                boolean exists = false;
+                for(ProjectInfo newMod : newMods) {
+                    if(!oldMod.slug.equals(newMod.slug)) {
+                        continue;
+                    }
+                    if(!oldMod.version.equals(newMod.version)) {
+                        continue;
+                    }
+                    exists = true;
+                    break;
+                }
+
+                if(!exists) {
+                    removedMods.add(oldMod);
+                }
+            }
+
+            ArrayList<ProjectInfo> newExtProjects = new ArrayList<>();
+            for(ProjectInfo extProject : extProjects) {
+                boolean remove = false;
+                for(ProjectInfo removedMod : removedMods) {
+                    if (extProject.slug.equals(removedMod.slug)) {
+                        remove = true;
+                        break;
+                    }
+                }
+                if(!remove) {
+                    newExtProjects.add(extProject);
+                } else {
+                    File mod = new File(gameDir + (extProject.type.equals("mod") ? "/mods" : "/resourcepacks"), extProject.slug + ".jar");
+                    if(mod.exists()) {
+                        mod.delete();
+                    }
+                }
+            }
+            extProjects = newExtProjects.toArray(new ProjectInfo[0]);
+        }
+
+        private void removeOldMods(ModsJson oldMods, ModsJson newMods) {
+            for(ModsJson.Version oldVersion : oldMods.versions) {
+                if(!versionName.equals(oldVersion.name)) {
+                    continue;
+                }
+
+                for(ModsJson.Version newVersion : newMods.versions) {
+                    if(!versionName.equals(newVersion.name)) {
+                        continue;
+                    }
+
+                    ArrayList<ProjectInfo> mergedOldMods = new ArrayList<>();
+                    mergedOldMods.addAll(Arrays.asList(oldVersion.coreMods));
+                    mergedOldMods.addAll(Arrays.asList(oldVersion.defaultMods));
+
+                    ArrayList<ProjectInfo> mergedNewMods = new ArrayList<>();
+                    mergedNewMods.addAll(Arrays.asList(newVersion.coreMods));
+                    mergedNewMods.addAll(Arrays.asList(newVersion.defaultMods));
+
+                    if(defaultMods) {
+                        removeModByType(mergedOldMods, mergedNewMods);
+                    } else {
+                        removeModByType(Arrays.asList(oldVersion.coreMods), Arrays.asList(newVersion.coreMods));
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void updateModByType(List<ProjectInfo> newMods) throws IOException {
+           for(ProjectInfo extMod : extProjects) {
+               boolean manual = true;
+               for(ProjectInfo newMod : newMods) {
+                   if(!extMod.slug.equals(newMod.slug)) {
+                       continue;
+                   }
+                   manual = false;
+                   File mod = new File(gameDir + (newMod.type.equals("mod") ? "/mods" : "/resourcepacks"), newMod.slug + ".jar");
+                   if(!mod.exists() || !extMod.version.equals(newMod.version)) {
+                       DownloadUtils.downloadFile(newMod.download_link, mod);
+                       break;
+                   }
+               }
+               if(manual) {
+                   File mod = new File(gameDir + (extMod.type.equals("mod") ? "/mods" : "/resourcepacks"), extMod.slug + ".jar");
+                   if(!mod.exists()) {
+                       DownloadUtils.downloadFile(extMod.download_link, mod);
+                       break;
+                   }
+               }
+           }
+        }
+
+        private void downloadAllMods(List<ProjectInfo> newMods) throws IOException {
+            for(ProjectInfo newMod : newMods) {
+                File mod = new File(gameDir + (newMod.type.equals("mod") ? "/mods" : "/resourcepacks"), newMod.slug + ".jar");
+                DownloadUtils.downloadFile(newMod.download_link, mod);
+            }
+
+            extProjects = newMods.toArray(new ProjectInfo[0]);
         }
 
         public void updateMods(MinecraftInstances instances) {
@@ -81,86 +193,37 @@ public class MinecraftInstances {
                 extProjects = new ProjectInfo[0];
             }
             try {
-                ModsJson modsJson = parseModsJson(Constants.USER_HOME);
+                ModsJson newMods = downloadCurrentModsJson(Constants.USER_HOME);
+                ModsJson oldMods = parseModsJson(Constants.USER_HOME + "/mods.json");
 
-                ModsJson.Version version = null;
-                for(ModsJson.Version info : modsJson.versions) {
-                    if(info.name.equals(versionName)) {
-                        version = info;
-                        break;
-                    }
+                if(oldMods != null) {
+                    removeOldMods(oldMods, newMods);
                 }
 
-                if(version == null) {
-                    Logger.getInstance().appendToLog("Mods could not be downloaded because version was null. Open a ticket.");
-                    return;
-                }
-
-                File modsDir = new File(gameDir + "/mods");
-                if(!modsDir.exists()) {
-                    ArrayList<ProjectInfo> modInfos = new ArrayList<>();
-                    for(ProjectInfo info : version.coreMods) {
-                        File mod = new File(modsDir + "/" + info.slug + ".jar");
-                        DownloadUtils.downloadFile(info.download_link, mod);
-                        info.type = "mod";
-                        modInfos.add(info);
+                File modsFolder = new File(gameDir + "/mods");
+                for (ModsJson.Version newVersion : newMods.versions) {
+                    if (!versionName.equals(newVersion.name)) {
+                        continue;
                     }
-                    if(defaultMods) {
-                        for (ProjectInfo info : version.defaultMods) {
-                            File mod = new File(modsDir + "/" + info.slug + ".jar");
-                            DownloadUtils.downloadFile(info.download_link, mod);
-                            info.type = "mod";
-                            modInfos.add(info);
-                        }
-                    }
-                    extProjects = modInfos.toArray(modInfos.toArray(new ProjectInfo[0]));
-                    GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
-                    API.finishedDownloading = true;
-                    return;
-                }
 
-                for(ProjectInfo info : version.coreMods) {
-                    for(ProjectInfo currInfo : extProjects) {
-                        if(!currInfo.slug.equals(info.slug)) {
-                            continue;
-                        }
-                        if(currInfo.version.equals(info.version)) {
-                            continue;
-                        }
+                    ArrayList<ProjectInfo> mergedNewMods = new ArrayList<>(Arrays.asList(newVersion.coreMods));
+                    if(defaultMods)
+                        mergedNewMods.addAll(Arrays.asList(newVersion.defaultMods));
 
-                        File mod = new File(modsDir + "/" + info.slug + ".jar");
-                        DownloadUtils.downloadFile(info.download_link, mod);
-                        info = currInfo;
-                    }
-                }
-
-                if(defaultMods) {
-                    for (ProjectInfo info : version.defaultMods) {
-                        for (ProjectInfo currInfo : extProjects) {
-                            if (!currInfo.slug.equals(info.slug)) {
-                                continue;
-                            }
-                            if (currInfo.version.equals(info.version)) {
-                                continue;
-                            }
-
-                            File mod = new File(modsDir + "/" + info.slug + ".jar");
-                            DownloadUtils.downloadFile(info.download_link, mod);
-                            info = currInfo;
-                        }
-                    }
-                }
-
-                // Download custom mods
-                for(ProjectInfo currInfo : extProjects) {
-                    boolean isMod = currInfo.type.equals("mod");
-                    File mod = new File((isMod ? modsDir : gameDir + "/resourcepacks") + "/" + currInfo.slug + (isMod ? ".jar" : ".zip"));
-                    if(!mod.exists()) {
-                        DownloadUtils.downloadFile(currInfo.download_link, mod);
-                    }
+                    if(extProjects.length == 0 || !modsFolder.exists())
+                        downloadAllMods(mergedNewMods);
+                    else
+                        updateModByType(mergedNewMods);
+                    break;
                 }
 
                 GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
+                File newModsFile = new File(Constants.USER_HOME + "/new_mods.json");
+                File modsFile = new File(Constants.USER_HOME + "/mods.json");
+
+                modsFile.delete();
+                Files.copy(newModsFile.toPath(), modsFile.toPath());
+                newModsFile.delete();
                 API.finishedDownloading = true;
             } catch (Exception e) {
                 Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e);

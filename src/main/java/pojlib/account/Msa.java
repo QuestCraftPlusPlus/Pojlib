@@ -73,6 +73,11 @@ public class Msa {
                 acc.username = mcName;
                 acc.uuid = mcUuid;
                 acc.expiresOn = mcExpiresOn;
+            } else {
+                acc.accessToken = "0";
+                acc.username = "Player";
+                acc.uuid = "00000000-0000-0000-0000-000000000000";
+                acc.expiresOn = 0;
             }
 
             return acc;
@@ -222,9 +227,9 @@ public class Msa {
             mcUuid = uuidDashes;
             return true;
         } else {
-            Logger.getInstance().appendToLog("MicrosoftLogin | It seems that this Microsoft Account does not own the game.");
+            Logger.getInstance().appendToLog("MicrosoftLogin | It seems that this Microsoft Account does not own the game, setting game to demo mode.");
             doesOwnGame = false;
-            throw new MSAException("It seems like this account does not have a Minecraft profile. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.");
+            throw new MSAException("It seems like this account does not have a Minecraft profile, demo mode enabled. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.");
         }
     }
 

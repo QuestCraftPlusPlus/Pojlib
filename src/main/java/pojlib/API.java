@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import com.google.gson.JsonObject;
 
 import pojlib.account.MinecraftAccount;
+import pojlib.account.Msa;
 import pojlib.util.Logger;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.Constants;
@@ -212,7 +213,7 @@ public class API {
         }
 
         MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts");
-        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasWifi || acc.expiresOn == 0)) {
+        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasWifi || !Msa.doesOwnGame)) {
             currentAcc = acc;
             API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             API.profileName = API.currentAcc.username;

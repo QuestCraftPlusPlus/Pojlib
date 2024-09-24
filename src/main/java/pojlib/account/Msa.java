@@ -231,7 +231,7 @@ public class Msa {
         } else {
             Logger.getInstance().appendToLog("MicrosoftLogin | It seems that this Microsoft Account does not own the game, setting game to demo mode.");
             doesOwnGame = false;
-            throw new MSAException("It seems like this account does not have a Minecraft profile, demo mode enabled. If you have Xbox Game Pass, please log in on https://minecraft.net/ and set it up.");
+            return false;
         }
     }
 

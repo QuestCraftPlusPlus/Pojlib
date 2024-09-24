@@ -213,7 +213,7 @@ public class API {
         }
 
         MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts");
-        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasWifi || !Msa.doesOwnGame)) {
+        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasWifi || acc.isDemoMode)) {
             currentAcc = acc;
             API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             API.profileName = API.currentAcc.username;

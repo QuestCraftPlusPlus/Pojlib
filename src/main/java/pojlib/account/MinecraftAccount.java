@@ -21,6 +21,7 @@ public class MinecraftAccount {
     public String accessToken;
     public String uuid;
     public String username;
+    public boolean isDemoMode = false;
     public long expiresOn;
     public final String userType = "msa";
 

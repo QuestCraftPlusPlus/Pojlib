@@ -59,7 +59,9 @@ public class MinecraftInstances {
             List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
             allArgs.add(mainClass);
             allArgs.addAll(Arrays.asList(mcArgs));
-            if (!Msa.doesOwnGame) {allArgs.add("--demo");}
+            if (account.isDemoMode) {
+                allArgs.add("--demo");
+            }
 
             return allArgs;
         }

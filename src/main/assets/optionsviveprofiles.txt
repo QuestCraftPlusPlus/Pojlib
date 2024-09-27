@@ -44,7 +44,7 @@
         "mixedRealityFov": "40.0",
         "alwaysShowUpdates": "false",
         "hudDistance": "1.25",
-        "stencilOn": "true",
+        "stencilOn": "false",
         "hudPitchOffset": "-2.0",
         "vehicleRotation": "true",
         "autoSprint": "true",

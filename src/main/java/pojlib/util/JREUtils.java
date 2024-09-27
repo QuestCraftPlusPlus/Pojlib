@@ -189,8 +189,8 @@ public class JREUtils {
                 userArgs.add("-Xms" + 2048 + "M");
                 userArgs.add("-Xmx" + 3072 + "M");
             } else {
-                userArgs.add("-Xms" + 512 + "M");
-                userArgs.add("-Xmx" + 4860 + "M");
+                userArgs.add("-Xms" + 1024 + "M");
+                userArgs.add("-Xmx" + 2048 + "M");
             }
         }
 

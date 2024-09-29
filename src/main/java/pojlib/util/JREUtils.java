@@ -197,9 +197,8 @@ public class JREUtils {
         userArgs.add("-XX:+UseZGC");
         userArgs.add("-XX:+ZGenerational");
         userArgs.add("-XX:+UnlockExperimentalVMOptions");
-        userArgs.add("-XX:+AllowUserSignalHandlers");
+        userArgs.add("-XX:+UseSignalChaining");
         userArgs.add("-XX:+UnlockDiagnosticVMOptions");
-        userArgs.add("-XX:-ImplicitNullChecks");
         userArgs.add("-XX:+DisableExplicitGC");
         userArgs.add("-XX:+UseCriticalJavaThreadPriority");
 

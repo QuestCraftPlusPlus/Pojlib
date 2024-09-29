@@ -34,6 +34,11 @@
 					"slug": "Lithium",
 					"version": "mc1.21-0.13.0",
 					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/NTZCh7rb/lithium-fabric-mc1.21-0.13.0.jar"
+				},
+				{
+					"slug": "MoreCulling",
+					"version": "v1.0.0-beta.1",
+					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/E3M7N09H/moreculling-fabric-1.21.1-1.0.0-beta.1.jar"
 				}
 			]
 		},
@@ -71,6 +76,11 @@
 					"slug": "Lithium",
 					"version": "mc1.20.6-0.12.5",
 					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/5a3sPIH2/lithium-fabric-mc1.20.6-0.12.5.jar"
+				},
+				{
+					"slug": "MoreCulling",
+					"version": "https://cdn.modrinth.com/data/51shyZVL/versions/yduz8IZo/moreculling-1.20.5-0.25.0.jar",
+					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/yduz8IZo/moreculling-1.20.5-0.25.0.jar"
 				}
 			]
 		},

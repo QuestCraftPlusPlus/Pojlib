@@ -51,6 +51,9 @@ static const jint const_ergo_class = 0; // DEFAULT_POLICY
 static struct sigaction old_sa[NSIG];
 
 void (*__old_sa)(int signal, siginfo_t *info, void *reserved);
+int (*sigaction_p) (int signum,
+              const struct sigaction *_Nullable restrict act,
+              struct sigaction *_Nullable restrict oldact);
 int (*JVM_handle_linux_signal)(int signo, siginfo_t* siginfo, void* ucontext, int abort_if_unrecognized);
 
 void android_sigaction(int signal, siginfo_t *info, void *reserved) {
@@ -121,6 +124,13 @@ static jint launchJVM(int margc, char** margv) {
  */
 JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray) {
 #ifdef TRY_SIG2JVM
+  void* libjsig = dlopen("libjsig.so", RTLD_LAZY | RTLD_GLOBAL);
+  if (NULL == libjsig) {
+      LOGE("JSig lib = NULL: %s", dlerror());
+      return -1;
+  }
+  sigaction_p = (void*) dlsym(libjsig, "sigaction");
+
   void* libjvm = dlopen("libjvm.so", RTLD_LAZY | RTLD_GLOBAL);
   if (NULL == libjvm) {
       LOGE("JVM lib = NULL: %s", dlerror());
@@ -137,7 +147,7 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, 
    catcher.sa_sigaction = android_sigaction;
    catcher.sa_flags = SA_SIGINFO|SA_RESTART;
    // SA_RESETHAND;
-#define CATCHSIG(X) sigaction(X, &catcher, &old_sa[X])
+#define CATCHSIG(X) sigaction_p(X, &catcher, &old_sa[X])
     CATCHSIG(SIGILL);
     CATCHSIG(SIGABRT);
     CATCHSIG(SIGBUS);

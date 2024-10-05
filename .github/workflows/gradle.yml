@@ -54,7 +54,7 @@ jobs:
         QCXR_KEYSTORE_ALIAS: ${{ secrets.QCXR_KEYSTORE_ALIAS }}
         QCXR_KEYSTORE_PASS: ${{ secrets.QCXR_KEYSTORE_PASS }}
 
-    - name: Upload APK
+    - name: Upload AAR
       uses: actions/upload-artifact@v3
       with:
           name: app-debug

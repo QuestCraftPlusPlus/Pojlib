@@ -1,5 +1,5 @@
 # Pojlib | Minecraft Launcher Core
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Pojlib Build](https://github.com/QuestCraftPlusPlus/Pojlib/actions/workflows/gradle.yml/badge.svg)](https://github.com/QuestCraftPlusPlus/Pojlib/actions/workflows/gradle.yml)
 
 A Minecraft: Java Edition launcher library partially made with elements from PojavLauncher.
@@ -28,6 +28,8 @@ Make sure your pull request describes exactly what the code does and explains wh
 * [@MrNavaStar](https://github.com/MrNavaStar) | Previous Main Feature Implementor
 
 ### Components:
-- [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) (Pojlib Base application): [GNU GPLv3](https://github.com/khanhduytran0/PojavLauncher/blob/master/LICENSE).
+- [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) (Pojlib Base application): [GNU LGPLv3](https://github.com/khanhduytran0/PojavLauncher/blob/master/LICENSE).
 
-- [OpenComposite](https://gitlab.com/znixian/OpenOVR) (Used for OpenVR to OpenXR interpretation): [GNU GPLv3](https://gitlab.com/znixian/OpenOVR/-/blob/openxr/LICENSE.txt).
+- [OpenComposite](https://gitlab.com/znixian/OpenOVR) - Pending removal for direct OpenXR (Used for OpenVR to OpenXR interpretation): [GNU GPLv3](https://gitlab.com/znixian/OpenOVR/-/blob/openxr/LICENSE.txt).
+
+- [LightThinWrapper](https://github.com/PojavLauncherTeam/BigTinyWrapper) (Main renderer/OpenGL Driver for QuestCraft): [PolyForm Shield](https://github.com/PojavLauncherTeam/BigTinyWrapper/blob/master/LICENSE) (Must be removed from forks of Pojlib IF said fork violates the guidelines set by this components  license).

@@ -28,6 +28,14 @@ Make sure your pull request describes exactly what the code does and explains wh
 * [@MrNavaStar](https://github.com/MrNavaStar) | Previous Main Feature Implementor
 
 ### Components:
-- [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) (Pojlib Base application): [GNU GPLv3](https://github.com/khanhduytran0/PojavLauncher/blob/master/LICENSE).
+- [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher) (Pojlib Base application): [GNU LGPLv3](https://github.com/khanhduytran0/PojavLauncher/blob/master/LICENSE).
+- [OpenComposite](https://gitlab.com/znixian/OpenOVR) - Pending removal for direct OpenXR (Used for OpenVR to OpenXR interpretation): [GNU GPLv3](https://gitlab.com/znixian/OpenOVR/-/blob/openxr/LICENSE.txt).
+- Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
+- [OpenJDK](https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html).
+- [LWJGL3](https://github.com/PojavLauncherTeam/lwjgl3): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md).
+- [LWJGLX](https://github.com/PojavLauncherTeam/lwjglx) (LWJGL2 API compatibility layer for LWJGL3): unknown license.
+- [Mesa 3D Graphics Library](https://gitlab.freedesktop.org/mesa/mesa): [MIT License](https://docs.mesa3d.org/license.html).
+- [libepoxy](https://github.com/anholt/libepoxy): [MIT License](https://github.com/anholt/libepoxy/blob/master/COPYING).
+- [bhook](https://github.com/bytedance/bhook) (Used for exit code trapping): [MIT license](https://github.com/bytedance/bhook/blob/main/LICENSE).
+- [pro-grade](https://github.com/pro-grade/pro-grade) (Java sandboxing security manager): [Apache License 2.0](https://github.com/pro-grade/pro-grade/blob/master/LICENSE.txt).
 
-- [OpenComposite](https://gitlab.com/znixian/OpenOVR) (Used for OpenVR to OpenXR interpretation): [GNU GPLv3](https://gitlab.com/znixian/OpenOVR/-/blob/openxr/LICENSE.txt).

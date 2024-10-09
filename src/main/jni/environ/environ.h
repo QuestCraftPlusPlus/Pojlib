@@ -7,7 +7,6 @@
 
 #include <stdatomic.h>
 #include <jni.h>
-#include <OpenOVR/openxr_platform.h>
 
 /* How many events can be handled at the same time */
 #define EVENT_WINDOW_SIZE 8000
@@ -53,8 +52,6 @@ struct pojav_environ_s {
     JavaVM* dalvikJavaVMPtr;
     JNIEnv* dalvikJNIEnvPtr_ANDROID;
     jobject activity;
-    XrInstanceCreateInfoAndroidKHR *OpenComposite_Android_Create_Info;
-    XrGraphicsBindingOpenGLESAndroidKHR *OpenComposite_Android_GLES_Binding_Info;
     long showingWindow;
     bool isInputReady, isCursorEntered, isUseStackQueueCall, shouldUpdateMouse;
     int savedWidth, savedHeight;

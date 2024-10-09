@@ -107,7 +107,7 @@ public class APIHandler {
         return new Gson().fromJson(postRaw(url + parseQueries(query), body.toString()), tClass);
     }
 
-    public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/Testing/supportedVersions.json";
+    public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/refs/heads/QuestCraft-5.1.0/supportedVersions.json";
 
     public static String[] getQCSupportedVersions() {
         File versionsJson = new File(Constants.USER_HOME + "/supportedVersions.json");

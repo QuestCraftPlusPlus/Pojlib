@@ -47,8 +47,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.1.12-b5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.21.0/Vivecraft.jar"
+					"version": "1.1.13-b5",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.21.0-CB/vivecraft.jar"
 				},
 				{
 					"slug": "Fabric-API",

@@ -44,6 +44,11 @@
 					"slug": "Simple-Voice-Chat",
 					"version": "fabric-1.21.1-2.5.24",
 					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/9IRn71aQ/voicechat-fabric-1.21.1-2.5.24.jar"
+				},
+				{
+					"slug": "Cloth-Config",
+					"version": "15.0.140+fabric",
+					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/HpMb5wGb/cloth-config-15.0.140-fabric.jar"
 				}
 			]
 		},
@@ -91,6 +96,11 @@
 					"slug": "Simple-Voice-Chat",
 					"version": "fabric-1.21.1-2.5.24",
 					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/9IRn71aQ/voicechat-fabric-1.21.1-2.5.24.jar"
+				},
+				{
+					"slug": "Cloth-Config",
+					"version": "15.0.140+fabric",
+					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/HpMb5wGb/cloth-config-15.0.140-fabric.jar"
 				}
 			]
 		},

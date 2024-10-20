@@ -63,6 +63,11 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         hookExec();
         installLinkerBugMitigation();
         installEMUIIteratorMititgation();
+
+        pojav_environ->XRAndroidInstanceBinding = malloc(sizeof(XrInstanceCreateInfoAndroidKHR));
+        pojav_environ->XRAndroidInstanceBinding->type = XR_TYPE_INSTANCE_CREATE_INFO_ANDROID_KHR;
+        pojav_environ->XRAndroidInstanceBinding->applicationVM = (void*) pojav_environ->dalvikJavaVMPtr;
+        pojav_environ->XRAndroidInstanceBinding->applicationActivity = (void*) pojav_environ->activity;
     }
 
     if(pojav_environ->dalvikJavaVMPtr == vm) {

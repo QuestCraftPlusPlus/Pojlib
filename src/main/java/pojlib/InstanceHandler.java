@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import pojlib.account.MinecraftAccount;
-import pojlib.account.Msa;
 import pojlib.install.FabricMeta;
 import pojlib.install.Installer;
 import pojlib.install.MinecraftMeta;
@@ -25,12 +24,12 @@ import pojlib.install.QuiltMeta;
 import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
+import pojlib.util.VLoader;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.json.ProjectInfo;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
-import pojlib.util.VLoader;
 import pojlib.util.json.ModrinthIndexJson;
 
 public class InstanceHandler {

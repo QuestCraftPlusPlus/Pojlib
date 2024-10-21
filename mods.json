@@ -1,6 +1,58 @@
 {
 	"versions": [
 		{
+			"name": "1.21.1",
+			"coreMods": [
+				{
+					"slug": "Vivecraft",
+					"version": "1.1.12-b5",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v5.1.0-1.21.0/Vivecraft.jar"
+				},
+				{
+					"slug": "Fabric-API",
+					"version": "0.105.0",
+					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/WTaAx4ah/fabric-api-0.105.0%2B1.21.1.jar"
+				}
+			],
+			"defaultMods": [
+				{
+					"slug": "Sodium",
+					"version": "0.6.0-beta.2",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/CcIWi5Av/sodium-fabric-0.6.0-beta.2%2Bmc1.21.1.jar"
+				},
+				{
+					"slug": "ModernFix",
+					"version": "5.19.3+mc1.21.1",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/T1ftCUJv/modernfix-fabric-5.19.3%2Bmc1.21.1.jar"
+				},
+				{
+					"slug": "Noisium",
+					"version": "2.3.0+mc1.21-1.21.1",
+					"download_link": "https://cdn.modrinth.com/data/KuNKN7d2/versions/4sGQgiu2/noisium-fabric-2.3.0%2Bmc1.21-1.21.1.jar"
+				},
+				{
+					"slug": "Lithium",
+					"version": "mc1.21-1.13.1",
+					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/9x0igjLz/lithium-fabric-mc1.21.1-0.13.1.jar"
+				},
+				{
+					"slug": "MoreCulling",
+					"version": "v1.0.0-beta.1",
+					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/E3M7N09H/moreculling-fabric-1.21.1-1.0.0-beta.1.jar"
+				},
+				{
+					"slug": "Simple-Voice-Chat",
+					"version": "fabric-1.21.1-2.5.24",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/9IRn71aQ/voicechat-fabric-1.21.1-2.5.24.jar"
+				},
+				{
+					"slug": "Cloth-Config",
+					"version": "15.0.140+fabric",
+					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/HpMb5wGb/cloth-config-15.0.140-fabric.jar"
+				}
+			]
+		},
+		{
 			"name": "1.21",
 			"coreMods": [
 				{
@@ -39,6 +91,16 @@
 					"slug": "MoreCulling",
 					"version": "v1.0.0-beta.1",
 					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/E3M7N09H/moreculling-fabric-1.21.1-1.0.0-beta.1.jar"
+				},
+				{
+					"slug": "Simple-Voice-Chat",
+					"version": "fabric-1.21.1-2.5.24",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/9IRn71aQ/voicechat-fabric-1.21.1-2.5.24.jar"
+				},
+				{
+					"slug": "Cloth-Config",
+					"version": "15.0.140+fabric",
+					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/HpMb5wGb/cloth-config-15.0.140-fabric.jar"
 				}
 			]
 		},
@@ -79,8 +141,13 @@
 				},
 				{
 					"slug": "MoreCulling",
-					"version": "https://cdn.modrinth.com/data/51shyZVL/versions/yduz8IZo/moreculling-1.20.5-0.25.0.jar",
+					"version": "1.20.5-0.25.0",
 					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/yduz8IZo/moreculling-1.20.5-0.25.0.jar"
+				},
+				{
+					"slug": "Simple-Voice-Chat",
+					"version": "fabric-1.20.6-2.5.22",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/FGDBZ2bv/voicechat-fabric-1.20.6-2.5.22.jar"
 				}
 			]
 		},

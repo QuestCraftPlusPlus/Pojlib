@@ -243,6 +243,11 @@ public class JREUtils {
                 "-Dglfwstub.initEgl=false",
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
                 "-Dnet.minecraft.clientmodname=" + "QuestCraft",
+                "-Dcom.sun.management.jmxremote",
+                "-Dcom.sun.management.jmxremote.port=9191",
+                "-Dcom.sun.management.jmxremote.authenticate=false",
+                "-Dcom.sun.management.jmxremote.ssl=false",
+                "-Djava.rmi.server.hostname=192.168.12.132",
                 "-Dext.net.resolvPath=" + Constants.USER_HOME + "/hacks/ResConfHack.jar",
                 "-Dsodium.checks.issue2561=false",
                 "-Dorg.sqlite.lib.path=" + ctx.getApplicationInfo().nativeLibraryDir        ));

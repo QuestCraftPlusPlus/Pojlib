@@ -18,19 +18,19 @@
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_digitalgenesis_VLoader_getEGLDisplay(JNIEnv* env, jclass clazz) {
+Java_org_vivecraft_util_VLoader_getEGLDisplay(JNIEnv* env, jclass clazz) {
     return reinterpret_cast<jlong>(eglGetCurrentDisplay());
 }
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_digitalgenesis_VLoader_getEGLContext(JNIEnv* env, jclass clazz) {
+Java_org_vivecraft_util_VLoader_getEGLContext(JNIEnv* env, jclass clazz) {
     return reinterpret_cast<jlong>(eglGetCurrentContext());
 }
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_digitalgenesis_VLoader_getEGLConfig(JNIEnv* env, jclass clazz) {
+Java_org_vivecraft_util_VLoader_getEGLConfig(JNIEnv* env, jclass clazz) {
     EGLConfig cfg;
     EGLint num_configs;
 
@@ -52,21 +52,21 @@ Java_org_digitalgenesis_VLoader_getEGLConfig(JNIEnv* env, jclass clazz) {
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_digitalgenesis_VLoader_getDalvikVM(JNIEnv* env, jclass clazz) {
+Java_org_vivecraft_util_VLoader_getDalvikVM(JNIEnv* env, jclass clazz) {
     return reinterpret_cast<jlong>(pojav_environ->dalvikJavaVMPtr);
 }
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_digitalgenesis_VLoader_getDalvikActivity(JNIEnv* env, jclass clazz) {
+Java_org_vivecraft_util_VLoader_getDalvikActivity(JNIEnv* env, jclass clazz) {
     return reinterpret_cast<jlong>(pojav_environ->activity);
 }
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_org_digitalgenesis_VLoader_setupAndroid(JNIEnv* env, jclass clazz) {
+Java_org_vivecraft_util_VLoader_setupAndroid(JNIEnv* env, jclass clazz) {
     JNIEnv *newEnv;
-    pojav_environ->dalvikJavaVMPtr->AttachCurrentThread(&newEnv, NULL);
+    pojav_environ->dalvikJavaVMPtr->AttachCurrentThread(&newEnv, nullptr);
 }
 
 extern "C"

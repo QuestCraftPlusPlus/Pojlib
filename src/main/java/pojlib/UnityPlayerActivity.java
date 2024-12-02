@@ -24,6 +24,8 @@ import android.util.DisplayMetrics;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -93,6 +95,17 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
         mUnityPlayer = new UnityPlayer(this, this);
         setContentView(mUnityPlayer);
+        mUnityPlayer.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+                System.out.println("Child added: " + child.toString());
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {
+                System.out.println("Child removed: " + child.toString());
+            }
+        });
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mUnityPlayer.requestFocus();
 

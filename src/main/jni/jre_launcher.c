@@ -122,7 +122,7 @@ static jint launchJVM(int margc, char** margv) {
  * Method:    launchJVM
  * Signature: ([Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray) {
+JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray, jboolean usePojavSigHandler) {
 #ifdef TRY_SIG2JVM
   void* libjsig = dlopen("libjsig.so", RTLD_LAZY | RTLD_GLOBAL);
   if (NULL == libjsig) {
@@ -147,6 +147,7 @@ JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, 
    catcher.sa_sigaction = android_sigaction;
    catcher.sa_flags = SA_SIGINFO|SA_RESTART;
    // SA_RESETHAND;
+
 #define CATCHSIG(X) sigaction_p(X, &catcher, &old_sa[X])
     CATCHSIG(SIGILL);
     CATCHSIG(SIGABRT);

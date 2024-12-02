@@ -215,7 +215,12 @@ public class JREUtils {
         chdir(instance.gameDir);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 
-        int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
+        boolean usePojavSigHandler = true;
+        if (Build.MANUFACTURER.equalsIgnoreCase("Oculus") || Build.MANUFACTURER.equalsIgnoreCase("Meta")) {
+            usePojavSigHandler = false;
+        }
+
+        int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]), usePojavSigHandler);
         Logger.getInstance().appendToLog("Java Exit code: " + exitCode);
         return exitCode;
     }

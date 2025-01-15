@@ -172,6 +172,11 @@
 					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/yduz8IZo/moreculling-1.20.5-0.25.0.jar"
 				},
 				{
+					"slug": "Cloth-Config",
+					"version": "14.0.139",
+					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/g0uTATyM/cloth-config-14.0.139-fabric.jar"
+				},
+				{
 					"slug": "Simple-Voice-Chat",
 					"version": "fabric-1.20.6-2.5.22",
 					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/FGDBZ2bv/voicechat-fabric-1.20.6-2.5.22.jar"

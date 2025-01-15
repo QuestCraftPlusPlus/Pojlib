@@ -21,6 +21,11 @@
 					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/tu8qILqH/sodium-fabric-0.6.6%2Bmc1.21.4.jar"
 				},
 				{
+					"slug": "Cloth-Config",
+					"version": "17.0.144",
+					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/TJ6o2sr4/cloth-config-17.0.144-fabric.jar"
+				},
+				{
 					"slug": "Ferrite-Core",
 					"version": "7.1.1",
 					"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/IPM0JlHd/ferritecore-7.1.1-fabric.jar"

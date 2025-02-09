@@ -17,8 +17,8 @@
 			"defaultMods": [
 				{
 					"slug": "Sodium",
-					"version": "0.6.7",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/IIO7jQ3j/sodium-fabric-0.6.7%2Bmc1.21.4.jar"
+					"version": "0.6.6",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/tu8qILqH/sodium-fabric-0.6.6%2Bmc1.21.4.jar"
 				},
 				{
 					"slug": "Cloth-Config",

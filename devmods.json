@@ -32,8 +32,8 @@
 				},
 				{
 					"slug": "ModernFix",
-					"version": "5.20.1",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/gx7PIV8n/modernfix-fabric-5.20.1%2Bmc1.21.4.jar"
+					"version": "5.20.3+mc1.21.4",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/ZGxQddYr/modernfix-fabric-5.20.3%2Bmc1.21.4.jar"
 				},
 				{
 					"slug": "MoreCulling",
@@ -89,8 +89,8 @@
 				},
 				{
 					"slug": "ModernFix",
-					"version": "5.19.3+mc1.21.1",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/T1ftCUJv/modernfix-fabric-5.19.3%2Bmc1.21.1.jar"
+					"version": "5.20.2+mc1.21.1",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/tn4FFqcg/modernfix-fabric-5.20.2%2Bmc1.21.1.jar"
 				},
 				{
 					"slug": "Noisium",
@@ -104,8 +104,8 @@
 				},
 				{
 					"slug": "MoreCulling",
-					"version": "v1.0.1",
-					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/SOpqvxVv/moreculling-fabric-1.21.1-1.0.1.jar"
+					"version": "v1.0.3",
+					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/mNRCywqI/moreculling-fabric-1.21.1-1.0.3.jar"
 				},
 				{
 					"slug": "Simple-Voice-Chat",
@@ -325,8 +325,8 @@
 				},
 				{
 					"slug": "ModernFix",
-					"version": "5.9.0",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/FDGaMHFj/modernfix-fabric-5.9.0%2Bmc1.20.1.jar"
+					"version": "5.20.2",
+					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LwBOyIOY/modernfix-fabric-5.20.2%2Bmc1.20.1.jar"
 				}
 			]
 		},

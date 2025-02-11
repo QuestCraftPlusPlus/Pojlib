@@ -78,7 +78,7 @@ public class Msa {
                 API.isDemoMode = false;
             } else {
                 acc.accessToken = "0";
-                acc.username = "Player";
+                acc.username = "DemoMode";
                 acc.uuid = "00000000-0000-0000-0000-000000000000";
                 acc.expiresOn = 0;
                 acc.isDemoMode = true;

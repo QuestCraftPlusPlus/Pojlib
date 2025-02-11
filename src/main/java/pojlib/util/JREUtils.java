@@ -209,23 +209,13 @@ public class JREUtils {
             }
         }
 
-        // Base JVM Args for MC: https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks?tab=readme-ov-file#base-java-flags
-        // NUMA doesn't exist on Android, so it is removed here
-        userArgs.addAll(List.of("-XX:+UnlockExperimentalVMOptions", "-XX:+UnlockDiagnosticVMOptions",
-                "-XX:+AlwaysActAsServerClassMachine", "-XX:+AlwaysPreTouch", "-XX:+DisableExplicitGC",
-                "-XX:NmethodSweepActivity=1", "-XX:ReservedCodeCacheSize=400M", "-XX:NonNMethodCodeHeapSize=12M",
-                "-XX:ProfiledCodeHeapSize=194M", "-XX:NonProfiledCodeHeapSize=194M", "-XX:-DontCompileHugeMethods",
-                "-XX:MaxNodeLimit=240000", "-XX:NodeLimitFudgeFactor=8000", "-XX:+UseVectorCmov",
-                "-XX:+PerfDisableSharedMem", "-XX:+UseFastUnorderedTimeStamps", "-XX:+UseCriticalJavaThreadPriority"));
-
-        // Garbage collection
         userArgs.add("-XX:+UseZGC");
         userArgs.add("-XX:+ZGenerational");
-        userArgs.add("-XX:AllocatePrefetchStyle=1");
-        userArgs.add("-XX:-ZProactive");
-
-        // Android sig fix
+        userArgs.add("-XX:+UnlockExperimentalVMOptions");
         userArgs.add("-XX:+UseSignalChaining");
+        userArgs.add("-XX:+UnlockDiagnosticVMOptions");
+        userArgs.add("-XX:+DisableExplicitGC");
+        userArgs.add("-XX:+UseCriticalJavaThreadPriority");
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");

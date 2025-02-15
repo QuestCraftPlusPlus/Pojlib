@@ -60,12 +60,18 @@ public class Installer {
         Logger.getInstance().appendToLog("Downloading Client");
 
         File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
-        for (int i = 0; i < 5; i++) {
-            if (i == 4) throw new RuntimeException("Client download failed after 5 retries");
 
-            if (!clientFile.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
-            if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) return clientFile.getAbsolutePath();
+        try {
+            for (int i = 0; i < 5; i++) {
+                if (i == 4) throw new RuntimeException("Client download failed after 5 retries");
+
+                if (!clientFile.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
+                if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) return clientFile.getAbsolutePath();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         return null;
     }
 
@@ -121,13 +127,18 @@ public class Installer {
 
     //Only works on minecraft, not fabric, quilt, etc...
     //Will only download asset if it is missing
-    public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir, Activity activity, MinecraftInstances.Instance instance) throws IOException {
+    public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
         Logger.getInstance().appendToLog("Downloading assets");
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
-        int totalAssets = assets.getAsJsonObject("objects").size();
-        DownloadManager downloadManager = new DownloadManager(totalAssets);
+        int bytes = 0;
 
+        for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
+            VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
+            bytes += asset.size;
+        }
+
+        DownloadManager downloadManager = new DownloadManager(bytes);
         ThreadPoolExecutor tp = new ThreadPoolExecutor(8, 8, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
@@ -138,7 +149,9 @@ public class Installer {
         tp.shutdown();
         try {
             while (!tp.awaitTermination(100, TimeUnit.MILLISECONDS));
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+            Logger.getInstance().appendToLog("Download thread interrupted" + e.getMessage());
+        }
 
         DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"), downloadManager);
 

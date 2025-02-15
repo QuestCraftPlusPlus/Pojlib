@@ -178,13 +178,11 @@ public class JREUtils {
 
     // Called before game launch to ensure all files are present and correct
     public static void prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws IOException {
-
         UnityPlayerActivity.installLWJGL(activity);
         Installer.installJVM(activity);
         Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
         Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
-        Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME, activity, instance);
-        MinecraftInstances.CheckVivecraftConfig(instance);
+        Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
     }
 
     public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, MinecraftInstances.Instance instance) throws Throwable {

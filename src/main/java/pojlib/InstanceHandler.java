@@ -56,6 +56,9 @@ public class InstanceHandler {
             API.finishedDownloading = false;
             for (ModrinthIndexJson.ModpackFile file : index.files) {
                 if (file.path.contains("mods")) {
+                    if (instance.extProjects == null) {
+                        instance.extProjects = new ProjectInfo[0];
+                    }
                     ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
                     ProjectInfo info = new ProjectInfo();
                     info.slug = file.path
@@ -176,7 +179,7 @@ public class InstanceHandler {
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
-                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir, activity, instance);
+                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
                 Installer.moveLocalAssets(activity, instance);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -212,9 +215,10 @@ public class InstanceHandler {
         return instances;
     }
 
-    public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url, String type) {
+    public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String fileName, String version, String url, String type) {
         ProjectInfo info = new ProjectInfo();
         info.slug = name;
+        info.fileName = fileName;
         info.download_link = url;
         info.version = version;
         info.type = type;
@@ -251,9 +255,10 @@ public class InstanceHandler {
 
         if(oldInfo != null) {
             boolean isMod = oldInfo.type.equals("mod");
+            boolean legacyMod = oldInfo.fileName == null;
 
             // Delete the mod
-            File modFile = new File(instance.gameDir + (isMod ? "/mods/" : "/resourcepacks/") + name + (isMod ? ".jar" : ".zip"));
+            File modFile = new File(instance.gameDir + (isMod ? "/mods/" : "/resourcepacks/") + (legacyMod ? oldInfo.slug : oldInfo.fileName) + (isMod ? ".jar" : ".zip"));
             modFile.delete();
 
             ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);

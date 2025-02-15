@@ -42,7 +42,7 @@ public class API {
     public static MinecraftAccount currentAcc;
     public static boolean isDemoMode;
     public static MinecraftInstances.Instance currentInstance;
-
+    public static boolean hasWifi;
     public static boolean advancedDebugger;
 
 
@@ -56,8 +56,8 @@ public class API {
      * @param version Project version
      * @param url Mod download URL
      */
-    public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String version, String url, String type) {
-        InstanceHandler.addExtraProject(instances, instance, name, version, url, type);
+    public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String fileName, String version, String url, String type) {
+        InstanceHandler.addExtraProject(instances, instance, name, fileName, version, url, type);
     }
 
     /**
@@ -174,12 +174,17 @@ public class API {
      *                 or {@link API#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
-        try {
-            JREUtils.prelaunchCheck(activity, instance);
-        } catch (IOException e) {
-            Logger.getInstance().appendToLog("WARN! Instance launch failed, " + e);
+        if (hasWifi) {
+            try {
+                JREUtils.prelaunchCheck(activity, instance);
+            } catch (IOException e) {
+                Logger.getInstance().appendToLog("WARN! Instance launch failed!" + e);
+            }
+        } else {
+            Logger.getInstance().appendToLog("Skipping prelaunch check due to no wifi connection!");
         }
 
+        MinecraftInstances.CheckVivecraftConfig(instance);
         InstanceHandler.launchInstance(activity, account, instance);
     }
 
@@ -207,7 +212,7 @@ public class API {
         ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkCapabilities capabilities = connManager.getNetworkCapabilities(connManager.getActiveNetwork());
 
-        boolean hasWifi = true;
+        hasWifi = true;
 
         if(capabilities != null) {
             hasWifi = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);

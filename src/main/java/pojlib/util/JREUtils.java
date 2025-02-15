@@ -145,6 +145,7 @@ public class JREUtils {
         envMap.put("POJLIB_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
         envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE");
         envMap.put("HOME", instance.gameDir);
+        //envMap.put("APP_HOME", Constants.USER_HOME);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("VR_MODEL", API.model);
         envMap.put("POJLIB_RENDERER", "LightThinWrapper");
@@ -192,6 +193,9 @@ public class JREUtils {
         final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity, instance);
 
+        // Loading Screen Agent
+        //userArgs.add("-javaagent:" + Constants.USER_HOME + "/modloadingscreen.jar");
+
         //Add automatically generated args
 
         if (API.customRAMValue) {
@@ -207,13 +211,19 @@ public class JREUtils {
             }
         }
 
+        // Garbage collection
         userArgs.add("-XX:+UseZGC");
         userArgs.add("-XX:+ZGenerational");
-        userArgs.add("-XX:+UnlockExperimentalVMOptions");
-        userArgs.add("-XX:+UseSignalChaining");
+        userArgs.add("-XX:-ZProactive");
         userArgs.add("-XX:+UnlockDiagnosticVMOptions");
         userArgs.add("-XX:+DisableExplicitGC");
+
+        // Java should run at max
+        userArgs.add("-XX:+UnlockExperimentalVMOptions");
         userArgs.add("-XX:+UseCriticalJavaThreadPriority");
+
+        // Android sig fix
+        userArgs.add("-XX:+UseSignalChaining");
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");

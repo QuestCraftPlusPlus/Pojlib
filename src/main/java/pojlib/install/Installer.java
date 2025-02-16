@@ -30,8 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class Installer {
 
     public static void installJVM(Activity activity) {
-        File jre = new File(activity.getFilesDir(), "runtimes/JRE");
-        File newRelease = new File(activity.getFilesDir(), "runtimes/release");
+        File jre = new File("/storage/emulated/0/Android/data/com.qcxr.qcxr/files", "runtimes/JRE");
+        File newRelease = new File("/storage/emulated/0/Android/data/com.qcxr.qcxr/files", "runtimes/release");
         File currentRelease = new File(jre, "release");
         String jreURL = "https://github.com/QuestCraftPlusPlus/android-openjdk-build-multiarch/releases/latest/download/JRE.zip";
         String jreReleaseInfo = "https://github.com/QuestCraftPlusPlus/android-openjdk-build-multiarch/releases/latest/download/release";
@@ -43,10 +43,10 @@ public class Installer {
                 if (jre.exists()) {
                     FileUtils.deleteDirectory(jre);
                 }
-                File jreZip = new File(activity.getFilesDir() + "/runtimes/JRE.zip");
+                File jreZip = new File("/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE.zip");
                 DownloadUtils.downloadFile(jreURL, jreZip, new DownloadManager(1));
-                FileUtil.unzipArchive(jreZip.getPath(), activity.getFilesDir() + "/runtimes/JRE");
-                Files.copy(Paths.get(activity.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get(activity.getFilesDir() + "/runtimes/JRE/lib/libawt_xawt.so"));
+                FileUtil.unzipArchive(jreZip.getPath(), "/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE");
+                Files.copy(Paths.get(activity.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get("/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE/lib/libawt_xawt.so"));
                 jreZip.delete();
             }
         } catch (IOException e) {

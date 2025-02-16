@@ -135,7 +135,7 @@ public class JREUtils {
     public static void relocateLibPath(final Context ctx) {
         sNativeLibDir = ctx.getApplicationInfo().nativeLibraryDir;
 
-        LD_LIBRARY_PATH = ctx.getFilesDir() + "/runtimes/JRE/bin:" + ctx.getFilesDir() + "/runtimes/JRE/lib:" +
+        LD_LIBRARY_PATH = "/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE/bin:" + "/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE/lib:" +
                 "/system/lib64:/vendor/lib64:/vendor/lib64/hw:" +
                 sNativeLibDir;
     }
@@ -143,7 +143,7 @@ public class JREUtils {
     public static void setJavaEnvironment(Activity activity, MinecraftInstances.Instance instance) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("POJLIB_NATIVEDIR", activity.getApplicationInfo().nativeLibraryDir);
-        envMap.put("JAVA_HOME", activity.getFilesDir() + "/runtimes/JRE");
+        envMap.put("JAVA_HOME", "/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE");
         envMap.put("HOME", instance.gameDir);
         //envMap.put("APP_HOME", Constants.USER_HOME);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
@@ -151,7 +151,7 @@ public class JREUtils {
         envMap.put("POJLIB_RENDERER", "LightThinWrapper");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
-        envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE/bin:" + Os.getenv("PATH"));
+        envMap.put("PATH", "/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE/bin:" + Os.getenv("PATH"));
 
         File customEnvFile = new File(Constants.USER_HOME, "custom_env.txt");
         if (customEnvFile.exists() && customEnvFile.isFile()) {
@@ -165,16 +165,21 @@ public class JREUtils {
             reader.close();
         }
         envMap.put("LIBGL_ES", "2");
+
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_1");
         for (Map.Entry<String, String> env : envMap.entrySet()) {
             Logger.getInstance().appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
             Os.setenv(env.getKey(), env.getValue(), true);
         }
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_2");
 
-        File serverFile = new File(activity.getFilesDir() + "/runtimes/JRE/lib/server/libjvm.so");
-        jvmLibraryPath = activity.getFilesDir() + "/runtimes/JRE/lib/" + (serverFile.exists() ? "server" : "client");
+        File serverFile = new File("/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE/lib/server/libjvm.so");
+        jvmLibraryPath = "/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE/lib/" + (serverFile.exists() ? "server" : "client");
         Log.d("DynamicLoader","Base LD_LIBRARY_PATH: "+LD_LIBRARY_PATH);
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_2.5");
         Log.d("DynamicLoader","Internal LD_LIBRARY_PATH: "+jvmLibraryPath+":"+LD_LIBRARY_PATH);
         setLdLibraryPath(jvmLibraryPath+":"+LD_LIBRARY_PATH);
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_3");
     }
 
     // Called before game launch to ensure all files are present and correct
@@ -190,6 +195,8 @@ public class JREUtils {
         JREUtils.relocateLibPath(activity);
         setJavaEnvironment(activity, instance);
 
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_3.5");
+
         final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity, instance);
 
@@ -197,6 +204,8 @@ public class JREUtils {
         //userArgs.add("-javaagent:" + Constants.USER_HOME + "/modloadingscreen.jar");
 
         //Add automatically generated args
+
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_4");
 
         if (API.customRAMValue) {
             userArgs.add("-Xms" + API.memoryValue + "M");
@@ -210,6 +219,8 @@ public class JREUtils {
                 userArgs.add("-Xmx" + 2048 + "M");
             }
         }
+
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_5");
 
         // Garbage collection
         userArgs.add("-XX:+UseZGC");
@@ -229,16 +240,23 @@ public class JREUtils {
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
         userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL_dri.so");
 
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_6");
+
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);
 
-        runtimeDir = activity.getFilesDir() + "/runtimes/JRE";
+        runtimeDir = "/storage/emulated/0/Android/data/com.qcxr.qcxr/files" + "/runtimes/JRE";
+
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_7");
 
         initJavaRuntime();
         chdir(instance.gameDir);
+
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_8");
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 
         int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
+        Logger.getInstance().appendToLog("XXXXXXXXXXXX_Byte_9");
         Logger.getInstance().appendToLog("Java Exit code: " + exitCode);
         return exitCode;
     }
@@ -251,7 +269,7 @@ public class JREUtils {
      */
     public static List<String> getJavaArgs(Context ctx, MinecraftInstances.Instance instance) {
         return new ArrayList<>(Arrays.asList(
-                "-Djava.home=" + new File(ctx.getFilesDir(), "runtimes/JRE"),
+                "-Djava.home=" + new File("/storage/emulated/0/Android/data/com.qcxr.qcxr/files", "runtimes/JRE"),
                 "-Djava.io.tmpdir=" + ctx.getCacheDir().getAbsolutePath(),
                 "-Duser.home=" + instance.gameDir,
                 "-Duser.language=" + System.getProperty("user.language"),

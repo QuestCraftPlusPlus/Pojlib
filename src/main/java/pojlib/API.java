@@ -133,6 +133,7 @@ public class API {
      * @throws                  IOException Throws if download of library or asset fails
      */
     public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, boolean useDefaultMods, String minecraftVersion, String modLoader, String imageURL) throws IOException {
+        finishedDownloading = false;
         return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, useDefaultMods, minecraftVersion, modLoader, imageURL);
     }
 
@@ -146,7 +147,7 @@ public class API {
      * @throws                  IOException Throws if download of library or asset fails
      */
     public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String imageURL, String modLoader, String mrpackFile) throws IOException {
-
+        finishedDownloading = false;
         if(ignoreInstanceName) {
             return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, modLoader, mrpackFile, imageURL);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {

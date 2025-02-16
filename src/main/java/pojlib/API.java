@@ -230,6 +230,7 @@ public class API {
             API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             API.profileName = API.currentAcc.username;
             API.profileUUID = API.currentAcc.uuid;
+            API.isDemoMode = API.currentAcc.isDemoMode;
             return;
         } else if(acc != null && acc.expiresOn < System.currentTimeMillis()) {
             currentAcc = LoginHelper.refreshAccount(activity, accountUUID);
@@ -237,6 +238,7 @@ public class API {
                 API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
                 API.profileName = API.currentAcc.username;
                 API.profileUUID = API.currentAcc.uuid;
+                API.isDemoMode = API.currentAcc.isDemoMode;
                 return;
             }
         }

@@ -29,8 +29,7 @@ public class DownloadUtils {
                 conn.connect();
 
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    int totalBytes = conn.getContentLength(); // Get the total size of the file
-                    try (InputStream is = new StreamDL(conn.getInputStream(), downloadManager, fileName, totalBytes)) {
+                    try (InputStream is = new StreamDL(conn.getInputStream(), downloadManager, fileName)) {
                         IOUtils.copy(is, os);
                     }
                     return;
@@ -44,7 +43,6 @@ public class DownloadUtils {
     }
 
     public static void downloadFile(String url, File out, DownloadManager downloadManager) throws IOException {
-        API.finishedDownloading = false;
         Objects.requireNonNull(out.getParentFile()).mkdirs();
         File tempOut = File.createTempFile(out.getName(), ".part", out.getParentFile());
         try {

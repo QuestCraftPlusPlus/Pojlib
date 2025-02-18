@@ -51,9 +51,8 @@ public class InstanceHandler {
 
         MinecraftInstances.Instance instance = create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL);
         new Thread(() -> {
-            while(!API.finishedDownloading);
+            while(API.isDownloading());
 
-            API.finishedDownloading = false;
             for (ModrinthIndexJson.ModpackFile file : index.files) {
                 if (file.path.contains("mods")) {
                     if (instance.extProjects == null) {
@@ -101,7 +100,6 @@ public class InstanceHandler {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            API.finishedDownloading = false;
             GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);
         }).start();
 
@@ -110,7 +108,6 @@ public class InstanceHandler {
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, String modLoader, String imageURL) {
-        API.finishedDownloading = false;
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
             for (MinecraftInstances.Instance instance : instances.instances) {
@@ -190,7 +187,6 @@ public class InstanceHandler {
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
             instance.updateMods(instances);
 
-            API.finishedDownloading = true;
             Logger.getInstance().appendToLog("Finished Downloading!");
         }).start();
 

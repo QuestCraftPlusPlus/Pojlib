@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import pojlib.account.MinecraftAccount;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
+import pojlib.util.download.DownloadManager;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
@@ -33,10 +34,9 @@ public class API {
     public static String model = "Quest";
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
-    public static boolean finishedDownloading = true;
     public static boolean ignoreInstanceName;
     public static boolean customRAMValue = false;
-    public static double downloadStatus = 0;
+    public static long downloadStatus = 0;
     public static String currentDownload = "";
     public static String profileImage;
     public static String profileName;
@@ -63,6 +63,10 @@ public class API {
      */
     public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String fileName, String version, String url, String type) {
         InstanceHandler.addExtraProject(instances, instance, name, fileName, version, url, type);
+    }
+
+    public static boolean isDownloading() {
+        return DownloadManager.currentDownloads() <= 0;
     }
 
     /**
@@ -138,7 +142,6 @@ public class API {
      * @throws                  IOException Throws if download of library or asset fails
      */
     public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, boolean useDefaultMods, String minecraftVersion, String modLoader, String imageURL) throws IOException {
-        finishedDownloading = false;
         return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, useDefaultMods, minecraftVersion, modLoader, imageURL);
     }
 
@@ -152,7 +155,6 @@ public class API {
      * @throws                  IOException Throws if download of library or asset fails
      */
     public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String imageURL, String modLoader, String mrpackFile) throws IOException {
-        finishedDownloading = false;
         if(ignoreInstanceName) {
             return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, modLoader, mrpackFile, imageURL);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {

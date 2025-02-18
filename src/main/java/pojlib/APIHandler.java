@@ -111,9 +111,9 @@ public class APIHandler {
     public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/refs/heads/QuestCraft-5.1.0/supportedVersions.json";
 
     public static String[] getQCSupportedVersions() {
-        File versionsJson = new File(Constants.USER_HOME + "/supportedVersions.json");
+        File versionsJson = new File(Constants.USER_HOME, "supportedVersions.json");
         try {
-            DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson, new DownloadManager(1));
+            DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson, DownloadManager.addDownloadToStack(1));
         } catch (IOException e) {
             Logger.getInstance().appendToLog("Error while grabbing supported versions!\n" + e);
         }

@@ -1,37 +1,42 @@
 package pojlib.util.download;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import pojlib.API;
 
 public class DownloadManager {
-    private final Map<String, Double> downloadProgress = new ConcurrentHashMap<>();
-    private final int totalFiles;
-    private final AtomicInteger completedFiles = new AtomicInteger(0);
+    public static final List<DownloadManager> DOWNLOAD_STACK = new ArrayList<>();
+    private final long byteCount;
+    private long bytesToDownload;
 
-    public DownloadManager(int totalFiles) {
-        this.totalFiles = totalFiles;
+    private DownloadManager(long byteCount) {
+        this.byteCount = byteCount;
+        this.bytesToDownload = byteCount;
     }
 
-    public void updateProgress(String fileName, double progress) {
-        downloadProgress.put(fileName, progress);
+    public void updateProgress(String fileName, long bytesDownloaded) {
         API.currentDownload = fileName;
-        getOverallProgress();
+        bytesToDownload -= bytesDownloaded;
+
+        API.downloadStatus = (bytesToDownload / byteCount) * 100;
     }
 
-    public void fileDownloadComplete(String fileName) {
-        completedFiles.incrementAndGet();
-        downloadProgress.remove(fileName);
-        getOverallProgress();
+    public void fileDownloadComplete(long byteCount) {
+        bytesToDownload -= byteCount;
+        if (bytesToDownload <= 0) {
+            DOWNLOAD_STACK.remove(this);
+        }
     }
 
-    private void getOverallProgress() {
-        int completed = completedFiles.get();
-        double overallProgress = ((double) completed / totalFiles) * 100;
-        if (completed == totalFiles) {API.currentDownload = "Finished! Ready to start."; API.finishedDownloading = true;}
-        API.downloadStatus = overallProgress;
+    public static DownloadManager addDownloadToStack(long byteCount) {
+        DownloadManager manager = new DownloadManager(byteCount);
+        DOWNLOAD_STACK.add(manager);
+        return manager;
+    }
+
+    public static int currentDownloads() {
+        return DOWNLOAD_STACK.size();
     }
 }
 

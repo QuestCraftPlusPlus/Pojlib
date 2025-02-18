@@ -37,14 +37,14 @@ public class Installer {
         String jreReleaseInfo = "https://github.com/QuestCraftPlusPlus/android-openjdk-build-multiarch/releases/latest/download/release";
 
         try {
-            DownloadUtils.downloadFile(jreReleaseInfo, newRelease, new DownloadManager(1));
+            DownloadUtils.downloadFile(jreReleaseInfo, newRelease, DownloadManager.addDownloadToStack(1));
 
             if (!jre.exists() || (jre.exists() && !FileUtil.matchingAssetFile(newRelease, FileUtils.readFileToByteArray(currentRelease)))) {
                 if (jre.exists()) {
                     FileUtils.deleteDirectory(jre);
                 }
                 File jreZip = new File(activity.getFilesDir() + "/runtimes/JRE.zip");
-                DownloadUtils.downloadFile(jreURL, jreZip, new DownloadManager(1));
+                DownloadUtils.downloadFile(jreURL, jreZip, DownloadManager.addDownloadToStack(1));
                 FileUtil.unzipArchive(jreZip.getPath(), activity.getFilesDir() + "/runtimes/JRE");
                 Files.copy(Paths.get(activity.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get(activity.getFilesDir() + "/runtimes/JRE/lib/libawt_xawt.so"));
                 jreZip.delete();
@@ -65,7 +65,7 @@ public class Installer {
             for (int i = 0; i < 5; i++) {
                 if (i == 4) throw new RuntimeException("Client download failed after 5 retries");
 
-                if (!clientFile.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
+                if (!clientFile.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, DownloadManager.addDownloadToStack(1));
                 if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) return clientFile.getAbsolutePath();
             }
         } catch (IOException e) {
@@ -98,7 +98,7 @@ public class Installer {
                     sha1 = APIHandler.getRaw(library.url + path + ".sha1");
                     if (!libraryFile.exists()) {
                         Logger.getInstance().appendToLog("Downloading: " + library.name);
-                        DownloadUtils.downloadFile(library.url + path, libraryFile, new DownloadManager(1));
+                        DownloadUtils.downloadFile(library.url + path, libraryFile, DownloadManager.addDownloadToStack(1));
                     }
                 } else {
                     VersionInfo.Library.Artifact artifact = library.downloads.artifact;
@@ -106,7 +106,7 @@ public class Installer {
                     sha1 = artifact.sha1;
                     if (!libraryFile.exists()) {
                         Logger.getInstance().appendToLog("Downloading: " + library.name);
-                        DownloadUtils.downloadFile(artifact.url, libraryFile, new DownloadManager(1));
+                        DownloadUtils.downloadFile(artifact.url, libraryFile, DownloadManager.addDownloadToStack(1));
                     }
                 }
 
@@ -138,7 +138,7 @@ public class Installer {
             bytes += asset.size;
         }
 
-        DownloadManager downloadManager = new DownloadManager(bytes);
+        DownloadManager downloadManager = DownloadManager.addDownloadToStack(bytes);
         ThreadPoolExecutor tp = new ThreadPoolExecutor(8, 8, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
         for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
@@ -146,16 +146,9 @@ public class Installer {
             tp.execute(thread);
         }
 
-        tp.shutdown();
-        try {
-            while (!tp.awaitTermination(100, TimeUnit.MILLISECONDS));
-        } catch (InterruptedException e) {
-            Logger.getInstance().appendToLog("Download thread interrupted" + e.getMessage());
-        }
+        DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir, "assets/indexes/" + minecraftVersionInfo.assets + ".json"), downloadManager);
 
-        DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"), downloadManager);
-
-        return new File(gameDir + "/assets").getAbsolutePath();
+        return new File(gameDir, "assets").getAbsolutePath();
     }
 
     public static void moveLocalAssets(Activity activity, MinecraftInstances.Instance instance) throws IOException {
@@ -206,7 +199,7 @@ public class Installer {
                 }
 
                 if (DownloadUtils.compareSHA1(assetFile, asset.hash)) {
-                    downloadManager.fileDownloadComplete(fileName);
+                    downloadManager.fileDownloadComplete(asset.size);
                     break;
                 } else {
                     assetFile.delete();

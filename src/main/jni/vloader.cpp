@@ -67,6 +67,9 @@ JNIEXPORT void JNICALL
 Java_org_vivecraft_util_VLoader_setupAndroid(JNIEnv* env, jclass clazz) {
     JNIEnv *newEnv;
     pojav_environ->dalvikJavaVMPtr->AttachCurrentThread(&newEnv, NULL);
+    jclass apiClass = pojav_environ->apiClass;
+    jfieldID fieldID = newEnv->GetStaticFieldID(apiClass, "gameReady", "Z");
+    newEnv->SetStaticBooleanField(apiClass, fieldID, true);
 }
 
 extern "C"

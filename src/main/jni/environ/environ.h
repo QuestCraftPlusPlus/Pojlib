@@ -45,6 +45,7 @@ struct pojav_environ_s {
     jmethodID method_internalWindowSizeChanged;
     jmethodID method_restartUnity;
     jclass bridgeClazz;
+    jclass apiClass;
     jclass vmGlfwClass;
     jboolean isGrabbing;
     jbyte* keyDownBuffer;

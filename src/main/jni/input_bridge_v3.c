@@ -43,6 +43,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         pojav_environ->dalvikJavaVMPtr = vm;
         (*vm)->GetEnv(vm, (void**) &pojav_environ->dalvikJNIEnvPtr_ANDROID, JNI_VERSION_1_4);
         pojav_environ->bridgeClazz = (*pojav_environ->dalvikJNIEnvPtr_ANDROID)->NewGlobalRef(pojav_environ->dalvikJNIEnvPtr_ANDROID,(*pojav_environ->dalvikJNIEnvPtr_ANDROID) ->FindClass(pojav_environ->dalvikJNIEnvPtr_ANDROID,"org/lwjgl/glfw/CallbackBridge"));
+        pojav_environ->apiClass = (*pojav_environ->dalvikJNIEnvPtr_ANDROID)->NewGlobalRef(pojav_environ->dalvikJNIEnvPtr_ANDROID,(*pojav_environ->dalvikJNIEnvPtr_ANDROID) ->FindClass(pojav_environ->dalvikJNIEnvPtr_ANDROID,"pojlib/API"));
         pojav_environ->method_accessAndroidClipboard = (*pojav_environ->dalvikJNIEnvPtr_ANDROID)->GetStaticMethodID(pojav_environ->dalvikJNIEnvPtr_ANDROID, pojav_environ->bridgeClazz, "accessAndroidClipboard", "(ILjava/lang/String;)Ljava/lang/String;");
         pojav_environ->method_onGrabStateChanged = (*pojav_environ->dalvikJNIEnvPtr_ANDROID)->GetStaticMethodID(pojav_environ->dalvikJNIEnvPtr_ANDROID, pojav_environ->bridgeClazz, "onGrabStateChanged", "(Z)V");
         pojav_environ->method_restartUnity = (*pojav_environ->dalvikJNIEnvPtr_ANDROID)->GetStaticMethodID(pojav_environ->dalvikJNIEnvPtr_ANDROID, pojav_environ->bridgeClazz, "restartUnitySession", "(Landroid/app/Activity;)V");
@@ -74,6 +75,14 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     pojav_environ->isGrabbing = JNI_FALSE;
 
     return JNI_VERSION_1_4;
+}
+
+JNIEXPORT void JNICALL Java_pojlib_util_JREUtils_killJVM(JNIEnv *env, jclass clazz) {
+    if (pojav_environ->runtimeJavaVMPtr != NULL) {
+        (*pojav_environ->runtimeJavaVMPtr)->DetachCurrentThread(pojav_environ->runtimeJavaVMPtr);
+        (*pojav_environ->runtimeJavaVMPtr)->DestroyJavaVM(pojav_environ->runtimeJavaVMPtr);
+        pojav_environ->runtimeJavaVMPtr = NULL;
+    }
 }
 
 #define ADD_CALLBACK_WWIN(NAME) \

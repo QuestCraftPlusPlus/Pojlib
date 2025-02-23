@@ -17,6 +17,10 @@ import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.URL;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -44,6 +48,7 @@ public class API {
     public static MinecraftInstances.Instance currentInstance;
     public static boolean hasWifi;
     public static boolean advancedDebugger;
+    public static boolean gameReady = false;
 
 
     /**
@@ -175,6 +180,7 @@ public class API {
      *                 or {@link API#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
+        gameReady = false;
         if (hasWifi) {
             try {
                 JREUtils.prelaunchCheck(activity, instance);
@@ -187,6 +193,15 @@ public class API {
 
         MinecraftInstances.CheckVivecraftConfig(instance);
         InstanceHandler.launchInstance(activity, account, instance);
+    }
+
+    /**
+     * Kill the current instance
+     *
+     */
+    public static void killInstance() {
+        Logger.getInstance().appendToLog("QuestCraft: Killing instance...");
+        JREUtils.killJVM();
     }
 
     /**
@@ -210,15 +225,6 @@ public class API {
      */
     public static void login(Activity activity, @Nullable String accountUUID)
     {
-        ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkCapabilities capabilities = connManager.getNetworkCapabilities(connManager.getActiveNetwork());
-
-        hasWifi = true;
-
-        if(capabilities != null) {
-            hasWifi = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
-        }
-
         if(accountUUID == null) {
             currentAcc = null;
             LoginHelper.login(activity);
@@ -245,5 +251,40 @@ public class API {
         }
 
         LoginHelper.login(activity);
+    }
+
+    /**
+     * Check if the device has a valid wifi connection
+     *
+     * @param activity activity object
+     * @return true if the device has a valid wifi connection
+     */
+    public static boolean hasConnection(Activity activity) {
+        boolean hasNetwork = false;
+        ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkCapabilities capabilities = connManager.getNetworkCapabilities(connManager.getActiveNetwork());
+
+        if(capabilities != null) {
+            hasNetwork = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+        }
+
+        if (hasNetwork) {
+            try {
+                URL url = new URL("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json");
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.connect();
+                conn.disconnect();
+                hasWifi = true;
+                return true;
+            } catch (Exception e) {
+                Logger.getInstance().appendToLog("WARN! Unable to reach Microsoft servers!");
+                hasWifi = false;
+                return false;
+            }
+        } else {
+            Logger.getInstance().appendToLog("WARN! Device has no wifi connection!");
+            hasWifi = false;
+            return false;
+        }
     }
 }

@@ -243,6 +243,7 @@ public class JREUtils {
         return exitCode;
     }
 
+
     /**
      *  Gives an argument list filled with both the user args
      *  and the auto-generated ones (eg. the window resolution).
@@ -329,6 +330,7 @@ public class JREUtils {
     public static native long getEGLConfigPtr();
     public static native int chdir(String path);
     public static native void logToLogger(final Logger logger);
+    public static native void killJVM();
     public static native boolean dlopen(String libPath);
     public static native void setLdLibraryPath(String ldLibraryPath);
 

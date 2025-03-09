@@ -77,14 +77,6 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
     return JNI_VERSION_1_4;
 }
 
-JNIEXPORT void JNICALL Java_pojlib_util_JREUtils_killJVM(JNIEnv *env, jclass clazz) {
-    if (pojav_environ->runtimeJavaVMPtr != NULL) {
-        (*pojav_environ->runtimeJavaVMPtr)->DetachCurrentThread(pojav_environ->runtimeJavaVMPtr);
-        (*pojav_environ->runtimeJavaVMPtr)->DestroyJavaVM(pojav_environ->runtimeJavaVMPtr);
-        pojav_environ->runtimeJavaVMPtr = NULL;
-    }
-}
-
 #define ADD_CALLBACK_WWIN(NAME) \
 JNIEXPORT jlong JNICALL Java_org_lwjgl_glfw_GLFW_nglfwSet##NAME##Callback(JNIEnv * env, jclass cls, jlong window, jlong callbackptr) { \
     void** oldCallback = (void**) &pojav_environ->GLFW_invoke_##NAME; \

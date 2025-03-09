@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.JsonObject;
 
+import org.lwjgl.glfw.CallbackBridge;
+
 import pojlib.account.MinecraftAccount;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
@@ -18,8 +20,6 @@ import pojlib.account.LoginHelper;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.net.URL;
 
 /**
@@ -198,10 +198,11 @@ public class API {
     /**
      * Kill the current instance
      *
+     * @param activity Android activity object
      */
-    public static void killInstance() {
-        Logger.getInstance().appendToLog("QuestCraft: Killing instance...");
-        JREUtils.killJVM();
+    public static void restartLauncher(Activity activity) {
+        Logger.getInstance().appendToLog("QuestCraft: Restarting launcher...");
+        CallbackBridge.restartUnitySession(activity);
     }
 
     /**

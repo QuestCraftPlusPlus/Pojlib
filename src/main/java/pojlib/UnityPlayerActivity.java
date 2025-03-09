@@ -119,6 +119,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
     }
 
     public static String installLWJGL(Activity activity) throws IOException {
+        Logger.getInstance().appendToLog("Checking LWJGL");
         File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
         byte[] lwjglAsset = FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar");
 
@@ -131,6 +132,7 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
             FileUtil.write(lwjgl.getAbsolutePath(), lwjglAsset);
         }
 
+        Logger.getInstance().appendToLog("LWJGL installed");
         return lwjgl.getAbsolutePath();
     }
 

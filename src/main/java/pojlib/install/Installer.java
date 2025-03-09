@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class Installer {
 
     public static void installJVM(Activity activity) {
+        Logger.getInstance().appendToLog("Checking JRE");
         File jre = new File(activity.getFilesDir(), "runtimes/JRE");
         File newRelease = new File(activity.getFilesDir(), "runtimes/release");
         File currentRelease = new File(jre, "release");
@@ -40,6 +41,7 @@ public class Installer {
             DownloadUtils.downloadFile(jreReleaseInfo, newRelease, new DownloadManager(1));
 
             if (!jre.exists() || (jre.exists() && !FileUtil.matchingAssetFile(newRelease, FileUtils.readFileToByteArray(currentRelease)))) {
+                Logger.getInstance().appendToLog("Updating JRE");
                 if (jre.exists()) {
                     FileUtils.deleteDirectory(jre);
                 }
@@ -48,8 +50,10 @@ public class Installer {
                 FileUtil.unzipArchive(jreZip.getPath(), activity.getFilesDir() + "/runtimes/JRE");
                 Files.copy(Paths.get(activity.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get(activity.getFilesDir() + "/runtimes/JRE/lib/libawt_xawt.so"));
                 jreZip.delete();
+                Logger.getInstance().appendToLog("JRE installed");
             }
         } catch (IOException e) {
+            Logger.getInstance().appendToLog("Failed to install JRE: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -57,7 +61,7 @@ public class Installer {
     // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath
     public static String installClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
-        Logger.getInstance().appendToLog("Downloading Client");
+        Logger.getInstance().appendToLog("Checking Client");
 
         File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
 
@@ -65,10 +69,21 @@ public class Installer {
             for (int i = 0; i < 5; i++) {
                 if (i == 4) throw new RuntimeException("Client download failed after 5 retries");
 
-                if (!clientFile.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
-                if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) return clientFile.getAbsolutePath();
+                if (!clientFile.exists()) {
+                    DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
+                } else if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) {
+                    clientFile.delete();
+                    DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
+                }
+
+                // Check if the downloaded client matches the expected SHA1 hash
+                if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) {
+                    Logger.getInstance().appendToLog("Client downloaded");
+                    return clientFile.getAbsolutePath();
+                }
             }
         } catch (IOException e) {
+            Logger.getInstance().appendToLog("Failed to download client: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -78,7 +93,7 @@ public class Installer {
     // Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
     // Returns the classpath of the downloaded libraries
     public static String installLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
-        Logger.getInstance().appendToLog("Downloading Libraries for: " + versionInfo.id);
+        Logger.getInstance().appendToLog("Checking Libraries for: " + versionInfo.id);
         StringJoiner classpath = new StringJoiner(File.pathSeparator);
 
         for (VersionInfo.Library library : versionInfo.libraries) {
@@ -122,13 +137,14 @@ public class Installer {
         // DNS SRV Resolver fix
         classpath.add(Constants.USER_HOME + "/hacks/ResConfHack.jar");
 
+        Logger.getInstance().appendToLog("Libraries installed");
         return classpath.toString();
     }
 
     //Only works on minecraft, not fabric, quilt, etc...
     //Will only download asset if it is missing
     public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
-        Logger.getInstance().appendToLog("Downloading assets");
+        Logger.getInstance().appendToLog("Checking assets");
         JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
         int bytes = 0;
@@ -153,7 +169,8 @@ public class Installer {
             Logger.getInstance().appendToLog("Download thread interrupted" + e.getMessage());
         }
 
-        DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json"), downloadManager);
+        File indexJson = new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json");
+        if (!indexJson.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, indexJson, downloadManager);
 
         return new File(gameDir + "/assets").getAbsolutePath();
     }

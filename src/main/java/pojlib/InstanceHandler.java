@@ -191,7 +191,7 @@ public class InstanceHandler {
             instance.updateMods(instances);
 
             API.finishedDownloading = true;
-            Logger.getInstance().appendToLog("Finished Downloading!");
+            Logger.getInstance().appendToLog("Finished Creating Instance!");
         }).start();
 
         return instance;

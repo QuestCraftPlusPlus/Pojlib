@@ -32,26 +32,19 @@ public class Installer {
     public static void installJVM(Activity activity) {
         Logger.getInstance().appendToLog("Checking JRE");
         File jre = new File(activity.getFilesDir(), "runtimes/JRE");
-        File newRelease = new File(activity.getFilesDir(), "runtimes/release");
-        File currentRelease = new File(jre, "release");
         String jreURL = "https://github.com/QuestCraftPlusPlus/android-openjdk-build-multiarch/releases/latest/download/JRE.zip";
-        String jreReleaseInfo = "https://github.com/QuestCraftPlusPlus/android-openjdk-build-multiarch/releases/latest/download/release";
 
         try {
-            DownloadUtils.downloadFile(jreReleaseInfo, newRelease, new DownloadManager(1));
-
-            if (!jre.exists() || (jre.exists() && !FileUtil.matchingAssetFile(newRelease, FileUtils.readFileToByteArray(currentRelease)))) {
-                Logger.getInstance().appendToLog("Updating JRE");
-                if (jre.exists()) {
-                    FileUtils.deleteDirectory(jre);
-                }
+            if (!jre.exists()) {
+                Logger.getInstance().appendToLog("Installing JRE");
                 File jreZip = new File(activity.getFilesDir() + "/runtimes/JRE.zip");
                 DownloadUtils.downloadFile(jreURL, jreZip, new DownloadManager(1));
                 FileUtil.unzipArchive(jreZip.getPath(), activity.getFilesDir() + "/runtimes/JRE");
                 Files.copy(Paths.get(activity.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get(activity.getFilesDir() + "/runtimes/JRE/lib/libawt_xawt.so"));
                 jreZip.delete();
-                Logger.getInstance().appendToLog("JRE installed");
             }
+
+            Logger.getInstance().appendToLog("JRE installed");
         } catch (IOException e) {
             Logger.getInstance().appendToLog("Failed to install JRE: " + e.getMessage());
             e.printStackTrace();

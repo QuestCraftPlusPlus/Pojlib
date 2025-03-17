@@ -1,6 +1,7 @@
 package pojlib.util;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.system.ErrnoException;
@@ -74,7 +75,6 @@ public class JREUtils {
     public static void initJavaRuntime() {
         dlopen(findInLdLibPath("libjli.so"));
         if(!dlopen("libjvm.so")){
-            Logger.getInstance().appendToLog("JREUtils: Failed to load libjvm with no path, trying with full path");
             dlopen(jvmLibraryPath+"/libjvm.so");
         }
         dlopen(findInLdLibPath("libverify.so"));
@@ -193,22 +193,20 @@ public class JREUtils {
         final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity, instance);
 
-        // Loading Screen Agent
-        //userArgs.add("-javaagent:" + Constants.USER_HOME + "/modloadingscreen.jar");
-
         //Add automatically generated args
-
         if (API.customRAMValue) {
+            Logger.getInstance().appendToLog("QuestCraft: Setting JVM memory to " + API.memoryValue + "MB (Custom)");
             userArgs.add("-Xms" + API.memoryValue + "M");
             userArgs.add("-Xmx" + API.memoryValue + "M");
         } else {
-            if (API.model.equals("Meta Quest Pro") || API.model.equals("Oculus Headset1")) {
-                userArgs.add("-Xms" + 2048 + "M");
-                userArgs.add("-Xmx" + 3072 + "M");
-            } else {
-                userArgs.add("-Xms" + 1024 + "M");
-                userArgs.add("-Xmx" + 2048 + "M");
-            }
+            ActivityManager manager = (ActivityManager) activity.getSystemService(Activity.ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo ami = new ActivityManager.MemoryInfo();
+            manager.getMemoryInfo(ami);
+            long availMem = ami.availMem /= 1024 * 1024;
+
+            Logger.getInstance().appendToLog("QuestCraft: Setting JVM memory to " + (availMem - 150) + "MB");
+            userArgs.add("-Xms" + 1024 + "M");
+            userArgs.add("-Xmx" + (availMem - 150) + "M");
         }
 
         // Garbage collection

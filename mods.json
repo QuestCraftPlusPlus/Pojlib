@@ -10,15 +10,15 @@
 				},
 				{
 					"slug": "Fabric-API",
-					"version": "0.118.0",
-					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/ZNwYCTsk/fabric-api-0.118.0%2B1.21.4.jar"
+					"version": "0.119.2",
+					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/bQZpGIz0/fabric-api-0.119.2%2B1.21.4.jar"
 				}
 			],
 			"defaultMods": [
 				{
 					"slug": "Sodium",
-					"version": "0.6.9",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/QuV9hMgB/sodium-fabric-0.6.9%2Bmc1.21.4.jar"
+					"version": "0.6.10",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/FRXt5xaI/sodium-fabric-0.6.10%2Bmc1.21.4.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -82,8 +82,8 @@
 				},
 				{
 					"slug": "Fabric-API",
-					"version": "0.115.1",
-					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/aHOmYIWr/fabric-api-0.115.1%2B1.21.1.jar"
+					"version": "0.115.3",
+					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/hZxPzoO7/fabric-api-0.115.3%2B1.21.1.jar"
 				}
 			],
 			"defaultMods": [

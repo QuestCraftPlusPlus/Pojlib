@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.install.FabricMeta;
@@ -49,28 +50,25 @@ public class InstanceHandler {
             return null;
         }
 
-        MinecraftInstances.Instance instance = create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL);
-        new Thread(() -> {
-            while(!API.finishedDownloading);
-
+        return create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL, (instance) -> {
             API.finishedDownloading = false;
+            if (instance.extProjects == null) {
+                instance.extProjects = new ProjectInfo[0];
+            }
+            ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
             for (ModrinthIndexJson.ModpackFile file : index.files) {
                 if (file.path.contains("mods")) {
-                    if (instance.extProjects == null) {
-                        instance.extProjects = new ProjectInfo[0];
-                    }
-                    ArrayList<ProjectInfo> mods = Lists.newArrayList(instance.extProjects);
                     ProjectInfo info = new ProjectInfo();
                     info.slug = file.path
-                            .replaceAll(".*\\/", "")
+                            .replaceAll(".*/", "")
                             .replaceAll("\\..*", "");
                     info.version = "1.0.0";
                     info.download_link = file.downloads[0];
                     info.type = "mod";
                     mods.add(info);
-                    instance.extProjects = mods.toArray(new ProjectInfo[0]);
                 }
             }
+            instance.extProjects = mods.toArray(new ProjectInfo[0]);
             try {
                 Files.walkFileTree(Paths.get(setupFile + "/overrides"), new FileVisitor<Path>() {
                     @Override
@@ -102,14 +100,13 @@ public class InstanceHandler {
                 throw new RuntimeException(e);
             }
             API.finishedDownloading = false;
+            instance.updateMods(instances);
             GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);
-        }).start();
-
-        return instance;
+        });
     }
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
-    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, String modLoader, String imageURL) {
+    public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, String modLoader, String imageURL, Consumer<MinecraftInstances.Instance> postInstall) {
         API.finishedDownloading = false;
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
@@ -187,8 +184,11 @@ public class InstanceHandler {
             instance.assetIndex = minecraftVersionInfo.assetIndex.id;
 
             // Write instance to json file
-            GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
             instance.updateMods(instances);
+            GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
+
+            if(postInstall != null)
+                postInstall.accept(instance);
 
             API.finishedDownloading = true;
             Logger.getInstance().appendToLog("Finished Creating Instance!");

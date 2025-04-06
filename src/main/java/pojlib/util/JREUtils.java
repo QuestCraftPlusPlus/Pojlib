@@ -214,6 +214,7 @@ public class JREUtils {
         userArgs.add("-XX:+ZGenerational");
         userArgs.add("-XX:-ZProactive");
         userArgs.add("-XX:+UnlockDiagnosticVMOptions");
+        userArgs.add("-XX:-ImplicitNullChecks");
         userArgs.add("-XX:+DisableExplicitGC");
 
         // Java should run at max

@@ -10,11 +10,12 @@ import java.util.ArrayList;
 
 import dalvik.annotation.optimization.CriticalNative;
 import pojlib.UnityPlayerActivity;
+
+import pojlib.UnityPlayerActivity;
 import pojlib.input.GrabListener;
 import pojlib.input.LwjglGlfwKeycode;
 
 public class CallbackBridge {
-    public static final Choreographer sChoreographer = Choreographer.getInstance();
     private static boolean isGrabbing = false;
     private static final ArrayList<GrabListener> grabListeners = new ArrayList<>();
 
@@ -30,7 +31,6 @@ public class CallbackBridge {
 
     public static void putMouseEventWithCoords(int button, float x, float y) {
         putMouseEventWithCoords(button, true, x, y);
-        sChoreographer.postFrameCallbackDelayed(l -> putMouseEventWithCoords(button, false, x, y), 33);
     }
 
     public static void putMouseEventWithCoords(int button, boolean isDown, float x, float y /* , int dz, long nanos */) {
@@ -166,16 +166,6 @@ public class CallbackBridge {
     @SuppressWarnings("unused")
     private static void onGrabStateChanged(final boolean grabbing) {
         isGrabbing = grabbing;
-        sChoreographer.postFrameCallbackDelayed((time) -> {
-            // If the grab re-changed, skip notify process
-            if (isGrabbing != grabbing) return;
-
-            System.out.println("Grab changed : " + grabbing);
-            synchronized (grabListeners) {
-                for (GrabListener g : grabListeners) g.onGrabState(grabbing);
-            }
-
-        }, 16);
     }
 
     public static void restartUnitySession(Activity activity) {

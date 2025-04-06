@@ -167,20 +167,9 @@ public class API {
      *
      * @param instance The instance to update
      */
-    public static void updateMods(MinecraftInstances instances, MinecraftInstances.Instance instance) {
-        instance.updateMods(instances);
-    }
-
-    /**
-     * Launch an instance
-     *
-     * @param activity Android activity object
-     * @param account Account object
-     * @param instance Instance object from {@link API#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String, String)}
-     *                 or {@link API#load(MinecraftInstances, String)}
-     */
-    public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
+    public static void prelaunch(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
         gameReady = false;
+        instance.updateMods(instances);
         if (hasWifi) {
             try {
                 JREUtils.prelaunchCheck(activity, instance);
@@ -192,6 +181,17 @@ public class API {
         }
 
         MinecraftInstances.CheckVivecraftConfig(instance);
+    }
+
+    /**
+     * Launch an instance
+     *
+     * @param activity Android activity object
+     * @param account Account object
+     * @param instance Instance object from {@link API#createNewInstance(Activity, MinecraftInstances, String, boolean, String, String, String)}
+     *                 or {@link API#load(MinecraftInstances, String)}
+     */
+    public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
         InstanceHandler.launchInstance(activity, account, instance);
     }
 

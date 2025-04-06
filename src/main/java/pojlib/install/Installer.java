@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
 
 import pojlib.APIHandler;
-import pojlib.UnityPlayerActivity;
 import pojlib.util.download.DownloadManager;
 import pojlib.util.download.DownloadUtils;
 import pojlib.util.json.MinecraftInstances;

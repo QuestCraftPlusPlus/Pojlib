@@ -9,7 +9,6 @@ import static android.view.MotionEvent.AXIS_X;
 import static android.view.MotionEvent.AXIS_Y;
 import static android.view.MotionEvent.AXIS_Z;
 
-import android.content.Context;
 import android.view.Choreographer;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -20,7 +19,6 @@ import org.lwjgl.glfw.CallbackBridge;
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
 import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 
-import static pojlib.UnityPlayerActivity.currentDisplayMetrics;
 import static pojlib.input.gamepad.GamepadJoystick.DIRECTION_EAST;
 import static pojlib.input.gamepad.GamepadJoystick.DIRECTION_NONE;
 import static pojlib.input.gamepad.GamepadJoystick.DIRECTION_NORTH;
@@ -47,7 +45,7 @@ public class Gamepad implements GrabListener, GamepadHandler {
     private final float mScaleFactor = 1; // LauncherPreferences.DEFAULT_PREF.getInt("resolutionRatio",100)/100f;
 
     /* Sensitivity, adjusted according to screen size */
-    private final double mSensitivityFactor = (1.4 * (1080f/ currentDisplayMetrics.heightPixels));
+    private final double mSensitivityFactor = (1.4 * (1080f));
     private final GamepadJoystick mLeftJoystick;
     private int mCurrentJoystickDirection = DIRECTION_NONE;
 

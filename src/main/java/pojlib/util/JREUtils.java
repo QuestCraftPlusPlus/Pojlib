@@ -149,6 +149,7 @@ public class JREUtils {
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("VR_MODEL", API.model);
         envMap.put("POJLIB_RENDERER", "LightThinWrapper");
+        envMap.put("POJLIB_STUTTER_FIX", Build.VERSION.SDK_INT < 34 ? "true" : "false");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE/bin:" + Os.getenv("PATH"));
@@ -214,7 +215,6 @@ public class JREUtils {
         userArgs.add("-XX:+ZGenerational");
         userArgs.add("-XX:-ZProactive");
         userArgs.add("-XX:+UnlockDiagnosticVMOptions");
-        userArgs.add("-XX:-ImplicitNullChecks");
         userArgs.add("-XX:+DisableExplicitGC");
 
         // Java should run at max

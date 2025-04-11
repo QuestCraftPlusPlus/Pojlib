@@ -203,11 +203,21 @@ public class JREUtils {
             ActivityManager.MemoryInfo ami = new ActivityManager.MemoryInfo();
             manager.getMemoryInfo(ami);
             long availMem = ami.availMem /= 1024 * 1024;
+            long memTotal = 2048;
 
-            Logger.getInstance().appendToLog("QuestCraft: Setting JVM memory to " + (availMem - 150) + "MB");
+            if (availMem > 4096) {
+                memTotal = 4096;
+            } else if (availMem < 2048) {
+                memTotal = 1536;
+            }
+
+            Logger.getInstance().appendToLog("QuestCraft: Setting JVM memory to " + memTotal + "MB");
+
+
             userArgs.add("-Xms" + 1024 + "M");
-            userArgs.add("-Xmx" + (availMem - 150) + "M");
+            userArgs.add("-Xmx" + memTotal + "M");
         }
+
 
         // Garbage collection
         userArgs.add("-XX:+UseZGC");

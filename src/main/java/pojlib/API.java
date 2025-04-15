@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import org.lwjgl.glfw.CallbackBridge;
 
 import pojlib.account.MinecraftAccount;
+import pojlib.util.DownloadUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.json.MinecraftInstances;
@@ -36,8 +37,6 @@ public class API {
     public static boolean finishedDownloading = true;
     public static boolean ignoreInstanceName;
     public static boolean customRAMValue = false;
-    public static double downloadStatus = 0;
-    public static String currentDownload = "";
     public static String profileImage;
     public static String profileName;
     public static String profileUUID;
@@ -90,8 +89,8 @@ public class API {
         return InstanceHandler.removeExtraProject(instances, instance, name);
     }
 
-    public static String[] getQCSupportedVersions() {
-        return APIHandler.getQCSupportedVersions();
+    public static String[] getQCSupportedVersions(Activity activity) {
+        return APIHandler.getQCSupportedVersions(activity);
     }
 
     /**
@@ -165,22 +164,11 @@ public class API {
     /**
      * Update the mods for the selected instance
      *
+     * @param activity Android activity object
      * @param instance The instance to update
      */
-    public static void prelaunch(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
-        gameReady = false;
-        instance.updateMods(instances);
-        if (hasWifi) {
-            try {
-                JREUtils.prelaunchCheck(activity, instance);
-            } catch (IOException e) {
-                Logger.getInstance().appendToLog("WARN! Instance launch failed!" + e);
-            }
-        } else {
-            Logger.getInstance().appendToLog("Skipping prelaunch check due to no wifi connection!");
-        }
-
-        MinecraftInstances.CheckVivecraftConfig(instance);
+    public static void updateMods(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
+        instance.updateMods(instances, activity);
     }
 
     /**
@@ -192,6 +180,18 @@ public class API {
      *                 or {@link API#load(MinecraftInstances, String)}
      */
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {
+        gameReady = false;
+        if (hasWifi) {
+            try {
+                JREUtils.prelaunchCheck(activity, instance);
+            } catch (IOException e) {
+                Logger.getInstance().appendToLog("WARN! Instance launch failed!" + e);
+            }
+        } else {
+            Logger.getInstance().appendToLog("Skipping prelaunch check due to no wifi connection!");
+        }
+
+        MinecraftInstances.CheckVivecraftConfig(instance);
         InstanceHandler.launchInstance(activity, account, instance);
     }
 
@@ -252,6 +252,26 @@ public class API {
         }
 
         LoginHelper.login(activity);
+    }
+
+    /**
+     * Get the current download name
+     *
+     * @param activity Android activity object
+     * @return The current download name
+     */
+    public static String currentDownload(Activity activity) {
+        return DownloadUtils.getCurrentDownloadFilename(activity);
+    };
+
+    /**
+     * Get the current download progress
+     *
+     * @param activity Android activity object
+     * @return The current download progress
+     */
+    public static double downloadStatus(Activity activity) {
+        return DownloadUtils.getTotalProgress(activity);
     }
 
     /**

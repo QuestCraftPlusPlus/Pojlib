@@ -1,7 +1,8 @@
 package pojlib.util.json;
 
+import android.app.Activity;
+
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +15,7 @@ import pojlib.account.MinecraftAccount;
 import pojlib.API;
 import pojlib.InstanceHandler;
 import pojlib.util.Constants;
-import pojlib.util.download.DownloadManager;
-import pojlib.util.download.DownloadUtils;
+import pojlib.util.DownloadUtils;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 
@@ -104,12 +104,12 @@ public class MinecraftInstances {
             return GsonUtils.jsonFileToObject(jsonPath, ModsJson.class);
         }
 
-        private ModsJson downloadCurrentModsJson(String userHome) throws Exception {
+        private ModsJson downloadCurrentModsJson(String userHome, Activity activity) throws Exception {
             File mods = new File(userHome + "/new_mods.json");
             if(API.developerMods) {
-                DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods, new DownloadManager(1));
+                DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods, true, activity);
             } else {
-                DownloadUtils.downloadFile(InstanceHandler.MODS, mods, new DownloadManager(1));
+                DownloadUtils.downloadFile(InstanceHandler.MODS, mods, true, activity);
             }
 
             return parseModsJson(mods.getAbsolutePath());
@@ -187,7 +187,7 @@ public class MinecraftInstances {
             }
         }
 
-        private void updateModByType(List<ProjectInfo> newMods) throws IOException {
+        private void updateModByType(List<ProjectInfo> newMods, Activity activity) throws IOException {
             ArrayList<ProjectInfo> newExtMods = new ArrayList<>();
             for(ProjectInfo extMod : extProjects) {
                 boolean manual = true;
@@ -202,7 +202,7 @@ public class MinecraftInstances {
                             (legacyMod ? newMod.slug : newMod.fileName) + (newMod.type.equals("resourcepack") ? ".zip" : ".jar")
                     );
                     if(!mod.exists() || !extMod.version.equals(newMod.version)) {
-                        DownloadUtils.downloadFile(newMod.download_link, mod, new DownloadManager(1));
+                        DownloadUtils.downloadFile(newMod.download_link, mod, true, activity);
                         extMod = newMod;
                         break;
                     }
@@ -214,7 +214,7 @@ public class MinecraftInstances {
                             (legacyMod ? extMod.slug : extMod.fileName) + (extMod.type.equals("resourcepack") ? ".zip" : ".jar")
                     );
                     if(!mod.exists()) {
-                        DownloadUtils.downloadFile(extMod.download_link, mod, new DownloadManager(1));
+                        DownloadUtils.downloadFile(extMod.download_link, mod, true, activity);
                     }
                 }
                 newExtMods.add(extMod);
@@ -223,27 +223,26 @@ public class MinecraftInstances {
             extProjects = newExtMods.toArray(new ProjectInfo[0]);
         }
 
-        private void downloadAllMods(List<ProjectInfo> newMods) throws IOException {
-            DownloadManager downloadManager = new DownloadManager(newMods.size());
+        private void downloadAllMods(List<ProjectInfo> newMods, Activity activity) throws IOException {
             for(ProjectInfo newMod : newMods) {
                 boolean legacyMod = newMod.fileName == null;
                 File mod = new File(
                         gameDir + (newMod.type.equals("mod") ? "/mods" : "/resourcepacks"),
                         (legacyMod ? newMod.slug : newMod.fileName) + (newMod.type.equals("resourcepack") ? ".zip" : ".jar")
                 );
-                DownloadUtils.downloadFile(newMod.download_link, mod, downloadManager);
+                DownloadUtils.downloadFile(newMod.download_link, mod, true, activity);
             }
 
             extProjects = newMods.toArray(new ProjectInfo[0]);
         }
 
-        public void updateMods(MinecraftInstances instances) {
+        public void updateMods(MinecraftInstances instances, Activity activity) {
             API.finishedDownloading = false;
             if(extProjects == null) {
                 extProjects = new ProjectInfo[0];
             }
             try {
-                ModsJson newMods = downloadCurrentModsJson(Constants.USER_HOME);
+                ModsJson newMods = downloadCurrentModsJson(Constants.USER_HOME, activity);
                 ModsJson oldMods = parseModsJson(Constants.USER_HOME + "/mods.json");
 
                 if(oldMods != null) {
@@ -261,9 +260,9 @@ public class MinecraftInstances {
                         mergedNewMods.addAll(Arrays.asList(newVersion.defaultMods));
 
                     if(extProjects.length == 0 || !modsFolder.exists())
-                        downloadAllMods(mergedNewMods);
+                        downloadAllMods(mergedNewMods, activity);
                     else
-                        updateModByType(mergedNewMods);
+                        updateModByType(mergedNewMods, activity);
                     break;
                 }
 

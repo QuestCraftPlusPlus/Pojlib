@@ -100,7 +100,7 @@ public class InstanceHandler {
                 throw new RuntimeException(e);
             }
             API.finishedDownloading = false;
-            instance.updateMods(instances);
+            instance.updateMods(instances, activity);
             GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);
         });
     }
@@ -169,14 +169,14 @@ public class InstanceHandler {
 
         new Thread(() -> {
             try {
-                String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
-                String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
-                String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
+                String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir, activity);
+                String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir, activity);
+                String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir, activity);
                 String lwjgl = UnityPlayerActivity.installLWJGL(activity);
 
                 instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
 
-                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
+                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir, activity);
                 Installer.moveLocalAssets(activity, instance);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -184,7 +184,7 @@ public class InstanceHandler {
             instance.assetIndex = minecraftVersionInfo.assetIndex.id;
 
             // Write instance to json file
-            instance.updateMods(instances);
+            instance.updateMods(instances, activity);
             GsonUtils.objectToJsonFile(gameDir + "/instances.json", instances);
 
             if(postInstall != null)

@@ -181,9 +181,9 @@ public class JREUtils {
     public static void prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws IOException {
         UnityPlayerActivity.installLWJGL(activity);
         Installer.installJVM(activity);
-        Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
-        Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
-        Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
+        Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME, activity);
+        Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME, activity);
+        Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME, activity);
     }
 
     public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, MinecraftInstances.Instance instance) throws Throwable {

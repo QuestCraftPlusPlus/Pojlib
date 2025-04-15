@@ -1,5 +1,7 @@
 package pojlib;
 
+import android.app.Activity;
+
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -15,8 +17,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import pojlib.util.Constants;
-import pojlib.util.download.DownloadManager;
-import pojlib.util.download.DownloadUtils;
+import pojlib.util.DownloadUtils;
 import pojlib.util.GsonUtils;
 import pojlib.util.Logger;
 
@@ -110,11 +111,12 @@ public class APIHandler {
 
     public static final String SUPPORTED_VERSIONS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/refs/heads/QuestCraft-6.0.0/supportedVersions.json";
 
-    public static String[] getQCSupportedVersions() {
+    public static String[] getQCSupportedVersions(Activity activity) {
         File versionsJson = new File(Constants.USER_HOME + "/supportedVersions.json");
+
         try {
-            DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson, new DownloadManager(1));
-        } catch (IOException e) {
+            DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson, true, activity);
+        } catch (Exception e) {
             Logger.getInstance().appendToLog("Error while grabbing supported versions!\n" + e);
         }
 

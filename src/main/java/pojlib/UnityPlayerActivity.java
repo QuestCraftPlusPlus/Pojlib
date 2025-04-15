@@ -7,19 +7,14 @@ import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Activity;
 import android.app.ActivityGroup;
-import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
-import android.util.DisplayMetrics;
-import android.view.InputDevice;
 import android.util.DisplayMetrics;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -34,8 +29,6 @@ import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 import fr.spse.gamepad_remapper.RemapperManager;
@@ -49,8 +42,6 @@ import pojlib.input.gamepad.Gamepad;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 import pojlib.util.Logger;
-import pojlib.util.download.DownloadManager;
-import pojlib.util.download.DownloadUtils;
 
 public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLifecycleEvents, GrabListener
 {
@@ -76,6 +67,10 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
             return arg;
         else
             return cmdLine + " " + arg;
+    }
+
+    public Activity getActivity() {
+        return this;
     }
 
     protected String updateUnityCommandLineArguments(String cmdLine)

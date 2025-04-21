@@ -57,8 +57,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "1.21.4-2.5.27",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/4Zzq92HE/voicechat-fabric-1.21.4-2.5.27.jar"
+					"version": "1.21.4-2.5.28",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/DWQCr1uB/voicechat-fabric-1.21.4-2.5.28.jar"
 				},
 				{
 					"slug": "BadOptimizations",
@@ -114,8 +114,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "fabric-1.21.1-2.5.24",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/9IRn71aQ/voicechat-fabric-1.21.1-2.5.24.jar"
+					"version": "fabric-1.21.1-2.5.28",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/UG3KsGVe/voicechat-fabric-1.21.1-2.5.28.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -283,8 +283,8 @@
 				},
 				{
 					"slug": "Fabric-API",
-					"version": "0.92.1",
-					"download_link": "https://github.com/FabricMC/fabric/releases/download/0.92.1%2B1.20.1/fabric-api-0.92.1+1.20.1.jar"
+					"version": "0.92.5",
+					"download_link": "https://github.com/FabricMC/fabric/releases/download/0.92.5%2B1.20.1/fabric-api-0.92.5+1.20.1.jar"
 				}
 			],
 			"defaultMods": [
@@ -330,8 +330,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "2.5.12",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/gEYXa8hg/voicechat-fabric-1.20.1-2.5.12.jar"
+					"version": "fabric-1.20.1-2.5.28",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/pPL5s4GQ/voicechat-fabric-1.20.1-2.5.28.jar"
 				},
 				{
 					"slug": "ModernFix",
@@ -449,8 +449,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "2.5.12",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/9VLgXa6O/voicechat-fabric-1.19.2-2.5.12.jar"
+					"version": "fabric-1.19.2-2.5.28",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/kgCLdzjR/voicechat-fabric-1.19.2-2.5.28.jar"
 				},
 				{
 					"slug": "Lithium",

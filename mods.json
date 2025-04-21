@@ -283,8 +283,8 @@
 				},
 				{
 					"slug": "Fabric-API",
-					"version": "0.92.1",
-					"download_link": "https://github.com/FabricMC/fabric/releases/download/0.92.1%2B1.20.1/fabric-api-0.92.1+1.20.1.jar"
+					"version": "0.92.5",
+					"download_link": "https://github.com/FabricMC/fabric/releases/download/0.92.5%2B1.20.1/fabric-api-0.92.5+1.20.1.jar"
 				}
 			],
 			"defaultMods": [

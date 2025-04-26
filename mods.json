@@ -17,8 +17,8 @@
 			"defaultMods": [
 				{
 					"slug": "Sodium",
-					"version": "0.6.10",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/FRXt5xaI/sodium-fabric-0.6.10%2Bmc1.21.4.jar"
+					"version": "0.6.13",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/c3YkZvne/sodium-fabric-0.6.13%2Bmc1.21.4.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -89,8 +89,8 @@
 			"defaultMods": [
 				{
 					"slug": "Sodium",
-					"version": "0.6.9",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/26nVNc41/sodium-fabric-0.6.9%2Bmc1.21.1.jar"
+					"version": "0.6.13",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/u1OEbNKx/sodium-fabric-0.6.13%2Bmc1.21.1.jar"
 				},
 				{
 					"slug": "ModernFix",

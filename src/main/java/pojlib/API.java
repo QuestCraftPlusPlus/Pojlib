@@ -90,7 +90,7 @@ public class API {
         return InstanceHandler.removeExtraProject(instances, instance, name);
     }
 
-    public static String[] getQCSupportedVersions(Context ctx) {
+    public static String[] getQCSupportedVersions(Activity ctx) {
         return APIHandler.getQCSupportedVersions(ctx);
     }
 

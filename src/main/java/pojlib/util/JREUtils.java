@@ -260,6 +260,14 @@ public class JREUtils {
     private static void writeDNS(Context ctx, File out) throws IOException {
         FileWriter writer = new FileWriter(out);
 
+        if(!API.hasConnection(ctx)) {
+            writer.write("nameserver 8.8.8.8\n");
+            writer.write("nameserver 8.8.4.4");
+            writer.flush();
+            writer.close();
+            return;
+        }
+
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network activeNetwork = cm.getActiveNetwork();
         LinkProperties lp = cm.getLinkProperties(activeNetwork);

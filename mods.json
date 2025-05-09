@@ -5,8 +5,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.4.1",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.21.4-1.2.1-openxr/vivecraft-1.21.4-1.2.4.1-fabric.jar"
+					"version": "1.2.4.2",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.21.4-1.2.1-openxr/vivecraft-1.21.4-1.2.4.2-fabric.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -77,8 +77,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.21.1-1.2.1-openxr/vivecraft-1.21.1-1.2.5-fabric.jar"
+					"version": "1.2.6",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.21.1-1.2.1-openxr/vivecraft-1.21.1-1.2.6-fabric.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -149,8 +149,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.20.6-1.2.1-openxr/vivecraft-1.20.6-1.2.5-fabric.jar"
+					"version": "1.2.6",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.20.6-1.2.1-openxr/vivecraft-1.20.6-1.2.6-fabric.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -201,8 +201,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.20.4-1.2.1-openxr/vivecraft-1.20.4-1.2.5-fabric.jar"
+					"version": "1.2.6",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.20.4-1.2.1-openxr/vivecraft-1.20.4-1.2.6-fabric.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -278,8 +278,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.20.1-1.2.1-openxr/vivecraft-1.20.1-1.2.5-fabric.jar"
+					"version": "1.2.6",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.20.1-1.2.1-openxr/vivecraft-1.20.1-1.2.6-fabric.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -345,8 +345,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.19.4-1.2.1-openxr/vivecraft-1.19.4-1.2.5-fabric.jar"
+					"version": "1.2.6",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.19.4-1.2.1-openxr/vivecraft-1.19.4-1.2.6-fabric.jar"
 				},
 				{
 					"slug": "Fabric-API",
@@ -432,8 +432,8 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.5",
-					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.19.2-1.2.1-openxr/vivecraft-1.19.2-1.2.5-fabric.jar"
+					"version": "1.2.6",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.19.2-1.2.1-openxr/vivecraft-1.19.2-1.2.6-fabric.jar"
 				},
 				{
 					"slug": "Fabric-API",

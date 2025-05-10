@@ -69,6 +69,10 @@ public class InstanceHandler {
                     info.version = "1.0.0";
                     info.download_link = file.downloads[0];
                     info.type = "mod";
+                    if(isCoreMod(instance, info)) {
+                        continue;
+                    }
+
                     mods.add(info);
                 }
             }
@@ -248,6 +252,23 @@ public class InstanceHandler {
         return false;
     }
 
+    private static boolean isCoreMod(MinecraftInstances.Instance instance, ProjectInfo oldInfo) {
+        // Check if its a coremod
+        ModsJson oldMods = instance.parseModsJson(Constants.USER_HOME + "/mods.json");
+        if(oldMods != null) {
+            Optional<ModsJson.Version> ver = Arrays.stream(oldMods.versions).filter((v) -> !v.name.equals(instance.versionName)).findFirst();
+            if(ver.isPresent()) {
+                ModsJson.Version version = ver.get();
+                Optional<ProjectInfo> info = Arrays.stream(version.coreMods).filter((mod) -> !mod.slug.equals(oldInfo.slug)).findFirst();
+                if(info.isPresent()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static boolean removeExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
         ProjectInfo oldInfo = Arrays.stream(instance.extProjects).filter(info -> info.slug.equalsIgnoreCase(name)).findFirst().orElse(null);
 
@@ -255,17 +276,8 @@ public class InstanceHandler {
             boolean isMod = oldInfo.type.equals("mod");
             boolean legacyMod = oldInfo.fileName == null;
 
-            // Check if its a coremod
-            ModsJson oldMods = instance.parseModsJson(Constants.USER_HOME + "/mods.json");
-            if(oldMods != null) {
-                Optional<ModsJson.Version> ver = Arrays.stream(oldMods.versions).filter((v) -> !v.name.equals(instance.versionName)).findFirst();
-                if(ver.isPresent()) {
-                   ModsJson.Version version = ver.get();
-                   Optional<ProjectInfo> info = Arrays.stream(version.coreMods).filter((mod) -> !mod.slug.equals(oldInfo.slug)).findFirst();
-                   if(info.isPresent()) {
-                       return false;
-                   }
-                }
+            if(isCoreMod(instance, oldInfo)) {
+                return false;
             }
 
             // Delete the mod

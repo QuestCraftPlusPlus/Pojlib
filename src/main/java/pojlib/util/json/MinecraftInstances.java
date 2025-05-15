@@ -100,7 +100,7 @@ public class MinecraftInstances {
             return extProjects;
         }
 
-        private ModsJson parseModsJson(String jsonPath) {
+        public ModsJson parseModsJson(String jsonPath) {
             return GsonUtils.jsonFileToObject(jsonPath, ModsJson.class);
         }
 

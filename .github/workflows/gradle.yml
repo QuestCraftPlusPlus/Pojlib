@@ -31,11 +31,6 @@ jobs:
         distribution: 'temurin'
     - uses: nttld/setup-ndk@v1
       with:
-        ndk-version: r21d
-        local-cache: true
-        link-to-sdk: true
-    - uses: nttld/setup-ndk@v1
-      with:
         ndk-version: r26b
         local-cache: true
         link-to-sdk: true

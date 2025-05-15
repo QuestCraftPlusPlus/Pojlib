@@ -46,7 +46,7 @@ public class API {
     public static MinecraftAccount currentAcc;
     public static boolean isDemoMode;
     public static MinecraftInstances.Instance currentInstance;
-    public static boolean hasWifi;
+    private static boolean hasWifi;
     public static boolean advancedDebugger;
     public static boolean gameReady = false;
 
@@ -90,8 +90,8 @@ public class API {
         return InstanceHandler.removeExtraProject(instances, instance, name);
     }
 
-    public static String[] getQCSupportedVersions() {
-        return APIHandler.getQCSupportedVersions();
+    public static String[] getQCSupportedVersions(Activity ctx) {
+        return APIHandler.getQCSupportedVersions(ctx);
     }
 
     /**
@@ -138,7 +138,6 @@ public class API {
      * @throws                  IOException Throws if download of library or asset fails
      */
     public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, boolean useDefaultMods, String minecraftVersion, String modLoader, String imageURL) throws IOException {
-        finishedDownloading = false;
         return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, useDefaultMods, minecraftVersion, modLoader, imageURL, null);
     }
 
@@ -152,7 +151,6 @@ public class API {
      * @throws                  IOException Throws if download of library or asset fails
      */
     public static MinecraftInstances.Instance createNewInstance(Activity activity, MinecraftInstances instances, String instanceName, String imageURL, String modLoader, String mrpackFile) throws IOException {
-        finishedDownloading = false;
         if(ignoreInstanceName) {
             return InstanceHandler.create(activity, instances, instanceName, Constants.USER_HOME, modLoader, mrpackFile, imageURL);
         } else if (instanceName.contains("/") || instanceName.contains("!")) {
@@ -170,7 +168,7 @@ public class API {
     public static void prelaunch(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
         gameReady = false;
         instance.updateMods(instances);
-        if (hasWifi) {
+        if (hasConnection(activity)) {
             try {
                 JREUtils.prelaunchCheck(activity, instance);
             } catch (IOException e) {
@@ -233,7 +231,7 @@ public class API {
         }
 
         MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", accountUUID);
-        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasWifi || acc.isDemoMode)) {
+        if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasConnection(activity) || acc.isDemoMode)) {
             currentAcc = acc;
             API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             API.profileName = API.currentAcc.username;
@@ -260,7 +258,7 @@ public class API {
      * @param activity activity object
      * @return true if the device has a valid wifi connection
      */
-    public static boolean hasConnection(Activity activity) {
+    public static boolean hasConnection(Context activity) {
         boolean hasNetwork = false;
         ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkCapabilities capabilities = connManager.getNetworkCapabilities(connManager.getActiveNetwork());

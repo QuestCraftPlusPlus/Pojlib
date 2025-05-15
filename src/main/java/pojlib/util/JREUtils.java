@@ -3,6 +3,9 @@ package pojlib.util;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.LinkProperties;
+import android.net.Network;
 import android.os.Build;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -14,7 +17,9 @@ import com.oracle.dalvik.VMLauncher;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -252,6 +257,30 @@ public class JREUtils {
         return exitCode;
     }
 
+    private static void writeDNS(Context ctx, File out) throws IOException {
+        FileWriter writer = new FileWriter(out);
+
+        if(!API.hasConnection(ctx)) {
+            writer.write("nameserver 8.8.8.8\n");
+            writer.write("nameserver 8.8.4.4");
+            writer.flush();
+            writer.close();
+            return;
+        }
+
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network activeNetwork = cm.getActiveNetwork();
+        LinkProperties lp = cm.getLinkProperties(activeNetwork);
+        if(lp == null)
+            return;
+
+        List<InetAddress> dnsServers = lp.getDnsServers();
+        for (InetAddress dns : dnsServers) {
+            writer.write(String.format("nameserver %s\n", dns.getHostAddress()));
+            writer.flush();
+        }
+        writer.close();
+    }
 
     /**
      *  Gives an argument list filled with both the user args
@@ -260,6 +289,15 @@ public class JREUtils {
      * @return A list filled with args.
      */
     public static List<String> getJavaArgs(Context ctx, MinecraftInstances.Instance instance) {
+        File resConfFile = new File(Constants.USER_HOME + "/hacks/resolv.conf");
+        try {
+            if(!resConfFile.exists()) {
+                resConfFile.createNewFile();
+            }
+            writeDNS(ctx, resConfFile);
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("Couldn't write DNS servers! " + e.getMessage());
+        }
         return new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + new File(ctx.getFilesDir(), "runtimes/JRE"),
                 "-Djava.io.tmpdir=" + ctx.getCacheDir().getAbsolutePath(),
@@ -276,9 +314,10 @@ public class JREUtils {
                 "-Dglfwstub.initEgl=false",
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
                 "-Dnet.minecraft.clientmodname=" + "QuestCraft",
-                "-Dext.net.resolvPath=" + Constants.USER_HOME + "/hacks/ResConfHack.jar",
+                "-Dext.net.resolvPath=" + resConfFile,
                 "-Dsodium.checks.issue2561=false",
-                "-Dorg.sqlite.lib.path=" + ctx.getApplicationInfo().nativeLibraryDir        ));
+                "-Dorg.sqlite.lib.path=" + ctx.getApplicationInfo().nativeLibraryDir
+        ));
     }
 
     /**

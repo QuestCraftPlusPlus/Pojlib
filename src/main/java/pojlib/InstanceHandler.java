@@ -14,7 +14,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import pojlib.account.MinecraftAccount;
@@ -27,6 +29,7 @@ import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 import pojlib.util.VLoader;
 import pojlib.util.json.MinecraftInstances;
+import pojlib.util.json.ModsJson;
 import pojlib.util.json.ProjectInfo;
 import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
@@ -38,6 +41,7 @@ public class InstanceHandler {
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/refs/heads/QuestCraft-6.0.0/devmods.json";
 
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, String modLoader, String mrpackFilePath, String imageURL) {
+        API.finishedDownloading = false;
         File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_") + "/setup/modrinth.index.json");
 
         mrpackJson.getParentFile().mkdirs();
@@ -65,6 +69,10 @@ public class InstanceHandler {
                     info.version = "1.0.0";
                     info.download_link = file.downloads[0];
                     info.type = "mod";
+                    if(isCoreMod(instance, info)) {
+                        continue;
+                    }
+
                     mods.add(info);
                 }
             }
@@ -244,18 +252,33 @@ public class InstanceHandler {
         return false;
     }
 
-    public static boolean removeExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
-        ProjectInfo oldInfo = null;
-        for(ProjectInfo info : instance.extProjects) {
-            if(info.slug.equalsIgnoreCase(name)) {
-                oldInfo = info;
-                break;
+    private static boolean isCoreMod(MinecraftInstances.Instance instance, ProjectInfo oldInfo) {
+        // Check if its a coremod
+        ModsJson oldMods = instance.parseModsJson(Constants.USER_HOME + "/mods.json");
+        if(oldMods != null) {
+            Optional<ModsJson.Version> ver = Arrays.stream(oldMods.versions).filter((v) -> !v.name.equals(instance.versionName)).findFirst();
+            if(ver.isPresent()) {
+                ModsJson.Version version = ver.get();
+                Optional<ProjectInfo> info = Arrays.stream(version.coreMods).filter((mod) -> !mod.slug.equals(oldInfo.slug)).findFirst();
+                if(info.isPresent()) {
+                    return true;
+                }
             }
         }
+
+        return false;
+    }
+
+    public static boolean removeExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name) {
+        ProjectInfo oldInfo = Arrays.stream(instance.extProjects).filter(info -> info.slug.equalsIgnoreCase(name)).findFirst().orElse(null);
 
         if(oldInfo != null) {
             boolean isMod = oldInfo.type.equals("mod");
             boolean legacyMod = oldInfo.fileName == null;
+
+            if(isCoreMod(instance, oldInfo)) {
+                return false;
+            }
 
             // Delete the mod
             File modFile = new File(instance.gameDir + (isMod ? "/mods/" : "/resourcepacks/") + (legacyMod ? oldInfo.slug : oldInfo.fileName) + (isMod ? ".jar" : ".zip"));
@@ -265,9 +288,10 @@ public class InstanceHandler {
             mods.remove(oldInfo);
             instance.extProjects = mods.toArray(mods.toArray(new ProjectInfo[0]));
             GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
+            return true;
         }
 
-        return oldInfo != null;
+        return false;
     }
 
     // Return true if instance was deleted

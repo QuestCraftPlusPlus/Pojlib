@@ -53,13 +53,14 @@ public class DownloadUtils {
                 tempOut.renameTo(out);
                 bos2.close();
                 if (tempOut.exists()) tempOut.delete();
-
             } catch (IOException th2) {
                 if (tempOut.exists()) tempOut.delete();
+                API.finishedDownloading = true;
                 throw th2;
             }
         } catch (IOException e) {
             if (tempOut.exists()) tempOut.delete();
+            API.finishedDownloading = true;
             throw e;
         }
     }

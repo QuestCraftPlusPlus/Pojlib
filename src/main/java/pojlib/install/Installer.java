@@ -20,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +39,8 @@ public class Installer {
             if (!jre.exists()) {
                 Logger.getInstance().appendToLog("Installing JRE");
                 File jreZip = new File(activity.getFilesDir() + "/runtimes/JRE.zip");
-                DownloadUtils.downloadFile(jreURL, jreZip, new DownloadManager(1));
+                DownloadUtils.downloadFile(jreURL, jreZip);
+                DownloadManager.reset();
                 FileUtil.unzipArchive(jreZip.getPath(), activity.getFilesDir() + "/runtimes/JRE");
                 Files.copy(Paths.get(activity.getApplicationInfo().nativeLibraryDir + "/libawt_xawt.so"), Paths.get(activity.getFilesDir() + "/runtimes/JRE/lib/libawt_xawt.so"));
                 jreZip.delete();
@@ -52,119 +55,135 @@ public class Installer {
 
     // Will only download client if it is missing, however it will overwrite if sha1 does not match the downloaded client
     // Returns client classpath
-    public static String installClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
-        Logger.getInstance().appendToLog("Checking Client");
+    public static CompletableFuture<String> installClient(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+        return CompletableFuture.supplyAsync(() -> {
+            Logger.getInstance().appendToLog("Checking Client");
 
-        File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
+            File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
 
-        try {
-            for (int i = 0; i < 5; i++) {
-                if (i == 4) throw new RuntimeException("Client download failed after 5 retries");
+            try {
+                for (int i = 0; i < 5; i++) {
+                    if (i == 4)
+                        throw new RuntimeException("Client download failed after 5 retries");
 
-                if (!clientFile.exists()) {
-                    DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
-                } else if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) {
-                    clientFile.delete();
-                    DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile, new DownloadManager(1));
+                    if (!clientFile.exists()) {
+                        DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile);
+                    } else if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) {
+                        clientFile.delete();
+                        DownloadUtils.downloadFile(minecraftVersionInfo.downloads.client.url, clientFile);
+                    }
+
+                    // Check if the downloaded client matches the expected SHA1 hash
+                    if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) {
+                        Logger.getInstance().appendToLog("Client downloaded");
+                        return clientFile.getAbsolutePath();
+                    }
                 }
-
-                // Check if the downloaded client matches the expected SHA1 hash
-                if (DownloadUtils.compareSHA1(clientFile, minecraftVersionInfo.downloads.client.sha1)) {
-                    Logger.getInstance().appendToLog("Client downloaded");
-                    return clientFile.getAbsolutePath();
-                }
+            } catch (IOException e) {
+                Logger.getInstance().appendToLog("Failed to download client: " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            Logger.getInstance().appendToLog("Failed to download client: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return null;
+            return null;
+        });
     }
 
     // Will only download library if it is missing, however it will overwrite if sha1 does not match the downloaded library
     // Returns the classpath of the downloaded libraries
-    public static String installLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
-        Logger.getInstance().appendToLog("Checking Libraries for: " + versionInfo.id);
-        StringJoiner classpath = new StringJoiner(File.pathSeparator);
+    public static CompletableFuture<String> installLibraries(VersionInfo versionInfo, String gameDir) throws IOException {
+        return CompletableFuture.supplyAsync(() -> {
+            Logger.getInstance().appendToLog("Checking Libraries for: " + versionInfo.id);
+            StringJoiner classpath = new StringJoiner(File.pathSeparator);
 
-        for (VersionInfo.Library library : versionInfo.libraries) {
-            if(library.name.contains("lwjgl") || (library.name.contains("org.ow2.asm")) & !versionInfo.id.contains("fabric")) {
-                continue;
-            }
-            for (int i = 0; i < 5; i++) {
-                if (i == 4) throw new RuntimeException(String.format("Library download of %s failed after 5 retries", library.name));
+            for (VersionInfo.Library library : versionInfo.libraries) {
+                if (library.name.contains("lwjgl") || (library.name.contains("org.ow2.asm")) & !versionInfo.id.contains("fabric")) {
+                    continue;
+                }
+                for (int i = 0; i < 5; i++) {
+                    if (i == 4)
+                        throw new RuntimeException(String.format("Library download of %s failed after 5 retries", library.name));
 
-                File libraryFile;
-                String sha1;
+                    File libraryFile;
+                    String sha1;
 
-                //Null means mod lib, otherwise vanilla lib
-                if (library.downloads == null) {
-                    String path = parseLibraryNameToPath(library.name);
-                    libraryFile = new File(gameDir + "/libraries/", path);
-                    sha1 = APIHandler.getRaw(library.url + path + ".sha1");
-                    if (!libraryFile.exists()) {
-                        Logger.getInstance().appendToLog("Downloading: " + library.name);
-                        DownloadUtils.downloadFile(library.url + path, libraryFile, new DownloadManager(1));
-                    }
-                } else {
-                    VersionInfo.Library.Artifact artifact = library.downloads.artifact;
-                    libraryFile = new File(gameDir + "/libraries/", artifact.path);
-                    sha1 = artifact.sha1;
-                    if (!libraryFile.exists()) {
-                        Logger.getInstance().appendToLog("Downloading: " + library.name);
-                        DownloadUtils.downloadFile(artifact.url, libraryFile, new DownloadManager(1));
+                    //Null means mod lib, otherwise vanilla lib
+                    try {
+                        if (library.downloads == null) {
+                            String path = parseLibraryNameToPath(library.name);
+                            libraryFile = new File(gameDir + "/libraries/", path);
+                            sha1 = APIHandler.getRaw(library.url + path + ".sha1");
+                            if (!libraryFile.exists()) {
+                                Logger.getInstance().appendToLog("Downloading: " + library.name);
+                                DownloadUtils.downloadFile(library.url + path, libraryFile);
+                            }
+                        } else {
+                            VersionInfo.Library.Artifact artifact = library.downloads.artifact;
+                            libraryFile = new File(gameDir + "/libraries/", artifact.path);
+                            sha1 = artifact.sha1;
+                            if (!libraryFile.exists()) {
+                                Logger.getInstance().appendToLog("Downloading: " + library.name);
+                                DownloadUtils.downloadFile(artifact.url, libraryFile);
+                            }
+                        }
+                        if (DownloadUtils.compareSHA1(libraryFile, sha1)) {
+                            classpath.add(libraryFile.getAbsolutePath());
+                            break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
-
-                if(DownloadUtils.compareSHA1(libraryFile, sha1)) {
-                    classpath.add(libraryFile.getAbsolutePath());
-                    break;
-                }
             }
-        }
 
-        // Add our GLFW
-        classpath.add(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
-        // DNS SRV Resolver fix
-        classpath.add(Constants.USER_HOME + "/hacks/ResConfHack.jar");
+            // Add our GLFW
+            classpath.add(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
+            // DNS SRV Resolver fix
+            classpath.add(Constants.USER_HOME + "/hacks/ResConfHack.jar");
 
-        Logger.getInstance().appendToLog("Libraries installed");
-        return classpath.toString();
+            Logger.getInstance().appendToLog("Libraries installed");
+            return classpath.toString();
+        });
     }
 
     //Only works on minecraft, not fabric, quilt, etc...
     //Will only download asset if it is missing
-    public static String installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
-        Logger.getInstance().appendToLog("Checking assets");
-        JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
+    public static CompletableFuture<String> installAssets(VersionInfo minecraftVersionInfo, String gameDir) throws IOException {
+        return CompletableFuture.supplyAsync(() -> {
+            Logger.getInstance().appendToLog("Checking assets");
+            JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
-        int bytes = 0;
+            int bytes = 0;
 
-        for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
-            VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
-            bytes += asset.size;
-        }
+            for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
+                VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
+                bytes += asset.size;
+            }
 
-        DownloadManager downloadManager = new DownloadManager(bytes);
-        ThreadPoolExecutor tp = new ThreadPoolExecutor(8, 8, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+            DownloadManager.addTotalBytes(bytes);
+            ThreadPoolExecutor tp = new ThreadPoolExecutor(8, 8, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
-        for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
-            AsyncDownload thread = new AsyncDownload(entry, gameDir, downloadManager);
-            tp.execute(thread);
-        }
+            for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
+                AsyncDownload thread = new AsyncDownload(entry, gameDir);
+                tp.execute(thread);
+            }
 
-        tp.shutdown();
-        try {
-            while (!tp.awaitTermination(100, TimeUnit.MILLISECONDS));
-        } catch (InterruptedException e) {
-            Logger.getInstance().appendToLog("Download thread interrupted" + e.getMessage());
-        }
+            tp.shutdown();
+            try {
+                while (!tp.awaitTermination(100, TimeUnit.MILLISECONDS)) ;
+            } catch (InterruptedException e) {
+                Logger.getInstance().appendToLog("Download thread interrupted" + e.getMessage());
+            }
 
-        File indexJson = new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json");
-        if (!indexJson.exists()) DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, indexJson, downloadManager);
+            File indexJson = new File(gameDir + "/assets/indexes/" + minecraftVersionInfo.assets + ".json");
+            if (!indexJson.exists()) {
+                try {
+                    DownloadUtils.downloadFile(minecraftVersionInfo.assetIndex.url, indexJson);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        return new File(gameDir + "/assets").getAbsolutePath();
+            return new File(gameDir + "/assets").getAbsolutePath();
+        });
     }
 
     public static void moveLocalAssets(Activity activity, MinecraftInstances.Instance instance) throws IOException {
@@ -187,13 +206,11 @@ public class Installer {
     public static class AsyncDownload implements Runnable {
         private final Map.Entry<String, JsonElement> entry;
         private final String gameDir;
-        private final DownloadManager downloadManager;
         private final String fileName;
 
-        public AsyncDownload(Map.Entry<String, JsonElement> entry, String gameDir, DownloadManager downloadManager) {
+        public AsyncDownload(Map.Entry<String, JsonElement> entry, String gameDir) {
             this.entry = entry;
             this.gameDir = gameDir;
-            this.downloadManager = downloadManager;
             this.fileName = entry.getKey();
         }
 
@@ -209,14 +226,13 @@ public class Installer {
                 if (!assetFile.exists()) {
                     Logger.getInstance().appendToLog("Downloading: " + fileName);
                     try {
-                        DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile, downloadManager);
+                        DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
 
                 if (DownloadUtils.compareSHA1(assetFile, asset.hash)) {
-                    downloadManager.fileDownloadComplete(fileName);
                     break;
                 } else {
                     assetFile.delete();

@@ -1,37 +1,32 @@
 package pojlib.util.download;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import pojlib.API;
-
 public class DownloadManager {
-    private final Map<String, Double> downloadProgress = new ConcurrentHashMap<>();
-    private final int totalFiles;
-    private final AtomicInteger completedFiles = new AtomicInteger(0);
-
-    public DownloadManager(int totalFiles) {
-        this.totalFiles = totalFiles;
+    private static long downloadedBytes;
+    private static long totalBytes;
+    
+    public static void addBytes(long add) {
+        downloadedBytes += add;
+    }
+    
+    public static void addTotalBytes(long add) {
+        totalBytes += add;
     }
 
-    public void updateProgress(String fileName, double progress) {
-        downloadProgress.put(fileName, progress);
-        API.currentDownload = fileName;
-        getOverallProgress();
+    public static void reset() {
+        downloadedBytes = 0;
+        totalBytes = 0;
     }
 
-    public void fileDownloadComplete(String fileName) {
-        completedFiles.incrementAndGet();
-        downloadProgress.remove(fileName);
-        getOverallProgress();
+    public static boolean downloadsCompleted() {
+        return downloadedBytes == totalBytes;
     }
 
-    private void getOverallProgress() {
-        int completed = completedFiles.get();
-        double overallProgress = ((double) completed / totalFiles) * 100;
-        if (completed == totalFiles) {API.currentDownload = "Finished! Ready to start."; API.finishedDownloading = true;}
-        API.downloadStatus = overallProgress;
+    public static float getPercentComplete() {
+        if(totalBytes == 0) {
+            return 1.0f;
+        }
+
+        return (float) downloadedBytes/totalBytes;
     }
 }
 

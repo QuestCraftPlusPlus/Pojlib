@@ -107,9 +107,11 @@ public class MinecraftInstances {
         private ModsJson downloadCurrentModsJson(String userHome) throws Exception {
             File mods = new File(userHome + "/new_mods.json");
             if(API.developerMods) {
-                DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods, new DownloadManager(1));
+                DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods);
+                DownloadManager.reset();
             } else {
-                DownloadUtils.downloadFile(InstanceHandler.MODS, mods, new DownloadManager(1));
+                DownloadUtils.downloadFile(InstanceHandler.MODS, mods);
+                DownloadManager.reset();
             }
 
             return parseModsJson(mods.getAbsolutePath());
@@ -202,7 +204,7 @@ public class MinecraftInstances {
                             (legacyMod ? newMod.slug : newMod.fileName) + (newMod.type.equals("resourcepack") ? ".zip" : ".jar")
                     );
                     if(!mod.exists() || !extMod.version.equals(newMod.version)) {
-                        DownloadUtils.downloadFile(newMod.download_link, mod, new DownloadManager(1));
+                        DownloadUtils.downloadFile(newMod.download_link, mod);
                         extMod = newMod;
                         break;
                     }
@@ -214,7 +216,7 @@ public class MinecraftInstances {
                             (legacyMod ? extMod.slug : extMod.fileName) + (extMod.type.equals("resourcepack") ? ".zip" : ".jar")
                     );
                     if(!mod.exists()) {
-                        DownloadUtils.downloadFile(extMod.download_link, mod, new DownloadManager(1));
+                        DownloadUtils.downloadFile(extMod.download_link, mod);
                     }
                 }
                 newExtMods.add(extMod);
@@ -224,21 +226,19 @@ public class MinecraftInstances {
         }
 
         private void downloadAllMods(List<ProjectInfo> newMods) throws IOException {
-            DownloadManager downloadManager = new DownloadManager(newMods.size());
             for(ProjectInfo newMod : newMods) {
                 boolean legacyMod = newMod.fileName == null;
                 File mod = new File(
                         gameDir + (newMod.type.equals("mod") ? "/mods" : "/resourcepacks"),
                         (legacyMod ? newMod.slug : newMod.fileName) + (newMod.type.equals("resourcepack") ? ".zip" : ".jar")
                 );
-                DownloadUtils.downloadFile(newMod.download_link, mod, downloadManager);
+                DownloadUtils.downloadFile(newMod.download_link, mod);
             }
 
             extProjects = newMods.toArray(new ProjectInfo[0]);
         }
 
         public void updateMods(MinecraftInstances instances) {
-            API.finishedDownloading = false;
             if(extProjects == null) {
                 extProjects = new ProjectInfo[0];
             }
@@ -274,10 +274,8 @@ public class MinecraftInstances {
                 modsFile.delete();
                 Files.copy(newModsFile.toPath(), modsFile.toPath());
                 newModsFile.delete();
-                API.finishedDownloading = true;
             } catch (Exception e) {
                 Logger.getInstance().appendToLog("Mods failed to download! Are you offline?\n" + e);
-                API.finishedDownloading = true;
             }
         }
     }

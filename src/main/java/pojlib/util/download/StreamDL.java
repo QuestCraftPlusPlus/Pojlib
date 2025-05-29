@@ -9,15 +9,10 @@ public class StreamDL extends InputStream {
     private final InputStream in;
     private int count;
     private final Collection<StreamListener> listeners = new ArrayList<>();
-    private final DownloadManager downloadManager;
-    private final String fileName;
-    private final int totalBytes;
 
-    public StreamDL(InputStream in, DownloadManager downloadManager, String fileName, int totalBytes) {
+    public StreamDL(InputStream in, int totalBytes) {
         this.in = in;
-        this.downloadManager = downloadManager;
-        this.fileName = fileName;
-        this.totalBytes = totalBytes;
+        DownloadManager.addTotalBytes(totalBytes);
     }
 
     @Override
@@ -34,10 +29,7 @@ public class StreamDL extends InputStream {
     private void byteReceived(int b) {
         if (b != -1) {
             count++;
-            double progress = ((double) count / totalBytes) * 100;
-            downloadManager.updateProgress(fileName, progress);
-        } else {
-            downloadManager.fileDownloadComplete(fileName);
+            DownloadManager.addBytes(1);
         }
 
         for (StreamListener l : listeners) {

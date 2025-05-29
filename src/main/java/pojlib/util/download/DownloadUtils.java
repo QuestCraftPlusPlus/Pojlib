@@ -16,7 +16,7 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 public class DownloadUtils {
-    private static void download(URL url, OutputStream os, String fileName, DownloadManager downloadManager) throws IOException {
+    private static void download(URL url, OutputStream os, String fileName) throws IOException {
         final int MAX_RETRIES = 3;
         int attempts = 0;
 
@@ -30,7 +30,7 @@ public class DownloadUtils {
 
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     int totalBytes = conn.getContentLength(); // Get the total size of the file
-                    try (InputStream is = new StreamDL(conn.getInputStream(), downloadManager, fileName, totalBytes)) {
+                    try (InputStream is = new StreamDL(conn.getInputStream(), totalBytes)) {
                         IOUtils.copy(is, os);
                     }
                     return;
@@ -43,24 +43,21 @@ public class DownloadUtils {
         }
     }
 
-    public static void downloadFile(String url, File out, DownloadManager downloadManager) throws IOException {
-        API.finishedDownloading = false;
+    public static void downloadFile(String url, File out) throws IOException {
         Objects.requireNonNull(out.getParentFile()).mkdirs();
         File tempOut = File.createTempFile(out.getName(), ".part", out.getParentFile());
         try {
             try (OutputStream bos2 = new BufferedOutputStream(Files.newOutputStream(tempOut.toPath()))) {
-                download(new URL(url), bos2, out.getName(), downloadManager);
+                download(new URL(url), bos2, out.getName());
                 tempOut.renameTo(out);
                 bos2.close();
                 if (tempOut.exists()) tempOut.delete();
             } catch (IOException th2) {
                 if (tempOut.exists()) tempOut.delete();
-                API.finishedDownloading = true;
                 throw th2;
             }
         } catch (IOException e) {
             if (tempOut.exists()) tempOut.delete();
-            API.finishedDownloading = true;
             throw e;
         }
     }

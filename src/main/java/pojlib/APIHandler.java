@@ -116,7 +116,7 @@ public class APIHandler {
         File versionsJson = new File(Constants.USER_HOME + "/supportedVersions.json");
         if(API.hasConnection(ctx)) {
             try {
-                DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson, new DownloadManager(1));
+                DownloadUtils.downloadFile(SUPPORTED_VERSIONS, versionsJson);
             } catch (IOException e) {
                 Logger.getInstance().appendToLog("Error while grabbing supported versions!\n" + e);
             }

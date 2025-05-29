@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 import pojlib.account.MinecraftAccount;
@@ -28,6 +31,7 @@ import pojlib.install.VersionInfo;
 import pojlib.util.Constants;
 import pojlib.util.FileUtil;
 import pojlib.util.VLoader;
+import pojlib.util.download.DownloadManager;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.json.ModsJson;
 import pojlib.util.json.ProjectInfo;
@@ -41,7 +45,6 @@ public class InstanceHandler {
     public static final String DEV_MODS = "https://raw.githubusercontent.com/QuestCraftPlusPlus/Pojlib/refs/heads/QuestCraft-6.0.0/devmods.json";
 
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String userHome, String modLoader, String mrpackFilePath, String imageURL) {
-        API.finishedDownloading = false;
         File mrpackJson = new File(Constants.USER_HOME + "/instances/" + instanceName.toLowerCase(Locale.ROOT).replaceAll(" ", "_") + "/setup/modrinth.index.json");
 
         mrpackJson.getParentFile().mkdirs();
@@ -55,7 +58,6 @@ public class InstanceHandler {
         }
 
         return create(activity, instances, instanceName, userHome, false, index.dependencies.minecraft, modLoader, imageURL, (instance) -> {
-            API.finishedDownloading = false;
             if (instance.extProjects == null) {
                 instance.extProjects = new ProjectInfo[0];
             }
@@ -107,7 +109,6 @@ public class InstanceHandler {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            API.finishedDownloading = false;
             instance.updateMods(instances);
             GsonUtils.objectToJsonFile(userHome + "/instances.json", instances);
         });
@@ -115,7 +116,6 @@ public class InstanceHandler {
 
     //creates a new instance of a minecraft version, install game + mod loader, stores non login related launch info to json
     public static MinecraftInstances.Instance create(Activity activity, MinecraftInstances instances, String instanceName, String gameDir, boolean useDefaultMods, String minecraftVersion, String modLoader, String imageURL, Consumer<MinecraftInstances.Instance> postInstall) {
-        API.finishedDownloading = false;
         File instancesFile = new File(gameDir + "/instances.json");
         if (instancesFile.exists()) {
             for (MinecraftInstances.Instance instance : instances.instances) {
@@ -175,18 +175,22 @@ public class InstanceHandler {
         instances1.add(instance);
         instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
 
-        new Thread(() -> {
+        CompletableFuture.supplyAsync(() ->
+        {
             try {
-                String clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
-                String minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
-                String modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
+                CompletableFuture<String> clientClasspath = Installer.installClient(minecraftVersionInfo, gameDir);
+                CompletableFuture<String> minecraftClasspath = Installer.installLibraries(minecraftVersionInfo, gameDir);
+                CompletableFuture<String> modLoaderClasspath = Installer.installLibraries(finalModLoaderVersionInfo, gameDir);
                 String lwjgl = UnityPlayerActivity.installLWJGL(activity);
 
-                instance.classpath = clientClasspath + File.pathSeparator + minecraftClasspath + File.pathSeparator + modLoaderClasspath + File.pathSeparator + lwjgl;
+                CompletableFuture<Void> installFuture = CompletableFuture.allOf(clientClasspath, minecraftClasspath, modLoaderClasspath);
+                installFuture.get();
 
-                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir);
+                instance.classpath = clientClasspath.get() + File.pathSeparator + minecraftClasspath.get() + File.pathSeparator + modLoaderClasspath.get() + File.pathSeparator + lwjgl;
+
+                instance.assetsDir = Installer.installAssets(minecraftVersionInfo, gameDir).get();
                 Installer.moveLocalAssets(activity, instance);
-            } catch (IOException e) {
+            } catch (IOException | ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
             instance.assetIndex = minecraftVersionInfo.assetIndex.id;
@@ -198,9 +202,10 @@ public class InstanceHandler {
             if(postInstall != null)
                 postInstall.accept(instance);
 
-            API.finishedDownloading = true;
+            DownloadManager.reset();
             Logger.getInstance().appendToLog("Finished Creating Instance!");
-        }).start();
+            return null;
+        });
 
         return instance;
     }

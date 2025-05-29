@@ -14,6 +14,7 @@ import org.lwjgl.glfw.CallbackBridge;
 import pojlib.account.MinecraftAccount;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
+import pojlib.util.download.DownloadManager;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
@@ -33,11 +34,8 @@ public class API {
     public static String model = "Quest";
     private static boolean hasQueried = false;
     private static JsonObject initialResponse;
-    public static boolean finishedDownloading = true;
     public static boolean ignoreInstanceName;
     public static boolean customRAMValue = false;
-    public static double downloadStatus = 0;
-    public static String currentDownload = "";
     public static String profileImage;
     public static String profileName;
     public static String profileUUID;
@@ -63,6 +61,14 @@ public class API {
      */
     public static void addExtraProject(MinecraftInstances instances, MinecraftInstances.Instance instance, String name, String fileName, String version, String url, String type) {
         InstanceHandler.addExtraProject(instances, instance, name, fileName, version, url, type);
+    }
+
+    public static boolean isDownloadsCompleted() {
+        return DownloadManager.downloadsCompleted();
+    }
+
+    public static float getDownloadPercentage() {
+        return DownloadManager.getPercentComplete();
     }
 
     /**
@@ -168,6 +174,7 @@ public class API {
     public static void prelaunch(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
         gameReady = false;
         instance.updateMods(instances);
+        DownloadManager.reset();
         if (hasConnection(activity)) {
             try {
                 JREUtils.prelaunchCheck(activity, instance);

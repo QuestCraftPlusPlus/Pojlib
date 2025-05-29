@@ -291,6 +291,9 @@ public class JREUtils {
     public static List<String> getJavaArgs(Context ctx, MinecraftInstances.Instance instance) {
         File resConfFile = new File(Constants.USER_HOME + "/hacks/resolv.conf");
         try {
+            if(!resConfFile.exists()) {
+                resConfFile.createNewFile();
+            }
             writeDNS(ctx, resConfFile);
         } catch (IOException e) {
             Logger.getInstance().appendToLog("Couldn't write DNS servers! " + e.getMessage());

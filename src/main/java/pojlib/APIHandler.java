@@ -122,9 +122,6 @@ public class APIHandler {
             }
         } else {
             Logger.getInstance().appendToLog("Skipping supported versions download.");
-            return new String[] {
-                    "1.21.4"
-            };
         }
 
         DownloadManager.reset();

@@ -29,5 +29,9 @@ public class Constants {
 
     public static final String MINOTAR_URL = "https://minotar.net";
 
-    public static String USER_HOME = new File(Environment.getExternalStorageDirectory(),"Android/data/com.qcxr.qcxr/files").getAbsolutePath();
+    public static String USER_HOME;
+
+    public static void initConstants(Activity activity) {
+        USER_HOME = activity.getExternalFilesDir(null).getAbsolutePath();
+    }
 }

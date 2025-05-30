@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import pojlib.API;
 
@@ -183,12 +184,12 @@ public class JREUtils {
     }
 
     // Called before game launch to ensure all files are present and correct
-    public static void prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws IOException {
+    public static void prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws IOException, ExecutionException, InterruptedException {
         UnityPlayerActivity.installLWJGL(activity);
         Installer.installJVM(activity);
-        Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
-        Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
-        Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME);
+        Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
+        Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
+        Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
     }
 
     public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, MinecraftInstances.Instance instance) throws Throwable {

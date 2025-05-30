@@ -22,6 +22,7 @@ import pojlib.account.LoginHelper;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -177,7 +178,7 @@ public class API {
         if (hasConnection(activity)) {
             try {
                 JREUtils.prelaunchCheck(activity, instance);
-            } catch (IOException e) {
+            } catch (IOException | ExecutionException | InterruptedException e) {
                 Logger.getInstance().appendToLog("WARN! Instance launch failed!" + e);
             }
         } else {

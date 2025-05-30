@@ -1,8 +1,8 @@
 package pojlib.util.download;
 
 public class DownloadManager {
-    private static long downloadedBytes;
-    private static long totalBytes;
+    private static long downloadedBytes = 0;
+    private static long totalBytes = 0;
     
     public static void addBytes(long add) {
         downloadedBytes += add;
@@ -23,10 +23,10 @@ public class DownloadManager {
 
     public static float getPercentComplete() {
         if(totalBytes == 0) {
-            return 1.0f;
+            return 100.0f;
         }
 
-        return (float) downloadedBytes/totalBytes;
+        return (float) downloadedBytes/totalBytes * 100;
     }
 }
 

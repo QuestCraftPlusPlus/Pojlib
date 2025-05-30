@@ -59,7 +59,7 @@ public class Installer {
         return CompletableFuture.supplyAsync(() -> {
             Logger.getInstance().appendToLog("Checking Client");
 
-            File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/" + minecraftVersionInfo.id + ".jar");
+            File clientFile = new File(gameDir + "/versions/" + minecraftVersionInfo.id + "/client.jar");
 
             try {
                 for (int i = 0; i < 5; i++) {

@@ -83,7 +83,9 @@ public class MinecraftInstances {
                     "--assetsDir", assetsDir, "--assetIndex", assetIndex, "--uuid", account.uuid.replace("-", ""),
                     "--accessToken", account.accessToken, "--userType", account.userType, "--versionType", "release"};
 
-            List<String> allArgs = new ArrayList<>(Arrays.asList("-cp", classpath));
+            List<String> allArgs = new ArrayList<>();
+            allArgs.add("-cp");
+            allArgs.add(classpath);
             allArgs.add(mainClass);
             allArgs.addAll(Arrays.asList(mcArgs));
             if (account.isDemoMode) {
@@ -108,10 +110,8 @@ public class MinecraftInstances {
             File mods = new File(userHome + "/new_mods.json");
             if(API.developerMods) {
                 DownloadUtils.downloadFile(InstanceHandler.DEV_MODS, mods);
-                DownloadManager.reset();
             } else {
                 DownloadUtils.downloadFile(InstanceHandler.MODS, mods);
-                DownloadManager.reset();
             }
 
             return parseModsJson(mods.getAbsolutePath());

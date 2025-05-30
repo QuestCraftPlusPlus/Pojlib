@@ -128,7 +128,7 @@ public class API {
      * @param instance Instance object
      * @return True if it deletes successfully, false otherwise.
      */
-    public static boolean deleteInstance(MinecraftInstances instances, MinecraftInstances.Instance instance) {
+    public static boolean deleteInstance(MinecraftInstances instances, MinecraftInstances.Instance instance) throws IOException {
         return InstanceHandler.delete(instances, instance);
     }
 
@@ -174,7 +174,6 @@ public class API {
     public static void prelaunch(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
         gameReady = false;
         instance.updateMods(instances);
-        DownloadManager.reset();
         if (hasConnection(activity)) {
             try {
                 JREUtils.prelaunchCheck(activity, instance);
@@ -184,6 +183,7 @@ public class API {
         } else {
             Logger.getInstance().appendToLog("Skipping prelaunch check due to no wifi connection!");
         }
+        DownloadManager.reset();
 
         MinecraftInstances.CheckVivecraftConfig(instance);
     }

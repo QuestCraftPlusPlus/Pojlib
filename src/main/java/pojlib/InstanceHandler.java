@@ -300,16 +300,38 @@ public class InstanceHandler {
     }
 
     // Return true if instance was deleted
-    public static boolean delete(MinecraftInstances instances, MinecraftInstances.Instance instance) {
+    public static boolean delete(MinecraftInstances instances, MinecraftInstances.Instance instance) throws IOException {
         File instanceDir = new File(instance.gameDir);
-        instanceDir.delete();
+        Files.walkFileTree(instanceDir.toPath(), new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
 
         ArrayList<MinecraftInstances.Instance> instances1 = Lists.newArrayList(instances.instances);
         instances1.remove(instance);
         instances.instances = instances1.toArray(new MinecraftInstances.Instance[0]);
         GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
 
-        return true;
+        return instanceDir.delete();
     }
 
     public static void launchInstance(Activity activity, MinecraftAccount account, MinecraftInstances.Instance instance) {

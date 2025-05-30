@@ -85,6 +85,8 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
     // Setup activity layout
     @Override protected void onCreate(Bundle savedInstanceState) {
+        Constants.initConstants(this);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 

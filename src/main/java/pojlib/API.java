@@ -240,19 +240,20 @@ public class API {
 
         MinecraftAccount acc = MinecraftAccount.load(activity.getFilesDir() + "/accounts", accountUUID);
         if(acc != null && (acc.expiresOn >= System.currentTimeMillis() || !hasConnection(activity) || acc.isDemoMode)) {
+            API.profileImage = MinecraftAccount.getSkinFaceUrl(acc);
+            API.profileName = acc.username;
+            API.profileUUID = acc.uuid;
+            API.isDemoMode = acc.isDemoMode;
             currentAcc = acc;
-            API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
-            API.profileName = API.currentAcc.username;
-            API.profileUUID = API.currentAcc.uuid;
-            API.isDemoMode = API.currentAcc.isDemoMode;
             return;
         } else if(acc != null && acc.expiresOn < System.currentTimeMillis()) {
-            currentAcc = LoginHelper.refreshAccount(activity, accountUUID);
-            if(currentAcc != null) {
-                API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
-                API.profileName = API.currentAcc.username;
-                API.profileUUID = API.currentAcc.uuid;
-                API.isDemoMode = API.currentAcc.isDemoMode;
+            MinecraftAccount refreshed = LoginHelper.refreshAccount(activity, accountUUID);
+            if(refreshed != null) {
+                API.profileImage = MinecraftAccount.getSkinFaceUrl(refreshed);
+                API.profileName = refreshed.username;
+                API.profileUUID = refreshed.uuid;
+                API.isDemoMode = refreshed.isDemoMode;
+                currentAcc = refreshed;
                 return;
             }
         }

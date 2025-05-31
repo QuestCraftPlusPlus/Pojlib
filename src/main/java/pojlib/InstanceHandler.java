@@ -262,13 +262,11 @@ public class InstanceHandler {
         // Check if its a coremod
         ModsJson oldMods = instance.parseModsJson(Constants.USER_HOME + "/mods.json");
         if(oldMods != null) {
-            Optional<ModsJson.Version> ver = Arrays.stream(oldMods.versions).filter((v) -> !v.name.equals(instance.versionName)).findFirst();
+            Optional<ModsJson.Version> ver = Arrays.stream(oldMods.versions).filter((v) -> v.name.equals(instance.versionName)).findFirst();
             if(ver.isPresent()) {
                 ModsJson.Version version = ver.get();
-                Optional<ProjectInfo> info = Arrays.stream(version.coreMods).filter((mod) -> !mod.slug.equals(oldInfo.slug)).findFirst();
-                if(info.isPresent()) {
-                    return true;
-                }
+                Optional<ProjectInfo> info = Arrays.stream(version.coreMods).filter((mod) -> mod.slug.equals(oldInfo.slug)).findFirst();
+                return info.isPresent();
             }
         }
 

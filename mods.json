@@ -1,6 +1,73 @@
 {
 	"versions": [
 		{
+			"name": "1.21.5",
+			"coreMods": [
+				{
+					"slug": "Vivecraft",
+					"version": "1.2.5",
+					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.21.5-1.2.5-OpenXR/vivecraft-1.21.5-1.2.5-fabric.jar"
+				},
+				{
+					"slug": "Fabric-API",
+					"version": "0.126.0",
+					"download_link": "https://github.com/FabricMC/fabric/releases/download/0.126.0%2B1.21.5/fabric-api-0.126.0+1.21.5.jar"
+				}
+			],
+			"defaultMods": [
+				{
+					"slug": "Sodium",
+					"version": "0.6.13",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/DA250htH/sodium-fabric-0.6.13%2Bmc1.21.5.jar"
+				},
+				{
+					"slug": "Cloth-Config",
+					"version": "18.0.145",
+					"download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/qA00xo1O/cloth-config-18.0.145-fabric.jar"
+				},
+				{
+					"slug": "Ferrite-Core",
+					"version": "8.0.0",
+					"download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/CtMpt7Jr/ferritecore-8.0.0-fabric.jar"
+				},
+				{
+					"slug": "MoreCulling",
+					"version": "1.3.1",
+					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/MDkI6Huh/moreculling-fabric-1.21.5-1.3.1.jar"
+				},
+				{
+					"slug": "Lithium",
+					"version": "0.16.2",
+					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/VWYoZjBF/lithium-fabric-0.16.2%2Bmc1.21.5.jar"
+				},
+				{
+					"slug": "ImmediatelyFast",
+					"version": "1.9.5",
+					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/dk4uLLmV/ImmediatelyFast-Fabric-1.9.5%2B1.21.5.jar"
+				},
+				{
+					"slug": "Krypton",
+					"version": "0.2.8",
+					"download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/neW85eWt/krypton-0.2.9.jar"
+				},
+				{
+					"slug": "Simple-Voice-Chat",
+					"version": "2.5.30",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/suJqF5xU/voicechat-fabric-1.21.5-2.5.30.jar"
+				},
+				{
+					"slug": "BadOptimizations",
+					"version": "2.2.2",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/flRkZbyf/BadOptimizations-2.2.2-1.21.2-21.5.jar"
+				},
+				{
+					"slug": "bbrb",
+					"version": "1.5.2",
+					"download_link": "https://cdn.modrinth.com/data/Xh8hkQmD/versions/HZlLCOct/betterbiomeblend-1.5.2.jar"
+				}
+			]
+		},
+		{
 			"name": "1.21.4",
 			"coreMods": [
 				{

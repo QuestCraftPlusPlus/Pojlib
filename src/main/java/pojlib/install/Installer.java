@@ -121,7 +121,7 @@ public class Installer {
                             sha1 = artifact.sha1;
                             if (!libraryFile.exists()) {
                                 Logger.getInstance().appendToLog("Downloading: " + library.name);
-                                DownloadUtils.downloadFile(artifact.url, libraryFile);
+                                DownloadUtils.downloadFile(artifact.url, libraryFile, artifact.size);
                             }
                         }
                         if (DownloadUtils.compareSHA1(libraryFile, sha1)) {
@@ -151,14 +151,11 @@ public class Installer {
             Logger.getInstance().appendToLog("Checking assets");
             JsonObject assets = APIHandler.getFullUrl(minecraftVersionInfo.assetIndex.url, JsonObject.class);
 
-            int bytes = 0;
-
             for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
                 VersionInfo.Asset asset = new Gson().fromJson(entry.getValue(), VersionInfo.Asset.class);
-                bytes += asset.size;
+                DownloadManager.addTotalBytes(asset.size);
             }
 
-            DownloadManager.addTotalBytes(bytes);
             ThreadPoolExecutor tp = new ThreadPoolExecutor(8, 8, 100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
             for (Map.Entry<String, JsonElement> entry : assets.getAsJsonObject("objects").entrySet()) {
@@ -226,7 +223,7 @@ public class Installer {
                 if (!assetFile.exists()) {
                     Logger.getInstance().appendToLog("Downloading: " + fileName);
                     try {
-                        DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile);
+                        DownloadUtils.downloadFile(Constants.MOJANG_RESOURCES_URL + "/" + path, assetFile, 0);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

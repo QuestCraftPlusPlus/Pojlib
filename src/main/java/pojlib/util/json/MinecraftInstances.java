@@ -216,7 +216,7 @@ public class MinecraftInstances {
                             (legacyMod ? extMod.slug : extMod.fileName) + (extMod.type.equals("resourcepack") ? ".zip" : ".jar")
                     );
                     if(!mod.exists()) {
-                        DownloadUtils.downloadFile(extMod.download_link, mod);
+                        DownloadUtils.downloadFile(extMod.download_link, mod, 0);
                     }
                 }
                 newExtMods.add(extMod);
@@ -232,7 +232,7 @@ public class MinecraftInstances {
                         gameDir + (newMod.type.equals("mod") ? "/mods" : "/resourcepacks"),
                         (legacyMod ? newMod.slug : newMod.fileName) + (newMod.type.equals("resourcepack") ? ".zip" : ".jar")
                 );
-                DownloadUtils.downloadFile(newMod.download_link, mod);
+                DownloadUtils.downloadFile(newMod.download_link, mod, 0);
             }
 
             extProjects = newMods.toArray(new ProjectInfo[0]);

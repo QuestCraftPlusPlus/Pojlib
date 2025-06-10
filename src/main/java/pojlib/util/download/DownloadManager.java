@@ -22,7 +22,7 @@ public class DownloadManager {
     }
 
     public static float getPercentComplete() {
-        if(totalBytes == 0) {
+        if(totalBytes == 0 || downloadedBytes > totalBytes) {
             return 100.0f;
         }
 

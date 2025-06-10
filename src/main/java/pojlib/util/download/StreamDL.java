@@ -10,7 +10,7 @@ public class StreamDL extends InputStream {
     private int count;
     private final Collection<StreamListener> listeners = new ArrayList<>();
 
-    public StreamDL(InputStream in, int totalBytes) {
+    public StreamDL(InputStream in, long totalBytes) {
         this.in = in;
         DownloadManager.addTotalBytes(totalBytes);
     }

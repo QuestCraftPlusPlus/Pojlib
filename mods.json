@@ -223,8 +223,8 @@
 				},
 				{
 					"slug": "Fabric-Language-Kotlin",
-					"version": "1.10.16+kotlin.1.9.21",
-					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/VJUqKopR/fabric-language-kotlin-1.10.16%2Bkotlin.1.9.21.jar"
+					"version": "1.13.4+kotlin.2.2.0",
+					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/mccDBWqV/fabric-language-kotlin-1.13.4%2Bkotlin.2.2.0.jar"
 				},
 				{
 					"slug": "Server-Core",

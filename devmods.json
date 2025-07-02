@@ -161,8 +161,8 @@
 				},
 				{
 					"slug": "ModernFix",
-					"version": "5.20.2+mc1.21.1",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/tn4FFqcg/modernfix-fabric-5.20.2%2Bmc1.21.1.jar"
+					"version": "5.24.2+mc1.21.1",
+					"download_link": "https://github.com/embeddedt/ModernFix/releases/download/5.24.0%2B1.21.1/modernfix-fabric-5.24.0+mc1.21.1.jar"
 				},
 				{
 					"slug": "Noisium",
@@ -377,8 +377,8 @@
 				},
 				{
 					"slug": "Fabric-Language-Kotlin",
-					"version": "1.13.4+kotlin.2.2.0",
-					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/mccDBWqV/fabric-language-kotlin-1.13.4%2Bkotlin.2.2.0.jar"
+					"version": "1.13.3+kotlin.2.1.21",
+					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/iqWDz8qt/fabric-language-kotlin-1.13.3%2Bkotlin.2.1.21.jar"
 				},
 				{
 					"slug": "Krypton",
@@ -402,8 +402,8 @@
 				},
 				{
 					"slug": "ModernFix",
-					"version": "5.20.2",
-					"download_link": "https://cdn.modrinth.com/data/nmDcB62a/versions/LwBOyIOY/modernfix-fabric-5.20.2%2Bmc1.20.1.jar"
+					"version": "5.24.0",
+					"download_link": "https://github.com/embeddedt/ModernFix/releases/download/5.24.0%2B1.20.1/modernfix-fabric-5.24.0+mc1.20.1.jar"
 				}
 			]
 		},
@@ -469,8 +469,8 @@
 				},
 				{
 					"slug": "Fabric-Language-Kotlin",
-					"version": "1.13.4+kotlin.2.2.0",
-					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/mccDBWqV/fabric-language-kotlin-1.13.4%2Bkotlin.2.2.0.jar"
+					"version": "1.9.3+kotlin.1.8.20",
+					"download_link": "https://cdn.modrinth.com/data/Ha28R6CL/versions/MkcO8aQ0/fabric-language-kotlin-1.9.3%2Bkotlin.1.8.20.jar"
 				},
 				{
 					"slug": "Server-Core",

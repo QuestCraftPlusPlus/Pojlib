@@ -209,11 +209,9 @@ public class JREUtils {
             ActivityManager.MemoryInfo ami = new ActivityManager.MemoryInfo();
             manager.getMemoryInfo(ami);
             long availMem = (ami.availMem-ami.threshold)/(1024*1024);
-            availMem *= 0.8; // Lossy, but should work...
             long allocatedRam = Math.max(availMem, 1536);
 
             Logger.getInstance().appendToLog("QuestCraft: Setting JVM memory to " + allocatedRam + "MB");
-
 
             userArgs.add("-Xms" + 1024 + "M");
             userArgs.add("-Xmx" + allocatedRam + "M");

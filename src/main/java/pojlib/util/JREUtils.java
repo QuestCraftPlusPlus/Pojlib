@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import pojlib.API;
 
@@ -78,11 +77,8 @@ public class JREUtils {
         return returnValue;
     }
 
-    public static void initJavaRuntime() {
-        dlopen(findInLdLibPath("libjli.so"));
-        if(!dlopen("libjvm.so")){
-            dlopen(jvmLibraryPath+"/libjvm.so");
-        }
+    public static boolean initJavaRuntime() {
+        dlopen(findInLdLibPath("server/libjvm.so"));
         dlopen(findInLdLibPath("libverify.so"));
         dlopen(findInLdLibPath("libjava.so"));
         dlopen(findInLdLibPath("libnet.so"));
@@ -91,9 +87,15 @@ public class JREUtils {
         dlopen(findInLdLibPath("libawt_headless.so"));
         dlopen(findInLdLibPath("libfreetype.so"));
         dlopen(findInLdLibPath("libfontmanager.so"));
-        for(File f : locateLibs(new File(runtimeDir + "/lib"))) {
-            dlopen(f.getAbsolutePath());
+        dlopen(findInLdLibPath("libjli.so"));
+
+        String dlerr = dlerror();
+        if(dlerr.contains(runtimeDir)) {
+            Logger.getInstance().appendToLog("ERROR! Could not dlopen libraries! " + dlerr);
+            return false;
         }
+
+        return true;
     }
 
     public static void redirectAndPrintJRELog() {
@@ -154,10 +156,14 @@ public class JREUtils {
         //envMap.put("APP_HOME", Constants.USER_HOME);
         envMap.put("TMPDIR", activity.getCacheDir().getAbsolutePath());
         envMap.put("VR_MODEL", API.model);
-        envMap.put("POJLIB_RENDERER", "LightThinWrapper");
+        envMap.put("POJLIB_RENDERER", "MobileGLUES");
+        envMap.put("MG_DIR_PATH", activity.getFilesDir() + "/mg");
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", activity.getFilesDir() + "/runtimes/JRE/bin:" + Os.getenv("PATH"));
+
+        File mg = new File(activity.getFilesDir() + "/mg");
+        mg.mkdirs();
 
         File customEnvFile = new File(Constants.USER_HOME, "custom_env.txt");
         if (customEnvFile.exists() && customEnvFile.isFile()) {
@@ -184,18 +190,21 @@ public class JREUtils {
     }
 
     // Called before game launch to ensure all files are present and correct
-    public static void prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws IOException, ExecutionException, InterruptedException {
+    public static boolean prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws Throwable {
+        runtimeDir = activity.getFilesDir() + "/runtimes/JRE";
+        JREUtils.relocateLibPath(activity);
+        setJavaEnvironment(activity, instance);
+
         UnityPlayerActivity.installLWJGL(activity);
         Installer.installJVM(activity);
         Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
         Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
         Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
+
+        return initJavaRuntime();
     }
 
     public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, MinecraftInstances.Instance instance) throws Throwable {
-        JREUtils.relocateLibPath(activity);
-        setJavaEnvironment(activity, instance);
-
         final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity, instance);
 
@@ -240,9 +249,6 @@ public class JREUtils {
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);
 
-        runtimeDir = activity.getFilesDir() + "/runtimes/JRE";
-
-        initJavaRuntime();
         chdir(instance.gameDir);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 
@@ -364,7 +370,7 @@ public class JREUtils {
      * @return The name of the loaded library
      */
     public static String loadGraphicsLibrary(){
-        return "libltw.so";
+        return "libmobileglues.so";
     }
 
     public static native long getEGLContextPtr();
@@ -373,6 +379,7 @@ public class JREUtils {
     public static native int chdir(String path);
     public static native void logToLogger(final Logger logger);
     public static native boolean dlopen(String libPath);
+    public static native String dlerror();
     public static native void setLdLibraryPath(String ldLibraryPath);
 
     static {

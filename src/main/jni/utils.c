@@ -91,6 +91,16 @@ JNIEXPORT jboolean JNICALL Java_pojlib_util_JREUtils_dlopen(JNIEnv *env, jclass 
 	return handle != NULL;
 }
 
+JNIEXPORT jstring JNICALL Java_pojlib_util_JREUtils_dlerror(JNIEnv *env, jclass clazz) {
+    char* err = dlerror();
+    if(err == NULL) {
+        return NULL;
+    }
+    jstring dstStr = (*env)->NewStringUTF(env, err);
+
+	return dstStr;
+}
+
 JNIEXPORT jint JNICALL Java_pojlib_util_JREUtils_chdir(JNIEnv *env, jclass clazz, jstring nameStr) {
 	const char *name = (*env)->GetStringUTFChars(env, nameStr, NULL);
 	int retval = chdir(name);

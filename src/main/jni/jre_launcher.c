@@ -36,7 +36,7 @@
 #include "utils.h"
 
 // Uncomment to try redirect signal handling to JVM
-#define TRY_SIG2JVM
+// #define TRY_SIG2JVM
 
 #define FULL_VERSION "1.8.0-internal"
 #define DOT_VERSION "1.8"
@@ -121,7 +121,7 @@ static jint launchJVM(int margc, char** margv) {
  */
 JNIEXPORT jint JNICALL Java_com_oracle_dalvik_VMLauncher_launchJVM(JNIEnv *env, jclass clazz, jobjectArray argsArray) {
 #ifdef TRY_SIG2JVM
-  void* libjvm = dlopen("libjvm.so", RTLD_LAZY | RTLD_GLOBAL);
+  void* libjvm = dlopen("libjvm.so", RTLD_NOLOAD);
   if (NULL == libjvm) {
       LOGE("JVM lib = NULL: %s", dlerror());
       return -1;

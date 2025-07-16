@@ -67,7 +67,7 @@ void pojavTerminate() {
 }
 
 void dlsym_egl() {
-    void* handle = dlopen("libltw.so", RTLD_NOW);
+    void* handle = dlopen("libmobileglues.so", RTLD_NOW);
     eglGetProcAddress_p = (eglGetProcAddress_t*) dlsym(handle, "eglGetProcAddress");
     eglGetDisplay_p = (eglGetDisplay_t*) eglGetProcAddress_p("eglGetDisplay");
     eglInitialize_p = (eglInitialize_t*) eglGetProcAddress_p("eglInitialize");

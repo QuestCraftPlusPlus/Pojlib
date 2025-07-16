@@ -172,21 +172,29 @@ public class API {
      *
      * @param instance The instance to update
      */
-    public static void prelaunch(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
+    public static boolean prelaunch(Activity activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
         gameReady = false;
         instance.updateMods(instances);
         if (hasConnection(activity)) {
             try {
-                JREUtils.prelaunchCheck(activity, instance);
-            } catch (IOException | ExecutionException | InterruptedException e) {
+                if(!JREUtils.prelaunchCheck(activity, instance)) {
+                    Logger.getInstance().appendToLog("JVM is not properly installed despite retry!");
+                    return false;
+                }
+            } catch (Throwable e) {
                 Logger.getInstance().appendToLog("WARN! Instance launch failed!" + e);
             }
         } else {
-            Logger.getInstance().appendToLog("Skipping prelaunch check due to no wifi connection!");
+            Logger.getInstance().appendToLog("Skipping most prelaunch checks due to no WiFi connection.");
+            if(!JREUtils.initJavaRuntime()) {
+                Logger.getInstance().appendToLog("JVM is not properly installed! Please connect to WiFi to install it!");
+                return false;
+            }
         }
         DownloadManager.reset();
 
         MinecraftInstances.CheckVivecraftConfig(instance);
+        return true;
     }
 
     /**

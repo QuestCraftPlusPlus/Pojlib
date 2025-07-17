@@ -25,7 +25,7 @@ public class Constants {
     public static final String MC_PROFILE_URL = "https://api.minecraftservices.com/minecraft/profile";
 
     public static final String MINOTAR_URL = "https://minotar.net";
-    public static final String GIT_BRANCH = "QuestCraft-6.0.0";
+    public static final String GIT_BRANCH = "QuestCraft-6.0.1";
     public static String USER_HOME;
 
     public static void initConstants(Activity activity) {

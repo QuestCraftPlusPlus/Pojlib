@@ -196,12 +196,17 @@ public class JREUtils {
         setJavaEnvironment(activity, instance);
 
         UnityPlayerActivity.installLWJGL(activity);
-        Installer.installJVM(activity);
         Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
         Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
         Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
 
-        return initJavaRuntime();
+        Installer.installJVM(activity, false);
+        if(!initJavaRuntime()) {
+            Installer.installJVM(activity, true);
+            return initJavaRuntime();
+        }
+
+        return true;
     }
 
     public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, MinecraftInstances.Instance instance) throws Throwable {

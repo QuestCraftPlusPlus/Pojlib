@@ -88,8 +88,8 @@ public class FileUtil {
                     int len;
                     while ((len = input.read(buf)) > 0) {
                         fos.write(buf, 0, len);
-                        fos.flush();
                     }
+                    fos.flush();
                     fos.close();
                 }
             }
@@ -119,8 +119,8 @@ public class FileUtil {
                     int len;
                     while ((len = input.read(buf)) > 0) {
                         fos.write(buf, 0, len);
-                        fos.flush();
                     }
+                    fos.flush();
                     fos.close();
                 }
             }

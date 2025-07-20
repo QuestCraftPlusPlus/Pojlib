@@ -30,13 +30,13 @@ import java.util.concurrent.TimeUnit;
 //This works for the base game as well as mod loaders
 public class Installer {
 
-    public static void installJVM(Activity activity) {
+    public static void installJVM(Activity activity, boolean force) {
         Logger.getInstance().appendToLog("Checking JRE");
         File jre = new File(activity.getFilesDir(), "runtimes/JRE");
         String jreURL = "https://github.com/QuestCraftPlusPlus/android-openjdk-build-multiarch/releases/latest/download/JRE.zip";
 
         try {
-            if (!jre.exists()) {
+            if (!jre.exists() || force) {
                 Logger.getInstance().appendToLog("Installing JRE");
                 File jreZip = new File(activity.getFilesDir() + "/runtimes/JRE.zip");
                 DownloadUtils.downloadFile(jreURL, jreZip);

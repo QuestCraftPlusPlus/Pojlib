@@ -282,8 +282,8 @@ public class JREUtils {
         List<InetAddress> dnsServers = lp.getDnsServers();
         for (InetAddress dns : dnsServers) {
             writer.write(String.format("nameserver %s\n", dns.getHostAddress()));
-            writer.flush();
         }
+        writer.flush();
         writer.close();
     }
 

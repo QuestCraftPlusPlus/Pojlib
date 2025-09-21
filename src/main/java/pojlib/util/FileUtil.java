@@ -6,19 +6,26 @@ import android.content.Context;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.Enumeration;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 public class FileUtil {
-
-    public static String DIR_GAME_NEW;
-    public static String DIR_HOME_VERSION;
-
+    private static final Set<PosixFilePermission> DEFAULT_FILE_PERMISSIONS = Set.of(
+            PosixFilePermission.OWNER_READ,
+            PosixFilePermission.OWNER_WRITE,
+            PosixFilePermission.OWNER_EXECUTE,
+            PosixFilePermission.GROUP_READ,
+            PosixFilePermission.GROUP_WRITE
+    );
 
     public static byte[] loadFromAssetToByte(Context ctx, String inFile) {
         byte[] buffer = null;
@@ -165,5 +172,24 @@ public class FileUtil {
         File parentFile = targetFile.getParentFile();
         if(parentFile == null) throw new IOException("targetFile does not have a parent");
         ensureDirectory(parentFile);
+    }
+
+    public static void fixFilePermissions(File targetFile) throws IOException {
+        Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(targetFile.toPath());
+        if(!Files.isDirectory(targetFile.toPath()) && permissions != DEFAULT_FILE_PERMISSIONS) {
+            Files.setPosixFilePermissions(targetFile.toPath(), DEFAULT_FILE_PERMISSIONS);
+        }
+    }
+
+    public static void fixDirectoryPermissions(File targetDir) throws IOException {
+        try(Stream<Path> paths = Files.walk(targetDir.toPath(), 12, FileVisitOption.FOLLOW_LINKS)) {
+            paths.forEach((path) ->  {
+                try {
+                    fixFilePermissions(path.toFile());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
     }
 }

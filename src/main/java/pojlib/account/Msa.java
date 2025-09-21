@@ -157,7 +157,9 @@ public class Msa {
             String locale_id = XSTS_ERRORS.get(xerr);
             if(locale_id != null) {
                 Logger.getInstance().appendToLog(responseContents);
-                throw new MSAException(responseContents);
+                Logger.getInstance().appendToLog(locale_id);
+
+                throw new MSAException(locale_id);
             }
             // Logger.getInstance().appendToLog("Unknown error returned from Xbox Live\n" + responseContents);
             throw new MSAException("Unknown error returned from Xbox Live");
@@ -218,7 +220,7 @@ public class Msa {
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             String s = FileUtil.read(conn.getInputStream());
             conn.disconnect();
-            Logger.getInstance().appendToLog("MicrosoftLogin | profile:" + s);
+            Logger.getInstance().appendToLog("MicrosoftLogin | Profile:" + s);
             JSONObject jsonObject = new JSONObject(s);
             String name = (String) jsonObject.get("name");
             String uuid = (String) jsonObject.get("id");

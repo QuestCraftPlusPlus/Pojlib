@@ -55,7 +55,7 @@ public class LoginHelper {
                     .authority("https://login.microsoftonline.com/consumers/")
                     .build();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Logger.getInstance().appendToLog("Unable to initialize auth cache and/or application! | " + e);
         }
 
         SCOPES = new HashSet<>();
@@ -105,11 +105,11 @@ public class LoginHelper {
                 } catch (IOException | JSONException | MSAException e) {
                     Logger.getInstance().appendToLog("Unable to load account! | " + e);
                 }
-                API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
                 API.profileName = API.currentAcc.username;
                 API.profileUUID = API.currentAcc.uuid;
+                API.profileImage = MinecraftAccount.getSkinFaceUrl(API.currentAcc);
             } catch (ExecutionException | InterruptedException e) {
-                Logger.getInstance().appendToLog("MicrosoftLogin | Something went wrong! Couldn't reach the Microsoft Auth servers.");
+                Logger.getInstance().appendToLog("MicrosoftLogin | Something went wrong! Couldn't reach the Microsoft Auth servers. | " + e);
                 API.msaMessage = "MicrosoftLogin | Something went wrong! Couldn't reach the Microsoft Auth servers.";
             }
         });

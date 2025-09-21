@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import org.lwjgl.glfw.CallbackBridge;
 
 import pojlib.account.MinecraftAccount;
+import pojlib.util.FileUtil;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.download.DownloadManager;
@@ -19,10 +20,10 @@ import pojlib.util.json.MinecraftInstances;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -70,6 +71,16 @@ public class API {
 
     public static float getDownloadPercentage() {
         return DownloadManager.getPercentComplete();
+    }
+
+    public static boolean fixDataPermissions() {
+        try {
+            FileUtil.fixDirectoryPermissions(new File(Constants.USER_HOME + "/instances"));
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("Couldn't fix directory permissions! | " + e);
+            return false;
+        }
+        return true;
     }
 
     /**

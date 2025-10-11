@@ -75,6 +75,7 @@ public class MinecraftInstances {
         public String assetIndex;
         public String assetsDir;
         public String mainClass;
+        public String extraNatives;
         public ProjectInfo[] extProjects;
         public boolean defaultMods;
 

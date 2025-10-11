@@ -13,6 +13,7 @@ import org.lwjgl.glfw.CallbackBridge;
 
 import pojlib.account.MinecraftAccount;
 import pojlib.util.FileUtil;
+import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.download.DownloadManager;
@@ -24,6 +25,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -312,6 +320,93 @@ public class API {
             Logger.getInstance().appendToLog("WARN! Device has no wifi connection!");
             hasWifi = false;
             return false;
+        }
+    }
+
+    public static void mirrorNativesInFolder(Context activity, MinecraftInstances instances, MinecraftInstances.Instance instance, String path) {
+        try {
+            Files.createDirectories(activity.getDataDir().toPath().resolve(instance.instanceName));
+            removeNatives(activity, instances, instance);
+
+            Files.walkFileTree(Paths.get(path), new FileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    installNative(activity, instances, instance, file.toString());
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("ERROR! Failed to bulk install natives from path: " + path);
+        }
+    }
+
+    public static void installNative(Context activity, MinecraftInstances instances, MinecraftInstances.Instance instance, String nativePath) {
+        try {
+            Files.createDirectories(activity.getDataDir().toPath().resolve(instance.instanceName));
+            String[] splitPath = nativePath.split("/");
+            String name = splitPath[splitPath.length - 1];
+            Path out = activity.getDataDir().toPath().resolve(instance.instanceName).resolve(name);
+
+            Files.copy(Paths.get(nativePath), out);
+            if(instance.extraNatives == null || instance.extraNatives.isEmpty()) {
+                instance.extraNatives = out.toString();
+            } else {
+                instance.extraNatives += File.pathSeparator + out.toString();
+            }
+
+            GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("ERROR! Failed to install native from path: " + nativePath);
+        }
+    }
+
+    public static void removeNatives(Context activity, MinecraftInstances instances, MinecraftInstances.Instance instance) {
+        try {
+            Path out = activity.getDataDir().toPath().resolve(instance.instanceName);
+            Files.walkFileTree(out, new FileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+            instance.extraNatives = "";
+
+            GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("ERROR! Failed to delete natives by folder");
         }
     }
 }

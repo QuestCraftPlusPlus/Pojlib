@@ -36,8 +36,6 @@ public class JREUtils {
     private JREUtils() {}
 
     public static String LD_LIBRARY_PATH;
-    public static Map<String, String> jreReleaseList;
-    public static String instanceHome;
     public static String jvmLibraryPath;
     private static String sNativeLibDir;
     private static String runtimeDir;
@@ -62,21 +60,6 @@ public class JREUtils {
         return libName;
     }
 
-    public static ArrayList<File> locateLibs(File path) {
-        ArrayList<File> returnValue = new ArrayList<>();
-        File[] list = path.listFiles();
-        if(list != null) {
-            for(File f : list) {
-                if(f.isFile() && f.getName().endsWith(".so")) {
-                    returnValue.add(f);
-                }else if(f.isDirectory()) {
-                    returnValue.addAll(locateLibs(f));
-                }
-            }
-        }
-        return returnValue;
-    }
-
     public static boolean initJavaRuntime() {
         dlopen(findInLdLibPath("server/libjvm.so"));
         dlopen(findInLdLibPath("libverify.so"));
@@ -92,6 +75,24 @@ public class JREUtils {
         String dlerr = dlerror();
         if(dlerr.contains(runtimeDir)) {
             Logger.getInstance().appendToLog("ERROR! Could not dlopen libraries! " + dlerr);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean initializeExtraNatives(MinecraftInstances.Instance instance) {
+        if(instance.extraNatives == null) {
+            return false;
+        }
+
+        for(String nativeLib : instance.extraNatives.split(File.pathSeparator)) {
+            dlopen(nativeLib);
+        }
+
+        String dlerr = dlerror();
+        if(dlerr.contains(runtimeDir)) {
+            Logger.getInstance().appendToLog("ERROR! Could not dlopen extra natives! " + dlerr);
             return false;
         }
 
@@ -140,11 +141,11 @@ public class JREUtils {
         Log.i("jrelog-logcat","Logcat thread started");
     }
 
-    public static void relocateLibPath(final Context ctx) {
+    public static void relocateLibPath(final Context ctx, MinecraftInstances.Instance instance) {
         sNativeLibDir = ctx.getApplicationInfo().nativeLibraryDir;
 
         LD_LIBRARY_PATH = ctx.getFilesDir() + "/runtimes/JRE/bin:" + ctx.getFilesDir() + "/runtimes/JRE/lib:" +
-                "/system/lib64:/vendor/lib64:/vendor/lib64/hw:" +
+                "/system/lib64:/vendor/lib64:/vendor/lib64/hw:" + ctx.getDataDir().toPath().resolve(instance.instanceName) + ":" +
                 sNativeLibDir;
     }
 
@@ -192,7 +193,7 @@ public class JREUtils {
     // Called before game launch to ensure all files are present and correct
     public static boolean prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws Throwable {
         runtimeDir = activity.getFilesDir() + "/runtimes/JRE";
-        JREUtils.relocateLibPath(activity);
+        JREUtils.relocateLibPath(activity, instance);
         setJavaEnvironment(activity, instance);
 
         UnityPlayerActivity.installLWJGL(activity);
@@ -215,7 +216,7 @@ public class JREUtils {
 
         //Add automatically generated args
         if (API.customRAMValue) {
-            Logger.getInstance().appendToLog("QuestCraft: Setting JVM memory to " + API.memoryValue + "MB (Custom)");
+            Logger.getInstance().appendToLog("etting JVM memory to " + API.memoryValue + "MB (Custom)");
             userArgs.add("-Xms" + API.memoryValue + "M");
             userArgs.add("-Xmx" + API.memoryValue + "M");
         } else {
@@ -225,18 +226,22 @@ public class JREUtils {
             long availMem = (ami.availMem-ami.threshold)/(1024*1024);
             long allocatedRam = Math.max(availMem, 1536);
 
-            Logger.getInstance().appendToLog("QuestCraft: Setting JVM memory to " + allocatedRam + "MB");
+            Logger.getInstance().appendToLog("Setting JVM memory to " + allocatedRam + "MB");
 
             userArgs.add("-Xms" + 1024 + "M");
             userArgs.add("-Xmx" + allocatedRam + "M");
         }
 
+        if(!initializeExtraNatives(instance)) {
+            Logger.getInstance().appendToLog("Some libraries did not dlopen properly. This can be safely ignored in most cases.");
+        }
 
         // Garbage collection
-        userArgs.add("-XX:+UseShenandoahGC");
+        userArgs.add("-XX:+UseG1GC");
         userArgs.add("-XX:+UnlockDiagnosticVMOptions");
 
         userArgs.add("-XX:+UnlockExperimentalVMOptions");
+        userArgs.add("-XX:-TieredCompilation");
 
         // Android sig fix
         userArgs.add("-XX:+UseSignalChaining");

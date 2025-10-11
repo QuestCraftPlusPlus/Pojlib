@@ -3,7 +3,7 @@
 //
 #include <thread>
 #include <string>
-#include <errno.h>
+#include <cerrno>
 #include <android/hardware_buffer.h>
 #include <fcntl.h>
 #include <unistd.h>

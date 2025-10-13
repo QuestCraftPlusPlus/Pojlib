@@ -5,7 +5,7 @@
 			"coreMods": [
 				{
 					"slug": "Vivecraft",
-					"version": "1.2.5-b5",
+					"version": "1.2.5-b5.1",
 					"download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/1.21.8-1.2.5-OpenXR/vivecraft-1.21.8-1.2.5-b5-fabric.jar"
 				},
 				{
@@ -52,8 +52,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "2.5.35",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/iGd9Wjlq/voicechat-fabric-1.21.8-2.5.35.jar"
+					"version": "2.6.5",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/MG8Wkv0k/voicechat-fabric-1.21.8-2.6.5.jar"
 				},
 				{
 					"slug": "BadOptimizations",
@@ -124,8 +124,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "2.5.30",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/suJqF5xU/voicechat-fabric-1.21.5-2.5.30.jar"
+					"version": "2.6.5",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/4FNzDGaq/voicechat-fabric-1.21.5-2.6.5.jar"
 				},
 				{
 					"slug": "BadOptimizations",
@@ -196,8 +196,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "1.21.4-2.5.28",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/DWQCr1uB/voicechat-fabric-1.21.4-2.5.28.jar"
+					"version": "1.21.4-2.6.5",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/JWAlaqql/voicechat-fabric-1.21.4-2.6.5.jar"
 				},
 				{
 					"slug": "BadOptimizations",
@@ -253,8 +253,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "fabric-1.21.1-2.5.28",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/UG3KsGVe/voicechat-fabric-1.21.1-2.5.28.jar"
+					"version": "fabric-1.21.1-2.6.5",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/PFZZqJrl/voicechat-fabric-1.21.1-2.6.5.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -469,8 +469,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "fabric-1.20.1-2.5.28",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/pPL5s4GQ/voicechat-fabric-1.20.1-2.5.28.jar"
+					"version": "fabric-1.20.1-2.6.5",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/oxkfZNn5/voicechat-fabric-1.20.1-2.6.5.jar"
 				},
 				{
 					"slug": "ModernFix",
@@ -588,8 +588,8 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "fabric-1.19.2-2.5.28",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/kgCLdzjR/voicechat-fabric-1.19.2-2.5.28.jar"
+					"version": "fabric-1.19.2-2.6.5",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/vbTGxqaQ/voicechat-fabric-1.19.2-2.6.5.jar"
 				},
 				{
 					"slug": "Lithium",

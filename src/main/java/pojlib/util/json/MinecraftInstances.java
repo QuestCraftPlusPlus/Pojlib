@@ -1,5 +1,7 @@
 package pojlib.util.json;
 
+import android.content.Context;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
@@ -78,6 +80,7 @@ public class MinecraftInstances {
         public String extraNatives;
         public ProjectInfo[] extProjects;
         public boolean defaultMods;
+        public int javaVersion;
 
         public List<String> generateLaunchArgs(MinecraftAccount account) {
             String[] mcArgs = {"--username", account.username, "--version", versionName, "--gameDir", gameDir,
@@ -116,6 +119,11 @@ public class MinecraftInstances {
             }
 
             return parseModsJson(mods.getAbsolutePath());
+        }
+
+        private void downloadJavaVersion(Context ctx) throws Exception {
+            String path = ctx.getFilesDir() + "/runtimes/JRE" + javaVersion;
+
         }
 
         private void removeModByType(List<ProjectInfo> oldMods, List<ProjectInfo> newMods) {

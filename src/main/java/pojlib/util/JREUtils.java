@@ -192,11 +192,10 @@ public class JREUtils {
 
     // Called before game launch to ensure all files are present and correct
     public static boolean prelaunchCheck(Activity activity, MinecraftInstances.Instance instance) throws Throwable {
-        runtimeDir = activity.getFilesDir() + "/runtimes/JRE";
+        runtimeDir = activity.getFilesDir() + "/runtimes/JRE" + instance.javaVersion;
         JREUtils.relocateLibPath(activity, instance);
         setJavaEnvironment(activity, instance);
 
-        UnityPlayerActivity.installLWJGL(activity);
         Installer.installClient(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
         Installer.installLibraries(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
         Installer.installAssets(MinecraftMeta.getVersionInfo(instance.versionName), Constants.USER_HOME).get();
@@ -310,13 +309,10 @@ public class JREUtils {
                 "-Duser.language=" + System.getProperty("user.language"),
                 "-Dos.name=Linux",
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,
-                "-Dorg.lwjgl.librarypath=" + ctx.getApplicationInfo().nativeLibraryDir,
-                "-Djna.boot.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
+                "-Dorg.lwjgl.librarypath=" + ctx.getDataDir().toPath().resolve(instance.instanceName),
+                "-Djna.boot.library.path=" + ctx.getCacheDir().getAbsolutePath(),
                 "-Djna.nosys=true",
-                "-Djava.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
-                "-Dglfwstub.windowWidth=" + 1280,
-                "-Dglfwstub.windowHeight=" + 720,
-                "-Dglfwstub.initEgl=false",
+                "-Djava.library.path=" + LD_LIBRARY_PATH,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
                 "-Dnet.minecraft.clientmodname=" + "QuestCraft",
                 "-Dext.net.resolvPath=" + resConfFile,

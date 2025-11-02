@@ -17,6 +17,7 @@ import pojlib.util.GsonUtils;
 import pojlib.util.JREUtils;
 import pojlib.util.Logger;
 import pojlib.util.download.DownloadManager;
+import pojlib.util.download.DownloadUtils;
 import pojlib.util.json.MinecraftInstances;
 import pojlib.util.Constants;
 import pojlib.account.LoginHelper;
@@ -32,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.zip.ZipFile;
 
 /**
  * This class is the only class used by the launcher to communicate and talk to pojlib. This keeps pojlib and launcher separate.
@@ -202,6 +204,7 @@ public class API {
                 }
             } catch (Throwable e) {
                 Logger.getInstance().appendToLog("WARN! Instance launch failed!" + e);
+                return false;
             }
         } else {
             Logger.getInstance().appendToLog("Skipping most prelaunch checks due to no WiFi connection.");
@@ -323,6 +326,49 @@ public class API {
         }
     }
 
+    public static void unzipSavesFromFolder(MinecraftInstances.Instance instance, String path) {
+        try {
+            Files.walkFileTree(Paths.get(path), new FileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    installSave(instance, file);
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+
+            fixDataPermissions();
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("ERROR! Failed to bulk install saves from path: " + path);
+        }
+    }
+
+    public static void installSave(MinecraftInstances.Instance instance, Path file) {
+        try {
+            Path outPath = Paths.get(instance.gameDir, "saves");
+
+            Files.createDirectories(outPath);
+            FileUtil.unzipArchive(file.toString(), outPath.toString());
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("ERROR! Failed to install save by file" + e);
+        }
+    }
+
     public static void mirrorNativesInFolder(Context activity, MinecraftInstances instances, MinecraftInstances.Instance instance, String path) {
         try {
             Files.createDirectories(activity.getDataDir().toPath().resolve(instance.instanceName));
@@ -336,7 +382,7 @@ public class API {
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    installNative(activity, instances, instance, file.toString());
+                    installNativeFromExisting(activity, instances, instance, file.toString());
                     return FileVisitResult.CONTINUE;
                 }
 
@@ -356,7 +402,7 @@ public class API {
         }
     }
 
-    public static void installNative(Context activity, MinecraftInstances instances, MinecraftInstances.Instance instance, String nativePath) {
+    public static void installNativeFromExisting(Context activity, MinecraftInstances instances, MinecraftInstances.Instance instance, String nativePath) {
         try {
             Files.createDirectories(activity.getDataDir().toPath().resolve(instance.instanceName));
             String[] splitPath = nativePath.split("/");
@@ -373,6 +419,24 @@ public class API {
             GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
         } catch (IOException e) {
             Logger.getInstance().appendToLog("ERROR! Failed to install native from path: " + nativePath);
+        }
+    }
+
+    public static void installNative(Context activity, MinecraftInstances instances, MinecraftInstances.Instance instance, String downloadPath, String downloadName) {
+        try {
+            Files.createDirectories(activity.getDataDir().toPath().resolve(instance.instanceName));
+            Path out = activity.getDataDir().toPath().resolve(instance.instanceName).resolve(downloadName);
+
+            DownloadUtils.downloadFile(downloadPath, out.toFile());
+            if(instance.extraNatives == null || instance.extraNatives.isEmpty()) {
+                instance.extraNatives = out.toString();
+            } else {
+                instance.extraNatives += File.pathSeparator + out;
+            }
+
+            GsonUtils.objectToJsonFile(Constants.USER_HOME + "/instances.json", instances);
+        } catch (IOException e) {
+            Logger.getInstance().appendToLog("ERROR! Failed to install native from url: " + downloadPath);
         }
     }
 

@@ -119,25 +119,6 @@ public class UnityPlayerActivity extends ActivityGroup implements IUnityPlayerLi
 
         CallbackBridge.nativeSetUseInputStackQueue(true);
     }
-
-    public static String installLWJGL(Activity activity) throws IOException {
-        Logger.getInstance().appendToLog("Checking LWJGL");
-        File lwjgl = new File(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
-        byte[] lwjglAsset = FileUtil.loadFromAssetToByte(activity, "lwjgl/lwjgl-glfw-classes.jar");
-
-        if (!lwjgl.exists()) {
-            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
-            FileUtil.write(lwjgl.getAbsolutePath(), lwjglAsset);
-        } else if (!FileUtil.matchingAssetFile(lwjgl, lwjglAsset)) {
-            lwjgl.delete();
-            Objects.requireNonNull(lwjgl.getParentFile()).mkdirs();
-            FileUtil.write(lwjgl.getAbsolutePath(), lwjglAsset);
-        }
-
-        Logger.getInstance().appendToLog("LWJGL installed");
-        return lwjgl.getAbsolutePath();
-    }
-
     public void reinitUnity() {
         this.runOnUiThread(() -> {
             Intent start = this.getPackageManager().getLaunchIntentForPackage(getApplicationInfo().packageName);

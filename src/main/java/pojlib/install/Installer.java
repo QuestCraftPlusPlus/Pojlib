@@ -95,7 +95,7 @@ public class Installer {
             StringJoiner classpath = new StringJoiner(File.pathSeparator);
 
             for (VersionInfo.Library library : versionInfo.libraries) {
-                if (library.name.contains("lwjgl") || (library.name.contains("org.ow2.asm")) & !versionInfo.id.contains("fabric")) {
+                if ((library.name.contains("org.ow2.asm")) & !versionInfo.id.contains("fabric")) {
                     continue;
                 }
                 for (int i = 0; i < 5; i++) {
@@ -134,8 +134,6 @@ public class Installer {
                 }
             }
 
-            // Add our GLFW
-            classpath.add(Constants.USER_HOME + "/lwjgl3/lwjgl-glfw-classes.jar");
             // DNS SRV Resolver fix
             classpath.add(Constants.USER_HOME + "/hacks/ResConfHack.jar");
 

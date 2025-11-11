@@ -10,15 +10,15 @@
 				},
 				{
 					"slug": "Fabric-API",
-					"version": "0.130.0",
-					"download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/zhzhM2yQ/fabric-api-0.130.0%2B1.21.8.jar"
+					"version": "0.136.0",
+					"download_link": "https://github.com/FabricMC/fabric/releases/download/0.136.0%2B1.21.8/fabric-api-0.136.0+1.21.8.jar"
 				}
 			],
 			"defaultMods": [
 				{
 					"slug": "Sodium",
-					"version": "0.6.13",
-					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/ND4ROcMQ/sodium-fabric-0.6.13%2Bmc1.21.6.jar"
+					"version": "0.7.3",
+					"download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/7pwil2dy/sodium-fabric-0.7.3%2Bmc1.21.8.jar"
 				},
 				{
 					"slug": "Cloth-Config",
@@ -32,18 +32,18 @@
 				},
 				{
 					"slug": "MoreCulling",
-					"version": "1.4.0-beta.1",
-					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/ESxkwc6w/moreculling-fabric-1.21.6-1.4.0-beta.1.jar"
+					"version": "1.4.0-beta.2",
+					"download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/ivOsScf8/moreculling-fabric-1.21.8-1.4.0-beta.2.jar"
 				},
 				{
 					"slug": "Lithium",
-					"version": "0.18.0",
-					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/pDfTqezk/lithium-fabric-0.18.0%2Bmc1.21.8.jar"
+					"version": "0.18.1",
+					"download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/qxIL7Kb8/lithium-fabric-0.18.1%2Bmc1.21.8.jar"
 				},
 				{
 					"slug": "ImmediatelyFast",
-					"version": "1.12.0",
-					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/dFWSDYH8/ImmediatelyFast-Fabric-1.12.0%2B1.21.8.jar"
+					"version": "1.12.2",
+					"download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/OrO3H19n/ImmediatelyFast-Fabric-1.12.2%2B1.21.8.jar"
 				},
 				{
 					"slug": "Krypton",
@@ -52,13 +52,13 @@
 				},
 				{
 					"slug": "Simple-Voice-Chat",
-					"version": "2.6.5",
-					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/MG8Wkv0k/voicechat-fabric-1.21.8-2.6.5.jar"
+					"version": "2.6.6",
+					"download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/2Z1g1v36/voicechat-fabric-1.21.8-2.6.6.jar"
 				},
 				{
 					"slug": "BadOptimizations",
-					"version": "2.3.0",
-					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/Zkvk6pH6/BadOptimizations-2.3.0-1.21.6-21.7.jar"
+					"version": "2.3.1",
+					"download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/2uHHfSae/BadOptimizations-2.3.1-1.21.6-21.8.jar"
 				},
 				{
 					"slug": "bbrb",
@@ -67,8 +67,8 @@
 				},
 				{
 					"slug": "EntityCulling",
-					"version": "1.8.2",
-					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/5wVZFo2d/entityculling-fabric-1.8.2-mc1.21.6.jar"
+					"version": "1.9.3",
+					"download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/U81jswDa/entityculling-fabric-1.9.3-mc1.21.8.jar"
 				}
 			]
 		},

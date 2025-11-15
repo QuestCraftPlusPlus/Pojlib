@@ -8,7 +8,6 @@
 #include <stdatomic.h>
 #include <jni.h>
 #include <EGL/egl.h>
-#include <openxr/openxr_platform.h>
 
 /* How many events can be handled at the same time */
 #define EVENT_WINDOW_SIZE 8000

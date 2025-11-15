@@ -241,10 +241,6 @@ public class JREUtils {
         userArgs.add("-XX:+UnlockDiagnosticVMOptions");
 
         userArgs.add("-XX:+UnlockExperimentalVMOptions");
-        userArgs.add("-XX:-TieredCompilation");
-
-        // Android sig fix
-        userArgs.add("-XX:+UseSignalChaining");
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");

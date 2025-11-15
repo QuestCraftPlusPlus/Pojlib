@@ -13,7 +13,6 @@
 #include <environ/environ.h>
 #include <GLES3/gl32.h>
 #include <EGL/egl.h>
-#include <openxr/openxr.h>
 #include "log.h"
 
 extern "C"

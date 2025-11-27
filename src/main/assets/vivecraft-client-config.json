@@ -125,7 +125,7 @@
   "hudMaxScale": "false",
   "vrHudLockMode": "WRIST",
   "shouldRenderSelf": "false",
-  "menuWorldSelection": "BOTH",
+  "menuWorldSelection": "NONE",
   "useFsaa": "false",
   "renderScaleFactor": "1.0",
   "showServerPluginMissingMessageAlways": "true",

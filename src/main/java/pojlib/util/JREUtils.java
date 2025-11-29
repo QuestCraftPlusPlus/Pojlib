@@ -237,10 +237,12 @@ public class JREUtils {
         }
 
         // Garbage collection
-        userArgs.add("-XX:+UseG1GC");
-        userArgs.add("-XX:+UnlockDiagnosticVMOptions");
-
         userArgs.add("-XX:+UnlockExperimentalVMOptions");
+        userArgs.add("-XX:+UseZGC");
+        userArgs.add("-XX:+ZGenerational");
+        userArgs.add("-XX:-ZProactive");
+        userArgs.add("-XX:+UnlockDiagnosticVMOptions");
+        userArgs.add("-XX:+DisableExplicitGC");
 
         userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
         userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");

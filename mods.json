@@ -1,6 +1,78 @@
 {
   "versions": [
     {
+      "name": "1.21.10",
+      "coreMods": [
+        {
+          "slug": "Vivecraft",
+          "version": "1.3.4",
+          "download_link": "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v6.0.1-1.21.10/vivecraft-1.21.10-1.3.4-fabric.jar"
+        },
+        {
+          "slug": "Fabric-API",
+          "version": "0.138.4",
+          "download_link": "https://cdn.modrinth.com/data/P7dR8mSH/versions/tV4Gc0Zo/fabric-api-0.138.4%2B1.21.10.jar"
+        }
+      ],
+      "defaultMods": [
+        {
+          "slug": "Sodium",
+          "version": "mc1.21.10-0.7.3-fabric",
+          "download_link": "https://cdn.modrinth.com/data/AANobbMI/versions/sFfidWgd/sodium-fabric-0.7.3%2Bmc1.21.10.jar"
+        },
+        {
+          "slug": "Cloth-Config",
+          "version": "20.0.149+fabric",
+          "download_link": "https://cdn.modrinth.com/data/9s6osm5g/versions/qMxkrrmq/cloth-config-20.0.149-fabric.jar"
+        },
+        {
+          "slug": "Ferrite-Core",
+          "version": "8.1.0-fabric",
+          "download_link": "https://cdn.modrinth.com/data/uXXizFIs/versions/bPLllEgi/ferritecore-8.1.0-fabric.jar"
+        },
+        {
+          "slug": "MoreCulling",
+          "version": "1.5.0-beta2",
+          "download_link": "https://cdn.modrinth.com/data/51shyZVL/versions/nASRyMbu/moreculling-fabric-1.21.9-1.5.0-beta.2.jar"
+        },
+        {
+          "slug": "Lithium",
+          "version": "mc1.21.10-0.20.1-fabric",
+          "download_link": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/NsswKiwi/lithium-fabric-0.20.1%2Bmc1.21.10.jar"
+        },
+        {
+          "slug": "ImmediatelyFast",
+          "version": "1.13.5+1.21.10-fabric",
+          "download_link": "https://cdn.modrinth.com/data/5ZwdcRci/versions/ntac1Na0/ImmediatelyFast-Fabric-1.13.5%2B1.21.10.jar"
+        },
+        {
+          "slug": "Krypton",
+          "version": "0.2.10",
+          "download_link": "https://cdn.modrinth.com/data/fQEb0iXm/versions/O9LmWYR7/krypton-0.2.10.jar"
+        },
+        {
+          "slug": "Simple-Voice-Chat",
+          "version": "fabric-1.21.10-2.6.12",
+          "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/n7Kvch7B/voicechat-fabric-1.21.10-2.6.12.jar"
+        },
+        {
+          "slug": "BadOptimizations",
+          "version": "2.4.1",
+          "download_link": "https://cdn.modrinth.com/data/g96Z4WVZ/versions/dOFYYhIv/BadOptimizations-2.4.1-1.21.10.jar"
+        },
+        {
+          "slug": "BetterBiomeBlend",
+          "version": "1.5.2",
+          "download_link": "https://cdn.modrinth.com/data/Xh8hkQmD/versions/HZlLCOct/betterbiomeblend-1.5.2.jar"
+        },
+        {
+          "slug": "EntityCulling",
+          "version": "1.9.5",
+          "download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/zwBaFdjH/entityculling-fabric-1.9.5-mc1.21.10.jar"
+        }
+      ]
+    },
+    {
       "name": "1.21.8",
       "coreMods": [
         {

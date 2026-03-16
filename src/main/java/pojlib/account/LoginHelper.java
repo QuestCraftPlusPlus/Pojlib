@@ -104,6 +104,7 @@ public class LoginHelper {
                     API.currentAcc = MinecraftAccount.login(activity, activity.getFilesDir() + "/accounts", res.accessToken());
                 } catch (IOException | JSONException | MSAException e) {
                     Logger.getInstance().appendToLog("Unable to load account! | " + e);
+                    return;
                 }
                 API.profileName = API.currentAcc.username;
                 API.profileUUID = API.currentAcc.uuid;

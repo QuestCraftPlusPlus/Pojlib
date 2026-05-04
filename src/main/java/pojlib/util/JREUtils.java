@@ -216,7 +216,7 @@ public class JREUtils {
 
         //Add automatically generated args
         if (API.customRAMValue) {
-            Logger.getInstance().appendToLog("etting JVM memory to " + API.memoryValue + "MB (Custom)");
+            Logger.getInstance().appendToLog("Setting JVM memory to " + API.memoryValue + "MB (Custom)");
             userArgs.add("-Xms" + API.memoryValue + "M");
             userArgs.add("-Xmx" + API.memoryValue + "M");
         } else {
@@ -251,7 +251,7 @@ public class JREUtils {
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);
 
-        if (API.currentAcc != null) {
+        if (API.currentAcc != null && !API.currentAcc.uuid.isEmpty()) {
             System.out.println("UUID: " + API.currentAcc.uuid);
         } else {
             System.out.println("UUID is null! Make sure to log in!");

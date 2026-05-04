@@ -251,6 +251,12 @@ public class JREUtils {
         userArgs.addAll(JVMArgs);
         System.out.println(JVMArgs);
 
+        if (API.currentAcc != null) {
+            System.out.println("UUID: " + API.currentAcc.uuid);
+        } else {
+            System.out.println("UUID is null! Make sure to log in!");
+        }
+
         chdir(instance.gameDir);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
 

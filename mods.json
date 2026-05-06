@@ -49,6 +49,11 @@
           "slug": "EntityCulling",
           "version": "1.10.1",
           "download_link": "https://cdn.modrinth.com/data/NNAgCjsB/versions/WORDhU8n/entityculling-fabric-1.10.1-mc1.21.11.jar"
+        },
+        {
+          "slug": "Simple-Voice-Chat",
+          "version": "fabric-1.21.11-2.6.17",
+          "download_link": "https://cdn.modrinth.com/data/9eGKb6K1/versions/ukcC8F72/voicechat-fabric-1.21.11-2.6.17.jar"
         }
       ]
     },

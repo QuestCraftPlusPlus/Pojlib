@@ -40,6 +40,21 @@ public class JREUtils {
     private static String sNativeLibDir;
     private static String runtimeDir;
 
+    /** Smallest heap we will hand out, so the game can still start on a busy device. */
+    private static final long MIN_HEAP_MB = 1024;
+    /**
+     * Largest share of the device's total RAM the Java heap may take.
+     * <p>
+     * The heap is only one part of the process: the GL driver, the XR swapchains, LWJGL and the
+     * JRE itself need roughly as much again outside it, and the VR compositor and system services
+     * have to keep running or the low memory killer takes the game out. Sizing purely from free
+     * memory means a device that happens to launch with a lot free hands out a heap it cannot
+     * afford for the rest of the session.
+     */
+    private static final double MAX_HEAP_FRACTION = 0.25;
+    /** Heap committed at startup; the JVM grows towards -Xmx only as the game actually needs it. */
+    private static final long INITIAL_HEAP_MB = 512;
+
     public static String findInLdLibPath(String libName) {
         if(Os.getenv("LD_LIBRARY_PATH")==null) {
             try {
@@ -210,6 +225,20 @@ public class JREUtils {
         return true;
     }
 
+    /**
+     * Picks a max heap size that fits alongside everything else the process and the headset need.
+     *
+     * @param availMem memory currently free to the app, in MB
+     * @param totalMem the device's total RAM in MB
+     * @return the heap size to pass to -Xmx, in MB
+     */
+    static long clampHeap(long availMem, long totalMem) {
+        long ceiling = (long) (totalMem * MAX_HEAP_FRACTION);
+        // Never return less than the floor, even on a device small enough that the ceiling
+        // would fall below it, or the game cannot start at all.
+        return Math.max(MIN_HEAP_MB, Math.min(availMem, ceiling));
+    }
+
     public static int launchJavaVM(final Activity activity, final List<String> JVMArgs, MinecraftInstances.Instance instance) throws Throwable {
         final String graphicsLib = loadGraphicsLibrary();
         List<String> userArgs = getJavaArgs(activity, instance);
@@ -217,18 +246,21 @@ public class JREUtils {
         //Add automatically generated args
         if (API.customRAMValue) {
             Logger.getInstance().appendToLog("Setting JVM memory to " + API.memoryValue + "MB (Custom)");
-            userArgs.add("-Xms" + API.memoryValue + "M");
+            // Start small and let the heap grow into the value the user picked. Committing it all
+            // up front costs that memory even in sessions that never need it.
+            userArgs.add("-Xms" + INITIAL_HEAP_MB + "M");
             userArgs.add("-Xmx" + API.memoryValue + "M");
         } else {
             ActivityManager manager = (ActivityManager) activity.getSystemService(Activity.ACTIVITY_SERVICE);
             ActivityManager.MemoryInfo ami = new ActivityManager.MemoryInfo();
             manager.getMemoryInfo(ami);
             long availMem = (ami.availMem-ami.threshold)/(1024*1024);
-            long allocatedRam = Math.max(availMem, 1536);
+            long totalMem = ami.totalMem/(1024*1024);
+            long allocatedRam = clampHeap(availMem, totalMem);
 
             Logger.getInstance().appendToLog("Setting JVM memory to " + allocatedRam + "MB");
 
-            userArgs.add("-Xms" + 1024 + "M");
+            userArgs.add("-Xms" + Math.min(INITIAL_HEAP_MB, allocatedRam) + "M");
             userArgs.add("-Xmx" + allocatedRam + "M");
         }
 
